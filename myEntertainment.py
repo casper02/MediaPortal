@@ -76,6 +76,7 @@ class showMEHDGenre(Screen):
 	def keyOK(self):
 		if self.keyLocked:
 			return
+		print "ok"
 		genreName = self['filmList'].getCurrent()[0][0]
 		genreLink = self['filmList'].getCurrent()[0][1]
 		print genreLink
