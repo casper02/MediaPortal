@@ -446,7 +446,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 		elif auswahl == "NetzKino":
 			self.session.open(netzKinoGenreScreen)
 		elif auswahl == "xHamster":
-			self.session.open(xhamster)
+			self.session.open(xhamsterGenreScreen)
 		elif auswahl == "Spobox":
 			self.session.open(spoboxGenreScreen)
 		elif auswahl == "PornHub":
