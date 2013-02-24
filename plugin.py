@@ -38,7 +38,7 @@ from songsTo import *
 from myEntertainment import *
 from movie2k import *
 from iStreamWS import *
-
+from x4tube import *
 
 config.mediaportal = ConfigSubsection()
 config.mediaportal.pincode = ConfigPIN(default = 0000)
@@ -79,6 +79,7 @@ config.mediaportal.showMEHD = ConfigYesNo(default = True)
 config.mediaportal.showM2k = ConfigYesNo(default = True)
 config.mediaportal.showM2kPorn = ConfigYesNo(default = True)
 config.mediaportal.showIStream = ConfigYesNo(default = True)
+config.mediaportal.show4tube = ConfigYesNo(default = True)
 
 class hauptScreenSetup(Screen, ConfigListScreen):
 	skin = 	"""
@@ -140,6 +141,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige Songsto:", config.mediaportal.showSongsto))
 		self.configlist.append(getConfigListEntry("Zeige My-Entertainment:", config.mediaportal.showMEHD))
 		self.configlist.append(getConfigListEntry("Zeige IStream:", config.mediaportal.showIStream))
+		self.configlist.append(getConfigListEntry("Zeige 4tube:", config.mediaportal.show4tube))
 		self["config"].setList(self.configlist)
 
 		self['title'] = Label("MediaPortal - Setup - (version 3.5.1)")
@@ -299,6 +301,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.fun.append(self.hauptListEntry("PornHub", "pornhub"))
 		if config.mediaportal.showSongsto.value:
 			self.fun.append(self.hauptListEntry("Songsto", "songsto"))
+		if config.mediaportal.show4tube.value:
+			self.fun.append(self.hauptListEntry("4tube", "4tube"))
 
 		self.movies.sort()
 		self.infos.sort()
@@ -485,10 +489,12 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(m2kGenreScreen, self.showM2KPorn)
 		elif auswahl == "IStream":
 			self.session.open(showIStreamGenre)
+		elif auswahl == "4tube":
+			self.session.open(fourtubeGenreScreen)
 
 	def keyCancel(self):
 		self.close()
-		
+
 
 def main(session, **kwargs):
 	session.open(haupt_Screen)
