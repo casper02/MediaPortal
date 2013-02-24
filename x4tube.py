@@ -80,7 +80,7 @@ class fourtubeGenreScreen(Screen):
 		self.genreliste.append(("Hardcore", "http://www.4tube.com/find/tags/hardcore?sort=ctr&page="))
 		self.genreliste.append(("Interracial", "http://www.4tube.com/find/tags/interracial?sort=ctr&page="))
 		self.genreliste.append(("Latinas", "http://www.4tube.com/find/tags/latinas?sort=ctr&page="))
-		self.genreliste.append(("Lesbian", "http://www.4tube.com/find/tags/lesbian?sort=ctr&page="))
+		self.genreliste.append(("Lesbians", "http://www.4tube.com/find/tags/lesbians?sort=ctr&page="))
 		self.genreliste.append(("Masturbation", "http://www.4tube.com/find/tags/masturbation?sort=ctr&page="))
 		self.genreliste.append(("MILF", "http://www.4tube.com/find/tags/milf?sort=ctr&page="))
 		self.genreliste.append(("Solo", "http://www.4tube.com/find/tags/solo?sort=ctr&page="))
