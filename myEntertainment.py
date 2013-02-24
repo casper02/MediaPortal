@@ -1,6 +1,6 @@
 from imports import *
 from decrypt import *
-
+kekse = {}
 def MEHDGenreListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
@@ -39,7 +39,6 @@ class showMEHDGenre(Screen):
 		
 		self.keyLocked = True
 		self.filmliste = []
-		self.keckse = {}
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
 		self.chooseMenuList.l.setItemHeight(25)
@@ -51,6 +50,7 @@ class showMEHDGenre(Screen):
 		filmliste = []
 		Genre = [("Neueinsteiger", "http://my-entertainment.biz/forum/content.php?r=1969-Aktuelle-HD-Filme&page="),
 			("Cineline", "http://my-entertainment.biz/forum/list.php?r=category/169-Cineline&page="),
+			("Collection", "http://my-entertainment.biz/forum/content.php?r=3501-hd-collection&page="),
 			("Abenteuer", "http://my-entertainment.biz/forum/list.php?r=category/65-HD-Abenteuer&page="),
 			("Action", "http://my-entertainment.biz/forum/list.php?r=category/35-HD-Action&page="),
 			("Biografie", "http://my-entertainment.biz/forum/list.php?r=category/70-HD-Biografie&page="),
@@ -133,7 +133,6 @@ class MEHDFilmListeScreen(Screen):
 		
 		self.keyLocked = True
 		self.filmliste = []
-		self.keckse = {}
 		self.page = 1
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
@@ -145,7 +144,7 @@ class MEHDFilmListeScreen(Screen):
 	def loadPage(self):
 		url = "%s%s" % (self.genreLink, str(self.page))
 		print url
-		getPage(url, cookies=self.keckse, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
+		getPage(url, cookies=kekse, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def dataError(self, error):
 		print error
@@ -172,7 +171,7 @@ class MEHDFilmListeScreen(Screen):
 		downloadPage(streamPic, "/tmp/Icon.jpg").addCallback(self.ShowCover)
 	
 	def getHandlung(self, url):
-		getPage(url, cookies=self.keckse, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.setHandlung).addErrback(self.dataError)
+		getPage(url, cookies=kekse, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.setHandlung).addErrback(self.dataError)
 	
 	def setHandlung(self, data):
 		handlung = re.findall('<div class="bbcode_quote_container"></div>(.*?)<', data, re.S)
@@ -200,15 +199,21 @@ class MEHDFilmListeScreen(Screen):
 	def keyOK(self):
 		if self.keyLocked:
 			return
-
 		streamLink = self['filmList'].getCurrent()[0][1]
-		getPage(streamLink, cookies=self.keckse, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getStream).addErrback(self.dataError)
+		getPage(streamLink, cookies=kekse, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getStream).addErrback(self.dataError)
 		
-	def getStream(self, data):	
+	def getStream(self, data):
 		stream = re.findall('href="(http://my-entertainment.biz/.*?/Free-Membe.*?.php\?mov=.*?)"', data)
-		if stream:
-			print stream
-			getPage(stream[0], cookies=self.keckse, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getStreamLink).addErrback(self.dataError)
+		# Wenn nur ein Link, dann stream starten, ansonsten handelt es sich wohl um eine Collection
+		if len(stream) == 1:
+			print 'Ein Free Stream....',stream
+			getPage(stream[0], cookies=kekse, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getStreamLink).addErrback(self.dataError)
+		else:
+			searchTitle = re.findall('<title>(.*?)</title>', data, re.S)
+			searchCol = re.findall('<img src="(http://my-entertainment.biz.*?)".*?href="(http://my-entertainment.biz/server/Free-Member.php\\?mov=.*?)"', data, re.S)
+			print 'Mehrere Free-Streams...',searchCol
+			# Jetzt muessen wir eine neue Screen oeffnen um die Filme der Collection anzuzeigen
+			self.session.open(enterColListScreen, searchCol, searchTitle)
 
 	def getStreamLink(self, data):
 			#print data
@@ -258,6 +263,143 @@ class MEHDFilmListeScreen(Screen):
 			return
 		self.page += 1 
 		self.loadPage()
+		
+	def keyCancel(self):
+		self.close()
+		
+def enterColListEntry(entry):
+	return [entry,
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
+		] 
+		
+class enterColListScreen(Screen):
+	skin = 	"""
+		<screen name="My-Entertainment.biz" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
+			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
+			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
+			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
+				<convert type="ClockToText">Format:%-H:%M</convert>
+			</widget>
+			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
+				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+			</widget>
+			<widget name="auswahlColList" position="0,60" size="900,350" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
+			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
+			<widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
+			<widget name="name" position="230,420" size="560,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
+			<widget name="handlung" position="185,473" size="700,140" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
+		</screen>"""
+
+	def __init__(self, session, pageCol, pageTitle,):
+		self.session = session
+		self.pageCol = pageCol
+		self.pageTitle = pageTitle
+		Screen.__init__(self, session)
+		
+		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions"], {
+			"ok"    : self.keyOK,
+			"cancel": self.keyCancel,
+			"up" : self.keyUp,
+			"down" : self.keyDown,
+			"right" : self.keyRight,
+			"left" : self.keyLeft,
+		}, -1)
+
+		self['title'] = Label("My-Entertainment.biz")
+		self['name'] = Label("Auswahl")
+		self['handlung'] = Label("")
+		self['coverArt'] = Pixmap()
+		
+		self.keyLocked = True
+		self.auswahlColListe = []
+		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
+		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
+		self.chooseMenuList.l.setItemHeight(25)
+		self['auswahlColList'] = self.chooseMenuList
+		self.onLayoutFinish.append(self.showColData)
+		
+		
+	def showColData(self):
+		i=1
+		if self.pageCol:
+			for enterPic,enterUrl in self.pageCol:
+				self.auswahlColListe.append((self.pageTitle[0]+' '+str(i), enterUrl, enterPic))
+				i=i+1
+			self.chooseMenuList.setList(map(enterColListEntry, self.auswahlColListe))
+			self.keyLocked = False
+			self.loadPic()
+			
+	def loadPic(self):
+		streamName = self['auswahlColList'].getCurrent()[0][0]
+		streamFilmLink = self['auswahlColList'].getCurrent()[0][1]
+		self['name'].setText(streamName)
+		streamPic = self['auswahlColList'].getCurrent()[0][2]
+		downloadPage(streamPic, "/tmp/spIcon.jpg").addCallback(self.ShowCover)
+
+		
+	def ShowCover(self, picData):
+		if fileExists("/tmp/spIcon.jpg"):
+			self['coverArt'].instance.setPixmap(None)
+			self.scale = AVSwitch().getFramebufferScale()
+			self.picload = ePicLoad()
+			size = self['coverArt'].instance.size()
+			self.picload.setPara((size.width(), size.height(), self.scale[0], self.scale[1], False, 1, "#FF000000"))
+			if self.picload.startDecode("/tmp/spIcon.jpg", 0, 0, False) == 0:
+				ptr = self.picload.getData()
+				if ptr != None:
+					self['coverArt'].instance.setPixmap(ptr.__deref__())
+					self['coverArt'].show()
+					del self.picload
+					
+					
+	def getRealLink(self, data):
+		print 'getRealLink'
+		stream_url = re.findall('src="(http://.*?my-entertainment.biz.*?)"', data, re.S)
+		print stream_url
+		if stream_url:
+			print stream_url
+			self.startMovie(stream_url[0])
+
+	def startMovie(self, link):
+		sref = eServiceReference(4097, 0, link)
+		sref.setName(self.streamName)
+		self.session.open(MoviePlayer, sref)
+			
+					
+	def keyOK(self):
+		if self.keyLocked:
+			return
+		streamLink = self['auswahlColList'].getCurrent()[0][1]
+		self.streamName = self['auswahlColList'].getCurrent()[0][0]
+		print 'RealStreamLink...', streamLink
+		getPage(streamLink, cookies=kekse, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getRealLink).addErrback(self.dataError)
+	
+	def dataError(self, error):
+		print error
+		
+	def keyLeft(self):
+		if self.keyLocked:
+			return
+		self['auswahlColList'].pageUp()
+		self.loadPic()
+		
+	def keyRight(self):
+		if self.keyLocked:
+			return
+		self['auswahlColList'].pageDown()
+		self.loadPic()
+		
+	def keyUp(self):
+		if self.keyLocked:
+			return
+		self['auswahlColList'].up()
+		self.loadPic()
+		
+	def keyDown(self):
+		if self.keyLocked:
+			return
+		self['auswahlColList'].down()
+		self.loadPic()
 		
 	def keyCancel(self):
 		self.close()
