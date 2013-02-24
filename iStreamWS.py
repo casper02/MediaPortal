@@ -5,7 +5,7 @@ from decrypt import *
 
 def IStreamGenreListEntry(entry):
 	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		] 
 class showIStreamGenre(Screen):
 	skin = 	"""
@@ -18,11 +18,11 @@ class showIStreamGenre(Screen):
 			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
 				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
 			</widget>
-			<widget name="filmList" position="0,60" size="900,350" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
+			<widget name="ContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
+			<widget name="genreList" position="0,85" size="900,325" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
+			<eLabel position="185,460" size="700,2" backgroundColor="#00555556" />
 			<widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
-			<widget name="name" position="230,420" size="560,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
-			<widget name="handlung" position="185,473" size="700,140" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
+			<widget name="name" position="185,420" size="700,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
 		</screen>"""
 
 	def __init__(self, session):
@@ -35,23 +35,23 @@ class showIStreamGenre(Screen):
 		}, -1)
 
 		self['title'] = Label("IStream.ws")
+		self['ContentTitle'] = Label("M e n ü")
 		self['name'] = Label("Genre Auswahl")
-		self['handlung'] = Label("")
 		self['coverArt'] = Pixmap()
 		
 		self.keyLocked = True
-		self.filmliste = []
+		self.genreListe = []
 		self.keckse = {}
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
 		self.chooseMenuList.l.setItemHeight(25)
-		self['filmList'] = self.chooseMenuList
+		self['genreList'] = self.chooseMenuList
 		
 		self.onLayoutFinish.append(self.loadPage)
 		
 	def loadPage(self):
 		print "ISteam.ws:"
-		filmliste = []
+		genreListe = []
 		Genre = [("Kino", "http://istream.ws/c/filme/kino/page/"),
 			("Neue Filme", "http://istream.ws/page/"),
 			("Abenteuer", "http://istream.ws/c/filme/abenteuer/page/"),
@@ -86,15 +86,15 @@ class showIStreamGenre(Screen):
 			("Western", "http://istream.ws/c/filme/western/page/")]
 					
 		for (Name,Url) in Genre:
-			self.filmliste.append((Name,Url))
-			self.chooseMenuList.setList(map(IStreamGenreListEntry, self.filmliste))
+			self.genreListe.append((Name,Url))
+			self.chooseMenuList.setList(map(IStreamGenreListEntry, self.genreListe))
 		self.keyLocked = False
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
-		genreName = self['filmList'].getCurrent()[0][0]
-		genreLink = self['filmList'].getCurrent()[0][1]
+		genreName = self['genreList'].getCurrent()[0][0]
+		genreLink = self['genreList'].getCurrent()[0][1]
 		print genreLink
 		self.session.open(IStreamFilmListeScreen, genreLink, genreName)
 		
@@ -103,7 +103,7 @@ class showIStreamGenre(Screen):
 		
 def IStreamFilmListEntry(entry):
 	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		] 
 class IStreamFilmListeScreen(Screen):
 	skin = 	"""
@@ -116,13 +116,14 @@ class IStreamFilmListeScreen(Screen):
 			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
 				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
 			</widget>
-			<widget name="filmList" position="0,60" size="900,350" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
+			<widget name="leftContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
+			<widget name="filmList" position="0,85" size="900,325" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
+			<eLabel position="185,460" size="700,2" backgroundColor="#00555556" />
 			<widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
-			<widget name="name" position="230,420" size="560,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
+			<widget name="name" position="185,420" size="550,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
 			<widget name="handlung" position="185,473" size="700,140" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
 			<eLabel text="Page" position="750,420" size="100,25" backgroundColor="#00101214" transparent="1" foregroundColor="#00555556" font="Regular;20" valign="top" />
-			<widget name="page" position="810,420" size="85,25" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />	
+			<widget name="page" position="810,420" size="100,25" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />	
 		</screen>"""
 
 	def __init__(self, session, genreLink, genreName):
@@ -143,13 +144,14 @@ class IStreamFilmListeScreen(Screen):
 		}, -1)
 
 		self['title'] = Label("IStream.ws")
-		self['name'] = Label(self.genreName)
+		self['leftContentTitle'] = Label("Filme in Genre "+self.genreName)
+		self['name'] = Label("")
 		self['handlung'] = Label("")
 		self['coverArt'] = Pixmap()
 		self['page'] = Label("")
 		
 		self.keyLocked = True
-		self.filmliste = []
+		self.filmListe = []
 		self.keckse = {}
 		self.page = 0
 		self.pages = 0;
@@ -168,8 +170,8 @@ class IStreamFilmListeScreen(Screen):
 	def dataError(self, error):
 		print "dataError:"
 		print error
-		self.filmliste.append(("No movies found!",""))
-		self.chooseMenuList.setList(map(IStreamFilmListEntry,	self.filmliste))
+		self.filmListe.append(("No movies found !",""))
+		self.chooseMenuList.setList(map(IStreamFilmListEntry,	self.filmListe))
 		
 	def loadPageData(self, data):
 		print "loadPageData:"
@@ -179,27 +181,27 @@ class IStreamFilmListeScreen(Screen):
 			filme = re.findall('<div class="voting".*?<a href="(.*?)".*?title="(.*?)">.*?data-original="(.*?)" alt', data)
 
 		if filme:
-			print "Movies found!"
+			print "Movies found !"
 			if not self.pages:
-				pages = re.findall('<span class=\'pages\'>Seite 1 von (.*?)</', data)
-				if pages:
-					self.pages = int(pages[0])
+				m = re.findall('<span class=\'pages\'>Seite 1 von (.*?)</', data)
+				if m:
+					self.pages = int(m[0])
 				else:
 					self.pages = 1
 				self.page = 1
 				print "Page: %d / %d" % (self.page,self.pages)
 				
-			self.filmliste = []
+			self.filmListe = []
 			for	(url,name,imageurl) in filme:
 				#print	"Url: ", url, "Name: ", name, "ImgUrl: ", imageurl
-				self.filmliste.append((decodeHtml(name), url, imageurl))
-			self.chooseMenuList.setList(map(IStreamFilmListEntry,	self.filmliste))
+				self.filmListe.append((decodeHtml(name), url, imageurl))
+			self.chooseMenuList.setList(map(IStreamFilmListEntry,	self.filmListe))
 			self.keyLocked	= False
 			self.loadPic()
 		else:
-			print "No movies found!"
-			self.filmliste.append(("No movies found!",""))
-			self.chooseMenuList.setList(map(IStreamFilmListEntry,	self.filmliste))
+			print "No movies found !"
+			self.filmListe.append(("No movies found !",""))
+			self.chooseMenuList.setList(map(IStreamFilmListEntry,	self.filmListe))
 
 	def loadPic(self):
 		print "loadPic:"
@@ -221,13 +223,11 @@ class IStreamFilmListeScreen(Screen):
 
 	def setHandlung(self, data):
 		print "setHandlung:"
-		handlung = re.findall('meta property="og:description".*?=\'(.*?)\' />', data, re.S)
-		if handlung:
-			#print handlung
-			handlung = re.sub(r"\s+", " ", handlung[0])
-			self['handlung'].setText(decodeHtml(handlung))
+		m = re.findall('meta property="og:description".*?=\'(.*?)\' />', data)
+		if m:
+			self['handlung'].setText(decodeHtml(re.sub(r"\s+", " ", m[0])))
 		else:
-			print "No Infos found!"
+			print "No Infos found !"
 			self['handlung'].setText("Keine infos gefunden.")
 			
 	def ShowCover(self, picData):
@@ -297,11 +297,11 @@ class IStreamFilmListeScreen(Screen):
 
 def IStreamStreamListEntry(entry):
 	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]+entry[2])
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0]+entry[2])
 		] 
 class IStreamStreams(Screen, ConfigListScreen):
 	skin = 	"""
-		<screen name="iStream" position="center,center" size="900,580" backgroundColor="#00060606" flags="wfNoBorder">
+		<screen name="iStream" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
 			<eLabel position="0,0" size="900,80" backgroundColor="#00242424"/>
 			<widget name="title" position="25,15" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;26" valign="center" halign="left" />
 			<widget source="global.CurrentTime" render="Label" position="730,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;26" valign="center" halign="right">
@@ -310,10 +310,12 @@ class IStreamStreams(Screen, ConfigListScreen):
 			<widget source="global.CurrentTime" render="Label" position="580,20" size="300,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;18" valign="center" halign="right">
 				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
 			</widget>
-			<widget name="leftContentTitle" position="0,80" size="900,26" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-			<widget name="streamlist" position="0,106" size="900,300" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<widget name="stationIcon" position="10,415" size="107,150" transparent="1" alphatest="blend" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png"/>
-			<widget name="handlung" position="140,415" size="740,160" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
+			<widget name="ContentTitle" position="0,60" size="900,26" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
+			<widget name="streamList" position="0,85" size="900,325" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
+			<eLabel position="185,460" size="700,2" backgroundColor="#00555556" />
+			<widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
+			<widget name="name" position="185,420" size="700,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
+			<widget name="handlung" position="185,473" size="700,140" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
 	        </screen>
 		"""
 		
@@ -329,15 +331,16 @@ class IStreamStreams(Screen, ConfigListScreen):
 		}, -1)
 		
 		self['title'] = Label("IStream.ws")
-		self['leftContentTitle'] = Label("Stream Auswahl")
-		self['stationIcon'] = Pixmap()
+		self['ContentTitle'] = Label("Stream Auswahl")
+		self['coverArt'] = Pixmap()
 		self['handlung'] = Label("")
+		self['name'] = Label(filmName)
 		
-		self.streamList = []
+		self.streamListe = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.streamMenuList.l.setFont(0, gFont('Regular', 24))
 		self.streamMenuList.l.setItemHeight(25)
-		self['streamlist'] = self.streamMenuList
+		self['streamList'] = self.streamMenuList
 		self.keyLocked = True
 		self.onLayoutFinish.append(self.loadPage)
 		
@@ -348,7 +351,6 @@ class IStreamStreams(Screen, ConfigListScreen):
 		
 	def parseData(self, data):
 		print "parseData:"
-		details = re.findall('og:image".*?"(.*?)"', data)
 		streams = re.findall('a href="(.*?)".*?title=.*?\[(.*)\](.*)">', data)
 		if streams:
 			print "Streams found"
@@ -356,58 +358,60 @@ class IStreamStreams(Screen, ConfigListScreen):
 				if re.match('.*?(putlocker|sockshare|streamclou|xvidstage|filenuke|movreel|nowvideo|xvidstream|uploadc|vreer|MonsterUploads|Novamov|Videoweed|Divxstage|Ginbig|Flashstrea|Movshare|yesload|faststream|Vidstream|PrimeShare|flashx|Divxmov|Putme|Zooupload|Click.*?Play)', isStream, re.S|re.I):
 					#print isUrl
 					#print isStream,streamPart
-					self.streamList.append((isStream,isUrl,streamPart))
+					self.streamListe.append((isStream,isUrl,streamPart))
+				else:
+					print "Wrong Hoster:"
+					print isStream
+					print isUrl
 			self.keyLocked = False			
 		else:
 			print "No Streams found"
-			self.streamList.append(("No streams found!",""))			
-		self.streamMenuList.setList(map(IStreamStreamListEntry, self.streamList))
+			self.streamListe.append(("No streams found !",""))			
+		self.streamMenuList.setList(map(IStreamStreamListEntry, self.streamListe))
 			
-		if details:
-			#print "Details found"
-			coverUrl = details[0]
-			downloadPage(coverUrl, "/tmp/Icon.jpg").addCallback(self.ShowCover)			
+		m = re.findall('og:image".*?"(.*?)"', data)
+		if m:
+			#print "CoverURL found"
+			downloadPage(m[0], "/tmp/Icon.jpg").addCallback(self.ShowCover)			
 	
 	def ShowCover(self, picData):
 		print "ShowCover:"
 		if fileExists("/tmp/Icon.jpg"):
-			self['stationIcon'].instance.setPixmap(None)
+			self['coverArt'].instance.setPixmap(None)
 			self.scale = AVSwitch().getFramebufferScale()
 			self.picload = ePicLoad()
-			size = self['stationIcon'].instance.size()
+			size = self['coverArt'].instance.size()
 			self.picload.setPara((size.width(), size.height(), self.scale[0], self.scale[1], False, 1, "#FF000000"))
 			if self.picload.startDecode("/tmp/Icon.jpg", 0, 0, False) == 0:
 				ptr = self.picload.getData()
 				if ptr != None:
-					self['stationIcon'].instance.setPixmap(ptr.__deref__())
-					self['stationIcon'].show()
+					self['coverArt'].instance.setPixmap(ptr.__deref__())
+					self['coverArt'].show()
 					del self.picload
 
 	def dataError(self, error):
 		print "dataError:"
 		print error
-		self.streamList.append(("No streams found!",""))			
-		self.streamMenuList.setList(map(IStreamStreamListEntry, self.streamList))
+		self.streamListe.append(("No streams found !",""))			
+		self.streamMenuList.setList(map(IStreamStreamListEntry, self.streamListe))
 			
 	def keyOK(self):
 		if self.keyLocked:
 			return
-		streamLink = self['streamlist'].getCurrent()[0][1]
-		streamPart = self['streamlist'].getCurrent()[0][2]
-		self.filmName = "%s%s" % (self.filmName,streamPart)
+		streamLink = self['streamList'].getCurrent()[0][1]
 		fp = urllib.urlopen(streamLink.replace('http://video.istream.ws/embed.php?m=','http://istream.ws/mirror.php?m='))
 		streamLink = fp.geturl()
 		fp.close()
-		print "get_streamLink: %s" % streamLink
+		print "get_streamLink:"
 		get_stream_link(self.session).check_link(streamLink, self.got_link)
 			
 	def got_link(self, stream_url):
-		#print "got_link:"
+		print "got_link:"
 		if stream_url == None:
 			message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=3)
 		else:
 			sref = eServiceReference(0x1001, 0, stream_url)
-			sref.setName(self.filmName)
+			sref.setName("%s%s" % (self.filmName,self['streamList'].getCurrent()[0][2]))
 			self.session.open(MoviePlayer, sref)
 	
 	def keyCancel(self):
