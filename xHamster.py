@@ -52,7 +52,7 @@ class xhamsterGenreScreen(Screen):
 		self.genreliste.append(("Arab", "http://www.xhamster.com/channels/new-arab-"))
 		self.genreliste.append(("Asian", "http://www.xhamster.com/channels/new-asian-"))
 		self.genreliste.append(("Babes", "http://www.xhamster.com/channels/new-babes-"))
-                self.genreliste.append(("Babysitters", "http://www.xhamster.com/channels/new-babysitters-"))
+		self.genreliste.append(("Babysitters", "http://www.xhamster.com/channels/new-babysitters-"))
 		self.genreliste.append(("BBW", "http://www.xhamster.com/channels/new-bbw-"))
 		self.genreliste.append(("BDSM", "http://www.xhamster.com/channels/new-bdsm-"))
 		self.genreliste.append(("Beach", "http://www.xhamster.com/channels/new-beach-"))
@@ -177,9 +177,6 @@ class xhamster(Screen):
 			<widget name="runtime" position="330,500" size="580,25" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
 			<eLabel text="Page" position="230,530" size="100,25" backgroundColor="#00101214" transparent="1" foregroundColor="#00555556" font="Regular;20" valign="top" />
 			<widget name="page" position="330,530" size="580,25" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
-			<widget source="session.CurrentService" render="Label" position="330,70" size="120,24" zPosition="1" font="Regular;24" halign="left" transparent="1">
-					<convert type="ServicePosition">Position,ShowHours</convert>
-			</widget>
 		</screen>"""
 
 	def __init__(self, session, genreLink):
