@@ -114,7 +114,7 @@ class bsSerien(Screen, ConfigListScreen):
 		self.onLayoutFinish.append(self.loadPage)
 		
 	def loadPage(self):
-		url = "http://www.burning-seri.es/andere-serien"
+		url = "http://www.burning-seri.es/serie-alphabet"
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 		
 	def parseData(self, data):
