@@ -144,7 +144,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige 4tube:", config.mediaportal.show4tube))
 		self["config"].setList(self.configlist)
 
-		self['title'] = Label("MediaPortal - Setup - (version 3.5.1)")
+		self['title'] = Label("MediaPortal - Setup - (version 3.5.2)")
 		self['name'] = Label("Setup")
 		self['coverArt'] = Pixmap()
 		
@@ -201,7 +201,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			"menu" : self.keySetup
 		}, -1)
 
-		self['title'] = Label("MediaPortal v3.5.1")
+		self['title'] = Label("MediaPortal v3.5.2")
 		
 		self['name'] = Label("Plugin Auswahl")
 		
