@@ -2,6 +2,7 @@
 
 from imports import *
 from decrypt import *
+import Queue
 
 def IStreamGenreListEntry(entry):
 	return [entry,
@@ -54,6 +55,7 @@ class showIStreamGenre(Screen):
 		genreListe = []
 		Genre = [("Kino", "http://istream.ws/c/filme/kino/page/"),
 			("Neue Filme", "http://istream.ws/page/"),
+			("Alle Filme", "http://istream.ws/c/filme/page/"),
 			("Abenteuer", "http://istream.ws/c/filme/abenteuer/page/"),
 			("Action", "http://istream.ws/c/filme/action/page/"),
 			("Adventure", "http://istream.ws/c/filme/adventure/page/"),
@@ -132,42 +134,102 @@ class IStreamFilmListeScreen(Screen):
 		self.genreName = genreName
 		Screen.__init__(self, session)
 		
-		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions"], {
+		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions","DirectionActions"], {
 			"ok"    : self.keyOK,
 			"cancel": self.keyCancel,
 			"up" : self.keyUp,
 			"down" : self.keyDown,
 			"right" : self.keyRight,
 			"left" : self.keyLeft,
+			"upUp" : self.key_repeatedUp,
+			"rightUp" : self.key_repeatedUp,
+			"leftUp" : self.key_repeatedUp,
+			"downUp" : self.key_repeatedUp,
+			"upRepeated" : self.keyUpRepeated,
+			"downRepeated" : self.keyDownRepeated,
+			"rightRepeated" : self.keyRightRepeated,
+			"leftRepeated" : self.keyLeftRepeated,
 			"nextBouquet" : self.keyPageUp,
-			"prevBouquet" : self.keyPageDown
+			"prevBouquet" : self.keyPageDown,
+			"1" : self.key_1,
+			"3" : self.key_3,
+			"4" : self.key_4,
+			"6" : self.key_6,
+			"7" : self.key_7,
+			"9" : self.key_9,
+			"green" : self.keySortAZ,
+			"yellow" : self.keySortIMDB
 		}, -1)
 
+		self.sortOrder = 0;
+		self.sortParIMDB = "?imdb_rating=desc"
+		self.sortParAZ = "?orderby=title&order=ASC"
+		self.genreTitle = "Filme in Genre "
+		self.sortOrderStrAZ = " - Sortierung A-Z"
+		self.sortOrderStrIMDB = " - Sortierung IMDB"
+		self.sortOrderStrGenre = ""
 		self['title'] = Label("IStream.ws")
-		self['leftContentTitle'] = Label("Filme in Genre "+self.genreName)
+		self['leftContentTitle'] = Label("")
 		self['name'] = Label("")
 		self['handlung'] = Label("")
 		self['coverArt'] = Pixmap()
 		self['page'] = Label("")
 		
+		self.filmQ = Queue.Queue(0)
+		self.hanQ = Queue.Queue(0)
+		self.semaL = 0
+		self.semaH = 0
 		self.keyLocked = True
 		self.filmListe = []
 		self.keckse = {}
 		self.page = 0
 		self.pages = 0;
+		self.neueFilme = re.match('Neue Filme',self.genreName)
+		self.setGenreStrTitle()
+		
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
 		self.chooseMenuList.l.setItemHeight(25)
 		self['filmList'] = self.chooseMenuList
 		
 		self.onLayoutFinish.append(self.loadPage)
-		
+
+	def setGenreStrTitle(self):
+		if not self.neueFilme:
+			if not self.sortOrder:
+				self.sortOrderStrGenre = self.sortOrderStrAZ
+			else:
+				self.sortOrderStrGenre = self.sortOrderStrIMDB
+		else:
+			self.sortOrderStrGenre = ""
+		self['leftContentTitle'].setText("%s%s%s" % (self.genreTitle,self.genreName,self.sortOrderStrGenre))
+
 	def loadPage(self):
-		url = "%s%s" % (self.genreLink, str(self.page))
+		print "loadPage:"
+		if not self.sortOrder:
+			url = "%s%s%s" % (self.genreLink, str(self.page), self.sortParAZ)
+		else:
+			url = "%s%s%s" % (self.genreLink, str(self.page), self.sortParIMDB)
+		if self.page:
+			self['page'].setText("%d / %d" % (self.page,self.pages))
+
+		self.filmQ.put(url)
+		print "semaL ",self.semaL
+		if not self.semaL:
+			self.semaL = 1
+			self.loadPageQueued()
+		else:
+			return
+		
+	def loadPageQueued(self):
+		while not self.filmQ.empty():
+			url = self.filmQ.get_nowait()
+		#self.semaL = 0
 		print url
 		getPage(url, cookies=self.keckse, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
-
+		
 	def dataError(self, error):
+		self.semaL=0
 		print "dataError:"
 		print error
 		self.filmListe.append(("No movies found !",""))
@@ -175,6 +237,7 @@ class IStreamFilmListeScreen(Screen):
 		
 	def loadPageData(self, data):
 		print "loadPageData:"
+			
 		if not re.match('http://istream.ws/page/',self.genreLink):
 			filme = re.findall('<div class="cover">.*?<a href="(.*?)" rel=.*?title="(.*?)"><img class=.*?\?src=(.*?)&h=', data, re.S)
 		else:
@@ -190,39 +253,61 @@ class IStreamFilmListeScreen(Screen):
 					self.pages = 1
 				self.page = 1
 				print "Page: %d / %d" % (self.page,self.pages)
+				self['page'].setText("%d / %d" % (self.page,self.pages))
 				
 			self.filmListe = []
 			for	(url,name,imageurl) in filme:
 				#print	"Url: ", url, "Name: ", name, "ImgUrl: ", imageurl
 				self.filmListe.append((decodeHtml(name), url, imageurl))
 			self.chooseMenuList.setList(map(IStreamFilmListEntry,	self.filmListe))
-			self.keyLocked	= False
+			
+			#if not self.filmQ.empty():
+			#	self.loadPageQueued()
+			#	return
 			self.loadPic()
 		else:
 			print "No movies found !"
 			self.filmListe.append(("No movies found !",""))
 			self.chooseMenuList.setList(map(IStreamFilmListEntry,	self.filmListe))
+			if self.filmQ.empty():
+				self.semaL = 0
+			else:
+				self.loadPageQueued()
 
 	def loadPic(self):
 		print "loadPic:"
-		self['page'].setText("%d / %d" % (self.page,self.pages))
 		streamName = self['filmList'].getCurrent()[0][0]
-		streamUrl = self['filmList'].getCurrent()[0][1]
-		self.getHandlung(streamUrl)
 		self['name'].setText(streamName)
 		streamPic = self['filmList'].getCurrent()[0][2]
+		
+		streamUrl = self['filmList'].getCurrent()[0][1]
+		self.getHandlung(streamUrl)
 		downloadPage(streamPic, "/tmp/Icon.jpg").addCallback(self.ShowCover)
-	
+		
 	def getHandlung(self, url):
+		print "getHandlung:"
+		self.hanQ.put(url)
+		if not self.semaH:
+			self.semaH = 1
+			self.getHandlungQeued()
+		else:
+			return
+		
+	def getHandlungQeued(self):
+		while not self.hanQ.empty():
+			url = self.hanQ.get_nowait()
+		#print url
 		getPage(url, cookies=self.keckse, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.setHandlung).addErrback(self.dataErrorH)
-	
+		
 	def dataErrorH(self, error):
+		self.semaH = 0
 		print "dataErrorH:"
 		print error
 		self['handlung'].setText("Keine infos gefunden.")
 
 	def setHandlung(self, data):
 		print "setHandlung:"
+			
 		m = re.findall('meta property="og:description".*?=\'(.*?)\' />', data)
 		if m:
 			self['handlung'].setText(decodeHtml(re.sub(r"\s+", " ", m[0])))
@@ -230,7 +315,15 @@ class IStreamFilmListeScreen(Screen):
 			print "No Infos found !"
 			self['handlung'].setText("Keine infos gefunden.")
 			
+		if not self.hanQ.empty():
+			self.getHandlungQeued()
+		else:
+			self.semaH = 0;
+		#print "semaH: ",self.semaH
+		#print "semaL: ",self.semaL
+		
 	def ShowCover(self, picData):
+		print "ShowCover:"
 		if fileExists("/tmp/Icon.jpg"):
 			self['coverArt'].instance.setPixmap(None)
 			self.scale = AVSwitch().getFramebufferScale()
@@ -243,9 +336,18 @@ class IStreamFilmListeScreen(Screen):
 					self['coverArt'].instance.setPixmap(ptr.__deref__())
 					self['coverArt'].show()
 					del self.picload
-
+					
+		if not self.filmQ.empty():
+			self.loadPageQueued()
+		else:
+			self.semaL = 0;
+		
+		#print "semaH: ",self.semaH
+		#print "semaL: ",self.semaL
+		self.keyLocked	= False
+			
 	def keyOK(self):
-		if self.keyLocked:
+		if (self.keyLocked|self.semaL|self.semaH):
 			return
 
 		streamLink = self['filmList'].getCurrent()[0][1]
@@ -253,45 +355,127 @@ class IStreamFilmListeScreen(Screen):
 		self.session.open(IStreamStreams, streamLink, streamName)
 	
 	def keyUp(self):
-		if self.keyLocked:
+		if (self.keyLocked|self.semaL|self.semaH):
 			return
 		self['filmList'].up()
 		self.loadPic()
 		
 	def keyDown(self):
-		if self.keyLocked:
+		if (self.keyLocked|self.semaL|self.semaH):
 			return
 		self['filmList'].down()
 		self.loadPic()
 		
+	def keyUpRepeated(self):
+		#print "keyUpRepeated"
+		if (self.keyLocked|self.semaL|self.semaH):
+			return
+		self['filmList'].up()
+		
+	def keyDownRepeated(self):
+		#print "keyDownRepeated"
+		if (self.keyLocked|self.semaL|self.semaH):
+			return
+		self['filmList'].down()
+		
+	def key_repeatedUp(self):
+		#print "key_repeatedUp"
+		self.loadPic()
+		
 	def keyLeft(self):
-		if self.keyLocked:
+		if (self.keyLocked|self.semaL|self.semaH):
 			return
 		self['filmList'].pageUp()
-		self.loadPic()
 		
 	def keyRight(self):
-		if self.keyLocked:
+		if (self.keyLocked|self.semaL|self.semaH):
 			return
 		self['filmList'].pageDown()
-		self.loadPic()
+			
+	def keyLeftRepeated(self):
+		if (self.keyLocked|self.semaL|self.semaH):
+			return
+		self['filmList'].pageUp()
+		
+	def keyRightRepeated(self):
+		if (self.keyLocked|self.semaL|self.semaH):
+			return
+		self['filmList'].pageDown()
 			
 	def keyPageDown(self):
-		print "keyPageDown:"
-		if self.keyLocked:
-			return
-		if not self.page < 2:
-			self.page -= 1
-			self.loadPage()
+		#print "keyPageDown()"
+		self.keyPageDownFast(1)
 			
 	def keyPageUp(self):
-		print "keyPageUp:"
+		#print "keyPageUp()"
+		self.keyPageUpFast(1)
+			
+	def keyPageUpFast(self,step):
 		if self.keyLocked:
 			return
-		if self.page < self.pages:
-			self.page += 1 
+		#print "keyPageUpFast: ",step
+		oldpage = self.page
+		if (self.page + step) <= self.pages:
+			self.page += step
+		else:
+			self.page += self.pages - self.page
+		#print "Page %d/%d" % (self.page,self.pages)
+		if oldpage != self.page:
 			self.loadPage()
 		
+	def keyPageDownFast(self,step):
+		if self.keyLocked:
+			return
+		print "keyPageDownFast: ",step
+		oldpage = self.page
+		if (self.page - step) >= 1:
+			self.page -= step
+		else:
+			self.page -=  -1 + self.page
+		#print "Page %d/%d" % (self.page,self.pages)
+		if oldpage != self.page:
+			self.loadPage()
+
+	def key_1(self):
+		#print "keyPageDownFast(2)"
+		self.keyPageDownFast(2)
+		
+	def key_4(self):
+		#print "keyPageDownFast(5)"
+		self.keyPageDownFast(5)
+		
+	def key_7(self):
+		#print "keyPageDownFast(10)"
+		self.keyPageDownFast(10)
+		
+	def key_3(self):
+		#print "keyPageUpFast(2)"
+		self.keyPageUpFast(2)
+		
+	def key_6(self):
+		#print "keyPageUpFast(5)"
+		self.keyPageUpFast(5)
+		
+	def key_9(self):
+		#print "keyPageUpFast(10)"
+		self.keyPageUpFast(10)
+
+	def keySortAZ(self):
+		if (self.keyLocked|self.semaL|self.semaH):
+			return
+		if self.sortOrder and not self.neueFilme:
+			self.sortOrder = 0
+			self.setGenreStrTitle()
+			self.loadPage()
+	
+	def keySortIMDB(self):
+		if (self.keyLocked|self.semaL|self.semaH):
+			return
+		if not (self.sortOrder or self.neueFilme):
+			self.sortOrder = 1
+			self.setGenreStrTitle()
+			self.loadPage()
+	
 	def keyCancel(self):
 		self.close()
 
@@ -360,7 +544,7 @@ class IStreamStreams(Screen, ConfigListScreen):
 					#print isStream,streamPart
 					self.streamListe.append((isStream,isUrl,streamPart))
 				else:
-					print "Wrong Hoster:"
+					print "No supported hoster:"
 					print isStream
 					print isUrl
 			self.keyLocked = False			
@@ -400,6 +584,7 @@ class IStreamStreams(Screen, ConfigListScreen):
 			return
 		streamLink = self['streamList'].getCurrent()[0][1]
 		fp = urllib.urlopen(streamLink.replace('http://video.istream.ws/embed.php?m=','http://istream.ws/mirror.php?m='))
+		#fp = urllib.urlopen(streamLink)
 		streamLink = fp.geturl()
 		fp.close()
 		print "get_streamLink:"
