@@ -1,4 +1,5 @@
 from imports import *
+from decrypt import *
 
 def pornerbrosGenreListEntry(entry):
 	return [entry,
@@ -209,7 +210,7 @@ class pornerbrosFilmScreen(Screen):
 		xhListe = re.findall('<div class="contents_gallery_item">.*?<a href="(.*?)" title="(.*?)".*?gid="(.*?)".*?data-original="(.*?.jpg)".*?length">(.*?)<.*?views">(.*?)</span>', data, re.S)
 		if xhListe:
 			for (xhLink, xhName, xhIdnr, xhImage, xhRuntime, xhViews) in xhListe:
-				self.streamList.append((xhName, xhLink, xhIdnr, xhImage, xhRuntime, xhViews))
+				self.streamList.append((decodeHtml(xhName), xhLink, xhIdnr, xhImage, xhRuntime, xhViews))
 			self.streamMenuList.setList(map(pornerbrosStreamListEntry, self.streamList))
 			self.keyLocked = False
 			self.showInfos()

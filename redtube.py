@@ -1,4 +1,5 @@
 from imports import *
+from decrypt import *
 
 def redtubeGenreListEntry(entry):
 	return [entry,
@@ -181,7 +182,7 @@ class redtubeFilmScreen(Screen):
 		phMovies = re.findall('class="video".*?<a href="(.*?)".*?title="(.*?)".*?class="te" src="(.*?)".*?class="time".*?span class="d">(.*?)</span>.*?style="float:left;">(.*?)</div>', data, re.S)
 		if phMovies:
 			for (phUrl, phTitle, phImage, phRuntime, phViews) in phMovies:
-				self.filmliste.append((phTitle, phUrl, phImage, phRuntime, phViews))
+				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage, phRuntime, phViews))
 			self.chooseMenuList.setList(map(redtubeFilmListEntry, self.filmliste))
 			self.keyLocked = False
 			self.showInfos()

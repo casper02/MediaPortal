@@ -1,4 +1,5 @@
 from imports import *
+from decrypt import *
 
 def youpornGenreListEntry(entry):
 	return [entry,
@@ -213,7 +214,7 @@ class youpornFilmScreen(Screen):
 		phMovies = re.findall('class="wrapping-video-box">.*?<a href="(.*?)">.*?<img src="(.*?)" alt="(.*?)".*?class="duration">(.*?)<span>length.*?views">(.*?)<span>views', data, re.S)
 		if phMovies:
 			for (phUrl, phImage, phTitle, phRuntime, phViews) in phMovies:
-				self.filmliste.append((phTitle, phUrl, phImage, phRuntime, phViews))
+				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage, phRuntime, phViews))
 			self.chooseMenuList.setList(map(youpornFilmListEntry, self.filmliste))
 			self.keyLocked = False
 			self.showInfos()
