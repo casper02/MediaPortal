@@ -1,0 +1,23 @@
+<!-- Radiode -->
+		<screen name="Radio.de" position="center,center" size="900,580" backgroundColor="#00060606" flags="wfNoBorder">
+			<eLabel position="0,0" size="900,80" backgroundColor="#00242424"/>
+			<widget name="title" position="25,15" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;26" valign="center" halign="left" />
+			<widget source="global.CurrentTime" render="Label" position="730,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;26" valign="center" halign="right">
+				<convert type="ClockToText">Format:%-H:%M</convert>
+			</widget>
+			<widget source="global.CurrentTime" render="Label" position="580,20" size="300,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;18" valign="center" halign="right">
+				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+			</widget>
+			<widget name="leftContentTitle" position="0,80" size="440,26" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
+			<widget name="streamlist" position="0,106" size="440,350" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
+			<widget name="rightContentTitle" position="460,80" size="440,26" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>		
+			<widget name="playlist" position="460,106" size="440,350" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
+			<widget name="stationIcon" position="20,465" zPosition="1" size="60,60" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png"/>
+			<eLabel text="Play" position="120,470" size="120,25" backgroundColor="#00101214" transparent="1" foregroundColor="#00555556" font="Regular;20" valign="top"/>
+			<widget name="stationInfo" position="240,470" size="450,25" backgroundColor="#00101214" foregroundColor="#00e5b243" transparent="1" font="Regular;20" valign="top"/>
+			<widget source="session.CurrentService" render="Label" position="750,470" size="120,25" font="Regular;20" foregroundColor="#00e5b243" backgroundColor="#00101214" halign="right" valign="top" transparent="1">
+				<convert type="ServicePosition">Position</convert>
+			</widget>
+			<eLabel text="Info" position="120,500" size="120,25" backgroundColor="#00101214" foregroundColor="#00555556" transparent="1" font="Regular;20" valign="top"/>
+			<widget name="stationDesc" position="240,500" zPosition="1" size="640,60" backgroundColor="#00101214" transparent="1" font="Regular;19" halign="left" valign="top"/>		
+	        </screen>
