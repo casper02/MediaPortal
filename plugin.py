@@ -39,10 +39,12 @@ from myEntertainment import *
 from movie2k import *
 from iStreamWS import *
 from x4tube import *
+from redtube import *
+from youporn import *
+from pornerbros import *
 
 config.mediaportal = ConfigSubsection()
 config.mediaportal.pincode = ConfigPIN(default = 0000)
-config.mediaportal.skin = ConfigSelection(default = "original", choices = [("liquidblue", _("liquidblue")), ("original", _("original"))])
 config.mediaportal.showDoku = ConfigYesNo(default = True)
 config.mediaportal.showRofl = ConfigYesNo(default = True)
 config.mediaportal.showFail = ConfigYesNo(default = True)
@@ -54,9 +56,7 @@ config.mediaportal.showFocus = ConfigYesNo(default = True)
 config.mediaportal.showYourfree = ConfigYesNo(default = True)
 config.mediaportal.showFilmOn = ConfigYesNo(default = True)
 config.mediaportal.showTvkino = ConfigYesNo(default = True)
-config.mediaportal.showXhamster = ConfigYesNo(default = True)
 config.mediaportal.showSpobox = ConfigYesNo(default = True)
-config.mediaportal.showPornhub = ConfigYesNo(default = True)
 config.mediaportal.showNetzKino = ConfigYesNo(default = True)
 config.mediaportal.showKinderKino = ConfigYesNo(default = True)
 config.mediaportal.showSportBild = ConfigYesNo(default = True)
@@ -76,27 +76,42 @@ config.mediaportal.showNhl = ConfigYesNo(default = True)
 config.mediaportal.showtivi = ConfigYesNo(default = True)
 config.mediaportal.showSongsto = ConfigYesNo(default = True)
 config.mediaportal.showMEHD = ConfigYesNo(default = True)
-config.mediaportal.showM2k = ConfigYesNo(default = True)
-config.mediaportal.showM2kPorn = ConfigYesNo(default = True)
 config.mediaportal.showIStream = ConfigYesNo(default = True)
-config.mediaportal.show4tube = ConfigYesNo(default = True)
+config.mediaportal.showM2k = ConfigYesNo(default = True)
+
+#porn
+config.mediaportal.showM2kPorn = ConfigYesNo(default = False)
+config.mediaportal.showXhamster = ConfigYesNo(default = False)
+config.mediaportal.showPornhub = ConfigYesNo(default = False)
+config.mediaportal.show4tube = ConfigYesNo(default = False)
+config.mediaportal.showredtube = ConfigYesNo(default = False)
+config.mediaportal.showyouporn = ConfigYesNo(default = False)
+config.mediaportal.showpornerbros = ConfigYesNo(default = False)
 
 class hauptScreenSetup(Screen, ConfigListScreen):
+	skin = 	"""
+		<screen name="MediaPortal_Setup" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
+			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
+			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
+			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
+				<convert type="ClockToText">Format:%-H:%M</convert>
+			</widget>
+			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
+				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+			</widget>
+			<widget name="config" position="0,60" size="900,350" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
+			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
+			<widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,440" size="160,120" transparent="1" alphatest="blend" />
+			<widget name="name" position="230,420" size="560,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
+		</screen>"""
 
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/hauptScreenSetup.xml" % config.mediaportal.skin.value
-		print path
-		with open(path, "r") as f:
-			self.skin = f.read()
-			f.close()
-			
 		Screen.__init__(self, session)
 		
 		self.configlist = []
 		ConfigListScreen.__init__(self, self.configlist)
 		self.configlist.append(getConfigListEntry("Pincode:", config.mediaportal.pincode))
-		self.configlist.append(getConfigListEntry("Skinauswahl:", config.mediaportal.skin))
 		self.configlist.append(getConfigListEntry("Zeige Doku:", config.mediaportal.showDoku))
 		self.configlist.append(getConfigListEntry("Zeige Rofl:", config.mediaportal.showRofl))
 		self.configlist.append(getConfigListEntry("Zeige Fail:", config.mediaportal.showFail))
@@ -111,7 +126,6 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige Burning Series:", config.mediaportal.showBs))
 		self.configlist.append(getConfigListEntry("Zeige Kinox:", config.mediaportal.showKinox))
 		self.configlist.append(getConfigListEntry("Zeige Movie2k:", config.mediaportal.showM2k))
-		self.configlist.append(getConfigListEntry("Zeige Movie2k-Porn:", config.mediaportal.showM2kPorn))
 		self.configlist.append(getConfigListEntry("Zeige Konzert Oase:", config.mediaportal.showKoase))
 		self.configlist.append(getConfigListEntry("Zeige 1channel:", config.mediaportal.show1channel))
 		self.configlist.append(getConfigListEntry("Zeige Focus:", config.mediaportal.showFocus))
@@ -119,9 +133,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige FilmeOn:", config.mediaportal.showFilmOn))
 		self.configlist.append(getConfigListEntry("Zeige TvKino:", config.mediaportal.showTvkino))
 		self.configlist.append(getConfigListEntry("Zeige NetzKino:", config.mediaportal.showNetzKino))
-		self.configlist.append(getConfigListEntry("Zeige xHamster:", config.mediaportal.showXhamster))
 		self.configlist.append(getConfigListEntry("Zeige Spobox:", config.mediaportal.showSpobox))
-		self.configlist.append(getConfigListEntry("Zeige Pornhub:", config.mediaportal.showPornhub))
 		self.configlist.append(getConfigListEntry("Zeige Radio:", config.mediaportal.showRadio))
 		self.configlist.append(getConfigListEntry("Zeige Cczwei:", config.mediaportal.showCczwei))
 		self.configlist.append(getConfigListEntry("Zeige Filmtrailer:", config.mediaportal.showTrailer))
@@ -133,7 +145,15 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige Songsto:", config.mediaportal.showSongsto))
 		self.configlist.append(getConfigListEntry("Zeige My-Entertainment:", config.mediaportal.showMEHD))
 		self.configlist.append(getConfigListEntry("Zeige IStream:", config.mediaportal.showIStream))
+		# porn
+		self.configlist.append(getConfigListEntry("Zeige Movie2k-Porn:", config.mediaportal.showM2kPorn))
+		self.configlist.append(getConfigListEntry("Zeige xHamster:", config.mediaportal.showXhamster))
+		self.configlist.append(getConfigListEntry("Zeige Pornhub:", config.mediaportal.showPornhub))
 		self.configlist.append(getConfigListEntry("Zeige 4tube:", config.mediaportal.show4tube))
+		self.configlist.append(getConfigListEntry("Zeige Youporn:", config.mediaportal.showyouporn))
+		self.configlist.append(getConfigListEntry("Zeige RedTube:", config.mediaportal.showredtube))
+		self.configlist.append(getConfigListEntry("Zeige YouPorn:", config.mediaportal.showyouporn))
+		self.configlist.append(getConfigListEntry("Zeige Pornerbros:", config.mediaportal.showpornerbros))
 		self["config"].setList(self.configlist)
 
 		self['title'] = Label("MediaPortal - Setup - (version 3.5.3)")
@@ -148,6 +168,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 	def keyOK(self):
 		for x in self["config"].list:
 			x[1].save()
+		configfile.save()
 		self.close()
 	
 	def keyCancel(self):
@@ -160,15 +181,27 @@ class chooseMenuList(MenuList):
 		self.l.setItemHeight(40)
 
 class haupt_Screen(Screen, ConfigListScreen):
+	skin = 	"""
+		<screen name="MediaPortal" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
+			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
+			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
+			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
+				<convert type="ClockToText">Format:%-H:%M</convert>
+			</widget>
+			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
+				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+			</widget>
+			<widget name="Infos" position="30,60" size="260,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
+			<widget name="infos" position="30,85" size="260,480" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
+			<widget name="Fun" position="320,60" size="260,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
+			<widget name="fun" position="320,85" size="260,480" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
+			<widget name="Movies" position="610,60" size="260,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
+			<widget name="movies" position="610,85" size="260,480" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
+			<widget name="name" position="0,580" size="900,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;28" valign="top" halign="center"/>
+		</screen>"""
+
 	def __init__(self, session):
 		self.session = session
-
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/haupt_Screen.xml" % config.mediaportal.skin.value
-		print path
-		with open(path, "r") as f:
-			self.skin = f.read()
-			f.close()
-			
 		Screen.__init__(self, session)
 		
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions"], {
@@ -181,7 +214,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			"menu" : self.keySetup
 		}, -1)
 
-		self['title'] = Label("MediaPortal v3.5.1")
+		self['title'] = Label("MediaPortal v3.5.3")
 		
 		self['name'] = Label("Plugin Auswahl")
 		
@@ -273,16 +306,22 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.fun.append(self.hauptListEntry("TV-Kino", "tvkino"))
 		if config.mediaportal.showRadio.value:
 			self.fun.append(self.hauptListEntry("Radio", "radiode"))
-		if config.mediaportal.showXhamster.value:
-			self.fun.append(self.hauptListEntry("xHamster", "xhamster"))
 		if config.mediaportal.showSpobox.value:
 			self.fun.append(self.hauptListEntry("Spobox", "spobox"))
-		if config.mediaportal.showPornhub.value:
-			self.fun.append(self.hauptListEntry("PornHub", "pornhub"))
 		if config.mediaportal.showSongsto.value:
 			self.fun.append(self.hauptListEntry("Songsto", "songsto"))
+		if config.mediaportal.showXhamster.value:
+			self.fun.append(self.hauptListEntry("xHamster", "xhamster"))
+		if config.mediaportal.showPornhub.value:
+			self.fun.append(self.hauptListEntry("PornHub", "pornhub"))
 		if config.mediaportal.show4tube.value:
 			self.fun.append(self.hauptListEntry("4tube", "4tube"))
+		if config.mediaportal.showredtube.value:
+			self.fun.append(self.hauptListEntry("RedTube", "redtube"))
+		if config.mediaportal.showyouporn.value:
+			self.fun.append(self.hauptListEntry("YouPorn", "youporn"))
+		if config.mediaportal.showyouporn.value:
+			self.fun.append(self.hauptListEntry("Pornerbros", "pornerbros"))
 
 		self.movies.sort()
 		self.infos.sort()
@@ -471,6 +510,12 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(showIStreamGenre)
 		elif auswahl == "4tube":
 			self.session.open(fourtubeGenreScreen)
+		elif auswahl == "RedTube":
+			self.session.open(redtubeGenreScreen)
+		elif auswahl == "YouPorn":
+			self.session.open(youpornGenreScreen)
+		elif auswahl == "Pornerbros":
+			self.session.open(pornerbrosGenreScreen)
 
 	def keyCancel(self):
 		self.close()
@@ -480,4 +525,4 @@ def main(session, **kwargs):
 	session.open(haupt_Screen)
 
 def Plugins(**kwargs):
-	return PluginDescriptor(name=_("MediaPortal"), description="MediaPortal", where = PluginDescriptor.WHERE_PLUGINMENU, icon="plugin.png", fnc=main)
+	return PluginDescriptor(name=_("MediaPortal"), description="MediaPortal", where = [PluginDescriptor.WHERE_PLUGINMENU, PluginDescriptor.WHERE_EXTENSIONSMENU], icon="plugin.png", fnc=main)

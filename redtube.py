@@ -1,4 +1,5 @@
 from imports import *
+from decrypt import *
 
 def redtubeGenreListEntry(entry):
 	return [entry,
@@ -11,15 +12,24 @@ def redtubeFilmListEntry(entry):
 		] 
 		
 class redtubeGenreScreen(Screen):
-	
+	skin = 	"""
+		<screen name="redtube" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
+			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
+			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
+			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
+				<convert type="ClockToText">Format:%-H:%M</convert>
+			</widget>
+			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
+				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+			</widget>
+			<widget name="genreList" position="0,60" size="900,350" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
+			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
+			<widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
+			<widget name="name" position="230,420" size="560,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
+		</screen>"""
+
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/redtubeGenreScreen.xml" % config.mediaportal.skin.value
-		print path
-		with open(path, "r") as f:
-			self.skin = f.read()
-			f.close()
-			
 		Screen.__init__(self, session)
 		
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions"], {
@@ -31,7 +41,7 @@ class redtubeGenreScreen(Screen):
 			"left" : self.keyLeft
 		}, -1)
 
-		self['title'] = Label("REDTUBE.com")
+		self['title'] = Label("RedTube.com")
 		self['name'] = Label("Genre Auswahl")
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
@@ -46,6 +56,10 @@ class redtubeGenreScreen(Screen):
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
+		self.genreliste.append(("Newest", "http://www.redtube.com/?page="))
+		self.genreliste.append(("Top Rated", "http://www.redtube.com/top?page="))
+		self.genreliste.append(("Most Viewed", "http://www.redtube.com/mostviewed?page="))
+		self.genreliste.append(("Most Favored", "http://www.redtube.com/mostfavored?page="))
 		self.genreliste.append(("Amateur", "http://www.redtube.com/redtube/amateur?page="))
 		self.genreliste.append(("Anal", "http://www.redtube.com/redtube/anal?page="))
 		self.genreliste.append(("Asian", "http://www.redtube.com/redtube/asian?page="))
@@ -100,16 +114,31 @@ class redtubeGenreScreen(Screen):
 		self.close()
 
 class redtubeFilmScreen(Screen):
-	
+	skin = 	"""
+		<screen name="redtube" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
+			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
+			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
+			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
+				<convert type="ClockToText">Format:%-H:%M</convert>
+			</widget>
+			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
+				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+			</widget>
+			<widget name="genreList" position="0,60" size="900,350" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
+			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
+			<widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
+			<widget name="name" position="230,420" size="560,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
+			<eLabel text="Views" position="230,470" size="100,25" backgroundColor="#00101214" transparent="1" foregroundColor="#00555556" font="Regular;20" valign="top" />
+			<widget name="views" position="330,470" size="580,25" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
+			<eLabel text="Runtime" position="230,500" size="100,25" backgroundColor="#00101214" transparent="1" foregroundColor="#00555556" font="Regular;20" valign="top" />
+			<widget name="runtime" position="330,500" size="580,25" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
+			<eLabel text="Page" position="230,530" size="100,25" backgroundColor="#00101214" transparent="1" foregroundColor="#00555556" font="Regular;20" valign="top" />
+			<widget name="page" position="330,530" size="580,25" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
+		</screen>"""
+
 	def __init__(self, session, phCatLink):
 		self.session = session
 		self.phCatLink = phCatLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/redtubeFilmScreen.xml" % config.mediaportal.skin.value
-		print path
-		with open(path, "r") as f:
-			self.skin = f.read()
-			f.close()
-			
 		Screen.__init__(self, session)
 		
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions"], {
@@ -120,10 +149,11 @@ class redtubeFilmScreen(Screen):
 			"right" : self.keyRight,
 			"left" : self.keyLeft,
 			"nextBouquet" : self.keyPageUp,
-			"prevBouquet" : self.keyPageDown
+			"prevBouquet" : self.keyPageDown,
+			"green" : self.keyPageNumber
 		}, -1)
 
-		self['title'] = Label("REDTUBE.com")
+		self['title'] = Label("RedTube.com")
 		self['name'] = Label("Film Auswahl")
 		self['views'] = Label("")
 		self['runtime'] = Label("")
@@ -133,7 +163,6 @@ class redtubeFilmScreen(Screen):
 		self.page = 1
 		
 		self.filmliste = []
-		self.filmQualitaet = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
 		self.chooseMenuList.l.setItemHeight(25)
@@ -150,10 +179,10 @@ class redtubeFilmScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
 	def loadData(self, data):
-		phMovies = re.findall('class="video".*?<a href="(.*?)".*?title="(.*?)".*?class="te" src="(.*?)".*?class="time".*?span class="d">(.*?)</span>', data, re.S)
+		phMovies = re.findall('class="video".*?<a href="(.*?)".*?title="(.*?)".*?class="te" src="(.*?)".*?class="time".*?span class="d">(.*?)</span>.*?style="float:left;">(.*?)</div>', data, re.S)
 		if phMovies:
-			for (phUrl, phTitle, phImage, phRuntime) in phMovies:
-				self.filmliste.append((phTitle,phUrl,phImage,phRuntime))
+			for (phUrl, phTitle, phImage, phRuntime, phViews) in phMovies:
+				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage, phRuntime, phViews))
 			self.chooseMenuList.setList(map(redtubeFilmListEntry, self.filmliste))
 			self.keyLocked = False
 			self.showInfos()
@@ -165,8 +194,14 @@ class redtubeFilmScreen(Screen):
 		phTitle = self['genreList'].getCurrent()[0][0]
 		phImage = self['genreList'].getCurrent()[0][2]
 		phRuntime = self['genreList'].getCurrent()[0][3]
+		phViews = self['genreList'].getCurrent()[0][4]
+		phViews = phViews.replace('\t','')
+		phViews = phViews.replace(' views','')
+		phViews = phViews.replace('\r','')
+		phViews = phViews.replace('\n','')
 		self['name'].setText(phTitle)
 		self['runtime'].setText(phRuntime)
+		self['views'].setText(phViews)
 		downloadPage(phImage, "/tmp/Icon.jpg").addCallback(self.ShowCover)
 		
 	def ShowCover(self, picData):
@@ -182,6 +217,14 @@ class redtubeFilmScreen(Screen):
 					self['coverArt'].instance.setPixmap(ptr.__deref__())
 					self['coverArt'].show()
 					del self.picload
+
+	def keyPageNumber(self):
+		self.session.openWithCallback(self.callbackkeyPageNumber, VirtualKeyBoard, title = (_("Seitennummer eingeben")), text = str(self.page))
+
+	def callbackkeyPageNumber(self, answer):
+		if answer is not None:
+			self.page = int(answer)
+			self.loadpage()
 
 	def keyPageDown(self):
 		print "PageDown"
@@ -227,7 +270,6 @@ class redtubeFilmScreen(Screen):
 			return
 		phTitle = self['genreList'].getCurrent()[0][0]
 		phLink = 'http://www.redtube.com' + self['genreList'].getCurrent()[0][1]
-		self.filmQualitaet = []
 		self.keyLocked = True
 		getPage(phLink, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVideoPage).addErrback(self.dataError)
 

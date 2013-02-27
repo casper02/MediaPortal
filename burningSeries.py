@@ -13,14 +13,24 @@ def mainListEntry(entry):
 		]	
 		
 class bsMain(Screen, ConfigListScreen):
+	skin = 	"""
+		<screen name="Burning-seri.es" position="center,center" size="900,580" backgroundColor="#00060606" flags="wfNoBorder">
+			<eLabel position="0,0" size="900,80" backgroundColor="#00242424"/>
+			<widget name="title" position="25,15" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;26" valign="center" halign="left" />
+			<widget source="global.CurrentTime" render="Label" position="730,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;26" valign="center" halign="right">
+				<convert type="ClockToText">Format:%-H:%M</convert>
+			</widget>
+			<widget source="global.CurrentTime" render="Label" position="580,20" size="300,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;18" valign="center" halign="right">
+				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+			</widget>
+			<widget name="leftContentTitle" position="0,80" size="900,26" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
+			<widget name="streamlist" position="0,106" size="900,300" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
+			<widget name="stationIcon" position="10,415" size="107,150" transparent="1" alphatest="blend" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png"/>
+	        </screen>
+		"""
+		
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/bsMain.xml" % config.mediaportal.skin.value
-		print path
-		with open(path, "r") as f:
-			self.skin = f.read()
-			f.close()
-			
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
@@ -64,14 +74,24 @@ class bsMain(Screen, ConfigListScreen):
 		self.close()
 
 class bsSerien(Screen, ConfigListScreen):
+	skin = 	"""
+		<screen name="Burning-seri.es" position="center,center" size="900,580" backgroundColor="#00060606" flags="wfNoBorder">
+			<eLabel position="0,0" size="900,80" backgroundColor="#00242424"/>
+			<widget name="title" position="25,15" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;26" valign="center" halign="left" />
+			<widget source="global.CurrentTime" render="Label" position="730,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;26" valign="center" halign="right">
+				<convert type="ClockToText">Format:%-H:%M</convert>
+			</widget>
+			<widget source="global.CurrentTime" render="Label" position="580,20" size="300,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;18" valign="center" halign="right">
+				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+			</widget>
+			<widget name="leftContentTitle" position="0,80" size="900,26" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
+			<widget name="streamlist" position="0,106" size="900,300" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
+			<widget name="stationIcon" position="10,415" size="107,150" transparent="1" alphatest="blend" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png"/>
+	        </screen>
+		"""
+		
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/bsSerien.xml" % config.mediaportal.skin.value
-		print path
-		with open(path, "r") as f:
-			self.skin = f.read()
-			f.close()
-			
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
@@ -137,14 +157,24 @@ class bsSerien(Screen, ConfigListScreen):
 		self.close()
 
 class bsWatchlist(Screen, ConfigListScreen):
+	skin = 	"""
+		<screen name="Burning-seri.es" position="center,center" size="900,580" backgroundColor="#00060606" flags="wfNoBorder">
+			<eLabel position="0,0" size="900,80" backgroundColor="#00242424"/>
+			<widget name="title" position="25,15" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;26" valign="center" halign="left" />
+			<widget source="global.CurrentTime" render="Label" position="730,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;26" valign="center" halign="right">
+				<convert type="ClockToText">Format:%-H:%M</convert>
+			</widget>
+			<widget source="global.CurrentTime" render="Label" position="580,20" size="300,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;18" valign="center" halign="right">
+				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+			</widget>
+			<widget name="leftContentTitle" position="0,80" size="900,26" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
+			<widget name="streamlist" position="0,106" size="900,300" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
+			<widget name="stationIcon" position="10,415" size="107,150" transparent="1" alphatest="blend" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png"/>
+	        </screen>
+		"""
+		
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/bsWatchlist.xml" % config.mediaportal.skin.value
-		print path
-		with open(path, "r") as f:
-			self.skin = f.read()
-			f.close()
-			
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
@@ -218,14 +248,25 @@ class bsWatchlist(Screen, ConfigListScreen):
 		self.close()
 
 class bsStaffeln(Screen, ConfigListScreen):
+	skin = 	"""
+		<screen name="Burning-seri.es" position="center,center" size="900,580" backgroundColor="#00060606" flags="wfNoBorder">
+			<eLabel position="0,0" size="900,80" backgroundColor="#00242424"/>
+			<widget name="title" position="25,15" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;26" valign="center" halign="left" />
+			<widget source="global.CurrentTime" render="Label" position="730,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;26" valign="center" halign="right">
+				<convert type="ClockToText">Format:%-H:%M</convert>
+			</widget>
+			<widget source="global.CurrentTime" render="Label" position="580,20" size="300,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;18" valign="center" halign="right">
+				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+			</widget>
+			<widget name="leftContentTitle" position="0,80" size="900,26" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
+			<widget name="streamlist" position="0,106" size="900,300" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
+			<widget name="stationIcon" position="10,415" size="107,150" transparent="1" alphatest="blend" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png"/>
+			<widget name="handlung" position="140,415" size="740,160" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
+	        </screen>
+		"""
+		
 	def __init__(self, session, serienUrl):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/bsStaffeln.xml" % config.mediaportal.skin.value
-		print path
-		with open(path, "r") as f:
-			self.skin = f.read()
-			f.close()
-			
 		self.serienUrl = serienUrl
 		Screen.__init__(self, session)
 
@@ -315,14 +356,25 @@ class bsStaffeln(Screen, ConfigListScreen):
 		self.close()
 
 class bsEpisoden(Screen, ConfigListScreen):
+	skin = 	"""
+		<screen name="Burning-seri.es" position="center,center" size="900,580" backgroundColor="#00060606" flags="wfNoBorder">
+			<eLabel position="0,0" size="900,80" backgroundColor="#00242424"/>
+			<widget name="title" position="25,15" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;26" valign="center" halign="left" />
+			<widget source="global.CurrentTime" render="Label" position="730,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;26" valign="center" halign="right">
+				<convert type="ClockToText">Format:%-H:%M</convert>
+			</widget>
+			<widget source="global.CurrentTime" render="Label" position="580,20" size="300,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;18" valign="center" halign="right">
+				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+			</widget>
+			<widget name="leftContentTitle" position="0,80" size="900,26" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
+			<widget name="streamlist" position="0,106" size="900,300" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
+			<widget name="stationIcon" position="10,415" size="107,150" transparent="1" alphatest="blend" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png"/>
+			<widget name="handlung" position="140,415" size="740,160" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
+	        </screen>
+		"""
+		
 	def __init__(self, session, serienUrl, bsStaffel):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/bsEpisoden.xml" % config.mediaportal.skin.value
-		print path
-		with open(path, "r") as f:
-			self.skin = f.read()
-			f.close()
-		
 		self.serienUrl = serienUrl
 		self.bsStaffel = bsStaffel
 		Screen.__init__(self, session)
@@ -398,15 +450,25 @@ class bsEpisoden(Screen, ConfigListScreen):
 		self.close()
 		
 class bsStreams(Screen, ConfigListScreen):
-	
+	skin = 	"""
+		<screen name="Burning-seri.es" position="center,center" size="900,580" backgroundColor="#00060606" flags="wfNoBorder">
+			<eLabel position="0,0" size="900,80" backgroundColor="#00242424"/>
+			<widget name="title" position="25,15" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;26" valign="center" halign="left" />
+			<widget source="global.CurrentTime" render="Label" position="730,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;26" valign="center" halign="right">
+				<convert type="ClockToText">Format:%-H:%M</convert>
+			</widget>
+			<widget source="global.CurrentTime" render="Label" position="580,20" size="300,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;18" valign="center" halign="right">
+				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+			</widget>
+			<widget name="leftContentTitle" position="0,80" size="900,26" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
+			<widget name="streamlist" position="0,106" size="900,300" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
+			<widget name="stationIcon" position="10,415" size="107,150" transparent="1" alphatest="blend" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png"/>
+			<widget name="handlung" position="140,415" size="740,160" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
+	        </screen>
+		"""
+		
 	def __init__(self, session, serienUrl):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/bsStreams.xml" % config.mediaportal.skin.value
-		print path
-		with open(path, "r") as f:
-			self.skin = f.read()
-			f.close()
-			
 		self.serienUrl = serienUrl
 		Screen.__init__(self, session)
 

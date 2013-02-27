@@ -58,7 +58,7 @@ class get_stream_link:
 				print link
 				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.xvidstream).addErrback(self.errorload)
 
-			elif re.match('.*?http://www.nowvideo.eu', data, re.S):
+			elif re.match('.*?http://(www|embed).nowvideo.eu', data, re.S):
 				link = data
 				print link
 				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.nowvideo).addErrback(self.errorload)
@@ -176,6 +176,11 @@ class get_stream_link:
 				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.sharesix).addErrback(self.errorload)
 				
 			elif re.match('.*?zooupload.com/', data, re.S):
+				link = data
+				print link
+				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.zooupload).addErrback(self.errorload)
+				
+			elif re.match('.*?http://wupfile.com', data, re.S):
 				link = data
 				print link
 				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.zooupload).addErrback(self.errorload)
