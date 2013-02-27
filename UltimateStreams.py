@@ -72,7 +72,7 @@ class showUSGenre(Screen):
 			("Krimi", "http://ultimate-streams.com/index.php?area=krimi&type=&pageno="),
 			("Martial Arts", "http://ultimate-streams.com/index.php?area=eastern&type=&pageno="),
 			("Märchen", "http://ultimate-streams.com/index.php?area=maerchen&type=&pageno="),
-			("Musikfilm", "http://ultimate-streams.com/index.php?area=musikfilm&type=&pageno="),
+			("Musikfilm", "http://ultimate-streams.com/index.php?area=musikfilme&type=&pageno="),
 			("Mystery", "http://ultimate-streams.com/index.php?area=mystery&type=&pageno="),
 			("Romantik", "http://ultimate-streams.com/index.php?area=romantik&type=&pageno="),
 			("SciFi", "http://ultimate-streams.com/index.php?area=scifi&type=&pageno="),
