@@ -55,6 +55,11 @@ class youpornGenreScreen(Screen):
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
+		self.genreliste.append(("New", "http://www.youporn.com/?page="))
+		self.genreliste.append(("Top Rated", "http://www.youporn.com/top_rated/?page="))
+		self.genreliste.append(("Most Viewed", "http://www.youporn.com/most_viewed/?page="))
+		self.genreliste.append(("Most Favorited", "http://www.youporn.com/most_favorited/?page="))
+		self.genreliste.append(("Most Discussed", "http://www.youporn.com/most_discussed/?page="))
 		self.genreliste.append(("Amateur", "http://www.youporn.com/category/1/amateur/?page="))
 		self.genreliste.append(("Anal", "http://www.youporn.com/category/2/anal/?page="))
 		self.genreliste.append(("Asian", "http://www.youporn.com/category/3/asian/?page="))
@@ -175,7 +180,8 @@ class youpornFilmScreen(Screen):
 			"right" : self.keyRight,
 			"left" : self.keyLeft,
 			"nextBouquet" : self.keyPageUp,
-			"prevBouquet" : self.keyPageDown
+			"prevBouquet" : self.keyPageDown,
+			"green" : self.keyPageNumber
 		}, -1)
 
 		self['title'] = Label("YouPorn.com")
@@ -188,7 +194,6 @@ class youpornFilmScreen(Screen):
 		self.page = 1
 		
 		self.filmliste = []
-		self.filmQualitaet = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
 		self.chooseMenuList.l.setItemHeight(25)
@@ -205,10 +210,10 @@ class youpornFilmScreen(Screen):
 		getPage(url, headers={'Cookie': 'age_verified=1', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
 	def loadData(self, data):
-		phMovies = re.findall('class="wrapping-video-box">.*?<a href="(.*?)">.*?<img src="(.*?)" alt="(.*?)".*?class="duration">(.*?)<span>length', data, re.S)
+		phMovies = re.findall('class="wrapping-video-box">.*?<a href="(.*?)">.*?<img src="(.*?)" alt="(.*?)".*?class="duration">(.*?)<span>length.*?views">(.*?)<span>views', data, re.S)
 		if phMovies:
-			for (phUrl, phImage, phTitle,phRuntime) in phMovies:
-				self.filmliste.append((phTitle,phUrl,phImage,phRuntime))
+			for (phUrl, phImage, phTitle, phRuntime, phViews) in phMovies:
+				self.filmliste.append((phTitle, phUrl, phImage, phRuntime, phViews))
 			self.chooseMenuList.setList(map(youpornFilmListEntry, self.filmliste))
 			self.keyLocked = False
 			self.showInfos()
@@ -220,8 +225,10 @@ class youpornFilmScreen(Screen):
 		phTitle = self['genreList'].getCurrent()[0][0]
 		phImage = self['genreList'].getCurrent()[0][2]
 		phRuntime = self['genreList'].getCurrent()[0][3]
+		phViews = self['genreList'].getCurrent()[0][4]
 		self['name'].setText(phTitle)
 		self['runtime'].setText(phRuntime)
+		self['views'].setText(phViews)
 		downloadPage(phImage, "/tmp/Icon.jpg").addCallback(self.ShowCover)
 		
 	def ShowCover(self, picData):
@@ -237,6 +244,14 @@ class youpornFilmScreen(Screen):
 					self['coverArt'].instance.setPixmap(ptr.__deref__())
 					self['coverArt'].show()
 					del self.picload
+
+	def keyPageNumber(self):
+		self.session.openWithCallback(self.callbackkeyPageNumber, VirtualKeyBoard, title = (_("Seitennummer eingeben")), text = str(self.page))
+
+	def callbackkeyPageNumber(self, answer):
+		if answer is not None:
+			self.page = int(answer)
+			self.loadpage()
 
 	def keyPageDown(self):
 		print "PageDown"
@@ -282,7 +297,6 @@ class youpornFilmScreen(Screen):
 			return
 		phTitle = self['genreList'].getCurrent()[0][0]
 		phLink = 'http://www.youporn.com' + self['genreList'].getCurrent()[0][1]
-		self.filmQualitaet = []
 		self.keyLocked = True
 		getPage(phLink, headers={'Cookie': 'age_verified=1', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVideoPage).addErrback(self.dataError)
 

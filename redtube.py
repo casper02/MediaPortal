@@ -40,7 +40,7 @@ class redtubeGenreScreen(Screen):
 			"left" : self.keyLeft
 		}, -1)
 
-		self['title'] = Label("REDTUBE.com")
+		self['title'] = Label("RedTube.com")
 		self['name'] = Label("Genre Auswahl")
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
@@ -55,6 +55,10 @@ class redtubeGenreScreen(Screen):
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
+		self.genreliste.append(("Newest", "http://www.redtube.com/?page="))
+		self.genreliste.append(("Top Rated", "http://www.redtube.com/top?page="))
+		self.genreliste.append(("Most Viewed", "http://www.redtube.com/mostviewed?page="))
+		self.genreliste.append(("Most Favored", "http://www.redtube.com/mostfavored?page="))
 		self.genreliste.append(("Amateur", "http://www.redtube.com/redtube/amateur?page="))
 		self.genreliste.append(("Anal", "http://www.redtube.com/redtube/anal?page="))
 		self.genreliste.append(("Asian", "http://www.redtube.com/redtube/asian?page="))
@@ -144,10 +148,11 @@ class redtubeFilmScreen(Screen):
 			"right" : self.keyRight,
 			"left" : self.keyLeft,
 			"nextBouquet" : self.keyPageUp,
-			"prevBouquet" : self.keyPageDown
+			"prevBouquet" : self.keyPageDown,
+			"green" : self.keyPageNumber
 		}, -1)
 
-		self['title'] = Label("REDTUBE.com")
+		self['title'] = Label("RedTube.com")
 		self['name'] = Label("Film Auswahl")
 		self['views'] = Label("")
 		self['runtime'] = Label("")
@@ -157,7 +162,6 @@ class redtubeFilmScreen(Screen):
 		self.page = 1
 		
 		self.filmliste = []
-		self.filmQualitaet = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
 		self.chooseMenuList.l.setItemHeight(25)
@@ -174,10 +178,10 @@ class redtubeFilmScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
 	def loadData(self, data):
-		phMovies = re.findall('class="video".*?<a href="(.*?)".*?title="(.*?)".*?class="te" src="(.*?)".*?class="time".*?span class="d">(.*?)</span>', data, re.S)
+		phMovies = re.findall('class="video".*?<a href="(.*?)".*?title="(.*?)".*?class="te" src="(.*?)".*?class="time".*?span class="d">(.*?)</span>.*?style="float:left;">(.*?)</div>', data, re.S)
 		if phMovies:
-			for (phUrl, phTitle, phImage, phRuntime) in phMovies:
-				self.filmliste.append((phTitle,phUrl,phImage,phRuntime))
+			for (phUrl, phTitle, phImage, phRuntime, phViews) in phMovies:
+				self.filmliste.append((phTitle, phUrl, phImage, phRuntime, phViews))
 			self.chooseMenuList.setList(map(redtubeFilmListEntry, self.filmliste))
 			self.keyLocked = False
 			self.showInfos()
@@ -189,8 +193,14 @@ class redtubeFilmScreen(Screen):
 		phTitle = self['genreList'].getCurrent()[0][0]
 		phImage = self['genreList'].getCurrent()[0][2]
 		phRuntime = self['genreList'].getCurrent()[0][3]
+		phViews = self['genreList'].getCurrent()[0][4]
+		phViews = phViews.replace('\t','')
+		phViews = phViews.replace(' views','')
+		phViews = phViews.replace('\r','')
+		phViews = phViews.replace('\n','')
 		self['name'].setText(phTitle)
 		self['runtime'].setText(phRuntime)
+		self['views'].setText(phViews)
 		downloadPage(phImage, "/tmp/Icon.jpg").addCallback(self.ShowCover)
 		
 	def ShowCover(self, picData):
@@ -206,6 +216,14 @@ class redtubeFilmScreen(Screen):
 					self['coverArt'].instance.setPixmap(ptr.__deref__())
 					self['coverArt'].show()
 					del self.picload
+
+	def keyPageNumber(self):
+		self.session.openWithCallback(self.callbackkeyPageNumber, VirtualKeyBoard, title = (_("Seitennummer eingeben")), text = str(self.page))
+
+	def callbackkeyPageNumber(self, answer):
+		if answer is not None:
+			self.page = int(answer)
+			self.loadpage()
 
 	def keyPageDown(self):
 		print "PageDown"
@@ -251,7 +269,6 @@ class redtubeFilmScreen(Screen):
 			return
 		phTitle = self['genreList'].getCurrent()[0][0]
 		phLink = 'http://www.redtube.com' + self['genreList'].getCurrent()[0][1]
-		self.filmQualitaet = []
 		self.keyLocked = True
 		getPage(phLink, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVideoPage).addErrback(self.dataError)
 
