@@ -518,7 +518,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(m2kGenreScreen, self.showM2KPorn)
 		elif auswahl == "IStream":
 			self.session.open(showIStreamGenre)
-		elif auswahl == "4tube":
+		elif auswahl == "4Tube":
 			self.session.open(fourtubeGenreScreen)
 		elif auswahl == "RedTube":
 			self.session.open(redtubeGenreScreen)
