@@ -192,7 +192,8 @@ class xhamster(Screen):
 			"right" : self.keyRight,
 			"left" : self.keyLeft,
 			"nextBouquet" : self.keyPageUp,
-			"prevBouquet" : self.keyPageDown
+			"prevBouquet" : self.keyPageDown,
+			"green" : self.keyPageNumber
 		}, -1)
 		
 		self['title'] = Label("xHamster.com")
@@ -216,7 +217,7 @@ class xhamster(Screen):
 	def loadpage(self):
 		self.keyLocked = True
 		self.streamList = []
-		#ptUrl = "http://xhamster.com/new/%s.html" % str(self.page)
+		self['page'].setText(str(self.page))
 		ptUrl = "%s%s.html" % (self.genreLink, str(self.page))
 		print ptUrl
 		getPage(ptUrl, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.pageData).addErrback(self.dataError)
@@ -286,6 +287,14 @@ class xhamster(Screen):
 			sref = eServiceReference(0x1001, 0, xhStream)
 			sref.setName(xhTitle)
 			self.session.open(MoviePlayer, sref)
+
+	def keyPageNumber(self):
+		self.session.openWithCallback(self.callbackkeyPageNumber, VirtualKeyBoard, title = (_("Seitennummer eingeben")), text = str(self.page))
+
+	def callbackkeyPageNumber(self, answer):
+		if answer is not None:
+			self.page = int(answer)
+			self.loadpage()
 
 	def keyPageDown(self):
 		print "PageDown"

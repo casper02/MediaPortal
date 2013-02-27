@@ -152,8 +152,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige Movie2k-Porn:", config.mediaportal.showM2kPorn))
 		self.configlist.append(getConfigListEntry("Zeige xHamster:", config.mediaportal.showXhamster))
 		self.configlist.append(getConfigListEntry("Zeige Pornhub:", config.mediaportal.showPornhub))
-		self.configlist.append(getConfigListEntry("Zeige 4tube:", config.mediaportal.show4tube))
-		self.configlist.append(getConfigListEntry("Zeige Youporn:", config.mediaportal.showyouporn))
+		self.configlist.append(getConfigListEntry("Zeige 4Tube:", config.mediaportal.show4tube))
 		self.configlist.append(getConfigListEntry("Zeige RedTube:", config.mediaportal.showredtube))
 		self.configlist.append(getConfigListEntry("Zeige YouPorn:", config.mediaportal.showyouporn))
 		self.configlist.append(getConfigListEntry("Zeige Pornerbros:", config.mediaportal.showpornerbros))
@@ -320,7 +319,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 		if config.mediaportal.showPornhub.value:
 			self.fun.append(self.hauptListEntry("PornHub", "pornhub"))
 		if config.mediaportal.show4tube.value:
-			self.fun.append(self.hauptListEntry("4tube", "4tube"))
+			self.fun.append(self.hauptListEntry("4Tube", "4tube"))
 		if config.mediaportal.showredtube.value:
 			self.fun.append(self.hauptListEntry("RedTube", "redtube"))
 		if config.mediaportal.showyouporn.value:
