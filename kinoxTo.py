@@ -48,26 +48,15 @@ def kxWatchSeriesListEntry(entry):
 		(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 830, 25, 0, RT_HALIGN_LEFT, entry[0])
 		]
 class kxMain(Screen):
-	skin = 	"""
-		<screen name="Kinox.to" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
-				<convert type="ClockToText">Format:%-H:%M</convert>
-			</widget>
-			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
-				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-			</widget>
-			<widget name="leftContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-			<widget name="streamlist" position="0,85" size="900,325" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
-			<widget name="stationIcon" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
-			<widget name="name" position="230,420" size="520,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
-	        </screen>
-		"""
-		
+	
 	def __init__(self, session):
 		self.session = session
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxMain.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
@@ -131,28 +120,16 @@ class kxMain(Screen):
 		self.close()
 
 class kxKino(Screen):
-	skin = 	"""
-		<screen name="Kinox.to" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
-				<convert type="ClockToText">Format:%-H:%M</convert>
-			</widget>
-			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
-				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-			</widget>
-			<widget name="leftContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-			<widget name="streamlist" position="0,85" size="900,325" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
-			<widget name="stationIcon" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
-			<widget name="name" position="230,420" size="520,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
-			<widget name="handlung" position="205,473" size="680,140" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
-	        </screen>
-		"""
-		
+	
 	def __init__(self, session, kxGotLink):
 		self.kxGotLink = kxGotLink
 		self.session = session
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxKino.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
@@ -257,28 +234,16 @@ class kxKino(Screen):
 		self.close()
 
 class kxNeusteKino(Screen):
-	skin = 	"""
-		<screen name="Kinox.to" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
-				<convert type="ClockToText">Format:%-H:%M</convert>
-			</widget>
-			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
-				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-			</widget>
-			<widget name="leftContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-			<widget name="streamlist" position="0,85" size="900,325" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
-			<widget name="stationIcon" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
-			<widget name="name" position="230,420" size="520,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
-			<widget name="handlung" position="205,473" size="680,140" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
-	        </screen>
-		"""
-		
+	
 	def __init__(self, session, kxGotLink):
 		self.kxGotLink = kxGotLink
 		self.session = session
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxNeusteKino.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
@@ -394,28 +359,16 @@ class kxNeusteKino(Screen):
 		self.close()
 		
 class kxNeusteOnline(Screen):
-	skin = 	"""
-		<screen name="Kinox.to" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
-				<convert type="ClockToText">Format:%-H:%M</convert>
-			</widget>
-			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
-				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-			</widget>
-			<widget name="leftContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-			<widget name="streamlist" position="0,85" size="900,325" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
-			<widget name="stationIcon" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
-			<widget name="name" position="230,420" size="520,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
-			<widget name="handlung" position="205,473" size="680,140" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
-	        </screen>
-		"""
-		
+	
 	def __init__(self, session, kxGotLink):
 		self.kxGotLink = kxGotLink
 		self.session = session
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxNeusteOnline.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
@@ -532,28 +485,16 @@ class kxNeusteOnline(Screen):
 		self.close()
 
 class kxABC(Screen):
-	skin = 	"""
-		<screen name="Kinox.to" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
-				<convert type="ClockToText">Format:%-H:%M</convert>
-			</widget>
-			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
-				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-			</widget>
-			<widget name="leftContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-			<widget name="streamlist" position="0,85" size="900,325" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
-			<widget name="stationIcon" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
-			<widget name="name" position="230,420" size="520,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
-			<widget name="handlung" position="205,473" size="680,140" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
-	        </screen>
-		"""
-		
+	
 	def __init__(self, session, kxGotLink):
 		self.kxGotLink = kxGotLink
 		self.session = session
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxABC.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
@@ -596,30 +537,16 @@ class kxABC(Screen):
 		self.close()
 		
 class kxABCpage(Screen):
-	skin = 	"""
-		<screen name="Kinox.to" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
-				<convert type="ClockToText">Format:%-H:%M</convert>
-			</widget>
-			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
-				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-			</widget>
-			<widget name="leftContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-			<widget name="streamlist" position="0,85" size="900,325" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
-			<widget name="stationIcon" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
-			<widget name="name" position="230,420" size="520,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
-			<widget name="handlung" position="205,473" size="680,140" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
-			<eLabel text="Page" position="750,420" size="100,25" backgroundColor="#00101214" transparent="1" foregroundColor="#00555556" font="Regular;20" valign="top" />
-			<widget name="page" position="850,420" size="45,25" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />			
-			</screen>
-		"""
-		
+	
 	def __init__(self, session, letter):
 		self.letter = letter
 		self.session = session
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxABCpage.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
@@ -747,28 +674,16 @@ class kxABCpage(Screen):
 		self.close()
 
 class kxNeusteSerien(Screen):
-	skin = 	"""
-		<screen name="Kinox.to" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
-				<convert type="ClockToText">Format:%-H:%M</convert>
-			</widget>
-			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
-				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-			</widget>
-			<widget name="leftContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-			<widget name="streamlist" position="0,85" size="900,325" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
-			<widget name="stationIcon" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
-			<widget name="name" position="230,420" size="520,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
-			<widget name="handlung" position="205,473" size="680,140" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
-	        </screen>
-		"""
-		
+	
 	def __init__(self, session, kxGotLink):
 		self.kxGotLink = kxGotLink
 		self.session = session
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxNeusteSerien.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
@@ -893,28 +808,16 @@ class kxNeusteSerien(Screen):
 		self.close()
 		
 class kxSerienABC(Screen):
-	skin = 	"""
-		<screen name="Kinox.to" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
-				<convert type="ClockToText">Format:%-H:%M</convert>
-			</widget>
-			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
-				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-			</widget>
-			<widget name="leftContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-			<widget name="streamlist" position="0,85" size="900,325" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
-			<widget name="stationIcon" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
-			<widget name="name" position="230,420" size="520,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
-			<widget name="handlung" position="205,473" size="680,140" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
-	        </screen>
-		"""
-		
+	
 	def __init__(self, session, kxGotLink):
 		self.kxGotLink = kxGotLink
 		self.session = session
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxSerienABC.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
@@ -957,30 +860,16 @@ class kxSerienABC(Screen):
 		self.close()
 		
 class kxSerienABCpage(Screen):
-	skin = 	"""
-		<screen name="Kinox.to" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
-				<convert type="ClockToText">Format:%-H:%M</convert>
-			</widget>
-			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
-				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-			</widget>
-			<widget name="leftContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-			<widget name="streamlist" position="0,85" size="900,325" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
-			<widget name="stationIcon" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
-			<widget name="name" position="230,420" size="520,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
-			<widget name="handlung" position="205,473" size="680,140" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
-			<eLabel text="Page" position="750,420" size="100,25" backgroundColor="#00101214" transparent="1" foregroundColor="#00555556" font="Regular;20" valign="top" />
-			<widget name="page" position="850,420" size="45,25" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />			
-			</screen>
-		"""
-		
+	
 	def __init__(self, session, letter):
 		self.letter = letter
 		self.session = session
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxSerienABCpage.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
@@ -1123,29 +1012,17 @@ class kxSerienABCpage(Screen):
 		self.close()
 
 class kxEpisoden(Screen):
-	skin = 	"""
-		<screen name="Kinox.to" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
-				<convert type="ClockToText">Format:%-H:%M</convert>
-			</widget>
-			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
-				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-			</widget>
-			<widget name="leftContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-			<widget name="streamlist" position="0,85" size="900,325" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
-			<widget name="stationIcon" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
-			<widget name="name" position="230,420" size="520,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
-			<widget name="handlung" position="205,473" size="680,140" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />		
-			</screen>
-		"""
 		
 	def __init__(self, session, url, stream_name):
 		self.url = url
 		self.stream_name = stream_name
 		self.session = session
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxEpisoden.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
@@ -1311,27 +1188,15 @@ class kxEpisoden(Screen):
 		self.close()
 
 class kxWatchlist(Screen):
-	skin = 	"""
-		<screen name="Kinox.to" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
-				<convert type="ClockToText">Format:%-H:%M</convert>
-			</widget>
-			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
-				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-			</widget>
-			<widget name="leftContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-			<widget name="streamlist" position="0,85" size="900,325" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
-			<widget name="stationIcon" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
-			<widget name="name" position="230,420" size="520,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
-			<widget name="handlung" position="205,473" size="680,140" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />		
-			</screen>
-		"""
-		
+	
 	def __init__(self, session):
 		self.session = session
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxWatchlist.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
@@ -1406,29 +1271,17 @@ class kxWatchlist(Screen):
 		self.close()
 		
 class kxStreams(Screen):
-	skin = 	"""
-		<screen name="Kinox.to" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
-				<convert type="ClockToText">Format:%-H:%M</convert>
-			</widget>
-			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
-				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-			</widget>
-			<widget name="leftContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-			<widget name="streamlist" position="0,85" size="900,325" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
-			<widget name="stationIcon" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
-			<widget name="name" position="230,420" size="520,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
-			<widget name="handlung" position="205,473" size="680,140" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
-	        </screen>
-		"""
-		
+	
 	def __init__(self, session, kxGotLink, stream_name):
 		self.kxGotLink = kxGotLink
 		self.stream_name = stream_name
 		self.session = session
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxStreams.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
@@ -1550,29 +1403,17 @@ class kxStreams(Screen):
 		self.close()
 		
 class kxParts(Screen):
-	skin = 	"""
-		<screen name="Kinox.to" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
-				<convert type="ClockToText">Format:%-H:%M</convert>
-			</widget>
-			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
-				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-			</widget>
-			<widget name="leftContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-			<widget name="streamlist" position="0,85" size="900,325" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
-			<widget name="stationIcon" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
-			<widget name="name" position="230,420" size="520,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
-			<widget name="handlung" position="205,473" size="680,140" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
-	        </screen>
-		"""
-		
+	
 	def __init__(self, session, parts, stream_name):
 		self.parts = parts
 		self.stream_name = stream_name
 		self.session = session
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxParts.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {

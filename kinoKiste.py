@@ -7,24 +7,15 @@ def kinokisteGenreListEntry(entry):
 		] 
 
 class kinokisteGenreScreen(Screen):
-	skin = 	"""
-		<screen name="KinoKiste" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
-				<convert type="ClockToText">Format:%-H:%M</convert>
-			</widget>
-			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
-				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-			</widget>
-			<widget name="genreList" position="0,60" size="900,350" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
-			<widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,440" size="160,120" transparent="1" alphatest="blend" />
-			<widget name="name" position="230,420" size="560,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
-		</screen>"""
-
+	
 	def __init__(self, session):
 		self.session = session
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kinokisteGenreScreen.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
 		Screen.__init__(self, session)
 		
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions"], {
@@ -68,27 +59,15 @@ def kinokisteKinoListEntry(entry):
 		] 
 
 class kinokisteKinoScreen(Screen):
-	skin = 	"""
-		<screen name="KinoKiste" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
-				<convert type="ClockToText">Format:%-H:%M</convert>
-			</widget>
-			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
-				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-			</widget>
-			<widget name="streamlist" position="0,60" size="900,350" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
-			<widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
-			<widget name="name" position="230,420" size="520,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
-			<eLabel text="Page" position="750,420" size="100,25" backgroundColor="#00101214" transparent="1" foregroundColor="#00555556" font="Regular;20" valign="top" />
-			<widget name="page" position="850,420" size="30,25" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
-			<widget name="handlung" position="205,473" size="680,140" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
-		</screen>"""
-
+	
 	def __init__(self, session):
 		self.session = session
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kinokisteKinoScreen.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
 		Screen.__init__(self, session)
 		
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions"], {
@@ -230,26 +209,17 @@ def kinokistePartsListEntry(entry):
 		] 
 
 class kinokistePartsScreen(Screen):
-	skin = 	"""
-		<screen name="KinoKiste" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
-				<convert type="ClockToText">Format:%-H:%M</convert>
-			</widget>
-			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
-				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-			</widget>
-			<widget name="genreList" position="0,60" size="900,350" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
-			<widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,420" size="160,120" transparent="1" alphatest="blend" />
-			<widget name="name" position="230,420" size="560,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
-		</screen>"""
-
+	
 	def __init__(self, session, parts, stream_name):
 		self.session = session
 		self.parts = parts
 		self.stream_name = stream_name
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kinokistePartsScreen.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
 		Screen.__init__(self, session)
 		
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions"], {
@@ -350,24 +320,15 @@ def kinokisteFilmlistenListEntry(entry):
 		] 
 
 class kinokisteFilmlistenScreen(Screen):
-	skin = 	"""
-		<screen name="KinoKiste" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
-				<convert type="ClockToText">Format:%-H:%M</convert>
-			</widget>
-			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
-				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-			</widget>
-			<widget name="genreList" position="0,60" size="900,350" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
-			<widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,440" size="160,120" transparent="1" alphatest="blend" />
-			<widget name="name" position="230,420" size="560,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
-		</screen>"""
-
+	
 	def __init__(self, session):
 		self.session = session
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kinokisteFilmlistenScreen.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
 		Screen.__init__(self, session)
 		
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions"], {
@@ -410,28 +371,16 @@ def kinokisteFilmLetterListEntry(entry):
 		] 
 
 class kinokisteFilmLetterScreen(Screen):
-	skin = 	"""
-		<screen name="KinoKiste" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
-				<convert type="ClockToText">Format:%-H:%M</convert>
-			</widget>
-			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
-				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-			</widget>
-			<widget name="genreList" position="0,60" size="900,350" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
-			<widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,440" size="160,120" transparent="1" alphatest="blend" />
-			<widget name="name" position="230,420" size="560,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
-			<eLabel text="Page" position="750,420" size="100,25" backgroundColor="#00101214" transparent="1" foregroundColor="#00555556" font="Regular;20" valign="top" />
-			<widget name="page" position="850,420" size="30,25" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
-			<widget name="handlung" position="205,473" size="680,140" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
-		</screen>"""
-
+	
 	def __init__(self, session, kkLink):
 		self.session = session
 		self.kkLink = kkLink
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kinokisteFilmLetterScreen.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
 		Screen.__init__(self, session)
 		
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions"], {

@@ -39,6 +39,8 @@ from myEntertainment import *
 from movie2k import *
 from iStreamWS import *
 from x4tube import *
+from redtube import *
+from youporn import *
 
 config.mediaportal = ConfigSubsection()
 config.mediaportal.pincode = ConfigPIN(default = 0000)
@@ -54,9 +56,7 @@ config.mediaportal.showFocus = ConfigYesNo(default = True)
 config.mediaportal.showYourfree = ConfigYesNo(default = True)
 config.mediaportal.showFilmOn = ConfigYesNo(default = True)
 config.mediaportal.showTvkino = ConfigYesNo(default = True)
-config.mediaportal.showXhamster = ConfigYesNo(default = True)
 config.mediaportal.showSpobox = ConfigYesNo(default = True)
-config.mediaportal.showPornhub = ConfigYesNo(default = True)
 config.mediaportal.showNetzKino = ConfigYesNo(default = True)
 config.mediaportal.showKinderKino = ConfigYesNo(default = True)
 config.mediaportal.showSportBild = ConfigYesNo(default = True)
@@ -76,10 +76,16 @@ config.mediaportal.showNhl = ConfigYesNo(default = True)
 config.mediaportal.showtivi = ConfigYesNo(default = True)
 config.mediaportal.showSongsto = ConfigYesNo(default = True)
 config.mediaportal.showMEHD = ConfigYesNo(default = True)
-config.mediaportal.showM2k = ConfigYesNo(default = True)
-config.mediaportal.showM2kPorn = ConfigYesNo(default = True)
 config.mediaportal.showIStream = ConfigYesNo(default = True)
-config.mediaportal.show4tube = ConfigYesNo(default = True)
+config.mediaportal.showM2k = ConfigYesNo(default = True)
+
+#porn
+config.mediaportal.showM2kPorn = ConfigYesNo(default = False)
+config.mediaportal.showXhamster = ConfigYesNo(default = False)
+config.mediaportal.showPornhub = ConfigYesNo(default = False)
+config.mediaportal.show4tube = ConfigYesNo(default = False)
+config.mediaportal.showredtube = ConfigYesNo(default = False)
+config.mediaportal.showyouporn = ConfigYesNo(default = False)
 
 class hauptScreenSetup(Screen, ConfigListScreen):
 
@@ -96,7 +102,6 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist = []
 		ConfigListScreen.__init__(self, self.configlist)
 		self.configlist.append(getConfigListEntry("Pincode:", config.mediaportal.pincode))
-		self.configlist.append(getConfigListEntry("Skinauswahl:", config.mediaportal.skin))
 		self.configlist.append(getConfigListEntry("Zeige Doku:", config.mediaportal.showDoku))
 		self.configlist.append(getConfigListEntry("Zeige Rofl:", config.mediaportal.showRofl))
 		self.configlist.append(getConfigListEntry("Zeige Fail:", config.mediaportal.showFail))
@@ -111,7 +116,6 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige Burning Series:", config.mediaportal.showBs))
 		self.configlist.append(getConfigListEntry("Zeige Kinox:", config.mediaportal.showKinox))
 		self.configlist.append(getConfigListEntry("Zeige Movie2k:", config.mediaportal.showM2k))
-		self.configlist.append(getConfigListEntry("Zeige Movie2k-Porn:", config.mediaportal.showM2kPorn))
 		self.configlist.append(getConfigListEntry("Zeige Konzert Oase:", config.mediaportal.showKoase))
 		self.configlist.append(getConfigListEntry("Zeige 1channel:", config.mediaportal.show1channel))
 		self.configlist.append(getConfigListEntry("Zeige Focus:", config.mediaportal.showFocus))
@@ -119,9 +123,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige FilmeOn:", config.mediaportal.showFilmOn))
 		self.configlist.append(getConfigListEntry("Zeige TvKino:", config.mediaportal.showTvkino))
 		self.configlist.append(getConfigListEntry("Zeige NetzKino:", config.mediaportal.showNetzKino))
-		self.configlist.append(getConfigListEntry("Zeige xHamster:", config.mediaportal.showXhamster))
 		self.configlist.append(getConfigListEntry("Zeige Spobox:", config.mediaportal.showSpobox))
-		self.configlist.append(getConfigListEntry("Zeige Pornhub:", config.mediaportal.showPornhub))
 		self.configlist.append(getConfigListEntry("Zeige Radio:", config.mediaportal.showRadio))
 		self.configlist.append(getConfigListEntry("Zeige Cczwei:", config.mediaportal.showCczwei))
 		self.configlist.append(getConfigListEntry("Zeige Filmtrailer:", config.mediaportal.showTrailer))
@@ -133,7 +135,14 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige Songsto:", config.mediaportal.showSongsto))
 		self.configlist.append(getConfigListEntry("Zeige My-Entertainment:", config.mediaportal.showMEHD))
 		self.configlist.append(getConfigListEntry("Zeige IStream:", config.mediaportal.showIStream))
+		# porn
+		self.configlist.append(getConfigListEntry("Zeige Movie2k-Porn:", config.mediaportal.showM2kPorn))
+		self.configlist.append(getConfigListEntry("Zeige xHamster:", config.mediaportal.showXhamster))
+		self.configlist.append(getConfigListEntry("Zeige Pornhub:", config.mediaportal.showPornhub))
 		self.configlist.append(getConfigListEntry("Zeige 4tube:", config.mediaportal.show4tube))
+		self.configlist.append(getConfigListEntry("Zeige Youporn:", config.mediaportal.showyouporn))
+		self.configlist.append(getConfigListEntry("Zeige Redtube:", config.mediaportal.showredtube))
+		
 		self["config"].setList(self.configlist)
 
 		self['title'] = Label("MediaPortal - Setup - (version 3.5.3)")
@@ -148,6 +157,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 	def keyOK(self):
 		for x in self["config"].list:
 			x[1].save()
+		configfile.save()
 		self.close()
 	
 	def keyCancel(self):
@@ -181,7 +191,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			"menu" : self.keySetup
 		}, -1)
 
-		self['title'] = Label("MediaPortal v3.5.1")
+		self['title'] = Label("MediaPortal v3.5.3")
 		
 		self['name'] = Label("Plugin Auswahl")
 		
@@ -273,17 +283,21 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.fun.append(self.hauptListEntry("TV-Kino", "tvkino"))
 		if config.mediaportal.showRadio.value:
 			self.fun.append(self.hauptListEntry("Radio", "radiode"))
-		if config.mediaportal.showXhamster.value:
-			self.fun.append(self.hauptListEntry("xHamster", "xhamster"))
 		if config.mediaportal.showSpobox.value:
 			self.fun.append(self.hauptListEntry("Spobox", "spobox"))
-		if config.mediaportal.showPornhub.value:
-			self.fun.append(self.hauptListEntry("PornHub", "pornhub"))
 		if config.mediaportal.showSongsto.value:
 			self.fun.append(self.hauptListEntry("Songsto", "songsto"))
+		if config.mediaportal.showXhamster.value:
+			self.fun.append(self.hauptListEntry("xHamster", "xhamster"))
+		if config.mediaportal.showPornhub.value:
+			self.fun.append(self.hauptListEntry("PornHub", "pornhub"))
 		if config.mediaportal.show4tube.value:
 			self.fun.append(self.hauptListEntry("4tube", "4tube"))
-
+		if config.mediaportal.showredtube.value:
+			self.fun.append(self.hauptListEntry("RedTube", "redtube"))
+		if config.mediaportal.showyouporn.value:
+			self.fun.append(self.hauptListEntry("YouPorn", "youporn"))
+			
 		self.movies.sort()
 		self.infos.sort()
 		self.fun.sort()		
@@ -471,6 +485,10 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(showIStreamGenre)
 		elif auswahl == "4tube":
 			self.session.open(fourtubeGenreScreen)
+		elif auswahl == "RedTube":
+			self.session.open(redtubeGenreScreen)
+		elif auswahl == "YouPorn":
+			self.session.open(youpornGenreScreen)
 
 	def keyCancel(self):
 		self.close()
@@ -480,4 +498,4 @@ def main(session, **kwargs):
 	session.open(haupt_Screen)
 
 def Plugins(**kwargs):
-	return PluginDescriptor(name=_("MediaPortal"), description="MediaPortal", where = PluginDescriptor.WHERE_PLUGINMENU, icon="plugin.png", fnc=main)
+	return PluginDescriptor(name=_("MediaPortal"), description="MediaPortal", where = [PluginDescriptor.WHERE_PLUGINMENU, PluginDescriptor.WHERE_EXTENSIONSMENU], icon="plugin.png", fnc=main)

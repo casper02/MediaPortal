@@ -9,25 +9,15 @@ def IStreamGenreListEntry(entry):
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		] 
 class showIStreamGenre(Screen):
-	skin = 	"""
-		<screen name="IStream" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
-				<convert type="ClockToText">Format:%-H:%M</convert>
-			</widget>
-			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
-				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-			</widget>
-			<widget name="ContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-			<widget name="genreList" position="0,85" size="900,325" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="185,460" size="700,2" backgroundColor="#00555556" />
-			<widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
-			<widget name="name" position="185,420" size="700,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
-		</screen>"""
-
+	
 	def __init__(self, session):
 		self.session = session
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/showIStreamGenre.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
 		Screen.__init__(self, session)
 		
 		self["actions"] = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions"], {
@@ -108,32 +98,20 @@ def IStreamFilmListEntry(entry):
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		] 
 class IStreamFilmListeScreen(Screen):
-	skin = 	"""
-		<screen name="IStream" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
-				<convert type="ClockToText">Format:%-H:%M</convert>
-			</widget>
-			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
-				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-			</widget>
-			<widget name="leftContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-			<widget name="filmList" position="0,85" size="900,325" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="185,460" size="700,2" backgroundColor="#00555556" />
-			<widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
-			<widget name="name" position="185,420" size="550,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
-			<widget name="handlung" position="185,473" size="700,140" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
-			<eLabel text="Page" position="750,420" size="100,25" backgroundColor="#00101214" transparent="1" foregroundColor="#00555556" font="Regular;20" valign="top" />
-			<widget name="page" position="810,420" size="100,25" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />	
-		</screen>"""
-
+	
 	def __init__(self, session, genreLink, genreName):
 		self.session = session
 		self.genreLink = genreLink
 		self.genreName = genreName
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/IStreamFilmListeScreen.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
 		Screen.__init__(self, session)
 		
+		#self["actions"]  = ActionMap(["OkCancelActions","SetupActions", "NumberActions", "MenuActions","DirectionActions","InfobarSeekActions"], {
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions","DirectionActions"], {
 			"ok"    : self.keyOK,
 			"cancel": self.keyCancel,
@@ -158,7 +136,13 @@ class IStreamFilmListeScreen(Screen):
 			"7" : self.key_7,
 			"9" : self.key_9,
 			"green" : self.keySortAZ,
-			"yellow" : self.keySortIMDB
+			"yellow" : self.keySortIMDB,
+			"blue" :  self.keyPageUp,
+			"red" :  self.keyPageDown
+			#"seekBackManual" :  self.keyPageDownMan,
+			#"seekFwdManual" :  self.keyPageUpMan,
+			#"seekFwd" :  self.keyPageUp,
+			#"seekBack" :  self.keyPageDown
 		}, -1)
 
 		self.sortOrder = 0;
@@ -175,10 +159,15 @@ class IStreamFilmListeScreen(Screen):
 		self['coverArt'] = Pixmap()
 		self['page'] = Label("")
 		
+		self.timerStart = False
+		self.seekTimerRun = False
 		self.filmQ = Queue.Queue(0)
 		self.hanQ = Queue.Queue(0)
+		self.picQ = Queue.Queue(0)
 		self.semaL = 0
 		self.semaH = 0
+		self.semaP = 0
+		self.updateP = 0
 		self.keyLocked = True
 		self.filmListe = []
 		self.keckse = {}
@@ -213,6 +202,9 @@ class IStreamFilmListeScreen(Screen):
 		if self.page:
 			self['page'].setText("%d / %d" % (self.page,self.pages))
 
+		#if self.seekTimerRun:
+		#	return
+			
 		self.filmQ.put(url)
 		print "semaL ",self.semaL
 		if not self.semaL:
@@ -222,6 +214,8 @@ class IStreamFilmListeScreen(Screen):
 			return
 		
 	def loadPageQueued(self):
+		print "loadPageQueued:"
+		self['name'].setText('Bitte warten..')
 		while not self.filmQ.empty():
 			url = self.filmQ.get_nowait()
 		#self.semaL = 0
@@ -264,7 +258,7 @@ class IStreamFilmListeScreen(Screen):
 			#if not self.filmQ.empty():
 			#	self.loadPageQueued()
 			#	return
-			self.loadPic()
+			self.loadPicQueued()
 		else:
 			print "No movies found !"
 			self.filmListe.append(("No movies found !",""))
@@ -276,12 +270,29 @@ class IStreamFilmListeScreen(Screen):
 
 	def loadPic(self):
 		print "loadPic:"
+		
+		if self.picQ.empty():
+			self.semaP = 0
+			print "picQ is empty"
+			return
+		
+		if self.semaH or self.updateP:
+			print "Pict. or descr. update in progress"
+			print "semaH: ",self.semaH
+			print "semaP: ",self.semaP
+			print "updateP: ",self.updateP
+			return
+			
+		while not self.picQ.empty():
+			self.picQ.get_nowait()
+		
 		streamName = self['filmList'].getCurrent()[0][0]
 		self['name'].setText(streamName)
 		streamPic = self['filmList'].getCurrent()[0][2]
 		
 		streamUrl = self['filmList'].getCurrent()[0][1]
 		self.getHandlung(streamUrl)
+		self.updateP = 1
 		downloadPage(streamPic, "/tmp/Icon.jpg").addCallback(self.ShowCover)
 		
 	def getHandlung(self, url):
@@ -318,7 +329,8 @@ class IStreamFilmListeScreen(Screen):
 		if not self.hanQ.empty():
 			self.getHandlungQeued()
 		else:
-			self.semaH = 0;
+			self.semaH = 0
+			self.loadPic()
 		#print "semaH: ",self.semaH
 		#print "semaL: ",self.semaL
 		
@@ -337,15 +349,26 @@ class IStreamFilmListeScreen(Screen):
 					self['coverArt'].show()
 					del self.picload
 					
+		self.updateP = 0;
 		if not self.filmQ.empty():
 			self.loadPageQueued()
 		else:
-			self.semaL = 0;
+			self.semaL = 0
+			self.loadPic()
 		
 		#print "semaH: ",self.semaH
 		#print "semaL: ",self.semaL
 		self.keyLocked	= False
-			
+	
+	def loadPicQueued(self):
+		print "loadPicQueued:"
+		self.picQ.put(None)
+		if not self.semaP:
+			self.semaP = 1
+			self.loadPic()
+		else:
+			return
+	
 	def keyOK(self):
 		if (self.keyLocked|self.semaL|self.semaH):
 			return
@@ -355,59 +378,61 @@ class IStreamFilmListeScreen(Screen):
 		self.session.open(IStreamStreams, streamLink, streamName)
 	
 	def keyUp(self):
-		if (self.keyLocked|self.semaL|self.semaH):
+		if self.keyLocked:
 			return
 		self['filmList'].up()
-		self.loadPic()
 		
 	def keyDown(self):
-		if (self.keyLocked|self.semaL|self.semaH):
+		if self.keyLocked:
 			return
 		self['filmList'].down()
-		self.loadPic()
 		
 	def keyUpRepeated(self):
 		#print "keyUpRepeated"
-		if (self.keyLocked|self.semaL|self.semaH):
+		if self.keyLocked:
 			return
 		self['filmList'].up()
 		
 	def keyDownRepeated(self):
 		#print "keyDownRepeated"
-		if (self.keyLocked|self.semaL|self.semaH):
+		if self.keyLocked:
 			return
 		self['filmList'].down()
 		
 	def key_repeatedUp(self):
 		#print "key_repeatedUp"
-		self.loadPic()
+		self.loadPicQueued()
 		
 	def keyLeft(self):
-		if (self.keyLocked|self.semaL|self.semaH):
+		if self.keyLocked:
 			return
 		self['filmList'].pageUp()
 		
 	def keyRight(self):
-		if (self.keyLocked|self.semaL|self.semaH):
+		if self.keyLocked:
 			return
 		self['filmList'].pageDown()
 			
 	def keyLeftRepeated(self):
-		if (self.keyLocked|self.semaL|self.semaH):
+		if self.keyLocked:
 			return
 		self['filmList'].pageUp()
 		
 	def keyRightRepeated(self):
-		if (self.keyLocked|self.semaL|self.semaH):
+		if self.keyLocked:
 			return
 		self['filmList'].pageDown()
 			
 	def keyPageDown(self):
 		#print "keyPageDown()"
+		if self.seekTimerRun:
+			self.seekTimerRun = False
 		self.keyPageDownFast(1)
 			
 	def keyPageUp(self):
 		#print "keyPageUp()"
+		if self.seekTimerRun:
+			self.seekTimerRun = False
 		self.keyPageUpFast(1)
 			
 	def keyPageUpFast(self,step):
@@ -436,6 +461,22 @@ class IStreamFilmListeScreen(Screen):
 		if oldpage != self.page:
 			self.loadPage()
 
+	#def keyPageDownMan(self):
+	#	self.keyPageDownUp = 0;
+	#	self.seekTimerRun = True
+
+	#def keyPageUpMan(self):
+	#	self.keyPageDownUp = 1;
+	#	self.seekTimerRun = True
+
+	#def seekTimer(self):
+	#	print "seekTimer:"
+	#	if self.seekTimerRun:
+	#		if not self.keyPageDownUp:
+	#			self.keyPageDown()
+	#		else:
+	#			self.keyPageUp()
+		
 	def key_1(self):
 		#print "keyPageDownFast(2)"
 		self.keyPageDownFast(2)
@@ -461,7 +502,7 @@ class IStreamFilmListeScreen(Screen):
 		self.keyPageUpFast(10)
 
 	def keySortAZ(self):
-		if (self.keyLocked|self.semaL|self.semaH):
+		if (self.keyLocked):
 			return
 		if self.sortOrder and not self.neueFilme:
 			self.sortOrder = 0
@@ -469,7 +510,7 @@ class IStreamFilmListeScreen(Screen):
 			self.loadPage()
 	
 	def keySortIMDB(self):
-		if (self.keyLocked|self.semaL|self.semaH):
+		if (self.keyLocked):
 			return
 		if not (self.sortOrder or self.neueFilme):
 			self.sortOrder = 1
@@ -484,29 +525,17 @@ def IStreamStreamListEntry(entry):
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0]+entry[2])
 		] 
 class IStreamStreams(Screen, ConfigListScreen):
-	skin = 	"""
-		<screen name="iStream" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-			<eLabel position="0,0" size="900,80" backgroundColor="#00242424"/>
-			<widget name="title" position="25,15" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;26" valign="center" halign="left" />
-			<widget source="global.CurrentTime" render="Label" position="730,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;26" valign="center" halign="right">
-				<convert type="ClockToText">Format:%-H:%M</convert>
-			</widget>
-			<widget source="global.CurrentTime" render="Label" position="580,20" size="300,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;18" valign="center" halign="right">
-				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-			</widget>
-			<widget name="ContentTitle" position="0,60" size="900,26" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-			<widget name="streamList" position="0,85" size="900,325" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="185,460" size="700,2" backgroundColor="#00555556" />
-			<widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
-			<widget name="name" position="185,420" size="700,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
-			<widget name="handlung" position="185,473" size="700,140" backgroundColor="#00101214" transparent="1" font="Regular;20" valign="top" />
-	        </screen>
-		"""
-		
+	
 	def __init__(self, session, filmUrl, filmName):
 		self.session = session
 		self.filmUrl = filmUrl
 		self.filmName = filmName
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/IStreamStreams.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {

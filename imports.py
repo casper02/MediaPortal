@@ -3,7 +3,7 @@ from Components.Label import Label
 from Components.ConfigList import ConfigListScreen
 from Components.Sources.StaticText import StaticText
 from Components.ActionMap import NumberActionMap, ActionMap
-from Components.config import config, ConfigSelection, getConfigListEntry, ConfigText, ConfigDirectory, ConfigYesNo, configfile, ConfigSelection, ConfigSubsection, ConfigPIN
+from Components.config import config, ConfigSelection, getConfigListEntry, ConfigText, ConfigDirectory, ConfigYesNo, ConfigSelection, ConfigSubsection, ConfigPIN
 from Components.FileList import FileList, FileEntryComponent
 from Components.GUIComponent import GUIComponent
 from Components.MenuList import MenuList
