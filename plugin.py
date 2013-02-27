@@ -500,4 +500,4 @@ def main(session, **kwargs):
 	session.open(haupt_Screen)
 
 def Plugins(**kwargs):
-	return PluginDescriptor(name=_("MediaPortal"), description="MediaPortal", where = PluginDescriptor.WHERE_PLUGINMENU, icon="plugin.png", fnc=main)
+	return PluginDescriptor(name=_("MediaPortal"), description="MediaPortal", where = [PluginDescriptor.WHERE_PLUGINMENU, PluginDescriptor.WHERE_EXTENSIONSMENU], icon="plugin.png", fnc=main)
