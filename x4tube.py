@@ -63,6 +63,7 @@ class fourtubeGenreScreen(Screen):
 		self.genreliste.append(("Lastest", "http://www.4tube.com/videos?page="))
 		self.genreliste.append(("Featured", "http://www.4tube.com/featured?sort=ctr&page="))
 		self.genreliste.append(("Full", "http://www.4tube.com/videos/full-length?sort=ctr&page="))
+		self.genreliste.append(("Pornstars", "http://www.4tube.com/pornstars?page="	))
 		self.genreliste.append(("Suchen", "callSuchen"))
 		self.genreliste.append(("Anal", "http://www.4tube.com/find/tags/anal?sort=ctr&page="))
 		self.genreliste.append(("Asian", "http://www.4tube.com/find/tags/asian?sort=ctr&page="))
@@ -162,7 +163,8 @@ class fourtubePornstarsScreen(Screen):
 			"right" : self.keyRight,
 			"left" : self.keyLeft,
 			"nextBouquet" : self.keyPageUp,
-			"prevBouquet" : self.keyPageDown
+			"prevBouquet" : self.keyPageDown,
+			"green" : self.keyPageNumber
 		}, -1)
 
 		self['title'] = Label("4Tube.com")
@@ -191,9 +193,9 @@ class fourtubePornstarsScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
 	def loadData(self, data):
-		Movies = re.findall('pornstarInfoLarge_pornstar"><a title=.*?" href="(.*?)".*?class="thumb" src="(.*?.jpeg)" title="(.*?)"', data, re.S)
+		Movies = re.findall('pornstarInfoLarge_pornstar"><a title=.*?href="(.*?)".*?class="thumb" src="(.*?)" title="(.*?)"',data,re.S) 
 		if Movies:
-			for (Url, Image, Title) in phMovies:
+			for (Url, Image, Title) in Movies:
 				self.filmliste.append((Title,Url,Image))
 			self.chooseMenuList.setList(map(fourtubePornstarsListEntry, self.filmliste))
 			self.keyLocked = False
@@ -221,6 +223,14 @@ class fourtubePornstarsScreen(Screen):
 					self['coverArt'].instance.setPixmap(ptr.__deref__())
 					self['coverArt'].show()
 					del self.picload
+
+	def keyPageNumber(self):
+		self.session.openWithCallback(self.callbackkeyPageNumber, VirtualKeyBoard, title = (_("Seitennummer eingeben")), text = str(self.page))
+
+	def callbackkeyPageNumber(self, answer):
+		if answer is not None:
+			self.page = int(answer)
+			self.loadpage()
 
 	def keyPageDown(self):
 		print "PageDown"
@@ -306,7 +316,8 @@ class fourtubeFilmScreen(Screen):
 			"right" : self.keyRight,
 			"left" : self.keyLeft,
 			"nextBouquet" : self.keyPageUp,
-			"prevBouquet" : self.keyPageDown
+			"prevBouquet" : self.keyPageDown,
+			"green" : self.keyPageNumber
 		}, -1)
 
 		self['title'] = Label("4Tube.com")
@@ -368,6 +379,14 @@ class fourtubeFilmScreen(Screen):
 					self['coverArt'].instance.setPixmap(ptr.__deref__())
 					self['coverArt'].show()
 					del self.picload
+
+	def keyPageNumber(self):
+		self.session.openWithCallback(self.callbackkeyPageNumber, VirtualKeyBoard, title = (_("Seitennummer eingeben")), text = str(self.page))
+
+	def callbackkeyPageNumber(self, answer):
+		if answer is not None:
+			self.page = int(answer)
+			self.loadpage()
 
 	def keyPageDown(self):
 		print "PageDown"
