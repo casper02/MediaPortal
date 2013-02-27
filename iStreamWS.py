@@ -134,6 +134,7 @@ class IStreamFilmListeScreen(Screen):
 		self.genreName = genreName
 		Screen.__init__(self, session)
 		
+		#self["actions"]  = ActionMap(["OkCancelActions","SetupActions", "NumberActions", "MenuActions","DirectionActions","InfobarSeekActions"], {
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions","DirectionActions"], {
 			"ok"    : self.keyOK,
 			"cancel": self.keyCancel,
@@ -158,7 +159,13 @@ class IStreamFilmListeScreen(Screen):
 			"7" : self.key_7,
 			"9" : self.key_9,
 			"green" : self.keySortAZ,
-			"yellow" : self.keySortIMDB
+			"yellow" : self.keySortIMDB,
+			"blue" :  self.keyPageUp,
+			"red" :  self.keyPageDown
+			#"seekBackManual" :  self.keyPageDownMan,
+			#"seekFwdManual" :  self.keyPageUpMan,
+			#"seekFwd" :  self.keyPageUp,
+			#"seekBack" :  self.keyPageDown
 		}, -1)
 
 		self.sortOrder = 0;
@@ -175,10 +182,15 @@ class IStreamFilmListeScreen(Screen):
 		self['coverArt'] = Pixmap()
 		self['page'] = Label("")
 		
+		self.timerStart = False
+		self.seekTimerRun = False
 		self.filmQ = Queue.Queue(0)
 		self.hanQ = Queue.Queue(0)
+		self.picQ = Queue.Queue(0)
 		self.semaL = 0
 		self.semaH = 0
+		self.semaP = 0
+		self.updateP = 0
 		self.keyLocked = True
 		self.filmListe = []
 		self.keckse = {}
@@ -213,6 +225,9 @@ class IStreamFilmListeScreen(Screen):
 		if self.page:
 			self['page'].setText("%d / %d" % (self.page,self.pages))
 
+		#if self.seekTimerRun:
+		#	return
+			
 		self.filmQ.put(url)
 		print "semaL ",self.semaL
 		if not self.semaL:
@@ -222,6 +237,8 @@ class IStreamFilmListeScreen(Screen):
 			return
 		
 	def loadPageQueued(self):
+		print "loadPageQueued:"
+		self['name'].setText('Bitte warten..')
 		while not self.filmQ.empty():
 			url = self.filmQ.get_nowait()
 		#self.semaL = 0
@@ -264,7 +281,7 @@ class IStreamFilmListeScreen(Screen):
 			#if not self.filmQ.empty():
 			#	self.loadPageQueued()
 			#	return
-			self.loadPic()
+			self.loadPicQueued()
 		else:
 			print "No movies found !"
 			self.filmListe.append(("No movies found !",""))
@@ -276,12 +293,29 @@ class IStreamFilmListeScreen(Screen):
 
 	def loadPic(self):
 		print "loadPic:"
+		
+		if self.picQ.empty():
+			self.semaP = 0
+			print "picQ is empty"
+			return
+		
+		if self.semaH or self.updateP:
+			print "Pict. or descr. update in progress"
+			print "semaH: ",self.semaH
+			print "semaP: ",self.semaP
+			print "updateP: ",self.updateP
+			return
+			
+		while not self.picQ.empty():
+			self.picQ.get_nowait()
+		
 		streamName = self['filmList'].getCurrent()[0][0]
 		self['name'].setText(streamName)
 		streamPic = self['filmList'].getCurrent()[0][2]
 		
 		streamUrl = self['filmList'].getCurrent()[0][1]
 		self.getHandlung(streamUrl)
+		self.updateP = 1
 		downloadPage(streamPic, "/tmp/Icon.jpg").addCallback(self.ShowCover)
 		
 	def getHandlung(self, url):
@@ -318,7 +352,8 @@ class IStreamFilmListeScreen(Screen):
 		if not self.hanQ.empty():
 			self.getHandlungQeued()
 		else:
-			self.semaH = 0;
+			self.semaH = 0
+			self.loadPic()
 		#print "semaH: ",self.semaH
 		#print "semaL: ",self.semaL
 		
@@ -337,15 +372,26 @@ class IStreamFilmListeScreen(Screen):
 					self['coverArt'].show()
 					del self.picload
 					
+		self.updateP = 0;
 		if not self.filmQ.empty():
 			self.loadPageQueued()
 		else:
-			self.semaL = 0;
+			self.semaL = 0
+			self.loadPic()
 		
 		#print "semaH: ",self.semaH
 		#print "semaL: ",self.semaL
 		self.keyLocked	= False
-			
+	
+	def loadPicQueued(self):
+		print "loadPicQueued:"
+		self.picQ.put(None)
+		if not self.semaP:
+			self.semaP = 1
+			self.loadPic()
+		else:
+			return
+	
 	def keyOK(self):
 		if (self.keyLocked|self.semaL|self.semaH):
 			return
@@ -355,59 +401,61 @@ class IStreamFilmListeScreen(Screen):
 		self.session.open(IStreamStreams, streamLink, streamName)
 	
 	def keyUp(self):
-		if (self.keyLocked|self.semaL|self.semaH):
+		if self.keyLocked:
 			return
 		self['filmList'].up()
-		self.loadPic()
 		
 	def keyDown(self):
-		if (self.keyLocked|self.semaL|self.semaH):
+		if self.keyLocked:
 			return
 		self['filmList'].down()
-		self.loadPic()
 		
 	def keyUpRepeated(self):
 		#print "keyUpRepeated"
-		if (self.keyLocked|self.semaL|self.semaH):
+		if self.keyLocked:
 			return
 		self['filmList'].up()
 		
 	def keyDownRepeated(self):
 		#print "keyDownRepeated"
-		if (self.keyLocked|self.semaL|self.semaH):
+		if self.keyLocked:
 			return
 		self['filmList'].down()
 		
 	def key_repeatedUp(self):
 		#print "key_repeatedUp"
-		self.loadPic()
+		self.loadPicQueued()
 		
 	def keyLeft(self):
-		if (self.keyLocked|self.semaL|self.semaH):
+		if self.keyLocked:
 			return
 		self['filmList'].pageUp()
 		
 	def keyRight(self):
-		if (self.keyLocked|self.semaL|self.semaH):
+		if self.keyLocked:
 			return
 		self['filmList'].pageDown()
 			
 	def keyLeftRepeated(self):
-		if (self.keyLocked|self.semaL|self.semaH):
+		if self.keyLocked:
 			return
 		self['filmList'].pageUp()
 		
 	def keyRightRepeated(self):
-		if (self.keyLocked|self.semaL|self.semaH):
+		if self.keyLocked:
 			return
 		self['filmList'].pageDown()
 			
 	def keyPageDown(self):
 		#print "keyPageDown()"
+		if self.seekTimerRun:
+			self.seekTimerRun = False
 		self.keyPageDownFast(1)
 			
 	def keyPageUp(self):
 		#print "keyPageUp()"
+		if self.seekTimerRun:
+			self.seekTimerRun = False
 		self.keyPageUpFast(1)
 			
 	def keyPageUpFast(self,step):
@@ -436,6 +484,22 @@ class IStreamFilmListeScreen(Screen):
 		if oldpage != self.page:
 			self.loadPage()
 
+	#def keyPageDownMan(self):
+	#	self.keyPageDownUp = 0;
+	#	self.seekTimerRun = True
+
+	#def keyPageUpMan(self):
+	#	self.keyPageDownUp = 1;
+	#	self.seekTimerRun = True
+
+	#def seekTimer(self):
+	#	print "seekTimer:"
+	#	if self.seekTimerRun:
+	#		if not self.keyPageDownUp:
+	#			self.keyPageDown()
+	#		else:
+	#			self.keyPageUp()
+		
 	def key_1(self):
 		#print "keyPageDownFast(2)"
 		self.keyPageDownFast(2)
@@ -461,7 +525,7 @@ class IStreamFilmListeScreen(Screen):
 		self.keyPageUpFast(10)
 
 	def keySortAZ(self):
-		if (self.keyLocked|self.semaL|self.semaH):
+		if (self.keyLocked):
 			return
 		if self.sortOrder and not self.neueFilme:
 			self.sortOrder = 0
@@ -469,7 +533,7 @@ class IStreamFilmListeScreen(Screen):
 			self.loadPage()
 	
 	def keySortIMDB(self):
-		if (self.keyLocked|self.semaL|self.semaH):
+		if (self.keyLocked):
 			return
 		if not (self.sortOrder or self.neueFilme):
 			self.sortOrder = 1
