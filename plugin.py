@@ -3,6 +3,7 @@ from imports import *
 from decrypt import *
 	
 # Streame-Sites import
+from forPlayers import *
 from dokuMe import *
 from roflVideos import *
 from streamJunkies import *
@@ -80,6 +81,7 @@ config.mediaportal.showMEHD = ConfigYesNo(default = True)
 config.mediaportal.showIStream = ConfigYesNo(default = True)
 config.mediaportal.showM2k = ConfigYesNo(default = True)
 config.mediaportal.showUstreams = ConfigYesNo(default = True)
+config.mediaportal.show4Players = ConfigYesNo(default = True)
 
 #porn
 config.mediaportal.showM2kPorn = ConfigYesNo(default = False)
@@ -148,6 +150,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige My-Entertainment:", config.mediaportal.showMEHD))
 		self.configlist.append(getConfigListEntry("Zeige IStream:", config.mediaportal.showIStream))
 		self.configlist.append(getConfigListEntry("Zeige UltimateStreams:", config.mediaportal.showUstreams))
+		self.configlist.append(getConfigListEntry("Zeige 4Players:", config.mediaportal.show4Players))
 		# porn
 		self.configlist.append(getConfigListEntry("Zeige Movie2k-Porn:", config.mediaportal.showM2kPorn))
 		self.configlist.append(getConfigListEntry("Zeige xHamster:", config.mediaportal.showXhamster))
@@ -297,7 +300,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.infos.append(self.hauptListEntry("Konzert Oase", "koase"))
 		if config.mediaportal.showNhl.value:
 			self.infos.append(self.hauptListEntry("NHL", "nhl"))
-			
+		if config.mediaportal.show4Players.value:
+			self.infos.append(self.hauptListEntry("4Players", "4players"))
 		#fun & TV
 		if config.mediaportal.showRofl.value:
 			self.fun.append(self.hauptListEntry("Rofl.to", "rofl"))
@@ -503,6 +507,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(autoBildGenreScreen)
 		elif auswahl == "NHL":
 			self.session.open(nhlGenreScreen)
+		elif auswahl == "4Players":
+			self.session.open(forPlayersGenreScreen)
 		elif auswahl == "Tivi":
 			self.session.open(tiviGenreListeScreen)
 		elif auswahl == "My-Entertain":
@@ -519,13 +525,10 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(redtubeGenreScreen)
 		elif auswahl == "YouPorn":
 			self.session.open(youpornGenreScreen)
-<<<<<<< HEAD
 		elif auswahl == "UltimateStreams":
 			self.session.open(showUSGenre)
-=======
 		elif auswahl == "Pornerbros":
 			self.session.open(pornerbrosGenreScreen)
->>>>>>> c160b3d17dd2ac887eaec1f8dfa5d317ac6e972d
 
 	def keyCancel(self):
 		self.close()
