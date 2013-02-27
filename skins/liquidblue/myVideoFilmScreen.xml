@@ -12,7 +12,7 @@
     <!-- select screen -->
     <widget name="title" position="913,356" size="328,100" backgroundColor="#26181d20" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="center" foregroundColor="#00ffffff" />
     <widget name="roflList" position="55,180" size="850,350" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/liquidblue/sel50_280.png" foregroundColor="#00bbbbbb" />
-    <widget name="croflPic" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/liquidblue/no_coverArt.png" position="998,487" size="160,120" transparent="1" alphatest="blend" />
+    <widget name="roflPic" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/liquidblue/no_coverArt.png" position="998,487" size="160,120" transparent="1" alphatest="blend" />
     <widget name="name" position="155,106" size="750,60" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="Regular;26" valign="center" halign="center" />
     <widget name="handlung" position="55,543" size="850,150" backgroundColor="#26181d20" transparent="1" font="Regular;20" valign="top" foregroundColor="#00ffffff" />
     <eLabel text="Page" position="55,106" size="100,60" backgroundColor="#26181d20" transparent="1" foregroundColor="#00ffffff" font="Regular;20" valign="center" />

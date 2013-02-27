@@ -10,7 +10,7 @@
     <widget source="session.VideoPicture" render="Pig" position="913,136" size="328,186" zPosition="3" backgroundColor="transparent" />
     <eLabel position="912,135" size="330,188" backgroundColor="#00ffffff" zPosition="0" name="Videoback" foregroundColor="#00ffffff" />
     <!-- select screen -->
-    <widget name="ContentTitle" position="55,190" size="850,25" backgroundColor="backgound" zPosition="5" foregroundColor="#00ffffff" font="Regular;22" halign="center" transparent="1" />
+    <widget name="ContentTitle" position="55,190" size="850,25" backgroundColor="#26181d20" zPosition="5" foregroundColor="#00ffffff" font="Regular;22" halign="center" transparent="1" />
     <widget name="title" position="913,356" size="328,100" backgroundColor="#26181d20" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="center" foregroundColor="#00ffffff" />
     <widget name="filmList" position="55,240" size="850,300" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/liquidblue/sel50_280.png" foregroundColor="#00bbbbbb" />
     <widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/liquidblue/no_coverArt.png" position="998,487" size="160,120" transparent="1" alphatest="blend" />
