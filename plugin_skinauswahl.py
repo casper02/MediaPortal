@@ -42,7 +42,7 @@ from x4tube import *
 
 config.mediaportal = ConfigSubsection()
 config.mediaportal.pincode = ConfigPIN(default = 0000)
-config.mediaportal.skin = ConfigSelection(default = "original", choices = [("elgato", _("elgato")), ("original", _("original"))])
+config.mediaportal.skin = ConfigSelection(default = "original", choices = [("liquidblue", _("liquidblue")), ("original", _("original"))])
 config.mediaportal.showDoku = ConfigYesNo(default = True)
 config.mediaportal.showRofl = ConfigYesNo(default = True)
 config.mediaportal.showFail = ConfigYesNo(default = True)
@@ -82,22 +82,31 @@ config.mediaportal.showM2kPorn = ConfigYesNo(default = True)
 config.mediaportal.showIStream = ConfigYesNo(default = True)
 config.mediaportal.show4tube = ConfigYesNo(default = True)
 
+
 class hauptScreenSetup(Screen, ConfigListScreen):
-	skin = 	"""
-		<screen name="MediaPortal_Setup" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
-				<convert type="ClockToText">Format:%-H:%M</convert>
-			</widget>
-			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
-				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-			</widget>
-			<widget name="config" position="0,60" size="900,350" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
-			<widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,440" size="160,120" transparent="1" alphatest="blend" />
-			<widget name="name" position="230,420" size="560,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
-		</screen>"""
+     
+            if config.mediaportal.skin.value == "original":
+                    skin =  """
+                            <screen name="MediaPortal_Setup" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
+                                    <eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
+                                    <widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
+                                    <widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
+                                            <convert type="ClockToText">Format:%-H:%M</convert>
+                                    </widget>
+                                    <widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
+                                            <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+                                    </widget>
+                                    <widget name="config" position="0,60" size="900,350" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
+                                    <eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
+                                    <widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,440" size="160,120" transparent="1" alphatest="blend" />
+                                    <widget name="name" position="230,420" size="560,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
+                            </screen>"""
+            else:
+                    path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/haupt_Screen.xml" % config.mediaportal.skin.value
+                    with open(path, "r") as f:
+                    self.skin = f.read()
+                    f.close()
+
 
 	def __init__(self, session):
 		self.session = session
@@ -188,6 +197,14 @@ class haupt_Screen(Screen, ConfigListScreen):
 			<widget name="movies" position="610,85" size="260,480" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
 			<widget name="name" position="0,580" size="900,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;28" valign="top" halign="center"/>
 		</screen>"""
+
+class haupt_Screen:
+
+path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/haupt_Scre
+en.xml" % config.mediaportal.skin.value
+with open(path, "r") as f:
+self.skin = f.read()
+f.close()		
 
 	def __init__(self, session):
 		self.session = session
