@@ -38,6 +38,7 @@ from songsTo import *
 from myEntertainment import *
 from movie2k import *
 from iStreamWS import *
+from UltimateStreams import *
 from x4tube import *
 from redtube import *
 from youporn import *
@@ -78,6 +79,7 @@ config.mediaportal.showSongsto = ConfigYesNo(default = True)
 config.mediaportal.showMEHD = ConfigYesNo(default = True)
 config.mediaportal.showIStream = ConfigYesNo(default = True)
 config.mediaportal.showM2k = ConfigYesNo(default = True)
+config.mediaportal.showUstreams = ConfigYesNo(default = True)
 
 #porn
 config.mediaportal.showM2kPorn = ConfigYesNo(default = False)
@@ -145,6 +147,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige Songsto:", config.mediaportal.showSongsto))
 		self.configlist.append(getConfigListEntry("Zeige My-Entertainment:", config.mediaportal.showMEHD))
 		self.configlist.append(getConfigListEntry("Zeige IStream:", config.mediaportal.showIStream))
+		self.configlist.append(getConfigListEntry("Zeige UltimateStreams:", config.mediaportal.showUstreams))
 		# porn
 		self.configlist.append(getConfigListEntry("Zeige Movie2k-Porn:", config.mediaportal.showM2kPorn))
 		self.configlist.append(getConfigListEntry("Zeige xHamster:", config.mediaportal.showXhamster))
@@ -261,6 +264,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.movies.append(self.hauptListEntry("Tivi", "tivi"))
 		if config.mediaportal.showMEHD.value:
 			self.movies.append(self.hauptListEntry("My-Entertain", "mehd"))
+		if config.mediaportal.showUstreams.value:
+			self.movies.append(self.hauptListEntry("UltimateStreams", "ustreams"))
 		if config.mediaportal.showM2k.value:
 			self.movies.append(self.hauptListEntry("Movie2k", "movie2k"))
 		if config.mediaportal.showM2kPorn.value:
@@ -514,8 +519,13 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(redtubeGenreScreen)
 		elif auswahl == "YouPorn":
 			self.session.open(youpornGenreScreen)
+<<<<<<< HEAD
+		elif auswahl == "UltimateStreams":
+			self.session.open(showUSGenre)
+=======
 		elif auswahl == "Pornerbros":
 			self.session.open(pornerbrosGenreScreen)
+>>>>>>> c160b3d17dd2ac887eaec1f8dfa5d317ac6e972d
 
 	def keyCancel(self):
 		self.close()
