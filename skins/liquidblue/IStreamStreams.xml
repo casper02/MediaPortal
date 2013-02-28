@@ -12,7 +12,7 @@
     <!-- select screen -->
     <widget name="ContentTitle" position="55,190" size="850,25" backgroundColor="#26181d20" zPosition="5" foregroundColor="#00ffffff" font="Regular;22" halign="center" transparent="1" />
     <widget name="title" position="913,356" size="328,100" backgroundColor="#26181d20" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="center" foregroundColor="#00ffffff" />
-    <widget name="filmList" position="55,240" size="850,300" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/liquidblue/sel50_280.png" foregroundColor="#00bbbbbb" />
+    <widget name="streamList" position="55,240" size="850,300" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/liquidblue/sel50_280.png" foregroundColor="#00bbbbbb" />
     <widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/liquidblue/no_coverArt.png" position="998,487" size="160,120" transparent="1" alphatest="blend" />
     <widget name="name" position="55,106" size="850,60" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="Regular;26" valign="center" halign="center" />
     <widget name="handlung" position="55,558" size="850,140" backgroundColor="#26181d20" transparent="1" font="Regular;20" valign="top" foregroundColor="#00ffffff" />
