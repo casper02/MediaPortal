@@ -11,7 +11,7 @@
     <eLabel position="912,135" size="330,188" backgroundColor="#00ffffff" zPosition="0" name="Videoback" foregroundColor="#00ffffff" />
     <!-- select screen -->
     <widget name="title" position="913,356" size="328,100" backgroundColor="#26181d20" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="center" foregroundColor="#00ffffff" />
-    <widget name="streamlist" position="55,180" size="850,450" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/liquidblue/sel50_280.png" foregroundColor="c-netnotval" zPosition="0" />
+    <widget name="streamlist" position="55,180" size="850,450" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/liquidblue/sel50_280.png" foregroundColor="#00bbbbbb" zPosition="0" />
     <widget name="name" position="153,106" size="670,60" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="Regular;26" valign="center" halign="center" />
     <widget source="session.CurrentService" render="Label" position="785,106" size="120,60" font="Regular;26" foregroundColor="#00ffffff" backgroundColor="#26181d20" halign="right" transparent="1">
       <convert type="ServicePosition">Length</convert>
