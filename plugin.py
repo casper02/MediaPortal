@@ -328,7 +328,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.fun.append(self.hauptListEntry("RedTube", "redtube"))
 		if config.mediaportal.showyouporn.value:
 			self.fun.append(self.hauptListEntry("YouPorn", "youporn"))
-		if config.mediaportal.showyouporn.value:
+		if config.mediaportal.showpornerbros.value:
 			self.fun.append(self.hauptListEntry("Pornerbros", "pornerbros"))
 
 		self.movies.sort()
