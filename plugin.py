@@ -47,6 +47,7 @@ from pornerbros import *
 
 config.mediaportal = ConfigSubsection()
 config.mediaportal.pincode = ConfigPIN(default = 0000)
+config.mediaportal.skin = ConfigSelection(default = "original", choices = [("liquidblue", _("liquidblue")), ("original", _("original"))])
 config.mediaportal.showDoku = ConfigYesNo(default = True)
 config.mediaportal.showRofl = ConfigYesNo(default = True)
 config.mediaportal.showFail = ConfigYesNo(default = True)
@@ -93,29 +94,21 @@ config.mediaportal.showyouporn = ConfigYesNo(default = False)
 config.mediaportal.showpornerbros = ConfigYesNo(default = False)
 
 class hauptScreenSetup(Screen, ConfigListScreen):
-	skin = 	"""
-		<screen name="MediaPortal_Setup" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
-				<convert type="ClockToText">Format:%-H:%M</convert>
-			</widget>
-			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
-				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-			</widget>
-			<widget name="config" position="0,60" size="900,350" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
-			<widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png" position="20,440" size="160,120" transparent="1" alphatest="blend" />
-			<widget name="name" position="230,420" size="560,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
-		</screen>"""
 
 	def __init__(self, session):
 		self.session = session
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/hauptScreenSetup.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
 		Screen.__init__(self, session)
 		
 		self.configlist = []
 		ConfigListScreen.__init__(self, self.configlist)
 		self.configlist.append(getConfigListEntry("Pincode:", config.mediaportal.pincode))
+		self.configlist.append(getConfigListEntry("Skinauswahl:", config.mediaportal.skin))
 		self.configlist.append(getConfigListEntry("Zeige Doku:", config.mediaportal.showDoku))
 		self.configlist.append(getConfigListEntry("Zeige Rofl:", config.mediaportal.showRofl))
 		self.configlist.append(getConfigListEntry("Zeige Fail:", config.mediaportal.showFail))
@@ -161,7 +154,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige Pornerbros:", config.mediaportal.showpornerbros))
 		self["config"].setList(self.configlist)
 
-		self['title'] = Label("MediaPortal - Setup - (version 3.5.3)")
+		self['title'] = Label("MediaPortal - Setup - (Version 3.5.3)")
 		self['name'] = Label("Setup")
 		self['coverArt'] = Pixmap()
 		
@@ -186,27 +179,15 @@ class chooseMenuList(MenuList):
 		self.l.setItemHeight(40)
 
 class haupt_Screen(Screen, ConfigListScreen):
-	skin = 	"""
-		<screen name="MediaPortal" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
-				<convert type="ClockToText">Format:%-H:%M</convert>
-			</widget>
-			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
-				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-			</widget>
-			<widget name="Infos" position="30,60" size="260,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-			<widget name="infos" position="30,85" size="260,480" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<widget name="Fun" position="320,60" size="260,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-			<widget name="fun" position="320,85" size="260,480" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<widget name="Movies" position="610,60" size="260,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-			<widget name="movies" position="610,85" size="260,480" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-			<widget name="name" position="0,580" size="900,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;28" valign="top" halign="center"/>
-		</screen>"""
-
 	def __init__(self, session):
 		self.session = session
+
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/haupt_Screen.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
 		Screen.__init__(self, session)
 		
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions"], {
