@@ -267,20 +267,31 @@ class epornerFilmScreen(Screen):
 		if self.keyLocked:
 			return
 		phTitle = self['genreList'].getCurrent()[0][0]
-		videoPage = re.findall('/.*?/(.*?)/', self['genreList'].getCurrent()[0][1], re.S)
+		url = 'http://www.eporner.com%s' % (self['genreList'].getCurrent()[0][1])
+		self.keyLocked = True
+		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getXMLPage).addErrback(self.dataError)
+
+	def getXMLPage(self, data):
+		videoPage = re.findall(r"player4\\([^\\]*)\\", data, re.S)
 		if videoPage:
 			for (phurl) in videoPage:
-				url = 'http://www.eporner.com/config5/%s' % (phurl)
-		self.keyLocked = True
-		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVideoPage).addErrback(self.dataError)
+				url2 = 'http://www.eporner.com/config5%s' % (phurl)
+		getPage(url2, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
-		videoPage = re.findall('<file>(.*?)</file>', data, re.S)
+		videoPage = re.findall('<hd.file>(.*?)</hd.file>', data, re.S)
 		if videoPage:
 			for (phurl) in videoPage:
-				url = '%s' % (phurl)
+				url3 = '%s' % (phurl)
 				self.keyLocked = False
-				self.play(url)
+				self.play(url3)
+		else:
+			videoPage = re.findall('<file>(.*?)</file>', data, re.S)
+			if videoPage:
+				for (phurl) in videoPage:
+					url3 = '%s' % (phurl)
+					self.keyLocked = False
+					self.play(url3)
 		
 	def play(self,file):
 		xxxtitle = self['genreList'].getCurrent()[0][0]
