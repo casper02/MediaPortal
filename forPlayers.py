@@ -1,7 +1,8 @@
+##Thanks to Tristan Fischer for XBMC-API (sphere@dersphere.de)
 from imports import *
 from decrypt import *
 
-from resources.lib.api import XBMC4PlayersApi, NetworkError
+from resources.lib.api import XBMC4PlayersApi, NetworkError, SYSTEMS
 
 api = XBMC4PlayersApi()
 
@@ -40,7 +41,8 @@ class forPlayersGenreScreen(Screen):
 		
 	def layoutFinished(self):
 		self.selectionListe.append(("Aktuelle Videos", "1"))
-		self.selectionListe.append(("Populaerste Videos", "2"))
+		self.selectionListe.append(("Meistgesehene Videos", "2"))
+		self.selectionListe.append(("Letzte Reviews", "3"))
 		self.chooseMenuList.setList(map(forPlayersGenreListEntry, self.selectionListe))
 
 	def keyOK(self):
@@ -91,9 +93,10 @@ class forPlayersVideoScreen(Screen):
 		self.onLayoutFinish.append(self.loadVideos)
 		
 	def loadVideos(self):
-		limit = int(80)
+		limit = int(50)
 		if self.selectionLink == '1':
 			try:
+				api.set_systems(SYSTEMS)#Videos zu allen Systeme
 				videos = api.get_latest_videos(limit)
 				self.showData(videos)
 			except NetworkError:
@@ -102,7 +105,17 @@ class forPlayersVideoScreen(Screen):
 				self.chooseMenuList.setList(map(forPlayersVideoListEntry, self.videosListe))
 		elif self.selectionLink == '2':
 			try:
+				api.set_systems(SYSTEMS)#Videos zu allen Systeme
 				videos = api.get_popular_videos(limit)
+				self.showData(videos)
+			except NetworkError:
+				print 'Fehler API-Call...'
+				self.videosListe.append(('4Players nicht verfuegbar....', "", "", ""))
+				self.chooseMenuList.setList(map(forPlayersVideoListEntry, self.videosListe))
+		elif self.selectionLink == '3':
+			try:
+				api.set_systems(SYSTEMS)#Videos zu allen Systeme
+				videos = api.get_latest_reviews(older_than=0)
 				self.showData(videos)
 			except NetworkError:
 				print 'Fehler API-Call...'
@@ -115,21 +128,11 @@ class forPlayersVideoScreen(Screen):
 			videoTitle = str(video['video_title'])
 			videoStreamUrl = video['streams']['hq']['url']
 			videoDate = video['date']
-			#videoDuration = self.convDuration(video['duration'])###TODO: Korrektur Zeitanzeige
 			videoPic = video['thumb']
 			videoTitleConv = gameTitle + ' - ' + videoTitle + ' ' + '(' + videoDate + ')'
-			#videoTitleConv = gameTitle + ' - ' + videoTitle + ' ' + '(' + videoDate + ' - ' + str(videoDuration) + ')'
 			self.videosListe.append((videoTitleConv, videoStreamUrl, videoPic, videoTitle))
 		self.chooseMenuList.setList(map(forPlayersVideoListEntry, self.videosListe))
 		self.showPic()
-			
-#	def convDuration(self, duration):
-#		s = duration
-#		hours = s // 3600 
-#		s = s - (hours * 3600)
-#		minutes = s // 60
-#		seconds = s - (minutes * 60)
-#		return '%s:%s' % (minutes, seconds)
 		
 	def showPic(self):
 		myTitle = self['videosList'].getCurrent()[0][0]
