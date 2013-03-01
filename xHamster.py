@@ -26,6 +26,7 @@ class xhamsterGenreScreen(Screen):
 		self['title'] = Label("xHamster.com")
 		self['name'] = Label("Genre Auswahl")
 		self['coverArt'] = Pixmap()
+		self.suchString = ''
 		
 		self.genreliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -36,6 +37,7 @@ class xhamsterGenreScreen(Screen):
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
+		self.genreliste.append(("--- Search ---", "callSuchen"))
 		self.genreliste.append(("New", "http://www.xhamster.com/new/"))
 		self.genreliste.append(("HD Videos", "http://www.xhamster.com/channels/new-hd_videos-"))
 		self.genreliste.append(("Amateur", "http://www.xhamster.com/channels/new-amateur-"))
@@ -135,9 +137,22 @@ class xhamsterGenreScreen(Screen):
 		self.chooseMenuList.setList(map(xhamsterGenreListEntry, self.genreliste))
 
 	def keyOK(self):
-		streamGenreLink = self['genreList'].getCurrent()[0][1]
-		print streamGenreLink
-		self.session.open(xhamster, streamGenreLink)
+		streamGenreName = self['genreList'].getCurrent()[0][0]
+		if streamGenreName == "--- Search ---":
+			self.suchen()
+
+		else:
+			streamGenreLink = self['genreList'].getCurrent()[0][1]
+			self.session.open(xhamster, streamGenreLink)
+		
+	def suchen(self):
+		self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoard, title = (_("Suchkriterium eingeben")), text = self.suchString)
+
+	def SuchenCallback(self, callback = None, entry = None):
+		if callback is not None and len(callback):
+			self.suchString = callback.replace(' ', '+')
+			streamGenreLink = 'http://www.xhamster.com/search.php?q=%s&page=' % (self.suchString)
+			self.session.open(xhamster, streamGenreLink)
 
 	def keyCancel(self):
 		self.close()

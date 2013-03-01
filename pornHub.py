@@ -251,6 +251,7 @@ class pornhubGenreScreen(Screen):
 		self['name'] = Label("Genre Auswahl")
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
+		self.suchString = ''
 		
 		self.filmliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -271,6 +272,7 @@ class pornhubGenreScreen(Screen):
 			for (phUrl,phImage,phTitle) in phCats:
 				phUrl = "http://www.pornhub.com" + phUrl + "&page="
 				self.filmliste.append((phTitle,phUrl,phImage))
+			self.filmliste.append(("--- Search ---", "callSuchen","dump"))
 			self.filmliste.append(("All","http://www.pornhub.com/video?page=","dump"))
 			self.filmliste.sort()
 			self.chooseMenuList.setList(map(pornhubGenreListEntry, self.filmliste))
@@ -327,14 +329,23 @@ class pornhubGenreScreen(Screen):
 		self.showInfos()
 		
 	def keyOK(self):
-		if self.keyLocked:
-			return
-		phTitle = self['genreList'].getCurrent()[0][0]
-		phLink = self['genreList'].getCurrent()[0][1]
-		print phTitle, phLink
-		self.session.open(pornhubFilmScreen, phLink)
-		print "end"
+		streamGenreName = self['genreList'].getCurrent()[0][0]
+		if streamGenreName == "--- Search ---":
+			self.suchen()
+
+		else:
+			streamGenreLink = self['genreList'].getCurrent()[0][1]
+			self.session.open(pornhubFilmScreen, streamGenreLink)
 		
+	def suchen(self):
+		self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoard, title = (_("Suchkriterium eingeben")), text = self.suchString)
+
+	def SuchenCallback(self, callback = None, entry = None):
+		if callback is not None and len(callback):
+			self.suchString = callback.replace(' ', '%2B')
+			streamGenreLink = 'http://www.pornhub.com/video/search?search=%s&page=' % (self.suchString)
+			self.session.open(pornhubFilmScreen, streamGenreLink)
+			
 	def keyCancel(self):
 		self.close()
 

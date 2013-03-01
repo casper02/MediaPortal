@@ -47,6 +47,7 @@ class youpornGenreScreen(Screen):
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
+		self.genreliste.append(("--- Search ---", "callSuchen"))
 		self.genreliste.append(("New", "http://www.youporn.com/?page="))
 		self.genreliste.append(("Top Rated", "http://www.youporn.com/top_rated/?page="))
 		self.genreliste.append(("Most Viewed", "http://www.youporn.com/most_viewed/?page="))
@@ -118,8 +119,22 @@ class youpornGenreScreen(Screen):
 		self.chooseMenuList.setList(map(youpornGenreListEntry, self.genreliste))
 
 	def keyOK(self):
-		streamGenreLink = self['genreList'].getCurrent()[0][1]
-		self.session.open(youpornFilmScreen, streamGenreLink)
+		streamGenreName = self['genreList'].getCurrent()[0][0]
+		if streamGenreName == "--- Search ---":
+			self.suchen()
+
+		else:
+			streamGenreLink = self['genreList'].getCurrent()[0][1]
+			self.session.open(youpornFilmScreen, streamGenreLink)
+		
+	def suchen(self):
+		self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoard, title = (_("Suchkriterium eingeben")), text = self.suchString)
+
+	def SuchenCallback(self, callback = None, entry = None):
+		if callback is not None and len(callback):
+			self.suchString = callback.replace(' ', '+')
+			streamGenreLink = 'http://www.youporn.com/search/?query=%s&page=' % (self.suchString)
+			self.session.open(youpornFilmScreen, streamGenreLink)
 
 	def keyLeft(self):
 		self['genreList'].pageUp()

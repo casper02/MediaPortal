@@ -44,6 +44,7 @@ from x4tube import *
 from redtube import *
 from youporn import *
 from pornerbros import *
+from eporner import *
 
 config.mediaportal = ConfigSubsection()
 config.mediaportal.pincode = ConfigPIN(default = 0000)
@@ -92,6 +93,7 @@ config.mediaportal.show4tube = ConfigYesNo(default = False)
 config.mediaportal.showredtube = ConfigYesNo(default = False)
 config.mediaportal.showyouporn = ConfigYesNo(default = False)
 config.mediaportal.showpornerbros = ConfigYesNo(default = False)
+config.mediaportal.showeporner = ConfigYesNo(default = False)
 
 class hauptScreenSetup(Screen, ConfigListScreen):
 
@@ -152,6 +154,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige RedTube:", config.mediaportal.showredtube))
 		self.configlist.append(getConfigListEntry("Zeige YouPorn:", config.mediaportal.showyouporn))
 		self.configlist.append(getConfigListEntry("Zeige Pornerbros:", config.mediaportal.showpornerbros))
+		self.configlist.append(getConfigListEntry("Zeige Eporner:", config.mediaportal.showeporner))
 		self["config"].setList(self.configlist)
 
 		self['title'] = Label("MediaPortal - Setup - (Version 3.5.3)")
@@ -311,6 +314,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.fun.append(self.hauptListEntry("YouPorn", "youporn"))
 		if config.mediaportal.showpornerbros.value:
 			self.fun.append(self.hauptListEntry("Pornerbros", "pornerbros"))
+		if config.mediaportal.showeporner.value:
+			self.fun.append(self.hauptListEntry("Eporner", "eporner"))
 
 		self.movies.sort()
 		self.infos.sort()
@@ -509,10 +514,11 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(showUSGenre)
 		elif auswahl == "Pornerbros":
 			self.session.open(pornerbrosGenreScreen)
+		elif auswahl == "Eporner":
+			self.session.open(epornerGenreScreen)
 
 	def keyCancel(self):
 		self.close()
-
 
 def main(session, **kwargs):
 	session.open(haupt_Screen)

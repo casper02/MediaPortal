@@ -1,21 +1,21 @@
 from imports import *
 from decrypt import *
 
-def redtubeGenreListEntry(entry):
+def epornerGenreListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		] 
 
-def redtubeFilmListEntry(entry):
+def epornerFilmListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		] 
 		
-class redtubeGenreScreen(Screen):
+class epornerGenreScreen(Screen):
 	
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/redtubeGenreScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/epornerGenreScreen.xml" % config.mediaportal.skin.value
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -32,7 +32,7 @@ class redtubeGenreScreen(Screen):
 			"left" : self.keyLeft
 		}, -1)
 
-		self['title'] = Label("RedTube.com")
+		self['title'] = Label("Eporner.com")
 		self['name'] = Label("Genre Auswahl")
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
@@ -47,44 +47,45 @@ class redtubeGenreScreen(Screen):
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
-		self.genreliste.append(("Newest", "http://www.redtube.com/?page="))
 		self.genreliste.append(("--- Search ---", "callSuchen"))
-		self.genreliste.append(("Top Rated", "http://www.redtube.com/top?page="))
-		self.genreliste.append(("Most Viewed", "http://www.redtube.com/mostviewed?page="))
-		self.genreliste.append(("Most Favored", "http://www.redtube.com/mostfavored?page="))
-		self.genreliste.append(("Amateur", "http://www.redtube.com/redtube/amateur?page="))
-		self.genreliste.append(("Anal", "http://www.redtube.com/redtube/anal?page="))
-		self.genreliste.append(("Asian", "http://www.redtube.com/redtube/asian?page="))
-		self.genreliste.append(("Big Tits", "http://www.redtube.com/redtube/bigtits?page="))
-		self.genreliste.append(("Blonde", "http://www.redtube.com/redtube/blonde?page="))
-		self.genreliste.append(("Blowjob", "http://www.redtube.com/redtube/blowjob?page="))
-		self.genreliste.append(("Creampie", "http://www.redtube.com/redtube/creampie?page="))
-		self.genreliste.append(("Cumshot", "http://www.redtube.com/redtube/cumshot?page="))
-		self.genreliste.append(("Double Penetration", "http://www.redtube.com/redtube/doublepenetration?page="))
-		self.genreliste.append(("Ebony", "http://www.redtube.com/redtube/ebony?page="))
-		self.genreliste.append(("Facials", "http://www.redtube.com/redtube/facials?page="))
-		self.genreliste.append(("Fetish", "http://www.redtube.com/redtube/fetish?page="))
-		self.genreliste.append(("Gangbang", "http://www.redtube.com/redtube/gangbang?page="))
-		self.genreliste.append(("Gay", "http://www.redtube.com/redtube/gay?page="))
-		self.genreliste.append(("Group", "http://www.redtube.com/redtube/group?page="))
-		self.genreliste.append(("Hentai", "http://www.redtube.com/redtube/hentai?page="))
-		self.genreliste.append(("Interracial", "http://www.redtube.com/redtube/interracial?page="))
-		self.genreliste.append(("Japanese", "http://www.redtube.com/redtube/japanese?page="))
-		self.genreliste.append(("Latina", "http://www.redtube.com/redtube/latina?page="))
-		self.genreliste.append(("Lesbian", "http://www.redtube.com/redtube/lesbian?page="))
-		self.genreliste.append(("Lingerie", "http://www.redtube.com/redtube/lingerie?page="))
-		self.genreliste.append(("Masturbation", "http://www.redtube.com/redtube/masturbation?page="))
-		self.genreliste.append(("Mature", "http://www.redtube.com/redtube/mature?page="))
-		self.genreliste.append(("MILF", "http://www.redtube.com/redtube/milf?page="))
-		self.genreliste.append(("POV", "http://www.redtube.com/redtube/pov?page="))
-		self.genreliste.append(("Public", "http://www.redtube.com/redtube/public?page="))
-		self.genreliste.append(("Redhead", "http://www.redtube.com/redtube/redhead?page="))
-		self.genreliste.append(("Shemale", "http://www.redtube.com/redtube/shemale?page="))
-		self.genreliste.append(("Squirting", "http://www.redtube.com/redtube/squirting?page="))
-		self.genreliste.append(("Teens", "http://www.redtube.com/redtube/teens?page="))
-		self.genreliste.append(("Vintage", "http://www.redtube.com/redtube/vintage?page="))
-		self.genreliste.append(("Wild & Crazy", "http://www.redtube.com/redtube/wildcrazy?page="))
-		self.chooseMenuList.setList(map(redtubeGenreListEntry, self.genreliste))
+		self.genreliste.append(("New", "http://www.eporner.com//"))
+		self.genreliste.append(("On Air", "http://www.eporner.com/currently//"))
+		self.genreliste.append(("Popular", "http://www.eporner.com/weekly_top//"))
+		self.genreliste.append(("Top Rated", "http://www.eporner.com/top_rated//"))
+		self.genreliste.append(("HD", "http://www.eporner.com/hd//"))
+		self.genreliste.append(("Amateurs", "http://www.eporner.com/keywords/amateur+amateurs/"))
+		self.genreliste.append(("Anal", "http://www.eporner.com/keywords/anal/"))
+		self.genreliste.append(("Asian", "http://www.eporner.com/keywords/asian/"))
+		self.genreliste.append(("BDSM", "http://www.eporner.com/keywords/bdsm/"))
+		self.genreliste.append(("Big Dick", "http://www.eporner.com/keywords/%22Big+dick%22/"))
+		self.genreliste.append(("Big Tits", "http://www.eporner.com/keywords/%22big+tits%22/"))
+		self.genreliste.append(("Blowjob", "http://www.eporner.com/keywords/Blowjob+Blow+Job/"))
+		self.genreliste.append(("Cumshot", "http://www.eporner.com/keywords/cum+cumshot/"))
+		self.genreliste.append(("Double Penetration", "http://www.eporner.com/keywords/dp+dual/"))
+		self.genreliste.append(("Ebony", "http://www.eporner.com/keywords/ebony/"))
+		self.genreliste.append(("Fat", "http://www.eporner.com/keywords/fat/"))
+		self.genreliste.append(("Gay", "http://www.eporner.com/keywords/gay/"))
+		self.genreliste.append(("Group", "http://www.eporner.com/keywords/group/"))
+		self.genreliste.append(("Handjob", "http://www.eporner.com/keywords/handjob/"))
+		self.genreliste.append(("Hardcore", "http://www.eporner.com/keywords/hardcore/"))
+		self.genreliste.append(("Lesbian", "http://www.eporner.com/keywords/lesbian+lesbians/"))
+		self.genreliste.append(("Masturbation", "http://www.eporner.com/keywords/masturbation+masturbate/"))
+		self.genreliste.append(("Mature", "http://www.eporner.com/keywords/mature/"))
+		self.genreliste.append(("Office", "http://www.eporner.com/keywords/office/"))
+		self.genreliste.append(("Old Man", "http://www.eporner.com/keywords/%22old+man%22/"))
+		self.genreliste.append(("Outdoor", "http://www.eporner.com/keywords/outdoor/"))
+		self.genreliste.append(("Public", "http://www.eporner.com/keywords/public/"))
+		self.genreliste.append(("Shemale", "http://www.eporner.com/keywords/shemale/"))
+		self.genreliste.append(("Sleep", "http://www.eporner.com/keywords/sleep/"))
+		self.genreliste.append(("Solo Girls", "http://www.eporner.com/solo//"))
+		self.genreliste.append(("Spy", "http://www.eporner.com/keywords/spy/"))
+		self.genreliste.append(("Students", "http://www.eporner.com/keywords/student+students/"))
+		self.genreliste.append(("Swingers", "http://www.eporner.com/keywords/swinger+swingers/"))
+		self.genreliste.append(("Teens", "http://www.eporner.com/keywords/teen+teens+young/"))
+		self.genreliste.append(("Threesome", "http://www.eporner.com/keywords/threesome/"))
+		self.genreliste.append(("Toys", "http://www.eporner.com/keywords/toy+toys/"))
+		self.genreliste.append(("Uniform", "http://www.eporner.com/keywords/uniform/"))
+		self.chooseMenuList.setList(map(epornerGenreListEntry, self.genreliste))
 
 	def keyOK(self):
 		streamGenreName = self['genreList'].getCurrent()[0][0]
@@ -93,16 +94,16 @@ class redtubeGenreScreen(Screen):
 
 		else:
 			streamGenreLink = self['genreList'].getCurrent()[0][1]
-			self.session.open(redtubeFilmScreen, streamGenreLink)
-		
+			self.session.open(epornerFilmScreen, streamGenreLink)
+
 	def suchen(self):
 		self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoard, title = (_("Suchkriterium eingeben")), text = self.suchString)
 
 	def SuchenCallback(self, callback = None, entry = None):
 		if callback is not None and len(callback):
-			self.suchString = callback.replace(' ', '+')
-			streamGenreLink = 'http://www.redtube.com/?search=%s&page=' % (self.suchString)
-			self.session.open(redtubeFilmScreen, streamGenreLink)
+			self.suchString = callback.replace(' ', '%20')
+			streamGenreLink = 'http://www.eporner.com/keywords/%s/' % (self.suchString)
+			self.session.open(epornerFilmScreen, streamGenreLink)
 
 	def keyLeft(self):
 		self['genreList'].pageUp()
@@ -119,12 +120,12 @@ class redtubeGenreScreen(Screen):
 	def keyCancel(self):
 		self.close()
 
-class redtubeFilmScreen(Screen):
+class epornerFilmScreen(Screen):
 	
 	def __init__(self, session, phCatLink):
 		self.session = session
 		self.phCatLink = phCatLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/redtubeFilmScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/epornerFilmScreen.xml" % config.mediaportal.skin.value
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -144,14 +145,14 @@ class redtubeFilmScreen(Screen):
 			"green" : self.keyPageNumber
 		}, -1)
 
-		self['title'] = Label("RedTube.com")
+		self['title'] = Label("Eporner.com")
 		self['name'] = Label("Film Auswahl")
 		self['views'] = Label("")
 		self['runtime'] = Label("")
 		self['page'] = Label("1")
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
-		self.page = 1
+		self.page = 0
 		
 		self.filmliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -164,19 +165,29 @@ class redtubeFilmScreen(Screen):
 	def loadpage(self):
 		self.keyLocked = True
 		self.filmliste = []
-		self['page'].setText(str(self.page))
-		url = "%s%s" % (self.phCatLink, str(self.page))
+		self['page'].setText(str(self.page+1))
+		url = "%s%s//" % (self.phCatLink, str(self.page))
 		print url
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
 	def loadData(self, data):
-		phMovies = re.findall('class="video".*?<a href="(.*?)".*?title="(.*?)".*?class="te" src="(.*?)".*?class="time".*?span class="d">(.*?)</span>.*?style="float:left;">(.*?)</div>', data, re.S)
-		if phMovies:
-			for (phUrl, phTitle, phImage, phRuntime, phViews) in phMovies:
-				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage, phRuntime, phViews))
-			self.chooseMenuList.setList(map(redtubeFilmListEntry, self.filmliste))
-			self.keyLocked = False
-			self.showInfos()
+		if self.phCatLink == "http://www.eporner.com/top_rated//":
+			phMovies = re.findall('<div class="mbtit"><a href="(.*?)" title="(.*?)".*?src="(.*?)".*?<span>TIME:</span> (.*?)</div>', data, re.S)
+			if phMovies:
+				Views = []
+				for (phUrl, phTitle, phImage, phRuntime) in phMovies:
+					self.filmliste.append((decodeHtml(phTitle), phUrl, phImage, phRuntime, Views))
+				self.chooseMenuList.setList(map(epornerFilmListEntry, self.filmliste))
+				self.keyLocked = False
+				self.showInfos()
+		else:
+			phMovies = re.findall('<div class="mbtit"><a href="(.*?)" title="(.*?)".*?src="(.*?)".*?<span>TIME:</span> (.*?)</div>.*?<span>VIEWS:</span> (.*?)</div>', data, re.S)
+			if phMovies:
+				for (phUrl, phTitle, phImage, phRuntime, phViews) in phMovies:
+					self.filmliste.append((decodeHtml(phTitle), phUrl, phImage, phRuntime, phViews))
+				self.chooseMenuList.setList(map(epornerFilmListEntry, self.filmliste))
+				self.keyLocked = False
+				self.showInfos()
 
 	def dataError(self, error):
 		print error
@@ -186,10 +197,6 @@ class redtubeFilmScreen(Screen):
 		phImage = self['genreList'].getCurrent()[0][2]
 		phRuntime = self['genreList'].getCurrent()[0][3]
 		phViews = self['genreList'].getCurrent()[0][4]
-		phViews = phViews.replace('\t','')
-		phViews = phViews.replace(' views','')
-		phViews = phViews.replace('\r','')
-		phViews = phViews.replace('\n','')
 		self['name'].setText(phTitle)
 		self['runtime'].setText(phRuntime)
 		self['views'].setText(phViews)
@@ -210,18 +217,18 @@ class redtubeFilmScreen(Screen):
 					del self.picload
 
 	def keyPageNumber(self):
-		self.session.openWithCallback(self.callbackkeyPageNumber, VirtualKeyBoard, title = (_("Seitennummer eingeben")), text = str(self.page))
+		self.session.openWithCallback(self.callbackkeyPageNumber, VirtualKeyBoard, title = (_("Seitennummer eingeben")), text = str(self.page+1))
 
 	def callbackkeyPageNumber(self, answer):
 		if answer is not None:
-			self.page = int(answer)
+			self.page = int(answer)-1
 			self.loadpage()
 
 	def keyPageDown(self):
 		print "PageDown"
 		if self.keyLocked:
 			return
-		if not self.page < 2:
+		if not self.page < 1:
 			self.page -= 1
 			self.loadpage()
 		
@@ -260,18 +267,20 @@ class redtubeFilmScreen(Screen):
 		if self.keyLocked:
 			return
 		phTitle = self['genreList'].getCurrent()[0][0]
-		phLink = 'http://www.redtube.com' + self['genreList'].getCurrent()[0][1]
+		videoPage = re.findall('/.*?/(.*?)/', self['genreList'].getCurrent()[0][1], re.S)
+		if videoPage:
+			for (phurl) in videoPage:
+				url = 'http://www.eporner.com/config5/%s' % (phurl)
 		self.keyLocked = True
-		getPage(phLink, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVideoPage).addErrback(self.dataError)
+		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
-		videoPage = re.findall("source src='(.*?)'", data, re.S)
+		videoPage = re.findall('<file>(.*?)</file>', data, re.S)
 		if videoPage:
 			for (phurl) in videoPage:
 				url = '%s' % (phurl)
-				videos = urllib.unquote(url)
 				self.keyLocked = False
-				self.play(videos)
+				self.play(url)
 		
 	def play(self,file):
 		xxxtitle = self['genreList'].getCurrent()[0][0]
