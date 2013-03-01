@@ -5,12 +5,21 @@ from decrypt import *
 import Queue
 import threading
 
+US_Version = "Ultimate-Streams.Com v1.00"
+
+US_siteEncoding = 'iso-8859-1'
+
+def rawDecode(txt):
+	txt = txt.replace('\xe4','ä').replace('\xf6','ö').replace('\xfc','ü').replace('\xdf','ß')
+	txt = txt.replace('\xc4','Ä').replace('\xd6','Ö').replace('\xdc','Ü')
+	return decodeHtml(txt)
+
 def USGenreListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		] 
 class showUSGenre(Screen):
-	
+
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/showUSGenre.xml" % config.mediaportal.skin.value
@@ -26,7 +35,7 @@ class showUSGenre(Screen):
 			"cancel": self.keyCancel
 		}, -1)
 
-		self['title'] = Label("UltimateStreams.Com")
+		self['title'] = Label(US_Version)
 		self['ContentTitle'] = Label("M e n ü")
 		self['name'] = Label("Genre Auswahl")
 		self['coverArt'] = Pixmap()
@@ -42,10 +51,12 @@ class showUSGenre(Screen):
 		self.onLayoutFinish.append(self.loadPage)
 		
 	def loadPage(self):
-		print "ISteam.ws:"
+		print "UltimateStreams:"
 		genreListe = []
 		Genre = [("Kino", "http://ultimate-streams.com/index.php?area=kinofilme&type=&pageno="),
 			("Letzte Einträge", "http://ultimate-streams.com/index.php?area=&type=&pageno="),
+			("LAST 100", "http://ultimate-streams.com/index.php?area=last100&type=&pageno="),
+			("Top 15 Streams", "http://ultimate-streams.com/index.php?area=&type=&pageno="),
 			("Abenteuer", "http://ultimate-streams.com/index.php?area=abenteuer&type=&pageno="),
 			("Action", "http://ultimate-streams.com/index.php?area=action&type=&pageno="),
 			("Anime", "http://ultimate-streams.com/index.php?area=anime&type=&pageno="),
@@ -64,7 +75,7 @@ class showUSGenre(Screen):
 			("Märchen", "http://ultimate-streams.com/index.php?area=maerchen&type=&pageno="),
 			("Musikfilm", "http://ultimate-streams.com/index.php?area=musikfilme&type=&pageno="),
 			("Mystery", "http://ultimate-streams.com/index.php?area=mystery&type=&pageno="),
-			("Romantik", "http://ultimate-streams.com/index.php?area=romantik&type=&pageno="),
+			("Romantik", "http://ultimate-streams.com/index.php?area=romanze&type=&pageno="),
 			("SciFi", "http://ultimate-streams.com/index.php?area=scifi&type=&pageno="),
 			("Sport", "http://ultimate-streams.com/index.php?area=sport&type=&pageno="),
 			("Thriller", "http://ultimate-streams.com/index.php?area=thriller&type=&pageno="),
@@ -92,7 +103,7 @@ def USFilmListEntry(entry):
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		] 
 class USFilmListeScreen(Screen):
-	
+
 	def __init__(self, session, genreLink, genreName):
 		self.session = session
 		self.genreLink = genreLink
@@ -155,7 +166,7 @@ class USFilmListeScreen(Screen):
 		self.sortOrderStrAZ = ""
 		self.sortOrderStrIMDB = ""
 		self.sortOrderStrGenre = ""
-		self['title'] = Label("UltimateStreams.Com")
+		self['title'] = Label(US_Version)
 		self['leftContentTitle'] = Label("")
 		self['name'] = Label("")
 		self['handlung'] = Label("")
@@ -179,7 +190,9 @@ class USFilmListeScreen(Screen):
 		self.keckse = {}
 		self.page = 0
 		self.pages = 0;
-		self.neueFilme = re.match('Letzte Einträge',self.genreName)
+		self.neueFilme = re.match('.*?Letzte Einträge',self.genreName)
+		self.Top15 = re.match('.*?Top 15 Streams',self.genreName)
+		self.Last100 = re.match('.*?LAST 100',self.genreName)
 		self.setGenreStrTitle()
 		
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -212,12 +225,10 @@ class USFilmListeScreen(Screen):
 		#	return
 			
 		self.filmQ.put(url)
-		print "eventL ",self.eventL.is_set()
 		if not self.eventL.is_set():
 			self.eventL.set()
 			self.loadPageQueued()
-		else:
-			return
+		print "eventL ",self.eventL.is_set()
 		
 	def loadPageQueued(self):
 		print "loadPageQueued:"
@@ -238,12 +249,24 @@ class USFilmListeScreen(Screen):
 	def loadPageData(self, data):
 		print "loadPageData:"
 			
-		if not re.match('Neue Einträge',self.genreName):
-			filme = re.findall('id="list" height="205".*?<a href="(.*?)amp;(.*?)" title="(.*?)"><img src="(.*?)" height=', data, re.S)
+		if self.Last100:
+			print "Last 100 search.."
+			m=re.search('<!-- start content -->(.*)<!-- end content -->',data,re.S)
+			if m:
+				filme = re.findall('.*?id="title".*?<a href="(.*?)".*?: none;">(.*?)</font>', m.group(1), re.S)
+			else:
+				filme = None
+		elif self.Top15:
+			print "Top 15 search.."
+			m=re.search('Top 15(.*)Views</b><br/></div>\n',data,re.S)
+			if m:
+				filme = re.findall('.*?<a href="(.*?)" title="(.*?)"><img src="(.*?)"', m.group(1))
+			else:
+				filme = None
 		else:
-			#filme = re.findall('<div class="voting".*?<a href="(.*?)".*?title="(.*?)">.*?data-original="(.*?)" alt', data)
-			return
-			
+			print "Normal search.."
+			filme = re.findall('id="list" height="205".*?<a href="(.*?)" title="(.*?)"><img src="(.*?)" height=', data, re.S)
+		
 		if filme:
 			print "Movies found !"
 			if not self.pages:
@@ -255,18 +278,24 @@ class USFilmListeScreen(Screen):
 				self.page = 1
 				print "Page: %d / %d" % (self.page,self.pages)
 				self['page'].setText("%d / %d" % (self.page,self.pages))
-				
+			
 			self.filmListe = []
-			for	(urlp1,urlp2,name,imageurl) in filme:
-				#print	"Url: ", url, "Name: ", name, "ImgUrl: ", imageurl
-				self.filmListe.append((decodeHtml(name), "%s%s" % (urlp1,urlp2), imageurl))
-			self.chooseMenuList.setList(map(USFilmListEntry,	self.filmListe))
+			if not self.Last100:
+				#self.filmListe = filme
+				for	(url,name,img) in filme:
+					#print	"Url: ", url, "Name: ", name
+					self.filmListe.append((rawDecode(name).lstrip(), url, img))
+			else:
+				for	(url,name) in filme:
+					#print	"Url: ", url, "Name: ", name
+					self.filmListe.append((rawDecode(name).lstrip(), url, None))
+			self.chooseMenuList.setList(map(USFilmListEntry, self.filmListe))
 			
 			self.loadPicQueued()
 		else:
 			print "No movies found !"
 			self.filmListe.append(("No movies found !",""))
-			self.chooseMenuList.setList(map(USFilmListEntry,	self.filmListe))
+			self.chooseMenuList.setList(map(USFilmListEntry, self.filmListe))
 			if self.filmQ.empty():
 				self.eventL.clear()
 			else:
@@ -293,22 +322,31 @@ class USFilmListeScreen(Screen):
 		streamName = self['filmList'].getCurrent()[0][0]
 		self['name'].setText(streamName)
 		streamPic = self['filmList'].getCurrent()[0][2]
-		streamUrl = self.baseUrl+self['filmList'].getCurrent()[0][1]
-		print "streamName: ",streamName
-		print "streamPic: ",streamPic
-		print "streamUrl: ",streamUrl
+		streamUrl = self.baseUrl+re.sub('amp;','',self['filmList'].getCurrent()[0][1])
+		#print "streamName: ",streamName
+		#print "streamPic: ",streamPic
+		#print "streamUrl: ",streamUrl
 		self.getHandlung(streamUrl)
 		self.updateP = 1
-		downloadPage(streamPic, "/tmp/Icon.jpg").addCallback(self.ShowCover)
+		if streamPic == None:
+			print "ImageUrl is None !"
+			self.ShowCoverNone()
+		else:
+			print "Download pict."
+			downloadPage(streamPic, "/tmp/Icon.jpg").addCallback(self.ShowCover)
 		
 	def getHandlung(self, url):
 		print "getHandlung:"
+		if url == None:
+			print "No Infos found !"
+			self['handlung'].setText("Keine infos gefunden.")
+			return
+			
 		self.hanQ.put(url)
 		if not self.eventH.is_set():
 			self.eventH.set()
 			self.getHandlungQeued()
-		else:
-			return
+		print "eventH: ",self.eventH.is_set()
 		
 	def getHandlungQeued(self):
 		while not self.hanQ.empty():
@@ -327,7 +365,7 @@ class USFilmListeScreen(Screen):
 			
 		m = re.findall('<tr height="22.*?<td id="views".*?">(.*?)</td>', data, re.S)
 		if m:
-			self['handlung'].setText(decodeHtml(re.sub(r"\s+", " ", m[0])))
+			self['handlung'].setText(rawDecode(re.sub(r"\s+", " ", m[0])))
 		else:
 			print "No Infos found !"
 			self['handlung'].setText("Keine infos gefunden.")
@@ -337,51 +375,58 @@ class USFilmListeScreen(Screen):
 		else:
 			self.eventH.clear()
 			self.loadPic()
-		#print "eventH: ",self.eventH.is_set()
-		#print "eventL: ",self.eventL.is_set()
+		print "eventH: ",self.eventH.is_set()
+		print "eventL: ",self.eventL.is_set()
 		
 	def ShowCover(self, picData):
 		print "ShowCover:"
-		if fileExists("/tmp/Icon.jpg"):
+		picPath = "/tmp/Icon.jpg"
+		self.ShowCoverFile(picPath)
+		
+	def ShowCoverNone(self):
+		print "ShowCoverNone:"
+		picPath = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png"
+		self.ShowCoverFile(picPath)
+	
+	def ShowCoverFile(self, picPath):
+		if fileExists(picPath):
 			self['coverArt'].instance.setPixmap(None)
 			self.scale = AVSwitch().getFramebufferScale()
 			self.picload = ePicLoad()
 			size = self['coverArt'].instance.size()
 			self.picload.setPara((size.width(), size.height(), self.scale[0], self.scale[1], False, 1, "#FF000000"))
-			if self.picload.startDecode("/tmp/Icon.jpg", 0, 0, False) == 0:
+			if self.picload.startDecode(picPath, 0, 0, False) == 0:
 				ptr = self.picload.getData()
 				if ptr != None:
 					self['coverArt'].instance.setPixmap(ptr.__deref__())
 					self['coverArt'].show()
 					del self.picload
-					
+				
 		self.updateP = 0;
+		self.keyLocked	= False
 		if not self.filmQ.empty():
 			self.loadPageQueued()
 		else:
 			self.eventL.clear()
 			self.loadPic()
-		
-		#print "eventH: ",self.eventH.is_set()
-		#print "eventL: ",self.eventL.is_set()
-		self.keyLocked	= False
-	
+			
 	def loadPicQueued(self):
 		print "loadPicQueued:"
 		self.picQ.put(None)
 		if not self.eventP.is_set():
 			self.eventP.set()
 			self.loadPic()
-		else:
-			return
-	
+		print "eventP: ",self.eventP.is_set()
+		
 	def keyOK(self):
 		if (self.keyLocked|self.eventL.is_set()|self.eventH.is_set()):
 			return
 
-		streamLink = self['filmList'].getCurrent()[0][1]
+		streamLink = self.baseUrl+re.sub('amp;','',self['filmList'].getCurrent()[0][1])
 		streamName = self['filmList'].getCurrent()[0][0]
-		self.session.open(USStreams, streamLink, streamName)
+		imageLink = self['filmList'].getCurrent()[0][2]
+		self.session.open(USStreams, streamLink, streamName, imageLink)
+		print "keyLocked: ",self.keyLocked
 	
 	def keyUp(self):
 		if self.keyLocked:
@@ -407,6 +452,8 @@ class USFilmListeScreen(Screen):
 		
 	def key_repeatedUp(self):
 		#print "key_repeatedUp"
+		if self.keyLocked:
+			return
 		self.loadPicQueued()
 		
 	def keyLeft(self):
@@ -528,14 +575,15 @@ class USFilmListeScreen(Screen):
 
 def USStreamListEntry(entry):
 	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0]+entry[2])
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		] 
 class USStreams(Screen, ConfigListScreen):
-	
-	def __init__(self, session, filmUrl, filmName):
+
+	def __init__(self, session, filmUrl, filmName, imageLink):
 		self.session = session
 		self.filmUrl = filmUrl
 		self.filmName = filmName
+		self.imageUrl = imageLink
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/USStreams.xml" % config.mediaportal.skin.value
 		print path
 		with open(path, "r") as f:
@@ -549,7 +597,7 @@ class USStreams(Screen, ConfigListScreen):
 			"cancel": self.keyCancel
 		}, -1)
 		
-		self['title'] = Label("UltimateStreams.Com")
+		self['title'] = Label(US_Version)
 		self['ContentTitle'] = Label("Stream Auswahl")
 		self['coverArt'] = Pixmap()
 		self['handlung'] = Label("")
@@ -566,41 +614,38 @@ class USStreams(Screen, ConfigListScreen):
 		
 	def loadPage(self):
 		print "loadPage:"
-		streamUrl = "%s%s" % (self.baseUrl, self.filmUrl)
-		print "FilmUrl: %s", streamUrl
-		print "FilmName: %s" % self.filmName
+		streamUrl = self.filmUrl
+		#print "FilmUrl: ", streamUrl
+		#print "FilmName: ", self.filmName
 		getPage(streamUrl, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 		
 	def parseData(self, data):
 		print "parseData:"
-		#streams = re.findall('<a title="(.*?)" href="(.*?)".*?width=', data)
-		streams = re.findall('<a title="(.*?)" href="(.*?)" Target=', data)
+		streams = re.findall('<a title=.*?href="(.*?)".*?" alt="(.*?)" width=', data)
+		self.streamListe = []
 		if streams:
 			print "Streams found"
-			for (isStream, isUrl,) in streams:
+			for (isUrl,isStream) in streams:
 				if re.match('.*?(putlocker|sockshare|streamclou|xvidstage|filenuke|movreel|nowvideo|xvidstream|uploadc|vreer|MonsterUploads|Novamov|Videoweed|Divxstage|Ginbig|Flashstrea|Movshare|yesload|faststream|Vidstream|PrimeShare|flashx|Divxmov|Putme|Zooupload|Click.*?Play)', isStream, re.S|re.I):
 					#print isUrl
 					#print isStream,streamPart
-					streamPart = ""
-					self.streamListe.append((isStream,isUrl,streamPart))
+					self.streamListe.append((isStream,isUrl))
 				else:
 					print "No supported hoster:"
 					print isStream
 					print isUrl
-			self.keyLocked = False			
 		else:
-			print "No Streams found"
+			print "No streams found"
 			self.streamListe.append(("No streams found !",""))			
 		self.streamMenuList.setList(map(USStreamListEntry, self.streamListe))
-			
-		m = re.findall('<center><img src="(.*?)"', data)
-		if m:
-			#print "CoverURL found"
-			downloadPage(m[0], "/tmp/Icon.jpg").addCallback(self.ShowCover)			
+		self.keyLocked = False			
+		print "imageUrl: ",self.imageUrl
+		if self.imageUrl:
+			downloadPage(self.imageUrl, "/tmp/Icon.jpg").addCallback(self.ShowCover)			
 	
 	def ShowCover(self, picData):
 		print "ShowCover:"
-		if fileExists("/tmp/Icon.jpg"):
+		if fileExists("/tmp/Icon.jpg") or picData == None:
 			self['coverArt'].instance.setPixmap(None)
 			self.scale = AVSwitch().getFramebufferScale()
 			self.picload = ePicLoad()
@@ -616,17 +661,13 @@ class USStreams(Screen, ConfigListScreen):
 	def dataError(self, error):
 		print "dataError:"
 		print error
-		self.streamListe.append(("No streams found !",""))			
+		self.streamListe.append(("Read error !",""))			
 		self.streamMenuList.setList(map(USStreamListEntry, self.streamListe))
 			
 	def keyOK(self):
 		if self.keyLocked:
 			return
 		streamLink = self['streamList'].getCurrent()[0][1]
-		#fp = urllib.urlopen()
-		#fp = urllib.urlopen(streamLink)
-		#streamLink = fp.geturl()
-		#fp.close()
 		print "get_streamLink:"
 		get_stream_link(self.session).check_link(streamLink, self.got_link)
 			
@@ -636,7 +677,7 @@ class USStreams(Screen, ConfigListScreen):
 			message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=3)
 		else:
 			sref = eServiceReference(0x1001, 0, stream_url)
-			sref.setName("%s%s" % (self.filmName,self['streamList'].getCurrent()[0][2]))
+			sref.setName(self.filmName)
 			self.session.open(MoviePlayer, sref)
 	
 	def keyCancel(self):

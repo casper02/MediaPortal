@@ -19,54 +19,73 @@
 
 import json
 from datetime import date
+from urllib import quote
 from urllib2 import urlopen, Request, HTTPError, URLError
 
 API_URL = 'http://app.4players.de/services/app/data.php'
+USER_AGENT = 'XBMC4PlayersApi'
+
+SYSTEMS = (
+    '360', 'PC-CDROM', 'iPhone', 'iPad', 'Android', '3DS', 'NDS', 'Wii_U',
+    'PlayStation3', 'PlayStation4', 'PSP', 'PS_Vita', 'Spielkultur',
+    'WindowsPhone7', 'XBox', 'Wii', 'PlayStation2',
+)
 
 
 class NetworkError(Exception):
     pass
 
 
-class XBMC4PlayersApi():
+class XBMC4PlayersApi(object):
 
-    USER_AGENT = 'XBMC4PlayersApi'
+    LIMIT = 50
 
     def __init__(self):
         self._game_infos = {}
+        self._systems = []
         pass
 
-    def get_systems(self):
-        return [{
-            'id': system['shortname'],
-            'name': system['longname']
-        } for system in self.__api_call('getSysteme')['Systeme']]
+    def set_systems(self, system_list):
+        self._systems = system_list
 
-    def get_latest_videos(self, limit=50, older_than=0):
+    def get_latest_videos(self, limit=LIMIT, older_than=0):
         params = (
             0,  # video_id
             limit,  # limit
             0,  # newer_than
             older_than,  # older_than
             0,  # reviews_only
-            0,  # system filter
+            self.systems,  # system filter
             1,  # include spielinfo
         )
         videos = self.__api_call('getVideos', *params)['Video']
         return self.__format_videos(videos)
 
-    def get_popular_videos(self, limit=50, page=1):
+    def get_latest_reviews(self, limit=LIMIT, older_than=0):
+        params = (
+            0,  # video_id
+            limit,  # limit
+            0,  # newer_than
+            older_than,  # older_than
+            1,  # reviews_only
+            self.systems,  # system filter
+            1,  # include spielinfo
+        )
+        videos = self.__api_call('getVideos', *params)['Video']
+        return self.__format_videos(videos)
+
+    def get_popular_videos(self, limit=LIMIT, page=1):
         offset = int(limit) * (int(page) - 1)
         params = (
             limit,  # limit
             offset,  # offset
-            0,  # system filter
+            self.systems,  # system filter
             1,  # include spielinfo
         )
         videos = self.__api_call('getVideosByViews', *params)['Video']
         return self.__format_videos(videos)
 
-    def get_videos_by_game(self, game_id, limit=50, older_than=0):
+    def get_videos_by_game(self, game_id, limit=LIMIT, older_than=0):
         params = (
             game_id,  # game_id
             limit,  # limit
@@ -75,6 +94,14 @@ class XBMC4PlayersApi():
         )
         videos = self.__api_call('getVideosBySpiel', *params)['Video']
         return self.__format_videos(videos)
+
+    def get_games(self, search_string, limit=LIMIT):
+        params = (
+            search_string,  # search_string
+            limit  # limit
+        )
+        games = self.__api_call('getSpieleBySuchbegriff', *params)['GameInfo']
+        return self.__format_games(games)
 
     def _get_game_info(self, game_id):
         params = (
@@ -106,6 +133,16 @@ class XBMC4PlayersApi():
         } for video in raw_videos]
         return videos
 
+    def __format_games(self, raw_games):
+        games = [{
+            'id': game['id'],
+            'title': game['name'],
+            'thumb': game['systeme'][0]['cover_big'],
+            'genre': game['subgenre'],
+            'studio': game['hersteller']
+        } for game in raw_games]
+        return games
+
     def __format_game(self, game_info):
         if not isinstance(game_info, list):
             game_id = game_info['id']
@@ -114,13 +151,22 @@ class XBMC4PlayersApi():
             else:
                 self._game_infos[game_id] = self._get_game_info(game_id)
             game_info = self._game_infos[game_id]
+        else:
+            self._game_infos[game_info[0]['id']] = game_info
         game = {
+            'id': game_info[0]['id'],
             'title': game_info[0]['name'],
             'genre': game_info[0]['subgenre'],
             'studio': game_info[0]['hersteller'],
-            'id': game_info[0]['id'],
         }
         return game
+
+    @property
+    def systems(self):
+        if self._systems and not self._systems == SYSTEMS:
+            return ','.join((s for s in self._systems if s in SYSTEMS))
+        else:
+            return 0
 
     @staticmethod
     def __format_thumb(url):
@@ -139,11 +185,12 @@ class XBMC4PlayersApi():
         else:
             return 0
 
-    def __api_call(self, method, *params):
-        parts = [API_URL, method] + [str(i) for i in params]
+    @staticmethod
+    def __api_call(method, *params):
+        parts = [API_URL, method] + [quote(str(p)) for p in params]
         url = '/'.join(parts)
         req = Request(url)
-        req.add_header('User Agent', self.USER_AGENT)
+        req.add_header('User Agent', USER_AGENT)
         log('Opening URL: %s' % url)
         try:
             response = urlopen(req).read()

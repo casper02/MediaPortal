@@ -3,6 +3,11 @@
 from imports import *
 from decrypt import *
 import Queue
+import threading
+
+IS_Version = "iStream.Ws v1.05"
+
+IS_siteEncoding = 'utf-8'
 
 def IStreamGenreListEntry(entry):
 	return [entry,
@@ -25,7 +30,7 @@ class showIStreamGenre(Screen):
 			"cancel": self.keyCancel
 		}, -1)
 
-		self['title'] = Label("IStream.ws")
+		self['title'] = Label(IS_Version)
 		self['ContentTitle'] = Label("M e n ü")
 		self['name'] = Label("Genre Auswahl")
 		self['coverArt'] = Pixmap()
@@ -152,7 +157,7 @@ class IStreamFilmListeScreen(Screen):
 		self.sortOrderStrAZ = " - Sortierung A-Z"
 		self.sortOrderStrIMDB = " - Sortierung IMDB"
 		self.sortOrderStrGenre = ""
-		self['title'] = Label("IStream.ws")
+		self['title'] = Label(IS_Version)
 		self['leftContentTitle'] = Label("")
 		self['name'] = Label("")
 		self['handlung'] = Label("")
@@ -161,19 +166,19 @@ class IStreamFilmListeScreen(Screen):
 		
 		self.timerStart = False
 		self.seekTimerRun = False
+		self.eventL = threading.Event()
+		self.eventH = threading.Event()
+		self.eventP = threading.Event()
 		self.filmQ = Queue.Queue(0)
 		self.hanQ = Queue.Queue(0)
 		self.picQ = Queue.Queue(0)
-		self.semaL = 0
-		self.semaH = 0
-		self.semaP = 0
 		self.updateP = 0
 		self.keyLocked = True
 		self.filmListe = []
 		self.keckse = {}
 		self.page = 0
 		self.pages = 0;
-		self.neueFilme = re.match('Neue Filme',self.genreName)
+		self.neueFilme = re.match('.*?Neue Filme',self.genreName)
 		self.setGenreStrTitle()
 		
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -206,24 +211,23 @@ class IStreamFilmListeScreen(Screen):
 		#	return
 			
 		self.filmQ.put(url)
-		print "semaL ",self.semaL
-		if not self.semaL:
-			self.semaL = 1
+		print "eventL ",self.eventL.is_set()
+		if not self.eventL.is_set():
+			self.eventL.set()
 			self.loadPageQueued()
-		else:
-			return
+		print "eventL ",self.eventL.is_set()
 		
 	def loadPageQueued(self):
 		print "loadPageQueued:"
 		self['name'].setText('Bitte warten..')
 		while not self.filmQ.empty():
 			url = self.filmQ.get_nowait()
-		#self.semaL = 0
+		#self.eventL.clear()
 		print url
 		getPage(url, cookies=self.keckse, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
 		
 	def dataError(self, error):
-		self.semaL=0
+		self.eventL.clear()
 		print "dataError:"
 		print error
 		self.filmListe.append(("No movies found !",""))
@@ -232,7 +236,7 @@ class IStreamFilmListeScreen(Screen):
 	def loadPageData(self, data):
 		print "loadPageData:"
 			
-		if not re.match('http://istream.ws/page/',self.genreLink):
+		if not self.neueFilme:
 			filme = re.findall('<div class="cover">.*?<a href="(.*?)" rel=.*?title="(.*?)"><img class=.*?\?src=(.*?)&h=', data, re.S)
 		else:
 			filme = re.findall('<div class="voting".*?<a href="(.*?)".*?title="(.*?)">.*?data-original="(.*?)" alt', data)
@@ -264,22 +268,30 @@ class IStreamFilmListeScreen(Screen):
 			self.filmListe.append(("No movies found !",""))
 			self.chooseMenuList.setList(map(IStreamFilmListEntry,	self.filmListe))
 			if self.filmQ.empty():
-				self.semaL = 0
+				self.eventL.clear()
 			else:
 				self.loadPageQueued()
 
+	def loadPicQueued(self):
+		print "loadPicQueued:"
+		self.picQ.put(None)
+		if not self.eventP.is_set():
+			self.eventP.set()
+			self.loadPic()
+		print "eventP: ",self.eventP.is_set()
+		
 	def loadPic(self):
 		print "loadPic:"
 		
 		if self.picQ.empty():
-			self.semaP = 0
+			self.eventP.clear()
 			print "picQ is empty"
 			return
 		
-		if self.semaH or self.updateP:
+		if self.eventH.is_set() or self.updateP:
 			print "Pict. or descr. update in progress"
-			print "semaH: ",self.semaH
-			print "semaP: ",self.semaP
+			print "eventH: ",self.eventH.is_set()
+			print "eventP: ",self.eventP.is_set()
 			print "updateP: ",self.updateP
 			return
 			
@@ -293,16 +305,25 @@ class IStreamFilmListeScreen(Screen):
 		streamUrl = self['filmList'].getCurrent()[0][1]
 		self.getHandlung(streamUrl)
 		self.updateP = 1
-		downloadPage(streamPic, "/tmp/Icon.jpg").addCallback(self.ShowCover)
-		
+		if streamPic == None:
+			print "ImageUrl is None !"
+			self.ShowCoverNone()
+		else:
+			print "Download pict."
+			downloadPage(streamPic, "/tmp/Icon.jpg").addCallback(self.ShowCover)
+	
 	def getHandlung(self, url):
 		print "getHandlung:"
-		self.hanQ.put(url)
-		if not self.semaH:
-			self.semaH = 1
-			self.getHandlungQeued()
-		else:
+		if url == None:
+			print "No Infos found !"
+			self['handlung'].setText("Keine infos gefunden.")
 			return
+			
+		self.hanQ.put(url)
+		if not self.eventH.is_set():
+			self.eventH.set()
+			self.getHandlungQeued()
+		print "eventH: ",self.eventH.is_set()
 		
 	def getHandlungQeued(self):
 		while not self.hanQ.empty():
@@ -311,7 +332,7 @@ class IStreamFilmListeScreen(Screen):
 		getPage(url, cookies=self.keckse, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.setHandlung).addErrback(self.dataErrorH)
 		
 	def dataErrorH(self, error):
-		self.semaH = 0
+		self.eventH.clear()
 		print "dataErrorH:"
 		print error
 		self['handlung'].setText("Keine infos gefunden.")
@@ -329,53 +350,51 @@ class IStreamFilmListeScreen(Screen):
 		if not self.hanQ.empty():
 			self.getHandlungQeued()
 		else:
-			self.semaH = 0
+			self.eventH.clear()
 			self.loadPic()
-		#print "semaH: ",self.semaH
-		#print "semaL: ",self.semaL
+		print "eventH: ",self.eventH.is_set()
+		print "eventL: ",self.eventL.is_set()
 		
 	def ShowCover(self, picData):
 		print "ShowCover:"
-		if fileExists("/tmp/Icon.jpg"):
+		picPath = "/tmp/Icon.jpg"
+		self.ShowCoverFile(picPath)
+		
+	def ShowCoverNone(self):
+		print "ShowCoverNone:"
+		picPath = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png"
+		self.ShowCoverFile(picPath)
+	
+	def ShowCoverFile(self, picPath):
+		if fileExists(picPath):
 			self['coverArt'].instance.setPixmap(None)
 			self.scale = AVSwitch().getFramebufferScale()
 			self.picload = ePicLoad()
 			size = self['coverArt'].instance.size()
 			self.picload.setPara((size.width(), size.height(), self.scale[0], self.scale[1], False, 1, "#FF000000"))
-			if self.picload.startDecode("/tmp/Icon.jpg", 0, 0, False) == 0:
+			if self.picload.startDecode(picPath, 0, 0, False) == 0:
 				ptr = self.picload.getData()
 				if ptr != None:
 					self['coverArt'].instance.setPixmap(ptr.__deref__())
 					self['coverArt'].show()
 					del self.picload
-					
+				
 		self.updateP = 0;
+		self.keyLocked	= False
 		if not self.filmQ.empty():
 			self.loadPageQueued()
 		else:
-			self.semaL = 0
+			self.eventL.clear()
 			self.loadPic()
-		
-		#print "semaH: ",self.semaH
-		#print "semaL: ",self.semaL
-		self.keyLocked	= False
-	
-	def loadPicQueued(self):
-		print "loadPicQueued:"
-		self.picQ.put(None)
-		if not self.semaP:
-			self.semaP = 1
-			self.loadPic()
-		else:
-			return
 	
 	def keyOK(self):
-		if (self.keyLocked|self.semaL|self.semaH):
+		if (self.keyLocked|self.eventL.is_set()|self.eventH.is_set()):
 			return
 
 		streamLink = self['filmList'].getCurrent()[0][1]
 		streamName = self['filmList'].getCurrent()[0][0]
-		self.session.open(IStreamStreams, streamLink, streamName)
+		imageLink = self['filmList'].getCurrent()[0][2]
+		self.session.open(IStreamStreams, streamLink, streamName, imageLink)
 	
 	def keyUp(self):
 		if self.keyLocked:
@@ -401,6 +420,8 @@ class IStreamFilmListeScreen(Screen):
 		
 	def key_repeatedUp(self):
 		#print "key_repeatedUp"
+		if self.keyLocked:
+			return
 		self.loadPicQueued()
 		
 	def keyLeft(self):
@@ -526,10 +547,11 @@ def IStreamStreamListEntry(entry):
 		] 
 class IStreamStreams(Screen, ConfigListScreen):
 	
-	def __init__(self, session, filmUrl, filmName):
+	def __init__(self, session, filmUrl, filmName, imageLink):
 		self.session = session
 		self.filmUrl = filmUrl
 		self.filmName = filmName
+		self.imageUrl = imageLink
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/IStreamStreams.xml" % config.mediaportal.skin.value
 		print path
 		with open(path, "r") as f:
@@ -543,7 +565,7 @@ class IStreamStreams(Screen, ConfigListScreen):
 			"cancel": self.keyCancel
 		}, -1)
 		
-		self['title'] = Label("IStream.ws")
+		self['title'] = Label(IS_Version)
 		self['ContentTitle'] = Label("Stream Auswahl")
 		self['coverArt'] = Pixmap()
 		self['handlung'] = Label("")
@@ -558,17 +580,20 @@ class IStreamStreams(Screen, ConfigListScreen):
 		self.onLayoutFinish.append(self.loadPage)
 		
 	def loadPage(self):
-		print "FilmUrl: %s" % self.filmUrl
-		print "FilmName: %s" % self.filmName
-		getPage(self.filmUrl, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
+		print "loadPage:"
+		streamUrl = self.filmUrl
+		#print "FilmUrl: %s" % self.filmUrl
+		#print "FilmName: %s" % self.filmName
+		getPage(streamUrl, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 		
 	def parseData(self, data):
 		print "parseData:"
 		streams = re.findall('a href="(.*?)".*?title=.*?\[(.*)\](.*)">', data)
+		self.streamListe = []
 		if streams:
 			print "Streams found"
 			for (isUrl,isStream,streamPart) in streams:
-				if re.match('.*?(putlocker|sockshare|streamclou|xvidstage|filenuke|movreel|nowvideo|xvidstream|uploadc|vreer|MonsterUploads|Novamov|Videoweed|Divxstage|Ginbig|Flashstrea|Movshare|yesload|faststream|Vidstream|PrimeShare|flashx|Divxmov|Putme|Zooupload|Click.*?Play)', isStream, re.S|re.I):
+				if re.match('.*?(putlocker|sockshare|flash strea|streamclou|xvidstage|filenuke|movreel|nowvideo|xvidstream|uploadc|vreer|MonsterUploads|Novamov|Videoweed|Divxstage|Ginbig|Flashstrea|Movshare|yesload|faststream|Vidstream|PrimeShare|flashx|Divxmov|Putme|Zooupload|Click.*?Play)', isStream, re.S|re.I):
 					#print isUrl
 					#print isStream,streamPart
 					self.streamListe.append((isStream,isUrl,streamPart))
@@ -576,16 +601,14 @@ class IStreamStreams(Screen, ConfigListScreen):
 					print "No supported hoster:"
 					print isStream
 					print isUrl
-			self.keyLocked = False			
 		else:
 			print "No Streams found"
-			self.streamListe.append(("No streams found !",""))			
+			self.streamListe.append(("No streams found !","",""))			
 		self.streamMenuList.setList(map(IStreamStreamListEntry, self.streamListe))
-			
-		m = re.findall('og:image".*?"(.*?)"', data)
-		if m:
-			#print "CoverURL found"
-			downloadPage(m[0], "/tmp/Icon.jpg").addCallback(self.ShowCover)			
+		self.keyLocked = False			
+		print "imageUrl: ",self.imageUrl
+		if self.imageUrl:
+			downloadPage(self.imageUrl, "/tmp/Icon.jpg").addCallback(self.ShowCover)			
 	
 	def ShowCover(self, picData):
 		print "ShowCover:"
@@ -605,7 +628,7 @@ class IStreamStreams(Screen, ConfigListScreen):
 	def dataError(self, error):
 		print "dataError:"
 		print error
-		self.streamListe.append(("No streams found !",""))			
+		self.streamListe.append(("Read error !",""))			
 		self.streamMenuList.setList(map(IStreamStreamListEntry, self.streamListe))
 			
 	def keyOK(self):
@@ -613,7 +636,6 @@ class IStreamStreams(Screen, ConfigListScreen):
 			return
 		streamLink = self['streamList'].getCurrent()[0][1]
 		fp = urllib.urlopen(streamLink.replace('http://video.istream.ws/embed.php?m=','http://istream.ws/mirror.php?m='))
-		#fp = urllib.urlopen(streamLink)
 		streamLink = fp.geturl()
 		fp.close()
 		print "get_streamLink:"

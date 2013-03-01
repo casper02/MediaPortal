@@ -1,7 +1,8 @@
+##Thanks to Tristan Fischer for XBMC-API (sphere@dersphere.de)
 from imports import *
 from decrypt import *
 
-from resources.lib.api import XBMC4PlayersApi, NetworkError
+from resources.lib.api import XBMC4PlayersApi, NetworkError, SYSTEMS
 
 api = XBMC4PlayersApi()
 
@@ -40,7 +41,8 @@ class forPlayersGenreScreen(Screen):
 		
 	def layoutFinished(self):
 		self.selectionListe.append(("Aktuelle Videos", "1"))
-		self.selectionListe.append(("Populaerste Videos", "2"))
+		self.selectionListe.append(("Meistgesehene Videos", "2"))
+		self.selectionListe.append(("Letzte Reviews", "3"))
 		self.chooseMenuList.setList(map(forPlayersGenreListEntry, self.selectionListe))
 
 	def keyOK(self):
@@ -75,7 +77,8 @@ class forPlayersVideoScreen(Screen):
 			"up"    : self.keyUp,
 			"down"  : self.keyDown,
 			"left"  : self.keyLeft,
-			"right" : self.keyRight
+			"right" : self.keyRight,
+			"info"  : self.keyInfo
 		}, -1)
 		
 		self.page = 1
@@ -89,34 +92,50 @@ class forPlayersVideoScreen(Screen):
 		self.chooseMenuList.l.setItemHeight(25)
 		self['videosList'] = self.chooseMenuList
 		self.onLayoutFinish.append(self.loadVideos)
-
 		
 	def loadVideos(self):
-		limit = int(80)
+		limit = int(50)
 		if self.selectionLink == '1':
-			videos = api.get_latest_videos(limit)
+			try:
+				api.set_systems(SYSTEMS)#Videos zu allen Systeme
+				videos = api.get_latest_videos(limit)
+				self.showData(videos)
+			except NetworkError:
+				print 'Fehler API-Call...'
+				self.videosListe.append(('4Players nicht verfuegbar....', "", "", ""))
+				self.chooseMenuList.setList(map(forPlayersVideoListEntry, self.videosListe))
 		elif self.selectionLink == '2':
-			videos = api.get_popular_videos(limit)
+			try:
+				api.set_systems(SYSTEMS)#Videos zu allen Systeme
+				videos = api.get_popular_videos(limit)
+				self.showData(videos)
+			except NetworkError:
+				print 'Fehler API-Call...'
+				self.videosListe.append(('4Players nicht verfuegbar....', "", "", ""))
+				self.chooseMenuList.setList(map(forPlayersVideoListEntry, self.videosListe))
+		elif self.selectionLink == '3':
+			try:
+				api.set_systems(SYSTEMS)#Videos zu allen Systeme
+				videos = api.get_latest_reviews(older_than=0)
+				self.showData(videos)
+			except NetworkError:
+				print 'Fehler API-Call...'
+				self.videosListe.append(('4Players nicht verfuegbar....', "", "", ""))
+				self.chooseMenuList.setList(map(forPlayersVideoListEntry, self.videosListe))
+				
+	def showData(self, videos):
 		for video in videos:
 			gameTitle = str(video['game']['title'])
 			videoTitle = str(video['video_title'])
 			videoStreamUrl = video['streams']['hq']['url']
 			videoDate = video['date']
-			#videoDuration = self.convDuration(video['duration'])###TODO: Korrektur Zeitanzeige
 			videoPic = video['thumb']
+			gameId = video['game']['id']
+			gameStudio = video['game']['studio']
 			videoTitleConv = gameTitle + ' - ' + videoTitle + ' ' + '(' + videoDate + ')'
-			#videoTitleConv = gameTitle + ' - ' + videoTitle + ' ' + '(' + videoDate + ' - ' + str(videoDuration) + ')'
-			self.videosListe.append((videoTitleConv, videoStreamUrl, videoPic, videoTitle))
+			self.videosListe.append((videoTitleConv, videoStreamUrl, videoPic, videoTitle, gameId, gameStudio, gameTitle))
 		self.chooseMenuList.setList(map(forPlayersVideoListEntry, self.videosListe))
 		self.showPic()
-			
-#	def convDuration(self, duration):
-#		s = duration
-#		hours = s // 3600 
-#		s = s - (hours * 3600)
-#		minutes = s // 60
-#		seconds = s - (minutes * 60)
-#		return '%s:%s' % (minutes, seconds)
 		
 	def showPic(self):
 		myTitle = self['videosList'].getCurrent()[0][0]
@@ -165,6 +184,32 @@ class forPlayersVideoScreen(Screen):
 	def keyDown(self):
 		self['videosList'].down()
 		self.showPic()
+		
+	def keyInfo(self):
+		text = []
+		gameStudio = self['videosList'].getCurrent()[0][5]
+		gameId = self['videosList'].getCurrent()[0][4]
+		gameTitle = self['videosList'].getCurrent()[0][6]
+		gameInfoCol = api._get_game_info(gameId)
+		text.append('Titel: ' + str(gameTitle))
+		text.append('\n')
+		text.append('Studion: ' + str(gameStudio))
+		text.append('\n')
+		for info in gameInfoCol:
+			gamePub = info['publisher']
+			text.append('Publisher: ' + str(gamePub))
+			text.append('\n')
+			for system in info['systeme']:
+				gameSys = system['system']
+				text.append('Plattform: ' + str(gameSys))
+				text.append('\n')
+				text.append('Release: ' + str(system['releasetag']) + '.' + str(system['releasemonat']) + '.' + str(system['releasejahr']))
+				text.append('\n')
+				text.append('USK: ' + str(system['usk']))
+				text.append('\n')
+		sText = ''.join(text)
+		print sText
+		self.session.open(MessageBox,_(sText), MessageBox.TYPE_INFO)
 		
 	def keyOK(self):
 		playersUrl = self['videosList'].getCurrent()[0][1]
