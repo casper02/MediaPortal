@@ -89,14 +89,27 @@ class forPlayersVideoScreen(Screen):
 		self.chooseMenuList.l.setItemHeight(25)
 		self['videosList'] = self.chooseMenuList
 		self.onLayoutFinish.append(self.loadVideos)
-
 		
 	def loadVideos(self):
 		limit = int(80)
 		if self.selectionLink == '1':
-			videos = api.get_latest_videos(limit)
+			try:
+				videos = api.get_latest_videos(limit)
+				self.showData(videos)
+			except NetworkError:
+				print 'Fehler API-Call...'
+				self.videosListe.append(('4Players nicht verfuegbar....', "", "", ""))
+				self.chooseMenuList.setList(map(forPlayersVideoListEntry, self.videosListe))
 		elif self.selectionLink == '2':
-			videos = api.get_popular_videos(limit)
+			try:
+				videos = api.get_popular_videos(limit)
+				self.showData(videos)
+			except NetworkError:
+				print 'Fehler API-Call...'
+				self.videosListe.append(('4Players nicht verfuegbar....', "", "", ""))
+				self.chooseMenuList.setList(map(forPlayersVideoListEntry, self.videosListe))
+				
+	def showData(self, videos):
 		for video in videos:
 			gameTitle = str(video['game']['title'])
 			videoTitle = str(video['video_title'])
