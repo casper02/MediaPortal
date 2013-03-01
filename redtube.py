@@ -47,8 +47,8 @@ class redtubeGenreScreen(Screen):
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
-		self.genreliste.append(("Newest", "http://www.redtube.com/?page="))
 		self.genreliste.append(("--- Search ---", "callSuchen"))
+		self.genreliste.append(("Newest", "http://www.redtube.com/?page="))
 		self.genreliste.append(("Top Rated", "http://www.redtube.com/top?page="))
 		self.genreliste.append(("Most Viewed", "http://www.redtube.com/mostviewed?page="))
 		self.genreliste.append(("Most Favored", "http://www.redtube.com/mostfavored?page="))
