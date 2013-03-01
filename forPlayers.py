@@ -77,7 +77,8 @@ class forPlayersVideoScreen(Screen):
 			"up"    : self.keyUp,
 			"down"  : self.keyDown,
 			"left"  : self.keyLeft,
-			"right" : self.keyRight
+			"right" : self.keyRight,
+			"info"  : self.keyInfo
 		}, -1)
 		
 		self.page = 1
@@ -129,8 +130,10 @@ class forPlayersVideoScreen(Screen):
 			videoStreamUrl = video['streams']['hq']['url']
 			videoDate = video['date']
 			videoPic = video['thumb']
+			gameId = video['game']['id']
+			gameStudio = video['game']['studio']
 			videoTitleConv = gameTitle + ' - ' + videoTitle + ' ' + '(' + videoDate + ')'
-			self.videosListe.append((videoTitleConv, videoStreamUrl, videoPic, videoTitle))
+			self.videosListe.append((videoTitleConv, videoStreamUrl, videoPic, videoTitle, gameId, gameStudio, gameTitle))
 		self.chooseMenuList.setList(map(forPlayersVideoListEntry, self.videosListe))
 		self.showPic()
 		
@@ -181,6 +184,32 @@ class forPlayersVideoScreen(Screen):
 	def keyDown(self):
 		self['videosList'].down()
 		self.showPic()
+		
+	def keyInfo(self):
+		text = []
+		gameStudio = self['videosList'].getCurrent()[0][5]
+		gameId = self['videosList'].getCurrent()[0][4]
+		gameTitle = self['videosList'].getCurrent()[0][6]
+		gameInfoCol = api._get_game_info(gameId)
+		text.append('Titel: ' + str(gameTitle))
+		text.append('\n')
+		text.append('Studion: ' + str(gameStudio))
+		text.append('\n')
+		for info in gameInfoCol:
+			gamePub = info['publisher']
+			text.append('Publisher: ' + str(gamePub))
+			text.append('\n')
+			for system in info['systeme']:
+				gameSys = system['system']
+				text.append('Plattform: ' + str(gameSys))
+				text.append('\n')
+				text.append('Release: ' + str(system['releasetag']) + '.' + str(system['releasemonat']) + '.' + str(system['releasejahr']))
+				text.append('\n')
+				text.append('USK: ' + str(system['usk']))
+				text.append('\n')
+		sText = ''.join(text)
+		print sText
+		self.session.open(MessageBox,_(sText), MessageBox.TYPE_INFO)
 		
 	def keyOK(self):
 		playersUrl = self['videosList'].getCurrent()[0][1]
