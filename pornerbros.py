@@ -47,6 +47,7 @@ class pornerbrosGenreScreen(Screen):
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
+		self.genreliste.append(("--- Search ---", "callSuchen"))
 		self.genreliste.append(("New", "http://www.pornerbros.com/page"))
 		self.genreliste.append(("Top Rated", "http://www.pornerbros.com/best/page"))
 		self.genreliste.append(("Most Viewed", "http://www.pornerbros.com/popular/page"))
@@ -108,8 +109,22 @@ class pornerbrosGenreScreen(Screen):
 		self.chooseMenuList.setList(map(pornerbrosGenreListEntry, self.genreliste))
 		
 	def keyOK(self):
-		streamGenreLink = self['genreList'].getCurrent()[0][1]
-		self.session.open(pornerbrosFilmScreen, streamGenreLink)
+		streamGenreName = self['genreList'].getCurrent()[0][0]
+		if streamGenreName == "--- Search ---":
+			self.suchen()
+
+		else:
+			streamGenreLink = self['genreList'].getCurrent()[0][1]
+			self.session.open(pornerbrosFilmScreen, streamGenreLink)
+		
+	def suchen(self):
+		self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoard, title = (_("Suchkriterium eingeben")), text = self.suchString)
+
+	def SuchenCallback(self, callback = None, entry = None):
+		if callback is not None and len(callback):
+			self.suchString = callback.replace(' ', '+')
+			streamGenreLink = 'http://www.pornerbros.com/search/?q=%s&page=' % (self.suchString)
+			self.session.open(pornerbrosFilmScreen, streamGenreLink)
 
 	def keyLeft(self):
 		self['genreList'].pageUp()

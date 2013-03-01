@@ -51,11 +51,11 @@ class fourtubeGenreScreen(Screen):
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
+		self.genreliste.append(("--- Search ---", "callSuchen"))
 		self.genreliste.append(("Lastest", "http://www.4tube.com/videos?page="))
 		self.genreliste.append(("Featured", "http://www.4tube.com/featured?sort=ctr&page="))
 		self.genreliste.append(("Full", "http://www.4tube.com/videos/full-length?sort=ctr&page="))
 		self.genreliste.append(("Pornstars", "http://www.4tube.com/pornstars?page="	))
-		self.genreliste.append(("Suchen", "callSuchen"))
 		self.genreliste.append(("Anal", "http://www.4tube.com/find/tags/anal?sort=ctr&page="))
 		self.genreliste.append(("Asian", "http://www.4tube.com/find/tags/asian?sort=ctr&page="))
 		self.genreliste.append(("Babe", "http://www.4tube.com/find/tags/babe?sort=ctr&page="))
@@ -83,7 +83,7 @@ class fourtubeGenreScreen(Screen):
 
 	def keyOK(self):
 		streamGenreName = self['genreList'].getCurrent()[0][0]
-		if streamGenreName == "Suchen":
+		if streamGenreName == "--- Search ---":
 			self.suchen()
 			
 		elif streamGenreName == "Pornstars":
