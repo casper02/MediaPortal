@@ -207,8 +207,8 @@ class youpornFilmScreen(Screen):
 			for (phUrl, phImage, phTitle, phRuntime, phViews) in phMovies:
 				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage, phRuntime, phViews))
 			self.chooseMenuList.setList(map(youpornFilmListEntry, self.filmliste))
-			self.keyLocked = False
 			self.showInfos()
+		self.keyLocked = False
 
 	def dataError(self, error):
 		print error

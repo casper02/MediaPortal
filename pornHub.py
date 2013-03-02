@@ -400,21 +400,18 @@ class pornhubFilmScreen(Screen):
 		self.keyLocked = True
 		self.filmliste = []
 		self['page'].setText(str(self.page))
-		#url = "%s&page=%s" %(self.phCatLink, str(self.page))
 		url = "%s%s" % (self.phCatLink, str(self.page))
 		print url
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
 	
 	def genreData(self, data):
-		#phMovies = re.findall('data-mediumthumb="(.*?)".*?<a href="(.*?)" target="" title="(.*?)".*?<var class="duration">(.*?)</var>.*?<span class="views"><var>(.*?)<.*?<var class="added">(.*?)<', data, re.S)
 		phMovies = re.findall('<div class="wrap">.*?<a href="(.*?)" target="" title="(.*?)".*?data-mediumthumb="(.*?)".*?<var class="duration">(.*?)</var>.*?<span class="views"><var>(.*?)<.*?<var class="added">(.*?)<', data, re.S)
 		if phMovies:
 			for (phUrl,phTitle,phImage,phRuntime,phViews,phAdded) in phMovies:
-			#for (phImage,phUrl,phTitle,phRuntime,phViews,phAdded) in phMovies:
 				self.filmliste.append((phTitle,phUrl,phImage,phRuntime,phViews,phAdded))
 			self.chooseMenuList.setList(map(pornhubFilmListEntry, self.filmliste))
-			self.keyLocked = False
 			self.showInfos()
+		self.keyLocked = False
 
 	def dataError(self, error):
 		print error

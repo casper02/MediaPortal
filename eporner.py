@@ -178,7 +178,6 @@ class epornerFilmScreen(Screen):
 				for (phUrl, phTitle, phImage, phRuntime) in phMovies:
 					self.filmliste.append((decodeHtml(phTitle), phUrl, phImage, phRuntime, Views))
 				self.chooseMenuList.setList(map(epornerFilmListEntry, self.filmliste))
-				self.keyLocked = False
 				self.showInfos()
 		else:
 			phMovies = re.findall('<div class="mbtit"><a href="(.*?)" title="(.*?)".*?src="(.*?)".*?<span>TIME:</span> (.*?)</div>.*?<span>VIEWS:</span> (.*?)</div>', data, re.S)
@@ -186,8 +185,8 @@ class epornerFilmScreen(Screen):
 				for (phUrl, phTitle, phImage, phRuntime, phViews) in phMovies:
 					self.filmliste.append((decodeHtml(phTitle), phUrl, phImage, phRuntime, phViews))
 				self.chooseMenuList.setList(map(epornerFilmListEntry, self.filmliste))
-				self.keyLocked = False
 				self.showInfos()
+		self.keyLocked = False
 
 	def dataError(self, error):
 		print error
@@ -274,24 +273,22 @@ class epornerFilmScreen(Screen):
 	def getXMLPage(self, data):
 		videoPage = re.findall(r"player4\\([^\\]*)\\", data, re.S)
 		if videoPage:
-			for (phurl) in videoPage:
-				url2 = 'http://www.eporner.com/config5%s' % (phurl)
-		getPage(url2, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVideoPage).addErrback(self.dataError)
+			for phurl in videoPage:
+				xml = 'http://www.eporner.com/config5%s' % (phurl)
+		getPage(xml, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
 		videoPage = re.findall('<hd.file>(.*?)</hd.file>', data, re.S)
 		if videoPage:
-			for (phurl) in videoPage:
-				url3 = '%s' % (phurl)
+			for phurl in videoPage:
 				self.keyLocked = False
-				self.play(url3)
+				self.play(phurl)
 		else:
 			videoPage = re.findall('<file>(.*?)</file>', data, re.S)
 			if videoPage:
-				for (phurl) in videoPage:
-					url3 = '%s' % (phurl)
+				for phurl in videoPage:
 					self.keyLocked = False
-					self.play(url3)
+					self.play(phurl)
 		
 	def play(self,file):
 		xxxtitle = self['genreList'].getCurrent()[0][0]
