@@ -269,12 +269,15 @@ class pornhubGenreScreen(Screen):
 	def genreData(self, data):
 		phCats = re.findall('<div class="category-wrapper">.*?<a href="(/video\?c=.*?)"><img src="(.*?)".*?alt="(.*?)"', data, re.S)
 		if phCats:
-			for (phUrl,phImage,phTitle) in phCats:
+			for (phUrl, phImage, phTitle) in phCats:
 				phUrl = "http://www.pornhub.com" + phUrl + "&page="
-				self.filmliste.append((phTitle,phUrl,phImage))
-			self.filmliste.append(("--- Search ---", "callSuchen","dump"))
-			self.filmliste.append(("All","http://www.pornhub.com/video?page=","dump"))
+				self.filmliste.append((phTitle, phUrl, phImage))
 			self.filmliste.sort()
+			self.filmliste.insert(0, ("Longest", "http://www.pornhub.com/video?o=lg&page=", None))
+			self.filmliste.insert(0, ("Top Rated", "http://www.pornhub.com/video?o=tr&page=", None))
+			self.filmliste.insert(0, ("Most Viewed", "http://www.pornhub.com/video?o=mv&page=", None))
+			self.filmliste.insert(0, ("Most Recent", "http://www.pornhub.com/video?o=mr&page=", None))
+			self.filmliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.chooseMenuList.setList(map(pornhubGenreListEntry, self.filmliste))
 			self.keyLocked = False
 			self.showInfos()
@@ -287,17 +290,27 @@ class pornhubGenreScreen(Screen):
 		phImage = self['genreList'].getCurrent()[0][2]
 		print phImage
 		self['name'].setText(phTitle)
-		if not phImage == "dump":
+		if not phImage == None:
 			downloadPage(phImage, "/tmp/phIcon.jpg").addCallback(self.ShowCover)
-		
+		else:
+			self.ShowCoverNone()
+
 	def ShowCover(self, picData):
-		if fileExists("/tmp/phIcon.jpg"):
+		picPath = "/tmp/phIcon.jpg"
+		self.ShowCoverFile(picPath)
+		
+	def ShowCoverNone(self):
+		picPath = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/images/no_coverArt.png" % config.mediaportal.skin.value
+		self.ShowCoverFile(picPath)
+		
+	def ShowCoverFile(self, picPath):
+		if fileExists(picPath):
 			self['coverArt'].instance.setPixmap(None)
 			self.scale = AVSwitch().getFramebufferScale()
 			self.picload = ePicLoad()
 			size = self['coverArt'].instance.size()
 			self.picload.setPara((size.width(), size.height(), self.scale[0], self.scale[1], False, 1, "#FF000000"))
-			if self.picload.startDecode("/tmp/phIcon.jpg", 0, 0, False) == 0:
+			if self.picload.startDecode(picPath, 0, 0, False) == 0:
 				ptr = self.picload.getData()
 				if ptr != None:
 					self['coverArt'].instance.setPixmap(ptr.__deref__())
