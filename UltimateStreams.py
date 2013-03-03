@@ -9,6 +9,14 @@ US_Version = "Ultimate-Streams.Com v1.01"
 
 US_siteEncoding = 'iso-8859-1'
 
+"""
+	Tastenfunktionen in der Filmliste:
+		Bouquet +/-, Rot/Blau	: Seitenweise blättern in 1 Schritten Up/Down
+		'1', '4', '7',
+		'3', 6', '9'			: blättern in 2er, 5er, 10er Schritten Down/Up
+		INFO					: zukünftig anzeige der IMDB-Bewertung
+"""
+
 def USGenreListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])

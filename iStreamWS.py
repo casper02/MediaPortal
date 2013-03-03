@@ -9,6 +9,15 @@ IS_Version = "iStream.Ws v1.05"
 
 IS_siteEncoding = 'utf-8'
 
+"""
+	Tastenfunktionen in der Filmliste:
+		Bouquet +/-, Rot/Blau	: Seitenweise blättern in 1 Schritten Up/Down
+		'1', '4', '7',
+		'3', 6', '9'			: blättern in 2er, 5er, 10er Schritten Down/Up
+		Grün/Gelb				: Sortierung [A-Z] bzw. [IMDB]
+		INFO					: zukünftig anzeige der IMDB-Bewertung
+"""
+
 def IStreamGenreListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
