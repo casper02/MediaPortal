@@ -1,10 +1,41 @@
 from imports import *
 from decrypt import *
 
+
+if fileExists('/usr/lib/enigma2/python/Plugins/Extensions/TMDb/plugin.pyo'):
+    from Plugins.Extensions.TMDb.plugin import *
+    TMDbPresent = True
+else:
+    TMDbPresent = False
+
+
+
 def m2kGenreListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
+		]
+
+def m2kLetterEntry(entry):
+	return [entry,
+		(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 830, 25, 0, RT_HALIGN_CENTER, entry)
+		]
+
+def m2kSerienABCEntry(entry):
+	return [entry,
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		] 
+
+def m2kSerienABCStaffelnEntry(entry):
+	return [entry,
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
+		]
+
+def m2kFilmListEntry(entry):
+	return [entry,
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
+		] 
+
+
 class m2kGenreScreen(Screen):
 	
 	def __init__(self, session, showM2kPorn):
@@ -41,6 +72,7 @@ class m2kGenreScreen(Screen):
 		self.genreliste.append(("Neue Updates (Filme)", "http://www.movie2k.to/movies-updates-"))
 		self.genreliste.append(("Empfohlene Serien", "http://www.movie2k.to/tvshows_featured.php"))
 		self.genreliste.append(("Letzte Updates (Serien)", "http://www.movie2k.to/tvshows_featured.php"))
+		self.genreliste.append(("Alle Serien A-Z", "http://www.movie2k.to/tvshows_featured.php"))
 		if self.showM2kPorn == True:
 			self.genreliste.append(("Letzte Updates (XXX)", "http://www.movie2k.to/xxx-updates.html"))
 		self.genreliste.append(("Abenteuer", "http://movie2k.to/movies-genre-4-"))
@@ -90,6 +122,8 @@ class m2kGenreScreen(Screen):
 			self.session.open(m2kTopSerienFilmeListeScreen, streamGenreLink)
 		elif streamGenreName == "Letzte Updates (Serien)":
 			self.session.open(m2kSerienUpdateFilmeListeScreen, streamGenreLink)
+		elif streamGenreName == "Alle Serien A-Z":
+			self.session.open(m2kSerienABCAuswahl, streamGenreLink)
 		elif streamGenreName == "Letzte Updates (XXX)":
 			self.session.open(m2kXXXUpdateFilmeListeScreen, streamGenreLink, '')
 		else:
@@ -97,11 +131,6 @@ class m2kGenreScreen(Screen):
 
 	def keyCancel(self):
 		self.close()
-
-def m2kFilmListEntry(entry):
-	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
-		] 
 
 
 class m2kKinoAlleFilmeListeScreen(Screen):
@@ -126,7 +155,8 @@ class m2kKinoAlleFilmeListeScreen(Screen):
 			"left" : self.keyLeft,
 			"nextBouquet" : self.keyPageUp,
 			"prevBouquet" : self.keyPageDown,
-			"green" : self.keyPageNumber
+			"green" : self.keyPageNumber,
+			"red" : self.keyTMDbInfo
 		}, -1)
 
 		self['title'] = Label("movie2k.to")
@@ -233,6 +263,11 @@ class m2kKinoAlleFilmeListeScreen(Screen):
 			xxxGenreLink = self['filmList'].getCurrent()[0][1]
 			self.session.open(m2kXXXUpdateFilmeListeScreen, xxxGenreLink, 'X')
 
+    	def keyTMDbInfo(self):
+		if TMDbPresent:
+			title = self['filmList'].getCurrent()[0][0]
+			self.session.open(TMDbMain, title)
+
 	def keyLeft(self):
 		if self.keyLocked:
 			return
@@ -298,7 +333,8 @@ class m2kKinoFilmeListeScreen(Screen):
 			"up" : self.keyUp,
 			"down" : self.keyDown,
 			"right" : self.keyRight,
-			"left" : self.keyLeft
+			"left" : self.keyLeft,
+			"red" : self.keyTMDbInfo
 		}, -1)
 
 		self['title'] = Label("movie2k.to")
@@ -370,6 +406,11 @@ class m2kKinoFilmeListeScreen(Screen):
 		streamLink = self['filmList'].getCurrent()[0][1]
 		self.session.open(m2kStreamListeScreen, streamLink, streamName, "movie")
 
+    	def keyTMDbInfo(self):
+		if TMDbPresent:
+			title = self['filmList'].getCurrent()[0][0]
+			self.session.open(TMDbMain, title)
+
 	def keyLeft(self):
 		if self.keyLocked:
 			return
@@ -416,7 +457,8 @@ class m2kVideoFilmeListeScreen(Screen):
 			"up" : self.keyUp,
 			"down" : self.keyDown,
 			"right" : self.keyRight,
-			"left" : self.keyLeft
+			"left" : self.keyLeft,
+			"red" : self.keyTMDbInfo
 		}, -1)
 
 		self['title'] = Label("movie2k.to")
@@ -488,6 +530,11 @@ class m2kVideoFilmeListeScreen(Screen):
 		streamLink = self['filmList'].getCurrent()[0][1]
 		self.session.open(m2kStreamListeScreen, streamLink, streamName, "movie")
 
+    	def keyTMDbInfo(self):
+		if TMDbPresent:
+			title = self['filmList'].getCurrent()[0][0]
+			self.session.open(TMDbMain, title)
+
 	def keyLeft(self):
 		if self.keyLocked:
 			return
@@ -534,7 +581,8 @@ class m2kupdateFilmeListeScreen(Screen):
 			"up" : self.keyUp,
 			"down" : self.keyDown,
 			"right" : self.keyRight,
-			"left" : self.keyLeft
+			"left" : self.keyLeft,
+			"red" : self.keyTMDbInfo
 		}, -1)
 
 		self['title'] = Label("movie2k.to")
@@ -607,6 +655,11 @@ class m2kupdateFilmeListeScreen(Screen):
 		streamName = self['filmList'].getCurrent()[0][0]
 		streamLink = self['filmList'].getCurrent()[0][1]
 		self.session.open(m2kStreamListeScreen, streamLink, streamName, "movie")
+
+    	def keyTMDbInfo(self):
+		if TMDbPresent:
+			title = self['filmList'].getCurrent()[0][0]
+			self.session.open(TMDbMain, title)
 
 	def keyLeft(self):
 		if self.keyLocked:
@@ -1381,3 +1434,331 @@ class m2kXXXUpdateFilmeListeScreen(Screen):
 			
 	def keyCancel(self):
 		self.close()
+
+
+class m2kSerienABCAuswahl(Screen):
+	
+	def __init__(self, session, m2kGotLink):
+		self.m2kGotLink = m2kGotLink
+		self.session = session
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/m2kSerienABCAuswahl.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
+		Screen.__init__(self, session)
+
+		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
+			"ok"    : self.keyOK,
+			"cancel": self.keyCancel
+		}, -1)
+		
+		self['title'] = Label("Movie2k.to")
+		self['leftContentTitle'] = Label("Serien A-Z")
+		self['stationIcon'] = Pixmap()
+		self['name'] = Label("")
+		self['handlung'] = Label("")
+		
+		self.streamList = []
+		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
+		self.streamMenuList.l.setFont(0, gFont('Regular', 24))
+		self.streamMenuList.l.setItemHeight(25)
+		self['streamlist'] = self.streamMenuList
+		
+		self.keyLocked = True
+		self.onLayoutFinish.append(self.loadPage)
+		
+	def loadPage(self):
+		self.streamList = []
+		abc = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","#"]
+		for letter in abc:
+			self.streamList.append((letter))
+		self.streamMenuList.setList(map(m2kLetterEntry, self.streamList))
+		self.keyLocked = False
+					
+	def keyOK(self):
+		exist = self['streamlist'].getCurrent()
+		if self.keyLocked or exist == None:
+			return
+		auswahl = self['streamlist'].getCurrent()[0]
+		if auswahl == '#':
+			auswahl = '1'
+		print auswahl
+		streamGenreLink = "http://www.movie2k.to/tvshows-all-%s.html" % auswahl
+		self.session.open(m2kSerienABCListe, streamGenreLink)
+		
+	def keyCancel(self):
+		self.close()
+
+
+class m2kSerienABCListe(Screen):
+	
+	def __init__(self, session, streamGenreLink):
+		self.session = session
+		self.streamGenreLink = streamGenreLink
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/m2kSerienABCListe.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
+		Screen.__init__(self, session)
+		
+		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions"], {
+			"ok"    : self.keyOK,
+			"cancel": self.keyCancel,
+			"up" : self.keyUp,
+			"down" : self.keyDown,
+			"right" : self.keyRight,
+			"left" : self.keyLeft
+		}, -1)
+
+		self['title'] = Label("movie2k.to")
+		self['name'] = Label("Serie Auswahl")
+		self['handlung'] = Label("")
+		self['coverArt'] = Pixmap()
+		self.keyLocked = True
+		self.filmliste = []
+		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
+		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
+		self.chooseMenuList.l.setItemHeight(25)
+		self['filmList'] = self.chooseMenuList
+		self.page = 1
+		self['page'] = Label(" ")
+		self.onLayoutFinish.append(self.loadPage)
+
+	def loadPage(self):
+		getPage(self.streamGenreLink, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
+
+	def dataError(self, error):
+		print error
+
+	def loadPageData(self, data):
+		print self.streamGenreLink
+		serien = re.findall('<TD id="tdmovies" width="538"><a href="(.*?)">(.*?)<', data, re.S)
+		if serien:
+			self.streamList = []
+			for urlPart, title in serien:
+				url = '%s%s' % ('http://www.movie2k.to/', urlPart)
+				self.filmliste.append((decodeHtml(title), url))
+			self.chooseMenuList.setList(map(m2kSerienABCEntry, self.filmliste))
+			self.keyLocked = False
+			self['page'].setText(str(self.page))
+		else:
+			print "parsen - Keine Daten gefunden"
+
+
+	def keyOK(self):
+		if self.keyLocked:
+			return
+		streamName = self['filmList'].getCurrent()[0][0]
+		streamLink = self['filmList'].getCurrent()[0][1]
+		self.session.open(m2kSerienABCListeStaffeln, streamLink)
+
+	def keyLeft(self):
+		if self.keyLocked:
+			return
+		self['filmList'].pageUp()
+		
+	def keyRight(self):
+		if self.keyLocked:
+			return
+		self['filmList'].pageDown()
+		
+	def keyUp(self):
+		if self.keyLocked:
+			return
+		self['filmList'].up()
+
+	def keyDown(self):
+		if self.keyLocked:
+			return
+		self['filmList'].down()
+
+			
+	def keyCancel(self):
+		self.close()
+
+
+class m2kSerienABCListeStaffeln(Screen):
+	
+	def __init__(self, session, streamGenreLink):
+		self.session = session
+		self.streamGenreLink = streamGenreLink
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/m2kSerienABCListeStaffeln.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
+		Screen.__init__(self, session)
+		
+		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions"], {
+			"ok"    : self.keyOK,
+			"cancel": self.keyCancel,
+			"up" : self.keyUp,
+			"down" : self.keyDown,
+			"right" : self.keyRight,
+			"left" : self.keyLeft
+		}, -1)
+
+		self['title'] = Label("movie2k.to")
+		self['name'] = Label("Staffel Auswahl")
+		self['handlung'] = Label("")
+		self['coverArt'] = Pixmap()
+		self.keyLocked = True
+		self.filmliste = []
+		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
+		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
+		self.chooseMenuList.l.setItemHeight(25)
+		self['filmList'] = self.chooseMenuList
+		self.page = 1
+		self['page'] = Label(" ")
+		self.onLayoutFinish.append(self.loadPage)
+
+	def loadPage(self):
+		getPage(self.streamGenreLink, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
+
+	def dataError(self, error):
+		print error
+
+	def loadPageData(self, data):
+		print self.streamGenreLink
+		staffeln = re.findall('<TD id="tdmovies" width="538"><a href="(.*?)".*?Season:(.*?)<', data, re.S)
+		if staffeln:
+			print "staffeln parsen gefunden"
+			self.streamList = []
+			for urlPart, season in staffeln:
+				url = '%s%s' % ('http://www.movie2k.to/', urlPart)
+				formatTitle = 'Season %s' % season
+				self.filmliste.append((decodeHtml(formatTitle), url))
+			self.chooseMenuList.setList(map(m2kSerienABCStaffelnEntry, self.filmliste))
+			self.keyLocked = False
+		else:
+			print "parsen - Keine Daten gefunden"
+
+
+	def keyOK(self):
+		if self.keyLocked:
+			return
+		streamName = self['filmList'].getCurrent()[0][0]
+		streamLink = self['filmList'].getCurrent()[0][1]
+		self.session.open(m2kSerienABCListeStaffelnFilme, streamLink)
+
+	def keyLeft(self):
+		if self.keyLocked:
+			return
+		self['filmList'].pageUp()
+		
+	def keyRight(self):
+		if self.keyLocked:
+			return
+		self['filmList'].pageDown()
+		
+	def keyUp(self):
+		if self.keyLocked:
+			return
+		self['filmList'].up()
+
+	def keyDown(self):
+		if self.keyLocked:
+			return
+		self['filmList'].down()
+
+			
+	def keyCancel(self):
+		self.close()
+
+
+class m2kSerienABCListeStaffelnFilme(Screen):
+	
+	def __init__(self, session, streamGenreLink):
+		self.session = session
+		self.streamGenreLink = streamGenreLink
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/m2kSerienABCListeStaffeln.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
+		Screen.__init__(self, session)
+		
+		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions"], {
+			"ok"    : self.keyOK,
+			"cancel": self.keyCancel,
+			"up" : self.keyUp,
+			"down" : self.keyDown,
+			"right" : self.keyRight,
+			"left" : self.keyLeft
+		}, -1)
+
+		self['title'] = Label("movie2k.to")
+		self['name'] = Label("Staffel Auswahl")
+		self['handlung'] = Label("")
+		self['coverArt'] = Pixmap()
+		self.keyLocked = True
+		self.filmliste = []
+		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
+		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
+		self.chooseMenuList.l.setItemHeight(25)
+		self['filmList'] = self.chooseMenuList
+		self.page = 1
+		self['page'] = Label(" ")
+		self.onLayoutFinish.append(self.loadPage)
+
+	def loadPage(self):
+		getPage(self.streamGenreLink, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
+
+	def dataError(self, error):
+		print error
+
+	def loadPageData(self, data):
+		print self.streamGenreLink
+#		staffeln = re.findall('<TD id="tdmovies" width="538"><a href="(.*?)">(.*?)<', data, re.S)
+		staffeln = re.findall('<TD id="tdmovies" width="538"><a href="(.*?)">(.*?), Season:(.*?), Episode:(.*?)<', data, re.S)
+		if staffeln:
+			print "episode parsen gefunden"
+			self.streamList = []
+			for urlPart, title, season, episode in staffeln:
+				url = '%s%s' % ('http://www.movie2k.to/', urlPart)
+				formatTitle = 'Season %s Episode %s' % (season, episode)
+				print url
+				self.filmliste.append((decodeHtml(formatTitle), url, title))
+			self.chooseMenuList.setList(map(m2kSerienABCStaffelnEntry, self.filmliste))
+			self.keyLocked = False
+		else:
+			print "parsen - Keine Daten gefunden"
+
+
+	def keyOK(self):
+		if self.keyLocked:
+			return
+		streamEpisode = self['filmList'].getCurrent()[0][2] + self['filmList'].getCurrent()[0][0]
+		streamLink = self['filmList'].getCurrent()[0][1]
+		self.session.open(m2kStreamListeScreen, streamLink, streamEpisode, "tv")
+
+	def keyLeft(self):
+		if self.keyLocked:
+			return
+		self['filmList'].pageUp()
+		
+	def keyRight(self):
+		if self.keyLocked:
+			return
+		self['filmList'].pageDown()
+		
+	def keyUp(self):
+		if self.keyLocked:
+			return
+		self['filmList'].up()
+
+	def keyDown(self):
+		if self.keyLocked:
+			return
+		self['filmList'].down()
+
+			
+	def keyCancel(self):
+		self.close()
+
