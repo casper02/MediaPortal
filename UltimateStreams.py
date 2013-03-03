@@ -5,7 +5,19 @@ from decrypt import *
 import Queue
 import threading
 
-US_Version = "Ultimate-Streams.Com v1.01"
+# teilweise von movie2k geliehen
+if fileExists('/usr/lib/enigma2/python/Plugins/Extensions/TMDb/plugin.pyo'):
+	from Plugins.Extensions.TMDb.plugin import *
+	TMDbPresent = True
+elif fileExists('/usr/lib/enigma2/python/Plugins/Extensions/IMDb/plugin.pyo'):
+	TMDbPresent = False
+	IMDbPresent = True
+	from Plugins.Extensions.IMDb.plugin import *
+else:
+	IMDbPresent = False
+	TMDbPresent = False
+	
+US_Version = "Ultimate-Streams.Com v1.02"
 
 US_siteEncoding = 'iso-8859-1'
 
@@ -14,7 +26,7 @@ US_siteEncoding = 'iso-8859-1'
 		Bouquet +/-, Rot/Blau	: Seitenweise blättern in 1 Schritten Up/Down
 		'1', '4', '7',
 		'3', 6', '9'			: blättern in 2er, 5er, 10er Schritten Down/Up
-		INFO					: zukünftig anzeige der IMDB-Bewertung
+		INFO					: anzeige der IMDB-Bewertung
 """
 
 def USGenreListEntry(entry):
@@ -145,7 +157,8 @@ class USFilmListeScreen(Screen):
 			"green" : self.keySortAZ,
 			"yellow" : self.keySortIMDB,
 			"blue" :  self.keyPageUp,
-			"red" :  self.keyPageDown
+			"red" :  self.keyPageDown,
+			"info" :  self.keyTMDbInfo
 			#"seekBackManual" :  self.keyPageDownMan,
 			#"seekFwdManual" :  self.keyPageUpMan,
 			#"seekFwd" :  self.keyPageUp,
@@ -571,6 +584,15 @@ class USFilmListeScreen(Screen):
 		#	self.loadPage()
 		pass
 		
+	# teilweise von movie2k geliehen
+	def keyTMDbInfo(self):
+		if not self.keyLocked and TMDbPresent:
+			title = self['filmList'].getCurrent()[0][0]
+			self.session.open(TMDbMain, title)
+		elif not self.keyLocked and IMDbPresent:
+			title = self['filmList'].getCurrent()[0][0]
+			self.session.open(IMDB, title)
+			
 	def keyCancel(self):
 		self.close()
 
