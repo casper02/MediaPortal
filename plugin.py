@@ -46,6 +46,7 @@ from youporn import *
 from pornerbros import *
 from eporner import *
 from lubetube import *
+from mahlzeitTV import *
 
 config.mediaportal = ConfigSubsection()
 config.mediaportal.pincode = ConfigPIN(default = 0000)
@@ -85,6 +86,7 @@ config.mediaportal.showIStream = ConfigYesNo(default = True)
 config.mediaportal.showM2k = ConfigYesNo(default = True)
 config.mediaportal.showUstreams = ConfigYesNo(default = True)
 config.mediaportal.show4Players = ConfigYesNo(default = True)
+config.mediaportal.showMahlzeitTV = ConfigYesNo(default = True)
 
 #porn
 config.mediaportal.showM2kPorn = ConfigYesNo(default = False)
@@ -148,6 +150,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige IStream:", config.mediaportal.showIStream))
 		self.configlist.append(getConfigListEntry("Zeige UltimateStreams:", config.mediaportal.showUstreams))
 		self.configlist.append(getConfigListEntry("Zeige 4Players:", config.mediaportal.show4Players))
+		self.configlist.append(getConfigListEntry("Zeige Mahlzeit TV:", config.mediaportal.showMahlzeitTV))
 		# porn
 		self.configlist.append(getConfigListEntry("Zeige Movie2k-Porn:", config.mediaportal.showM2kPorn))
 		self.configlist.append(getConfigListEntry("Zeige xHamster:", config.mediaportal.showXhamster))
@@ -288,6 +291,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.infos.append(self.hauptListEntry("NHL", "nhl"))
 		if config.mediaportal.show4Players.value:
 			self.infos.append(self.hauptListEntry("4Players", "4players"))
+		if config.mediaportal.showMahlzeitTV.value:
+			self.infos.append(self.hauptListEntry("MahlzeitTV", "mahlzeitTV"))
 		#fun & TV
 		if config.mediaportal.showRofl.value:
 			self.fun.append(self.hauptListEntry("Rofl.to", "rofl"))
@@ -523,6 +528,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(epornerGenreScreen)
 		elif auswahl == "LubeTube":
 			self.session.open(lubetubeGenreScreen)
+		elif auswahl == "MahlzeitTV":
+			self.session.open(mahlzeitMainScreen)
 
 	def keyCancel(self):
 		self.close()
