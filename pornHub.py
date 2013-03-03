@@ -226,6 +226,11 @@ def pornhubGenreListEntry(entry):
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		] 
 		
+def pornhubFilmListEntry(entry):
+	return [entry,
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
+		] 
+
 class pornhubGenreScreen(Screen):
 	
 	def __init__(self, session):
@@ -317,6 +322,24 @@ class pornhubGenreScreen(Screen):
 					self['coverArt'].show()
 					del self.picload
 	
+	def keyOK(self):
+		streamGenreName = self['genreList'].getCurrent()[0][0]
+		if streamGenreName == "--- Search ---":
+			self.suchen()
+
+		else:
+			streamGenreLink = self['genreList'].getCurrent()[0][1]
+			self.session.open(pornhubFilmScreen, streamGenreLink)
+		
+	def suchen(self):
+		self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoard, title = (_("Suchkriterium eingeben")), text = self.suchString)
+
+	def SuchenCallback(self, callback = None, entry = None):
+		if callback is not None and len(callback):
+			self.suchString = callback.replace(' ', '%2B')
+			streamGenreLink = 'http://www.pornhub.com/video/search?search=%s&page=' % (self.suchString)
+			self.session.open(pornhubFilmScreen, streamGenreLink)
+
 	def keyLeft(self):
 		if self.keyLocked:
 			return
@@ -340,33 +363,10 @@ class pornhubGenreScreen(Screen):
 			return
 		self['genreList'].down()
 		self.showInfos()
-		
-	def keyOK(self):
-		streamGenreName = self['genreList'].getCurrent()[0][0]
-		if streamGenreName == "--- Search ---":
-			self.suchen()
-
-		else:
-			streamGenreLink = self['genreList'].getCurrent()[0][1]
-			self.session.open(pornhubFilmScreen, streamGenreLink)
-		
-	def suchen(self):
-		self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoard, title = (_("Suchkriterium eingeben")), text = self.suchString)
-
-	def SuchenCallback(self, callback = None, entry = None):
-		if callback is not None and len(callback):
-			self.suchString = callback.replace(' ', '%2B')
-			streamGenreLink = 'http://www.pornhub.com/video/search?search=%s&page=' % (self.suchString)
-			self.session.open(pornhubFilmScreen, streamGenreLink)
-			
+	
 	def keyCancel(self):
 		self.close()
 
-def pornhubFilmListEntry(entry):
-	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
-		] 
-		
 class pornhubFilmScreen(Screen):
 	
 	def __init__(self, session, phCatLink):
