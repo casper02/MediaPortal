@@ -197,8 +197,8 @@ class pornerbrosFilmScreen(Screen):
 			for (xhLink, xhName, xhIdnr, xhImage, xhRuntime, xhViews) in xhListe:
 				self.streamList.append((decodeHtml(xhName), xhLink, xhIdnr, xhImage, xhRuntime, xhViews))
 			self.streamMenuList.setList(map(pornerbrosStreamListEntry, self.streamList))
-			self.keyLocked = False
 			self.showInfos()
+		self.keyLocked = False
 
 	def showInfos(self):
 		if self.keyLocked:

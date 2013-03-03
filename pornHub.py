@@ -226,6 +226,11 @@ def pornhubGenreListEntry(entry):
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		] 
 		
+def pornhubFilmListEntry(entry):
+	return [entry,
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
+		] 
+
 class pornhubGenreScreen(Screen):
 	
 	def __init__(self, session):
@@ -269,12 +274,15 @@ class pornhubGenreScreen(Screen):
 	def genreData(self, data):
 		phCats = re.findall('<div class="category-wrapper">.*?<a href="(/video\?c=.*?)"><img src="(.*?)".*?alt="(.*?)"', data, re.S)
 		if phCats:
-			for (phUrl,phImage,phTitle) in phCats:
+			for (phUrl, phImage, phTitle) in phCats:
 				phUrl = "http://www.pornhub.com" + phUrl + "&page="
-				self.filmliste.append((phTitle,phUrl,phImage))
-			self.filmliste.append(("--- Search ---", "callSuchen","dump"))
-			self.filmliste.append(("All","http://www.pornhub.com/video?page=","dump"))
+				self.filmliste.append((phTitle, phUrl, phImage))
 			self.filmliste.sort()
+			self.filmliste.insert(0, ("Longest", "http://www.pornhub.com/video?o=lg&page=", None))
+			self.filmliste.insert(0, ("Top Rated", "http://www.pornhub.com/video?o=tr&page=", None))
+			self.filmliste.insert(0, ("Most Viewed", "http://www.pornhub.com/video?o=mv&page=", None))
+			self.filmliste.insert(0, ("Most Recent", "http://www.pornhub.com/video?o=mr&page=", None))
+			self.filmliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.chooseMenuList.setList(map(pornhubGenreListEntry, self.filmliste))
 			self.keyLocked = False
 			self.showInfos()
@@ -287,23 +295,51 @@ class pornhubGenreScreen(Screen):
 		phImage = self['genreList'].getCurrent()[0][2]
 		print phImage
 		self['name'].setText(phTitle)
-		if not phImage == "dump":
+		if not phImage == None:
 			downloadPage(phImage, "/tmp/phIcon.jpg").addCallback(self.ShowCover)
-		
+		else:
+			self.ShowCoverNone()
+
 	def ShowCover(self, picData):
-		if fileExists("/tmp/phIcon.jpg"):
+		picPath = "/tmp/phIcon.jpg"
+		self.ShowCoverFile(picPath)
+		
+	def ShowCoverNone(self):
+		picPath = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/images/no_coverArt.png" % config.mediaportal.skin.value
+		self.ShowCoverFile(picPath)
+		
+	def ShowCoverFile(self, picPath):
+		if fileExists(picPath):
 			self['coverArt'].instance.setPixmap(None)
 			self.scale = AVSwitch().getFramebufferScale()
 			self.picload = ePicLoad()
 			size = self['coverArt'].instance.size()
 			self.picload.setPara((size.width(), size.height(), self.scale[0], self.scale[1], False, 1, "#FF000000"))
-			if self.picload.startDecode("/tmp/phIcon.jpg", 0, 0, False) == 0:
+			if self.picload.startDecode(picPath, 0, 0, False) == 0:
 				ptr = self.picload.getData()
 				if ptr != None:
 					self['coverArt'].instance.setPixmap(ptr.__deref__())
 					self['coverArt'].show()
 					del self.picload
 	
+	def keyOK(self):
+		streamGenreName = self['genreList'].getCurrent()[0][0]
+		if streamGenreName == "--- Search ---":
+			self.suchen()
+
+		else:
+			streamGenreLink = self['genreList'].getCurrent()[0][1]
+			self.session.open(pornhubFilmScreen, streamGenreLink)
+		
+	def suchen(self):
+		self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoard, title = (_("Suchkriterium eingeben")), text = self.suchString)
+
+	def SuchenCallback(self, callback = None, entry = None):
+		if callback is not None and len(callback):
+			self.suchString = callback.replace(' ', '%2B')
+			streamGenreLink = 'http://www.pornhub.com/video/search?search=%s&page=' % (self.suchString)
+			self.session.open(pornhubFilmScreen, streamGenreLink)
+
 	def keyLeft(self):
 		if self.keyLocked:
 			return
@@ -327,33 +363,10 @@ class pornhubGenreScreen(Screen):
 			return
 		self['genreList'].down()
 		self.showInfos()
-		
-	def keyOK(self):
-		streamGenreName = self['genreList'].getCurrent()[0][0]
-		if streamGenreName == "--- Search ---":
-			self.suchen()
-
-		else:
-			streamGenreLink = self['genreList'].getCurrent()[0][1]
-			self.session.open(pornhubFilmScreen, streamGenreLink)
-		
-	def suchen(self):
-		self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoard, title = (_("Suchkriterium eingeben")), text = self.suchString)
-
-	def SuchenCallback(self, callback = None, entry = None):
-		if callback is not None and len(callback):
-			self.suchString = callback.replace(' ', '%2B')
-			streamGenreLink = 'http://www.pornhub.com/video/search?search=%s&page=' % (self.suchString)
-			self.session.open(pornhubFilmScreen, streamGenreLink)
-			
+	
 	def keyCancel(self):
 		self.close()
 
-def pornhubFilmListEntry(entry):
-	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
-		] 
-		
 class pornhubFilmScreen(Screen):
 	
 	def __init__(self, session, phCatLink):
@@ -400,21 +413,18 @@ class pornhubFilmScreen(Screen):
 		self.keyLocked = True
 		self.filmliste = []
 		self['page'].setText(str(self.page))
-		#url = "%s&page=%s" %(self.phCatLink, str(self.page))
 		url = "%s%s" % (self.phCatLink, str(self.page))
 		print url
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
 	
 	def genreData(self, data):
-		#phMovies = re.findall('data-mediumthumb="(.*?)".*?<a href="(.*?)" target="" title="(.*?)".*?<var class="duration">(.*?)</var>.*?<span class="views"><var>(.*?)<.*?<var class="added">(.*?)<', data, re.S)
 		phMovies = re.findall('<div class="wrap">.*?<a href="(.*?)" target="" title="(.*?)".*?data-mediumthumb="(.*?)".*?<var class="duration">(.*?)</var>.*?<span class="views"><var>(.*?)<.*?<var class="added">(.*?)<', data, re.S)
 		if phMovies:
 			for (phUrl,phTitle,phImage,phRuntime,phViews,phAdded) in phMovies:
-			#for (phImage,phUrl,phTitle,phRuntime,phViews,phAdded) in phMovies:
 				self.filmliste.append((phTitle,phUrl,phImage,phRuntime,phViews,phAdded))
 			self.chooseMenuList.setList(map(pornhubFilmListEntry, self.filmliste))
-			self.keyLocked = False
 			self.showInfos()
+		self.keyLocked = False
 
 	def dataError(self, error):
 		print error

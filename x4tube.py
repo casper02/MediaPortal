@@ -174,8 +174,8 @@ class fourtubePornstarsScreen(Screen):
 			for (Url, Image, Title) in Movies:
 				self.filmliste.append((Title,Url,Image))
 			self.chooseMenuList.setList(map(fourtubePornstarsListEntry, self.filmliste))
-			self.keyLocked = False
 			self.showInfos()
+		self.keyLocked = False
 
 	def dataError(self, error):
 		print error
@@ -313,8 +313,8 @@ class fourtubeFilmScreen(Screen):
 			for (phUrl, phImage, phTitle, phRuntime) in phMovies:
 				self.filmliste.append((phTitle,phUrl,phImage,phRuntime))
 			self.chooseMenuList.setList(map(fourtubeFilmListEntry, self.filmliste))
-			self.keyLocked = False
 			self.showInfos()
+		self.keyLocked = False
 
 	def dataError(self, error):
 		print error

@@ -175,8 +175,8 @@ class redtubeFilmScreen(Screen):
 			for (phUrl, phTitle, phImage, phRuntime, phViews) in phMovies:
 				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage, phRuntime, phViews))
 			self.chooseMenuList.setList(map(redtubeFilmListEntry, self.filmliste))
-			self.keyLocked = False
 			self.showInfos()
+		self.keyLocked = False
 
 	def dataError(self, error):
 		print error

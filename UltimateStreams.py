@@ -377,7 +377,7 @@ class USFilmListeScreen(Screen):
 		
 	def ShowCoverNone(self):
 		print "ShowCoverNone:"
-		picPath = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png"
+		picPath = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/images/no_coverArt.png" % config.mediaportal.skin.value
 		self.ShowCoverFile(picPath)
 	
 	def ShowCoverFile(self, picPath):
