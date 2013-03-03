@@ -5,14 +5,9 @@ from decrypt import *
 import Queue
 import threading
 
-US_Version = "Ultimate-Streams.Com v1.00"
+US_Version = "Ultimate-Streams.Com v1.01"
 
 US_siteEncoding = 'iso-8859-1'
-
-def rawDecode(txt):
-	txt = txt.replace('\xe4','ä').replace('\xf6','ö').replace('\xfc','ü').replace('\xdf','ß')
-	txt = txt.replace('\xc4','Ä').replace('\xd6','Ö').replace('\xdc','Ü')
-	return decodeHtml(txt)
 
 def USGenreListEntry(entry):
 	return [entry,
@@ -56,7 +51,7 @@ class showUSGenre(Screen):
 		Genre = [("Kino", "http://ultimate-streams.com/index.php?area=kinofilme&type=&pageno="),
 			("Letzte Einträge", "http://ultimate-streams.com/index.php?area=&type=&pageno="),
 			("LAST 100", "http://ultimate-streams.com/index.php?area=last100&type=&pageno="),
-			("Top 15 Streams", "http://ultimate-streams.com/index.php?area=&type=&pageno="),
+			("Top Streams", "http://ultimate-streams.com/index.php?area=&type=&pageno="),
 			("Abenteuer", "http://ultimate-streams.com/index.php?area=abenteuer&type=&pageno="),
 			("Action", "http://ultimate-streams.com/index.php?area=action&type=&pageno="),
 			("Anime", "http://ultimate-streams.com/index.php?area=anime&type=&pageno="),
@@ -103,7 +98,7 @@ def USFilmListEntry(entry):
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		] 
 class USFilmListeScreen(Screen):
-
+	
 	def __init__(self, session, genreLink, genreName):
 		self.session = session
 		self.genreLink = genreLink
@@ -182,16 +177,13 @@ class USFilmListeScreen(Screen):
 		self.eventL = threading.Event()
 		self.eventH = threading.Event()
 		self.eventP = threading.Event()
-		self.filmQ = Queue.Queue(0)
-		self.filmP = Queue.Queue(0)
-		self.hanQ = Queue.Queue(0)
 		self.keyLocked = True
 		self.filmListe = []
 		self.keckse = {}
 		self.page = 0
 		self.pages = 0;
 		self.neueFilme = re.match('.*?Letzte Einträge',self.genreName)
-		self.Top15 = re.match('.*?Top 15 Streams',self.genreName)
+		self.topStreams = re.match('.*?Top Streams',self.genreName)
 		self.Last100 = re.match('.*?LAST 100',self.genreName)
 		self.setGenreStrTitle()
 		
@@ -256,11 +248,11 @@ class USFilmListeScreen(Screen):
 				filme = re.findall('.*?id="title".*?<a href="(.*?)".*?: none;">(.*?)</font>', m.group(1), re.S)
 			else:
 				filme = None
-		elif self.Top15:
-			print "Top 15 search.."
-			m=re.search('Top 15(.*)Views</b><br/></div>\n',data,re.S)
+		elif self.topStreams:
+			print "Top Streams search.."
+			m=re.search('Top(.*?)Streams(.*?)Views</b><br/></div>\n',data,re.S)
 			if m:
-				filme = re.findall('.*?<a href="(.*?)" title="(.*?)"><img src="(.*?)"', m.group(1))
+				filme = re.findall('.*?<a href="(.*?)" title="(.*?)"><img src="(.*?)"', m.group(2))
 			else:
 				filme = None
 		else:
@@ -426,7 +418,6 @@ class USFilmListeScreen(Screen):
 		streamName = self['filmList'].getCurrent()[0][0]
 		imageLink = self['filmList'].getCurrent()[0][2]
 		self.session.open(USStreams, streamLink, streamName, imageLink)
-		print "keyLocked: ",self.keyLocked
 	
 	def keyUp(self):
 		if self.keyLocked:
@@ -555,21 +546,23 @@ class USFilmListeScreen(Screen):
 		self.keyPageUpFast(10)
 
 	def keySortAZ(self):
-		if (self.keyLocked):
-			return
-		if self.sortOrder and not self.neueFilme:
-			self.sortOrder = 0
-			self.setGenreStrTitle()
-			self.loadPage()
-	
+		#if (self.keyLocked):
+		#	return
+		#if self.sortOrder and not self.neueFilme:
+		#	self.sortOrder = 0
+		#	self.setGenreStrTitle()
+		#	self.loadPage()
+		pass
+		
 	def keySortIMDB(self):
-		if (self.keyLocked):
-			return
-		if not (self.sortOrder or self.neueFilme):
-			self.sortOrder = 1
-			self.setGenreStrTitle()
-			self.loadPage()
-	
+		#if (self.keyLocked):
+		#	return
+		#if not (self.sortOrder or self.neueFilme):
+		#	self.sortOrder = 1
+		#	self.setGenreStrTitle()
+		#	self.loadPage()
+		pass
+		
 	def keyCancel(self):
 		self.close()
 
@@ -578,7 +571,7 @@ def USStreamListEntry(entry):
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		] 
 class USStreams(Screen, ConfigListScreen):
-
+	
 	def __init__(self, session, filmUrl, filmName, imageLink):
 		self.session = session
 		self.filmUrl = filmUrl
@@ -591,7 +584,7 @@ class USStreams(Screen, ConfigListScreen):
 			f.close()
 			
 		Screen.__init__(self, session)
-
+		
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
 			"ok"    : self.keyOK,
 			"cancel": self.keyCancel
@@ -682,3 +675,9 @@ class USStreams(Screen, ConfigListScreen):
 	
 	def keyCancel(self):
 		self.close()
+		
+def rawDecode(txt):
+	txt = txt.replace('\xe4','ä').replace('\xf6','ö').replace('\xfc','ü').replace('\xdf','ß')
+	txt = txt.replace('\xc4','Ä').replace('\xd6','Ö').replace('\xdc','Ü')
+	return decodeHtml(txt)
+	
