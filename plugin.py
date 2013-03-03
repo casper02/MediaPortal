@@ -292,7 +292,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 		if config.mediaportal.show4Players.value:
 			self.infos.append(self.hauptListEntry("4Players", "4players"))
 		if config.mediaportal.showMahlzeitTV.value:
-			self.infos.append(self.hauptListEntry("MahlzeitTV", "mahlzeitTV"))
+			self.infos.append(self.hauptListEntry("MahlzeitTV", "mahlzeit"))
 		#fun & TV
 		if config.mediaportal.showRofl.value:
 			self.fun.append(self.hauptListEntry("Rofl.to", "rofl"))
