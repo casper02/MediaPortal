@@ -1536,17 +1536,38 @@ class m2kSerienABCListe(Screen):
 
 	def loadPageData(self, data):
 		print self.streamGenreLink
-		serien = re.findall('<TD id="tdmovies" width="538"><a href="(.*?)">(.*?)<', data, re.S)
+		serien = re.findall('<TD id="tdmovies" width="538"><a href="(.*?)">(.*?)<.*?src="(.*?)"', data, re.S)
 		if serien:
 			self.streamList = []
-			for urlPart, title in serien:
+			for urlPart, title, landImage in serien:
 				url = '%s%s' % ('http://www.movie2k.to/', urlPart)
-				self.filmliste.append((decodeHtml(title), url))
+				self.filmliste.append((decodeHtml(title), url, landImage))
 			self.chooseMenuList.setList(map(m2kSerienABCEntry, self.filmliste))
 			self.keyLocked = False
-			self['page'].setText(str(self.page))
+			self.loadPic()
 		else:
 			print "parsen - Keine Daten gefunden"
+
+	def dataError(self, error):
+		print error
+
+	def loadPic(self):
+		landImageUrl = self['filmList'].getCurrent()[0][2]
+		downloadPage(landImageUrl, "/tmp/Icon.jpg").addCallback(self.ShowCoverFlag)
+
+	def ShowCoverFlag(self, picData):
+		if fileExists("/tmp/Icon.jpg"):
+			self['coverArt'].instance.setPixmap(None)
+			self.scale = AVSwitch().getFramebufferScale()
+			self.picload = ePicLoad()
+			size = self['coverArt'].instance.size()
+			self.picload.setPara((size.width(), size.height(), self.scale[0], self.scale[1], False, 1, "#FF000000"))
+			if self.picload.startDecode("/tmp/Icon.jpg", 0, 0, False) == 0:
+				ptr = self.picload.getData()
+				if ptr != None:
+					self['coverArt'].instance.setPixmap(ptr.__deref__())
+					self['coverArt'].show()
+					del self.picload
 
 
 	def keyOK(self):
@@ -1560,21 +1581,25 @@ class m2kSerienABCListe(Screen):
 		if self.keyLocked:
 			return
 		self['filmList'].pageUp()
+		self.loadPic()
 		
 	def keyRight(self):
 		if self.keyLocked:
 			return
 		self['filmList'].pageDown()
+		self.loadPic()
 		
 	def keyUp(self):
 		if self.keyLocked:
 			return
 		self['filmList'].up()
+		self.loadPic()
 
 	def keyDown(self):
 		if self.keyLocked:
 			return
 		self['filmList'].down()
+		self.loadPic()
 
 			
 	def keyCancel(self):
@@ -1715,7 +1740,6 @@ class m2kSerienABCListeStaffelnFilme(Screen):
 
 	def loadPageData(self, data):
 		print self.streamGenreLink
-#		staffeln = re.findall('<TD id="tdmovies" width="538"><a href="(.*?)">(.*?)<', data, re.S)
 		staffeln = re.findall('<TD id="tdmovies" width="538"><a href="(.*?)">(.*?), Season:(.*?), Episode:(.*?)<', data, re.S)
 		if staffeln:
 			print "episode parsen gefunden"
