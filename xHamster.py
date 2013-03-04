@@ -218,7 +218,7 @@ class xhamster(Screen):
 		if xhListe:
 			for (xhLink, xhImage, xhName, xhRuntime, xhxhViews) in xhListe:
 				xhLink = "http://xhamster.com"+xhLink
-				self.streamList.append((xhName, xhImage, xhLink, xhxhViews, xhRuntime))
+				self.streamList.append((decodeHtml(xhName), xhImage, xhLink, xhxhViews, xhRuntime))
 			self.streamMenuList.setList(map(xhamsterstreamListEntry, self.streamList))
 			self.showInfos()
 		self.keyLocked = False
