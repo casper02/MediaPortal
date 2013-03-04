@@ -7,14 +7,12 @@ from forPlayers import *
 from dokuMe import *
 from roflVideos import *
 from streamJunkies import *
-from xHamster import *
 from focus import *
 from yourFreeTV import *
 from tvKino import *
 from filmOn import *
 from netzKino import *
 from kinoKiste import *
-from pornHub import *
 from failTo import *
 from sportBild import *
 from kinderKino import *
@@ -40,13 +38,17 @@ from myEntertainment import *
 from movie2k import *
 from iStreamWS import *
 from UltimateStreams import *
-from x4tube import *
-from redtube import *
-from youporn import *
-from pornerbros import *
-from eporner import *
-from lubetube import *
 from mahlzeitTV import *
+# porn
+from amateurporn import *
+from eporner import *
+from hdporn import *
+from pornerbros import *
+from pornHub import *
+from redtube import *
+from xHamster import *
+from x4tube import *
+from youporn import *
 
 config.mediaportal = ConfigSubsection()
 config.mediaportal.pincode = ConfigPIN(default = 0000)
@@ -87,17 +89,17 @@ config.mediaportal.showM2k = ConfigYesNo(default = True)
 config.mediaportal.showUstreams = ConfigYesNo(default = True)
 config.mediaportal.show4Players = ConfigYesNo(default = True)
 config.mediaportal.showMahlzeitTV = ConfigYesNo(default = True)
-
-#porn
-config.mediaportal.showM2kPorn = ConfigYesNo(default = False)
-config.mediaportal.showXhamster = ConfigYesNo(default = False)
-config.mediaportal.showPornhub = ConfigYesNo(default = False)
+# porn
 config.mediaportal.show4tube = ConfigYesNo(default = False)
-config.mediaportal.showredtube = ConfigYesNo(default = False)
-config.mediaportal.showyouporn = ConfigYesNo(default = False)
-config.mediaportal.showpornerbros = ConfigYesNo(default = False)
+config.mediaportal.showamateurporn = ConfigYesNo(default = False)
 config.mediaportal.showeporner = ConfigYesNo(default = False)
-config.mediaportal.showlubetube = ConfigYesNo(default = False)
+config.mediaportal.showhdporn = ConfigYesNo(default = False)
+config.mediaportal.showM2kPorn = ConfigYesNo(default = False)
+config.mediaportal.showpornerbros = ConfigYesNo(default = False)
+config.mediaportal.showPornhub = ConfigYesNo(default = False)
+config.mediaportal.showredtube = ConfigYesNo(default = False)
+config.mediaportal.showXhamster = ConfigYesNo(default = False)
+config.mediaportal.showyouporn = ConfigYesNo(default = False)
 
 class hauptScreenSetup(Screen, ConfigListScreen):
 
@@ -113,8 +115,6 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		
 		self.configlist = []
 		ConfigListScreen.__init__(self, self.configlist)
-		self.configlist.append(getConfigListEntry("Pincode:", config.mediaportal.pincode))
-		self.configlist.append(getConfigListEntry("Skinauswahl:", config.mediaportal.skin))
 		self.configlist.append(getConfigListEntry("Zeige Doku:", config.mediaportal.showDoku))
 		self.configlist.append(getConfigListEntry("Zeige Rofl:", config.mediaportal.showRofl))
 		self.configlist.append(getConfigListEntry("Zeige Fail:", config.mediaportal.showFail))
@@ -151,16 +151,20 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige UltimateStreams:", config.mediaportal.showUstreams))
 		self.configlist.append(getConfigListEntry("Zeige 4Players:", config.mediaportal.show4Players))
 		self.configlist.append(getConfigListEntry("Zeige Mahlzeit TV:", config.mediaportal.showMahlzeitTV))
+		self.configlist.sort()
+		self.configlist.insert(0, ("Skinauswahl:", config.mediaportal.skin))
+		self.configlist.insert(0, ("Pincode:", config.mediaportal.pincode))
 		# porn
-		self.configlist.append(getConfigListEntry("Zeige Movie2k-Porn:", config.mediaportal.showM2kPorn))
-		self.configlist.append(getConfigListEntry("Zeige xHamster:", config.mediaportal.showXhamster))
-		self.configlist.append(getConfigListEntry("Zeige Pornhub:", config.mediaportal.showPornhub))
 		self.configlist.append(getConfigListEntry("Zeige 4Tube:", config.mediaportal.show4tube))
-		self.configlist.append(getConfigListEntry("Zeige RedTube:", config.mediaportal.showredtube))
-		self.configlist.append(getConfigListEntry("Zeige YouPorn:", config.mediaportal.showyouporn))
-		self.configlist.append(getConfigListEntry("Zeige Pornerbros:", config.mediaportal.showpornerbros))
+		self.configlist.append(getConfigListEntry("Zeige AmateurPorn:", config.mediaportal.showamateurporn))
 		self.configlist.append(getConfigListEntry("Zeige Eporner:", config.mediaportal.showeporner))
-		self.configlist.append(getConfigListEntry("Zeige LubeTube:", config.mediaportal.showlubetube))
+		self.configlist.append(getConfigListEntry("Zeige HDPorn:", config.mediaportal.showhdporn))
+		self.configlist.append(getConfigListEntry("Zeige Movie2k-Porn:", config.mediaportal.showM2kPorn))
+		self.configlist.append(getConfigListEntry("Zeige Pornerbros:", config.mediaportal.showpornerbros))
+		self.configlist.append(getConfigListEntry("Zeige Pornhub:", config.mediaportal.showPornhub))
+		self.configlist.append(getConfigListEntry("Zeige RedTube:", config.mediaportal.showredtube))
+		self.configlist.append(getConfigListEntry("Zeige xHamster:", config.mediaportal.showXhamster))
+		self.configlist.append(getConfigListEntry("Zeige YouPorn:", config.mediaportal.showyouporn))
 		self["config"].setList(self.configlist)
 
 		self['title'] = Label("MediaPortal - Setup - (Version 3.5.3)")
@@ -293,7 +297,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.infos.append(self.hauptListEntry("4Players", "4players"))
 		if config.mediaportal.showMahlzeitTV.value:
 			self.infos.append(self.hauptListEntry("MahlzeitTV", "mahlzeit"))
-		#fun & TV
+		# fun & TV
 		if config.mediaportal.showRofl.value:
 			self.fun.append(self.hauptListEntry("Rofl.to", "rofl"))
 		if config.mediaportal.showFail.value:
@@ -310,22 +314,25 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.fun.append(self.hauptListEntry("Spobox", "spobox"))
 		if config.mediaportal.showSongsto.value:
 			self.fun.append(self.hauptListEntry("Songsto", "songsto"))
-		if config.mediaportal.showXhamster.value:
-			self.fun.append(self.hauptListEntry("xHamster", "xhamster"))
-		if config.mediaportal.showPornhub.value:
-			self.fun.append(self.hauptListEntry("PornHub", "pornhub"))
+		# porn
 		if config.mediaportal.show4tube.value:
 			self.fun.append(self.hauptListEntry("4Tube", "4tube"))
-		if config.mediaportal.showredtube.value:
-			self.fun.append(self.hauptListEntry("RedTube", "redtube"))
-		if config.mediaportal.showyouporn.value:
-			self.fun.append(self.hauptListEntry("YouPorn", "youporn"))
-		if config.mediaportal.showpornerbros.value:
-			self.fun.append(self.hauptListEntry("Pornerbros", "pornerbros"))
+		if config.mediaportal.showamateurporn.value:
+			self.fun.append(self.hauptListEntry("AmateurPorn", "amateurporn"))
 		if config.mediaportal.showeporner.value:
 			self.fun.append(self.hauptListEntry("Eporner", "eporner"))
-		if config.mediaportal.showlubetube.value:
-			self.fun.append(self.hauptListEntry("LubeTube", "lubetube"))
+		if config.mediaportal.showhdporn.value:
+			self.fun.append(self.hauptListEntry("HDPorn", "hdporn"))
+		if config.mediaportal.showpornerbros.value:
+			self.fun.append(self.hauptListEntry("Pornerbros", "pornerbros"))
+		if config.mediaportal.showPornhub.value:
+			self.fun.append(self.hauptListEntry("PornHub", "pornhub"))
+		if config.mediaportal.showredtube.value:
+			self.fun.append(self.hauptListEntry("RedTube", "redtube"))
+		if config.mediaportal.showXhamster.value:
+			self.fun.append(self.hauptListEntry("xHamster", "xhamster"))
+		if config.mediaportal.showyouporn.value:
+			self.fun.append(self.hauptListEntry("YouPorn", "youporn"))
 
 		self.movies.sort()
 		self.infos.sort()
@@ -472,12 +479,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(filmON)
 		elif auswahl == "NetzKino":
 			self.session.open(netzKinoGenreScreen)
-		elif auswahl == "xHamster":
-			self.session.open(xhamsterGenreScreen)
 		elif auswahl == "Spobox":
 			self.session.open(spoboxGenreScreen)
-		elif auswahl == "PornHub":
-			self.session.open(pornhubGenreScreen)
 		elif auswahl == "Radio":
 			self.session.open(Radiode)
 		elif auswahl == "Cczwei":
@@ -514,22 +517,29 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(m2kGenreScreen, self.showM2KPorn)
 		elif auswahl == "IStream":
 			self.session.open(showIStreamGenre)
-		elif auswahl == "4Tube":
-			self.session.open(fourtubeGenreScreen)
-		elif auswahl == "RedTube":
-			self.session.open(redtubeGenreScreen)
-		elif auswahl == "YouPorn":
-			self.session.open(youpornGenreScreen)
 		elif auswahl == "UltimateStreams":
 			self.session.open(showUSGenre)
-		elif auswahl == "Pornerbros":
-			self.session.open(pornerbrosGenreScreen)
-		elif auswahl == "Eporner":
-			self.session.open(epornerGenreScreen)
-		elif auswahl == "LubeTube":
-			self.session.open(lubetubeGenreScreen)
 		elif auswahl == "MahlzeitTV":
 			self.session.open(mahlzeitMainScreen)
+		elif auswahl == "4Tube":
+			self.session.open(fourtubeGenreScreen)
+		# porn
+		elif auswahl == "AmateurPorn":
+			self.session.open(amateurpornGenreScreen)
+		elif auswahl == "Eporner":
+			self.session.open(epornerGenreScreen)
+		elif auswahl == "HDPorn":
+			self.session.open(hdpornGenreScreen)
+		elif auswahl == "Pornerbros":
+			self.session.open(pornerbrosGenreScreen)
+		elif auswahl == "PornHub":
+			self.session.open(pornhubGenreScreen)
+		elif auswahl == "RedTube":
+			self.session.open(redtubeGenreScreen)
+		elif auswahl == "xHamster":
+			self.session.open(xhamsterGenreScreen)
+		elif auswahl == "YouPorn":
+			self.session.open(youpornGenreScreen)
 
 	def keyCancel(self):
 		self.close()
