@@ -47,8 +47,10 @@ class appletrailersGenreScreen(Screen):
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
-		self.genreliste.append(("Newest (HD)", "http://trailers.apple.com/trailers/home/xml/newest_720p.xml"))
-		self.genreliste.append(("Current (HD)", "http://trailers.apple.com/trailers/home/xml/current_720p.xml"))
+		self.genreliste.append(("Newest (HD-720p)", "http://trailers.apple.com/trailers/home/xml/newest_720p.xml"))
+		self.genreliste.append(("Current (HD-720p)", "http://trailers.apple.com/trailers/home/xml/current_720p.xml"))
+		self.genreliste.append(("Newest (HD-480p)", "http://trailers.apple.com/trailers/home/xml/newest_480p.xml"))
+		self.genreliste.append(("Current (HD-480p)", "http://trailers.apple.com/trailers/home/xml/current_480p.xml"))
 		self.genreliste.append(("Newest (SD)", "http://trailers.apple.com/trailers/home/xml/newest.xml"))
 		self.genreliste.append(("Current (SD)", "http://trailers.apple.com/trailers/home/xml/current.xml"))
 		self.chooseMenuList.setList(map(appletrailersGenreListEntry, self.genreliste))
@@ -191,7 +193,6 @@ class appletrailersFilmScreen(Screen):
 			return
 		phTitle = self['genreList'].getCurrent()[0][0]
 		phLink = self['genreList'].getCurrent()[0][1]
-		phLink = phLink.replace('h720p.mov','a720p.m4v')
 		self.keyLocked = False
 		self.play(phLink)
 		
