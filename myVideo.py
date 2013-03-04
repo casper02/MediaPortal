@@ -134,12 +134,9 @@ class myVideoFilmScreen(Screen):
 		if mvVideo:
 			self.mvListe = []
 			for (mvUrl,mvHandlung,mvImage,mvRuntime,mvTitle) in mvVideo:
-				#print mvTitle, mvUrl, mvImage
 				mvUrl = "http://www.myvideo.de" + mvUrl
-				self.mvListe.append((mvTitle, mvUrl, mvImage, mvHandlung, mvRuntime))
+				self.mvListe.append((decodeHtml(mvTitle), mvUrl, mvImage, mvHandlung, mvRuntime))
 			self.chooseMenuList.setList(map(myVideoFilmListEntry, self.mvListe))
-			#self.kiListe.append((kiTitle.replace('_',' '),kiUrl,kiImage))
-			#self.chooseMenuList.setList(map(kinderKinoListEntry, self.kiListe))
 			self.keyLocked = False
 			self.showPic()
 
