@@ -235,8 +235,8 @@ def decodeHtml(text):
 	text = text.replace('&#8222;',',').replace('&#8220;',"'").replace('&#8216;',"'").replace('&#8217;',"'").replace('&#8211;',"-")
 	text = text.replace('&#8230;','...').replace('&#8217;',"'").replace('&#128513;',":-)").replace('&#8221;','"')
 	text = text.replace('&#038;','&').replace('&#039;','\'').replace('&acute;','\'').replace('&ndash;','-')
-	text = text.replace('\u00c4','Ae').replace('\u00e4;',"ae").replace('\u00d6',"Oe").replace('\u00f6','oe')
-	text = text.replace('\u00dc','Ue').replace('\u00fc',"ue").replace('\u00df',"ss")
+	text = text.replace('\u00c4','Ae').replace('\u00e4;',"ae").replace('\u00d6',"Oe").replace('\u00f6','oe').replace('&lsquo;','\'').replace('&rsquo;','\'')
+	text = text.replace('\u00dc','Ue').replace('\u00fc',"ue").replace('\u00df',"ss").replace('&bdquo;','"').replace('&rdquo;','"').replace('&ldquo;','"')
 	text = text.replace('&#196;','Ae').replace('&#228;',"ae").replace('&#214;',"Oe").replace('&#246;',"oe").replace('&#220;',"Ue").replace('&#252;',"ue")
 	text = text.replace('<br />\n','')
 	return text	
