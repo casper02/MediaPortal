@@ -47,17 +47,20 @@ class appletrailersGenreScreen(Screen):
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
-		self.genreliste.append(("Newest (HD-720p)", "http://trailers.apple.com/trailers/home/xml/newest_720p.xml"))
-		self.genreliste.append(("Current (HD-720p)", "http://trailers.apple.com/trailers/home/xml/current_720p.xml"))
-		self.genreliste.append(("Newest (HD-480p)", "http://trailers.apple.com/trailers/home/xml/newest_480p.xml"))
-		self.genreliste.append(("Current (HD-480p)", "http://trailers.apple.com/trailers/home/xml/current_480p.xml"))
-		self.genreliste.append(("Newest (SD)", "http://trailers.apple.com/trailers/home/xml/newest.xml"))
-		self.genreliste.append(("Current (SD)", "http://trailers.apple.com/trailers/home/xml/current.xml"))
+		self.genreliste.append(("Newest (HD-1080p)", "http://trailers.apple.com/trailers/home/xml/newest_720p.xml", "1080p"))
+		self.genreliste.append(("Current (HD-1080p)", "http://trailers.apple.com/trailers/home/xml/current_720p.xml", "1080p"))
+		self.genreliste.append(("Newest (HD-720p)", "http://trailers.apple.com/trailers/home/xml/newest_720p.xml", "720p"))
+		self.genreliste.append(("Current (HD-720p)", "http://trailers.apple.com/trailers/home/xml/current_720p.xml", "720p"))
+		self.genreliste.append(("Newest (HD-480p)", "http://trailers.apple.com/trailers/home/xml/newest_480p.xml", "480p"))
+		self.genreliste.append(("Current (HD-480p)", "http://trailers.apple.com/trailers/home/xml/current_480p.xml", "480p"))
+		self.genreliste.append(("Newest (SD)", "http://trailers.apple.com/trailers/home/xml/newest.xml", "SD"))
+		self.genreliste.append(("Current (SD)", "http://trailers.apple.com/trailers/home/xml/current.xml", "SD"))
 		self.chooseMenuList.setList(map(appletrailersGenreListEntry, self.genreliste))
 
 	def keyOK(self):
 		streamGenreLink = self['genreList'].getCurrent()[0][1]
-		self.session.open(appletrailersFilmScreen, streamGenreLink)
+		streamHD = self['genreList'].getCurrent()[0][2]
+		self.session.open(appletrailersFilmScreen, streamGenreLink, streamHD)
 		
 	def keyLeft(self):
 		self['genreList'].pageUp()
@@ -76,9 +79,10 @@ class appletrailersGenreScreen(Screen):
 
 class appletrailersFilmScreen(Screen):
 	
-	def __init__(self, session, phCatLink):
+	def __init__(self, session, phCatLink, phHD):
 		self.session = session
 		self.phCatLink = phCatLink
+		self.phHD = phHD
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/appletrailersFilmScreen.xml" % config.mediaportal.skin.value
 		print path
 		with open(path, "r") as f:
@@ -193,6 +197,12 @@ class appletrailersFilmScreen(Screen):
 			return
 		phTitle = self['genreList'].getCurrent()[0][0]
 		phLink = self['genreList'].getCurrent()[0][1]
+		phHD = self.phHD 
+		if phHD == "720p":
+			phLink = phLink.replace('a720p.m4v','h720p.mov')
+		if phHD == "1080p":
+			phLink = phLink.replace('a720p.m4v','h1080p.mov')
+			phLink = phLink.replace('h720p.mov','h1080p.mov')
 		self.keyLocked = False
 		self.play(phLink)
 		
