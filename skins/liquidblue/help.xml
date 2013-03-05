@@ -1,0 +1,3 @@
+<!-- HelpScreen -->
+		<screen name="HelpScreen" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
+		</screen>

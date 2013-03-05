@@ -2,7 +2,7 @@
 from imports import *
 from decrypt import *
 	
-# Streame-Sites import
+# Stream-Sites import
 from forPlayers import *
 from dokuMe import *
 from roflVideos import *
@@ -188,6 +188,29 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 	def keyCancel(self):
 		self.close()
 
+class HelpScreen(Screen):
+
+	def __init__(self, session):
+		self.session = session
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/help.xml" % config.mediaportal.skin.value
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
+		Screen.__init__(self, session)
+		
+		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions"], {
+			"ok"    : self.keyOK,
+			"cancel": self.keyCancel
+		}, -1)
+
+	def keyOK(self):
+		self.close()
+	
+	def keyCancel(self):
+		self.close()
+		
 class chooseMenuList(MenuList):
 	def __init__(self, list):
 		MenuList.__init__(self, list, True, eListboxPythonMultiContent)
@@ -206,14 +229,15 @@ class haupt_Screen(Screen, ConfigListScreen):
 			
 		Screen.__init__(self, session)
 		
-		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions"], {
+		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "HelpActions"], {
 			"ok"    : self.keyOK,
 			"up"    : self.keyUp,
 			"down"  : self.keyDown,
 			"cancel": self.keyCancel,
 			"left"  : self.keyLeft,
 			"right" : self.keyRight,
-			"menu" : self.keySetup
+			"menu" : self.keySetup,
+			"displayHelp" : self.keyHelp
 		}, -1)
 
 		self['title'] = Label("MediaPortal v3.5.3")
@@ -363,6 +387,9 @@ class haupt_Screen(Screen, ConfigListScreen):
 		print config.mediaportal.pincode.value
 		self.session.openWithCallback(self.pinok, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
 	
+	def keyHelp(self):
+		self.session.open(HelpScreen)
+
 	def getTriesEntry(self):
 		return config.ParentalControl.retries.setuppin
 		
