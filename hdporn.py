@@ -68,10 +68,8 @@ class hdpornGenreScreen(Screen):
 		print error
 
 	def showInfos(self):
-		phTitle = self['genreList'].getCurrent()[0][0]
 		phImage = self['genreList'].getCurrent()[0][2]
 		print phImage
-		self['name'].setText(phTitle)
 		if not phImage == None:
 			downloadPage(phImage, "/tmp/phIcon.jpg").addCallback(self.ShowCover)
 		else:
