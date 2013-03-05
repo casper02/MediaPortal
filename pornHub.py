@@ -386,7 +386,8 @@ class pornhubFilmScreen(Screen):
 			"right" : self.keyRight,
 			"left" : self.keyLeft,
 			"nextBouquet" : self.keyPageUp,
-			"prevBouquet" : self.keyPageDown
+			"prevBouquet" : self.keyPageDown,
+			"green" : self.keyPageNumber
 		}, -1)
 
 		self['title'] = Label("Pornhub.com")
@@ -453,6 +454,21 @@ class pornhubFilmScreen(Screen):
 					self['coverArt'].show()
 					del self.picload
 
+	def keyOK(self):
+		if self.keyLocked:
+			return
+		phTitle = self['genreList'].getCurrent()[0][0]
+		phLink = self['genreList'].getCurrent()[0][1]
+		getPage(phLink, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
+
+	def keyPageNumber(self):
+		self.session.openWithCallback(self.callbackkeyPageNumber, VirtualKeyBoard, title = (_("Seitennummer eingeben")), text = str(self.page))
+
+	def callbackkeyPageNumber(self, answer):
+		if answer is not None:
+			self.page = int(answer)
+			self.loadpage()
+
 	def keyPageDown(self):
 		print "PageDown"
 		if self.keyLocked:
@@ -491,13 +507,6 @@ class pornhubFilmScreen(Screen):
 			return
 		self['genreList'].down()
 		self.showInfos()
-		
-	def keyOK(self):
-		if self.keyLocked:
-			return
-		phTitle = self['genreList'].getCurrent()[0][0]
-		phLink = self['genreList'].getCurrent()[0][1]
-		getPage(phLink, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		phTitle = self['genreList'].getCurrent()[0][0]
