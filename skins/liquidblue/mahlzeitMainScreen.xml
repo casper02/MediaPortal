@@ -1,22 +1,57 @@
-<!-- showMEHDGenre -->
-	<screen name="mahlzeit.tv" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-		<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-		<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-		<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="right">
-			<convert type="ClockToText">Format:%-H:%M</convert>
-		</widget>
-		<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="Regular;16" valign="center" halign="right">
-			<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
-		</widget>
-		<widget name="Vorspeisen" position="30,60" size="260,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-		<widget name="vorspeisen" position="30,85" size="260,215" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-		<widget name="Hauptspeisen" position="320,60" size="260,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-		<widget name="hauptspeisen" position="320,85" size="260,215" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-		<widget name="Desserts" position="610,60" size="260,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-		<widget name="desserts" position="610,85" size="260,215" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-		<widget name="Kuchen" position="30,325" size="260,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-		<widget name="kuchen" position="30,350" size="260,215" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-		<widget name="Weiteres" position="320,325" size="260,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center"/>
-		<widget name="weiteres" position="320,350" size="260,215" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/sel.png"/>
-		<widget name="name" position="0,580" size="900,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;28" valign="top" halign="center"/>
-	</screen>
+<!-- mahlzeit Genre -->
+<screen name="mahlzeit.tv" position="center,center" size="1280,720" flags="wfNoBorder">
+    <ePixmap position="20,0" size="1280,720" zPosition="-1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/mpback.png" />
+    <widget source="global.CurrentTime" render="Label" position="840,42" size="300,28" font="Regular; 26" halign="left" backgroundColor="#26181d20" transparent="1" foregroundColor="#00bbbbbb">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1140,42" size="100,28" font="Regular;26" halign="center" backgroundColor="#26181d20" transparent="1" foregroundColor="#00bbbbbb">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="session.VideoPicture" render="Pig" position="913,136" size="328,186" zPosition="3" backgroundColor="transparent" />
+    <eLabel position="912,135" size="330,188" backgroundColor="#00ffffff" zPosition="0" name="Videoback" foregroundColor="#00ffffff" />
+    <!-- select screen -->
+    <widget name="Vorspeisen" position="50,130" size="260,30" backgroundColor="#26181d20" zPosition="5" foregroundColor="#00ffffff" font="Regular; 25" halign="center" transparent="1" />
+		<widget name="vorspeisen" position="50,170" size="260,215" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/sel.png" foregroundColor="#00bbbbbb" />
+		<widget name="Hauptspeisen" position="340,130" size="260,30" backgroundColor="#26181d20" zPosition="5" foregroundColor="#00ffffff" font="Regular; 25" halign="center" transparent="1" />
+		<widget name="hauptspeisen" position="340,170" size="260,215" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/sel.png" foregroundColor="#00bbbbbb" />
+		<widget name="Desserts" position="630,130" size="260,30" backgroundColor="#26181d20" zPosition="5" foregroundColor="#00ffffff" font="Regular; 25" halign="center" transparent="1" />
+		<widget name="desserts" position="630,170" size="260,215" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/sel.png" foregroundColor="#00bbbbbb" />
+		<widget name="Kuchen" position="50,430" size="260,30" backgroundColor="#26181d20" zPosition="5" foregroundColor="#00ffffff" font="Regular; 25" halign="center" transparent="1" />
+		<widget name="kuchen" position="50,470" size="260,215" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/sel.png" foregroundColor="#00bbbbbb" />
+		<widget name="Weiteres" position="340,430" size="260,30" backgroundColor="#26181d20" zPosition="5" foregroundColor="#00ffffff" font="Regular; 25" halign="center" transparent="1" />
+		<widget name="weiteres" position="340,470" size="260,215" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/sel.png" foregroundColor="#00bbbbbb" />
+		<widget name="title" position="913,356" size="328,100" backgroundColor="#26181d20" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="center" foregroundColor="#00ffffff" />
+<!-- r1 -->
+<eLabel position="48,125" size="264,2" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="48,164" size="264,2" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="48,390" size="264,2" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="48,425" size="264,2" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="48,464" size="264,2" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="48,690" size="264,2" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="48,125" size="2,265" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="310,125" size="2,265" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="48,425" size="2,265" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="310,425" size="2,265" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<!-- r2 -->
+<eLabel position="338,125" size="264,2" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="338,164" size="264,2" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="338,390" size="264,2" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="338,425" size="264,2" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="338,464" size="264,2" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="338,690" size="264,2" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="338,125" size="2,265" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="600,125" size="2,265" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="338,425" size="2,265" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="600,425" size="2,265" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<!-- r3 -->
+<eLabel position="628,125" size="264,2" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="628,164" size="264,2" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="628,390" size="264,2" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="628,425" size="264,2" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="628,464" size="264,2" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="628,690" size="264,2" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="628,125" size="2,265" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="890,125" size="2,265" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="628,425" size="2,265" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+<eLabel position="890,425" size="2,265" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />
+</screen>
