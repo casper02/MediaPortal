@@ -1,3 +1,4 @@
 <!-- HelpScreen -->
 		<screen name="HelpScreen" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
+		<ePixmap position="50,100" size="800,250" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/help.png" alphatest="blend" backgroundColor="#26181d20" />
 		</screen>

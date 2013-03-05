@@ -12,6 +12,6 @@
     <!-- select screen -->
     <widget name="title" position="913,356" size="328,100" backgroundColor="#26181d20" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="center" foregroundColor="#00ffffff" />
     <widget name="genreList" position="55,190" size="850,500" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/sel.png" foregroundColor="#00bbbbbb" />
-    <!-- <widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/no_coverArt.png" position="998,487" size="160,120" transparent="1" alphatest="blend" /> -->
-    <widget name="name" position="95,106" size="850,60" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="Regular;26" valign="center" halign="center" />
+<!--    <widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/no_coverArt.png" position="998,487" size="160,120" transparent="1" alphatest="blend" /> -->
+    <widget name="name" position="100,106" size="850,60" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="Regular;26" valign="center" halign="center" />
   </screen>

@@ -8,7 +8,9 @@
       <convert type="ClockToText">Default</convert>
     </widget>
     <widget source="session.VideoPicture" render="Pig" position="913,136" size="328,186" zPosition="3" backgroundColor="transparent" />
-    <ePixmap position="920,645" size="64,34" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/menue.png" alphatest="blend" backgroundColor="#26181d20" />
+    <ePixmap position="925,652" size="90,27" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/buttonmenue.png" alphatest="blend" backgroundColor="#26181d20" />
+    <ePixmap position="1035,652" size="90,27" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/buttonhelp.png" alphatest="blend" backgroundColor="#26181d20" />
+    <ePixmap position="1145,652" size="90,27" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/buttonexit.png" alphatest="blend" backgroundColor="#26181d20" />
     <!-- select screen -->
     <widget name="Infos" position="55,135" size="280,30" backgroundColor="#26181d20" zPosition="5" font="Regular; 26" halign="left" transparent="1" foregroundColor="#00ffffff" />
     <widget name="infos" position="55,180" size="280,500" backgroundColor="#26181d20" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/sel.png" foregroundColor="#00bbbbbb" />
