@@ -40,6 +40,7 @@ from iStreamWS import *
 from UltimateStreams import *
 from mahlzeitTV import *
 from appletrailers import *
+from DOKUh import *
 # porn
 from amateurporn import *
 from eporner import *
@@ -91,6 +92,7 @@ config.mediaportal.showUstreams = ConfigYesNo(default = True)
 config.mediaportal.show4Players = ConfigYesNo(default = True)
 config.mediaportal.showMahlzeitTV = ConfigYesNo(default = True)
 config.mediaportal.showappletrailers = ConfigYesNo(default = True)
+config.mediaportal.showDOKUh = ConfigYesNo(default = True)
 # porn
 config.mediaportal.show4tube = ConfigYesNo(default = False)
 config.mediaportal.showamateurporn = ConfigYesNo(default = False)
@@ -154,6 +156,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige 4Players:", config.mediaportal.show4Players))
 		self.configlist.append(getConfigListEntry("Zeige Mahlzeit TV:", config.mediaportal.showMahlzeitTV))
 		self.configlist.append(getConfigListEntry("Zeige Apple Movie Trailers:", config.mediaportal.showappletrailers))
+		self.configlist.append(getConfigListEntry("Zeige DOKUh:", config.mediaportal.showDOKUh))
 		self.configlist.sort()
 		self.configlist.insert(0, ("Skinauswahl:", config.mediaportal.skin))
 		self.configlist.insert(0, ("Pincode:", config.mediaportal.pincode))
@@ -326,6 +329,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.infos.append(self.hauptListEntry("MahlzeitTV", "mahlzeit"))
 		if config.mediaportal.showappletrailers.value:
 			self.infos.append(self.hauptListEntry("AppleTrailer", "appletrailers"))
+		if config.mediaportal.showDOKUh.value:
+			self.infos.append(self.hauptListEntry("DOKUh", "dokuh"))
 		# fun & TV
 		if config.mediaportal.showRofl.value:
 			self.fun.append(self.hauptListEntry("Rofl.to", "rofl"))
@@ -555,6 +560,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(mahlzeitMainScreen)
 		elif auswahl == "AppleTrailer":
 			self.session.open(appletrailersGenreScreen)
+		elif auswahl == "DOKUh":
+			self.session.open(showDOKUHGenre)
 		# porn
 		elif auswahl == "4Tube":
 			self.session.open(fourtubeGenreScreen)
