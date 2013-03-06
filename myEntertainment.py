@@ -48,7 +48,7 @@ class showMEHDGenre(Screen):
 			("Drama", "http://my-entertainment.biz/forum/list.php?r=category/36-HD-Drama&page="),
 			("Fantasy", "http://my-entertainment.biz/forum/list.php?r=category/37-HD-Fantasy&page="),
 			("Horror", "http://my-entertainment.biz/forum/list.php?r=category/38-HD-Horror&page="),
-			("Koedie", "http://my-entertainment.biz/forum/list.php?r=category/39-HD-Kom%F6die&page="),
+			("Komoedie", "http://my-entertainment.biz/forum/list.php?r=category/39-HD-Kom%F6die&page="),
 			("Kriegsfilm", "http://my-entertainment.biz/forum/list.php?r=category/66-HD-Kriegsfilm&page="),
 			("Krimi", "http://my-entertainment.biz/forum/list.php?r=category/56-HD-Krimi&page="),
 			("Musik", "http://my-entertainment.biz/forum/list.php?r=category/63-HD-Musik&page="),
