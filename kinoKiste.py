@@ -134,7 +134,7 @@ class kinokisteKinoScreen(Screen):
 	def getDescription(self, data):
 		ddDescription = re.findall('<meta name="description" content="(.*?)"', data, re.S)
 		if ddDescription:
-			self['handlung'].setText(ddDescription[0])
+			self['handlung'].setText(decodeHtml(ddDescription[0]))
 		else:
 			self['handlung'].setText("keine infos.")
 			
