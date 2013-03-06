@@ -10,6 +10,8 @@ class spoboxGenreScreen(Screen):
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/spoboxGenreScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/spoboxGenreScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -61,6 +63,8 @@ class spoboxSubGenreScreen(Screen):
 		self.streamGenreName = streamGenreName
 		self.streamGenreLink = streamGenreLink
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/spoboxSubGenreScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/spoboxSubGenreScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -117,6 +121,8 @@ class spoboxFilmListeScreen(Screen):
 		self.session = session
 		self.streamGenreLink = streamGenreLink
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/spoboxFilmListeScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/spoboxFilmListeScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

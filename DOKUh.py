@@ -33,6 +33,8 @@ class showDOKUHGenre(Screen):
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/showDOKUHGenre.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/showDOKUHGenre.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -426,6 +428,8 @@ class DOKUHFilmListeScreen(Screen):
 		self.genreLink = genreLink
 		self.genreName = genreName
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/DOKUHFilmListeScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/DOKUHFilmListeScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -822,6 +826,8 @@ class DOKUHStreams(Screen, ConfigListScreen):
 		self.dokuUrl = dokuUrl
 		self.dokuName = dokuName
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/DOKUHStreams.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/DOKUHStreams.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

@@ -52,6 +52,8 @@ class kxMain(Screen):
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxMain.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxMain.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -125,6 +127,8 @@ class kxKino(Screen):
 		self.kxGotLink = kxGotLink
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxKino.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxKino.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -239,6 +243,8 @@ class kxNeusteKino(Screen):
 		self.kxGotLink = kxGotLink
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxNeusteKino.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxNeusteKino.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -364,6 +370,8 @@ class kxNeusteOnline(Screen):
 		self.kxGotLink = kxGotLink
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxNeusteOnline.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxNeusteOnline.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -490,6 +498,8 @@ class kxABC(Screen):
 		self.kxGotLink = kxGotLink
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxABC.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxABC.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -542,6 +552,8 @@ class kxABCpage(Screen):
 		self.letter = letter
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxABCpage.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxABCpage.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -679,6 +691,8 @@ class kxNeusteSerien(Screen):
 		self.kxGotLink = kxGotLink
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxNeusteSerien.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxNeusteSerien.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -813,6 +827,8 @@ class kxSerienABC(Screen):
 		self.kxGotLink = kxGotLink
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxSerienABC.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxSerienABC.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -865,6 +881,8 @@ class kxSerienABCpage(Screen):
 		self.letter = letter
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxSerienABCpage.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxSerienABCpage.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -1018,6 +1036,8 @@ class kxEpisoden(Screen):
 		self.stream_name = stream_name
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxEpisoden.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxEpisoden.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -1192,6 +1212,8 @@ class kxWatchlist(Screen):
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxWatchlist.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxWatchlist.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -1277,6 +1299,8 @@ class kxStreams(Screen):
 		self.stream_name = stream_name
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxStreams.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxStreams.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -1409,6 +1433,8 @@ class kxParts(Screen):
 		self.stream_name = stream_name
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxParts.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxParts.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

@@ -16,6 +16,8 @@ class amateurpornGenreScreen(Screen):
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/amateurpornGenreScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/amateurpornGenreScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -108,6 +110,8 @@ class amateurpornFilmScreen(Screen):
 		self.session = session
 		self.phCatLink = phCatLink
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/amateurpornFilmScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/amateurpornFilmScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

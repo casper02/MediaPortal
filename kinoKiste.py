@@ -11,6 +11,8 @@ class kinokisteGenreScreen(Screen):
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kinokisteGenreScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kinokisteGenreScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -63,6 +65,8 @@ class kinokisteKinoScreen(Screen):
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kinokisteKinoScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kinokisteKinoScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -215,6 +219,8 @@ class kinokistePartsScreen(Screen):
 		self.parts = parts
 		self.stream_name = stream_name
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kinokistePartsScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kinokistePartsScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -324,6 +330,8 @@ class kinokisteFilmlistenScreen(Screen):
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kinokisteFilmlistenScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kinokisteFilmlistenScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -376,6 +384,8 @@ class kinokisteFilmLetterScreen(Screen):
 		self.session = session
 		self.kkLink = kkLink
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kinokisteFilmLetterScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kinokisteFilmLetterScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

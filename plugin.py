@@ -110,6 +110,8 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/hauptScreenSetup.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/hauptScreenSetup.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -196,6 +198,8 @@ class HelpScreen(Screen):
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/help.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/help.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -225,6 +229,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 		self.session = session
 
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/haupt_Screen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/haupt_Screen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

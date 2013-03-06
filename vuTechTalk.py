@@ -11,6 +11,8 @@ class vutechtalk(Screen):
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/vutechtalk.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/vutechtalk.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

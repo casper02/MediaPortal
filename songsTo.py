@@ -10,6 +10,8 @@ class showSongstoGenre(Screen):
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/showSongstoGenre.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/showSongstoGenre.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -80,6 +82,8 @@ class showSongstoAll(Screen, InfoBarBase, InfoBarSeek):
 		self.scLink = link
 		self.scGuiName = name
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/showSongstoAll.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/showSongstoAll.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -218,6 +222,8 @@ class showSongstoTop(Screen, InfoBarBase, InfoBarSeek):
 		self.scLink = link
 		self.scGuiName = name
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/showSongstoTop.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/showSongstoTop.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

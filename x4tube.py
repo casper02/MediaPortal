@@ -20,6 +20,8 @@ class fourtubeGenreScreen(Screen):
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/fourtubeGenreScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/fourtubeGenreScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -124,6 +126,8 @@ class fourtubePornstarsScreen(Screen):
 		self.session = session
 		self.phCatLink = phCatLink
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/fourtubePornstarsScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/fourtubePornstarsScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -262,6 +266,8 @@ class fourtubeFilmScreen(Screen):
 		self.session = session
 		self.phCatLink = phCatLink
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/fourtubeFilmScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/fourtubeFilmScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

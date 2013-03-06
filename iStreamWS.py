@@ -39,6 +39,8 @@ class showIStreamGenre(Screen):
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/showIStreamGenre.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/showIStreamGenre.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -130,6 +132,8 @@ class IStreamFilmListeScreen(Screen):
 		self.genreLink = genreLink
 		self.genreName = genreName
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/IStreamFilmListeScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/IStreamFilmListeScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -584,6 +588,8 @@ class IStreamStreams(Screen, ConfigListScreen):
 		self.filmName = filmName
 		self.imageUrl = imageLink
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/IStreamStreams.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/IStreamStreams.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

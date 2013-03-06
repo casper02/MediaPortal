@@ -11,6 +11,8 @@ class focusGenre(Screen):
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/focusGenre.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/focusGenre.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -67,6 +69,8 @@ class focus(Screen):
 	def __init__(self, session, streamGenreLink):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/focus.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/focus.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

@@ -16,6 +16,8 @@ class forPlayersGenreScreen(Screen):
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/forPlayersGenreScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/forPlayersGenreScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -64,6 +66,8 @@ class forPlayersVideoScreen(Screen):
 		self.session = session
 		self.selectionLink = selectionLink
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/forPlayersVideoScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/forPlayersVideoScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

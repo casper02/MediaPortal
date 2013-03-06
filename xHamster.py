@@ -11,6 +11,8 @@ class xhamsterGenreScreen(Screen):
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/xhamsterGenreScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/xhamsterGenreScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -168,6 +170,8 @@ class xhamster(Screen):
 		self.session = session
 		self.genreLink = genreLink
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/xhamster.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/xhamster.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

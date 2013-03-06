@@ -38,6 +38,8 @@ class showUSGenre(Screen):
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/showUSGenre.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/showUSGenre.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -124,6 +126,8 @@ class USFilmListeScreen(Screen):
 		self.genreLink = genreLink
 		self.genreName = genreName
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/USFilmListeScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/USFilmListeScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -608,6 +612,8 @@ class USStreams(Screen, ConfigListScreen):
 		self.filmName = filmName
 		self.imageUrl = imageLink
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/USStreams.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/USStreams.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

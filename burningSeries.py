@@ -16,6 +16,8 @@ class bsMain(Screen, ConfigListScreen):
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/bsMain.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/bsMain.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -67,6 +69,8 @@ class bsSerien(Screen, ConfigListScreen):
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/bsSerien.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/bsSerien.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -140,6 +144,8 @@ class bsWatchlist(Screen, ConfigListScreen):
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/bsWatchlist.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/bsWatchlist.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -221,6 +227,8 @@ class bsStaffeln(Screen, ConfigListScreen):
 	def __init__(self, session, serienUrl):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/bsStaffeln.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/bsStaffeln.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -318,6 +326,8 @@ class bsEpisoden(Screen, ConfigListScreen):
 	def __init__(self, session, serienUrl, bsStaffel):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/bsEpisoden.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/bsEpisoden.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -402,6 +412,8 @@ class bsStreams(Screen, ConfigListScreen):
 	def __init__(self, session, serienUrl):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/bsStreams.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/bsStreams.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

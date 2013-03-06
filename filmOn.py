@@ -11,6 +11,8 @@ class filmON(Screen):
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/filmON.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/filmON.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

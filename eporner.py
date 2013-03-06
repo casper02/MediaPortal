@@ -16,6 +16,8 @@ class epornerGenreScreen(Screen):
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/epornerGenreScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/epornerGenreScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -126,6 +128,8 @@ class epornerFilmScreen(Screen):
 		self.session = session
 		self.phCatLink = phCatLink
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/epornerFilmScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/epornerFilmScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
