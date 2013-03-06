@@ -5,7 +5,7 @@ from decrypt import *
 import Queue
 import threading
 
-DOKUH_Version = "DOKUh.de v0.90"
+DOKUH_Version = "DOKUh.de v0.91"
 
 DOKUH_siteEncoding = 'utf-8'
 
@@ -74,7 +74,10 @@ class showDOKUHGenre(Screen):
 		self.chooseMenuList.l.setItemHeight(25)
 		self['genreList'] = self.chooseMenuList
 		
+		#("BELIEBTESTE DOKUS", "/"),
+		#("MEISTGESEHENE DOKUS", "/"),
 		mainGenre = [
+			("NEUESTE DOKUS", ""),
 			("Geschichte", "/geschichte"),
 			("Länder", "/lander"),
 			("Menschen", "/menschen"),
@@ -257,9 +260,12 @@ class showDOKUHGenre(Screen):
 			
 		self.genreMenu = [mainGenre,
 			[
-			subGenre_0,subGenre_1,subGenre_2,subGenre_3,subGenre_4,subGenre_5,subGenre_6,subGenre_7,subGenre_8,subGenre_9
+			None,subGenre_0,subGenre_1,subGenre_2,subGenre_3,subGenre_4,subGenre_5,subGenre_6,subGenre_7,subGenre_8,subGenre_9
 			],
 			[
+			[
+			None
+			],
 			[
 			subGenre_0_0,None,None,None,None,None,None
 			],
@@ -325,16 +331,16 @@ class showDOKUHGenre(Screen):
 		print "keyMenuUp:"
 		if self.keyLocked:
 			return
-		self.menuIdx = self['genreList'].getSelectedIndex()
-		self.setMenu(-1, self.menuIdx)
+		menuIdx = self['genreList'].getSelectedIndex()
+		self.setMenu(-1, menuIdx)
 
 	def keyOK(self):
 		print "keyOK:"
 		if self.keyLocked:
 			return
 			
-		self.menuIdx = self['genreList'].getSelectedIndex()
-		self.setMenu(+1, self.menuIdx)
+		menuIdx = self['genreList'].getSelectedIndex()
+		self.setMenu(+1, menuIdx)
 		
 		if self.genreSelected:
 			print "Genre selected"
@@ -351,7 +357,7 @@ class showDOKUHGenre(Screen):
 			self.menuLevel += levelIncr
 			self.menuListe = []
 			if self.menuLevel == 0:
-				if self.genreMenu[0]:
+				if self.genreMenu[0] != None:
 					for (Name,Url) in self.genreMenu[0]:
 						self.menuListe.append((Name,Url))
 					self.chooseMenuList.setList(map(DOKUHmenuListentry, self.menuListe))
@@ -359,10 +365,10 @@ class showDOKUHGenre(Screen):
 				else:
 					self.genreName[self.menuLevel] = ""
 					self.genreUrl[self.menuLevel] = ""
-					self.menuLevel -= 1
+					self.menuLevel = 0
 					print "No menu entrys!"
 			elif self.menuLevel == 1:
-				if self.genreMenu[1][self.menuIdx] != None:
+				if self.genreMenu[1][menuIdx] != None:
 					if levelIncr > 0:
 						self.mainIdx = menuIdx
 						self.subIdx_1 = 0
@@ -377,7 +383,7 @@ class showDOKUHGenre(Screen):
 					self.genreSelected = True
 					print "No menu entrys!"
 			elif self.menuLevel == 2:
-				if self.genreMenu[2][self.mainIdx][self.menuIdx] != None:
+				if self.genreMenu[2][self.mainIdx][menuIdx] != None:
 					if levelIncr > 0:
 						self.subIdx_1 = menuIdx
 						self.subIdx_2 = 0
@@ -486,6 +492,13 @@ class DOKUHFilmListeScreen(Screen):
 		self.keckse = {}
 		self.page = 0
 		self.pages = 0;
+		self.genreNEUESTE = re.match(".*?NEUESTE DOKUS",self.genreName)
+		#self.genreBELIEBTESTE = re.match(".*?BELIEBTESTE DOKUS",self.genreName)
+		#self.genreMEISTGESEHEN = re.match(".*?MEISTGESEHENE DOKUS",self.genreName)
+		self.genreBELIEBTESTE = False
+		self.genreMEISTGESEHEN = False
+		self.genreSpecial = self.genreNEUESTE or self.genreBELIEBTESTE or self.genreMEISTGESEHEN
+
 		self.setGenreStrTitle()
 		
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -502,7 +515,11 @@ class DOKUHFilmListeScreen(Screen):
 
 	def loadPage(self):
 		print "loadPage:"
-		url = "%s/page/%d/" % (self.genreLink, self.page)
+		if not self.genreSpecial:
+			url = "%s/page/%d/" % (self.genreLink, self.page)
+		else:
+			url = self.baseUrl
+			
 		if self.page:
 			self['page'].setText("%d / %d" % (self.page,self.pages))
 			
@@ -518,7 +535,7 @@ class DOKUHFilmListeScreen(Screen):
 		while not self.filmQ.empty():
 			url = self.filmQ.get_nowait()
 		#self.eventL.clear()
-		#print url
+		print url
 		getPage(url, cookies=self.keckse, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
 		
 	def dataError(self, error):
@@ -530,9 +547,20 @@ class DOKUHFilmListeScreen(Screen):
 		
 	def loadPageData(self, data):
 		print "loadPageData:"
+		
+		if self.genreNEUESTE:
+			print "Neueste Dokus suche..."
+			m=re.search('class="name">neueste Dokus<(.*?)<!-- end .section-box -->',data,re.S)
+		elif self.genreBELIEBTESTE:
+			print "Beliebteste Dokus suche..."
+			m=re.search('class="name">beliebteste Dokus<(.*?)',data,re.S)
+		elif self.genreMEISTGESEHEN:
+			print "Meistgesehene Dokus suche..."
+			m=re.search('class="name">meistgesehene Dokus<(.*?)',data,re.S)
+		else:
+			print "Normal search.."
+			m=re.search('<div class="loop-content.*?class="thumb">(.*)<!-- end .loop-content -->',data,re.S)
 			
-		print "Normal search.."
-		m=re.search('<div class="loop-content.*?class="thumb">(.*)<!-- end .loop-content -->',data,re.S)
 		if m:
 			dokus = re.findall('class="clip-link".*?title="(.*?)" href="(.*?)".*?<img src="(.*?)".*?class="desc">(.*?)</p>', m.group(1), re.S)
 		else:
