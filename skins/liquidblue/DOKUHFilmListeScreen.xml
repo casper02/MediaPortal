@@ -1,4 +1,4 @@
-<!-- IStreamFilmListeScreen -->
+<!-- DOKUHFilmListeScreen -->
   <screen name="DOKUH" position="center,center" size="1280,720" flags="wfNoBorder">
     <ePixmap position="0,0" size="1280,720" zPosition="-1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/mpback.png" />
     <widget source="global.CurrentTime" render="Label" position="840,42" size="300,28" font="Regular; 26" halign="left" backgroundColor="#26181d20" transparent="1" foregroundColor="#00bbbbbb">
