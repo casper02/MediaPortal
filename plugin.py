@@ -6,9 +6,9 @@ from decrypt import *
 from forPlayers import *
 from dokuMe import *
 from roflVideos import *
-from streamJunkies import *
+#from streamJunkies import *
 from focus import *
-from yourFreeTV import *
+#from yourFreeTV import *
 from tvKino import *
 from filmOn import *
 from netzKino import *
@@ -58,12 +58,12 @@ config.mediaportal.skin = ConfigSelection(default = "original", choices = [("liq
 config.mediaportal.showDoku = ConfigYesNo(default = True)
 config.mediaportal.showRofl = ConfigYesNo(default = True)
 config.mediaportal.showFail = ConfigYesNo(default = True)
-config.mediaportal.showStream = ConfigYesNo(default = True)
+#config.mediaportal.showStream = ConfigYesNo(default = True)
 config.mediaportal.showKinoKiste = ConfigYesNo(default = True)
 config.mediaportal.showStreamOase = ConfigYesNo(default = True)
 config.mediaportal.showMyvideo = ConfigYesNo(default = True)
 config.mediaportal.showFocus = ConfigYesNo(default = True)
-config.mediaportal.showYourfree = ConfigYesNo(default = True)
+#config.mediaportal.showYourfree = ConfigYesNo(default = True)
 config.mediaportal.showFilmOn = ConfigYesNo(default = True)
 config.mediaportal.showTvkino = ConfigYesNo(default = True)
 config.mediaportal.showSpobox = ConfigYesNo(default = True)
@@ -119,42 +119,42 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		
 		self.configlist = []
 		ConfigListScreen.__init__(self, self.configlist)
-		self.configlist.append(getConfigListEntry("Zeige Doku:", config.mediaportal.showDoku))
-		self.configlist.append(getConfigListEntry("Zeige Rofl:", config.mediaportal.showRofl))
-		self.configlist.append(getConfigListEntry("Zeige Fail:", config.mediaportal.showFail))
+		self.configlist.append(getConfigListEntry("Zeige Doku.me:", config.mediaportal.showDoku))
+		self.configlist.append(getConfigListEntry("Zeige Rofl.to:", config.mediaportal.showRofl))
+		self.configlist.append(getConfigListEntry("Zeige Fail.to:", config.mediaportal.showFail))
 		self.configlist.append(getConfigListEntry("Zeige Myvideo:", config.mediaportal.showMyvideo))
 		self.configlist.append(getConfigListEntry("Zeige AutoBild:", config.mediaportal.showAutoBild))
 		self.configlist.append(getConfigListEntry("Zeige SportBild:", config.mediaportal.showSportBild))
 		self.configlist.append(getConfigListEntry("Zeige Laola1:", config.mediaportal.showLaola1))
 		self.configlist.append(getConfigListEntry("Zeige KinderKino:", config.mediaportal.showKinderKino))
-		self.configlist.append(getConfigListEntry("Zeige Streamjunkies:", config.mediaportal.showStream))
+		#self.configlist.append(getConfigListEntry("Zeige Streamjunkies:", config.mediaportal.showStream))
 		self.configlist.append(getConfigListEntry("Zeige KinoKiste:", config.mediaportal.showKinoKiste))
 		self.configlist.append(getConfigListEntry("Zeige Stream-Oase:", config.mediaportal.showStreamOase))
-		self.configlist.append(getConfigListEntry("Zeige Burning Series:", config.mediaportal.showBs))
+		self.configlist.append(getConfigListEntry("Zeige Burning-Series:", config.mediaportal.showBs))
 		self.configlist.append(getConfigListEntry("Zeige Kinox:", config.mediaportal.showKinox))
 		self.configlist.append(getConfigListEntry("Zeige Movie2k:", config.mediaportal.showM2k))
 		self.configlist.append(getConfigListEntry("Zeige Konzert Oase:", config.mediaportal.showKoase))
 		self.configlist.append(getConfigListEntry("Zeige 1channel:", config.mediaportal.show1channel))
 		self.configlist.append(getConfigListEntry("Zeige Focus:", config.mediaportal.showFocus))
-		self.configlist.append(getConfigListEntry("Zeige Yourfree:", config.mediaportal.showYourfree))
-		self.configlist.append(getConfigListEntry("Zeige FilmeOn:", config.mediaportal.showFilmOn))
+		#self.configlist.append(getConfigListEntry("Zeige Yourfree:", config.mediaportal.showYourfree))
+		self.configlist.append(getConfigListEntry("Zeige FilmOn:", config.mediaportal.showFilmOn))
 		self.configlist.append(getConfigListEntry("Zeige TvKino:", config.mediaportal.showTvkino))
 		self.configlist.append(getConfigListEntry("Zeige NetzKino:", config.mediaportal.showNetzKino))
 		self.configlist.append(getConfigListEntry("Zeige Spobox:", config.mediaportal.showSpobox))
-		self.configlist.append(getConfigListEntry("Zeige Radio:", config.mediaportal.showRadio))
-		self.configlist.append(getConfigListEntry("Zeige Cczwei:", config.mediaportal.showCczwei))
+		self.configlist.append(getConfigListEntry("Zeige Radio.de:", config.mediaportal.showRadio))
+		self.configlist.append(getConfigListEntry("Zeige CCZwei:", config.mediaportal.showCczwei))
 		self.configlist.append(getConfigListEntry("Zeige Filmtrailer:", config.mediaportal.showTrailer))
 		self.configlist.append(getConfigListEntry("Zeige Baskino:", config.mediaportal.showBaskino))
 		self.configlist.append(getConfigListEntry("Zeige Vutechtalk:", config.mediaportal.showVutec))
 		self.configlist.append(getConfigListEntry("Zeige Dreamscreencast:", config.mediaportal.showDsc))
 		self.configlist.append(getConfigListEntry("Zeige NHL:", config.mediaportal.showNhl))
 		self.configlist.append(getConfigListEntry("Zeige Tivi:", config.mediaportal.showtivi))
-		self.configlist.append(getConfigListEntry("Zeige Songsto:", config.mediaportal.showSongsto))
+		self.configlist.append(getConfigListEntry("Zeige Songs.to:", config.mediaportal.showSongsto))
 		self.configlist.append(getConfigListEntry("Zeige My-Entertainment:", config.mediaportal.showMEHD))
 		self.configlist.append(getConfigListEntry("Zeige IStream:", config.mediaportal.showIStream))
 		self.configlist.append(getConfigListEntry("Zeige UltimateStreams:", config.mediaportal.showUstreams))
 		self.configlist.append(getConfigListEntry("Zeige 4Players:", config.mediaportal.show4Players))
-		self.configlist.append(getConfigListEntry("Zeige Mahlzeit TV:", config.mediaportal.showMahlzeitTV))
+		self.configlist.append(getConfigListEntry("Zeige mahlzeit.tv:", config.mediaportal.showMahlzeitTV))
 		self.configlist.append(getConfigListEntry("Zeige Apple Movie Trailers:", config.mediaportal.showappletrailers))
 		self.configlist.append(getConfigListEntry("Zeige DOKUh:", config.mediaportal.showDOKUh))
 		self.configlist.sort()
@@ -166,7 +166,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige Eporner:", config.mediaportal.showeporner))
 		self.configlist.append(getConfigListEntry("Zeige HDPorn:", config.mediaportal.showhdporn))
 		self.configlist.append(getConfigListEntry("Zeige Movie2k-Porn:", config.mediaportal.showM2kPorn))
-		self.configlist.append(getConfigListEntry("Zeige Pornerbros:", config.mediaportal.showpornerbros))
+		self.configlist.append(getConfigListEntry("Zeige PornerBros:", config.mediaportal.showpornerbros))
 		self.configlist.append(getConfigListEntry("Zeige Pornhub:", config.mediaportal.showPornhub))
 		self.configlist.append(getConfigListEntry("Zeige RedTube:", config.mediaportal.showredtube))
 		self.configlist.append(getConfigListEntry("Zeige xHamster:", config.mediaportal.showXhamster))
@@ -275,7 +275,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 		if config.mediaportal.showKinoKiste.value:
 			self.movies.append(self.hauptListEntry("KinoKiste", "kinokiste"))
 		if config.mediaportal.showBs.value:
-			self.movies.append(self.hauptListEntry("BurningSeries", "burningseries"))
+			self.movies.append(self.hauptListEntry("Burning-Series", "burningseries"))
 		if config.mediaportal.show1channel.value:
 			self.movies.append(self.hauptListEntry("1channel", "1channel"))
 		if config.mediaportal.showNetzKino.value:
@@ -289,7 +289,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 		if config.mediaportal.showtivi.value:
 			self.movies.append(self.hauptListEntry("Tivi", "tivi"))
 		if config.mediaportal.showMEHD.value:
-			self.movies.append(self.hauptListEntry("My-Entertain", "mehd"))
+			self.movies.append(self.hauptListEntry("My-Entertainment", "mehd"))
 		if config.mediaportal.showUstreams.value:
 			self.movies.append(self.hauptListEntry("UltimateStreams", "ustreams"))
 		if config.mediaportal.showM2k.value:
@@ -312,7 +312,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 		if config.mediaportal.showFocus.value:
 			self.infos.append(self.hauptListEntry("Focus", "focus"))
 		if config.mediaportal.showCczwei.value:
-			self.infos.append(self.hauptListEntry("Cczwei", "cczwei"))
+			self.infos.append(self.hauptListEntry("CCZwei", "cczwei"))
 		if config.mediaportal.showTrailer.value:
 			self.infos.append(self.hauptListEntry("Filmtrailer", "trailer"))
 		if config.mediaportal.showVutec.value:
@@ -326,7 +326,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 		if config.mediaportal.show4Players.value:
 			self.infos.append(self.hauptListEntry("4Players", "4players"))
 		if config.mediaportal.showMahlzeitTV.value:
-			self.infos.append(self.hauptListEntry("MahlzeitTV", "mahlzeit"))
+			self.infos.append(self.hauptListEntry("mahlzeit.tv", "mahlzeit"))
 		if config.mediaportal.showappletrailers.value:
 			self.infos.append(self.hauptListEntry("AppleTrailer", "appletrailers"))
 		if config.mediaportal.showDOKUh.value:
@@ -343,11 +343,11 @@ class haupt_Screen(Screen, ConfigListScreen):
 		if config.mediaportal.showTvkino.value:
 			self.fun.append(self.hauptListEntry("TV-Kino", "tvkino"))
 		if config.mediaportal.showRadio.value:
-			self.fun.append(self.hauptListEntry("Radio", "radiode"))
+			self.fun.append(self.hauptListEntry("Radio.de", "radiode"))
 		if config.mediaportal.showSpobox.value:
 			self.fun.append(self.hauptListEntry("Spobox", "spobox"))
 		if config.mediaportal.showSongsto.value:
-			self.fun.append(self.hauptListEntry("Songsto", "songsto"))
+			self.fun.append(self.hauptListEntry("Songs.to", "songsto"))
 		# porn
 		if config.mediaportal.show4tube.value:
 			self.fun.append(self.hauptListEntry("4Tube", "4tube"))
@@ -358,9 +358,9 @@ class haupt_Screen(Screen, ConfigListScreen):
 		if config.mediaportal.showhdporn.value:
 			self.fun.append(self.hauptListEntry("HDPorn", "hdporn"))
 		if config.mediaportal.showpornerbros.value:
-			self.fun.append(self.hauptListEntry("Pornerbros", "pornerbros"))
+			self.fun.append(self.hauptListEntry("PornerBros", "pornerbros"))
 		if config.mediaportal.showPornhub.value:
-			self.fun.append(self.hauptListEntry("PornHub", "pornhub"))
+			self.fun.append(self.hauptListEntry("Pornhub", "pornhub"))
 		if config.mediaportal.showredtube.value:
 			self.fun.append(self.hauptListEntry("RedTube", "redtube"))
 		if config.mediaportal.showXhamster.value:
@@ -500,27 +500,27 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(sportBildScreen)
 		elif auswahl == "Laola1 Live":
 			self.session.open(laolaScreen)
-		elif auswahl == "Streamjunkies":
-			self.session.open(streamGenreScreen)
+		#elif auswahl == "Streamjunkies":
+		#	self.session.open(streamGenreScreen)
 		elif auswahl == "KinoKiste":
 			self.session.open(kinokisteGenreScreen)
-		elif auswahl == "BurningSeries":
+		elif auswahl == "Burning-Series":
 			self.session.open(bsMain)
 		elif auswahl == "1channel":
 			self.session.open(chMain)
 		elif auswahl == "Focus":
 			self.session.open(focusGenre)
-		elif auswahl == "YourfreeTv":
-			self.session.open(yourFreeTv)
+		#elif auswahl == "YourfreeTv":
+		#	self.session.open(yourFreeTv)
 		elif auswahl == "FilmOn":
 			self.session.open(filmON)
 		elif auswahl == "NetzKino":
 			self.session.open(netzKinoGenreScreen)
 		elif auswahl == "Spobox":
 			self.session.open(spoboxGenreScreen)
-		elif auswahl == "Radio":
+		elif auswahl == "Radio.de":
 			self.session.open(Radiode)
-		elif auswahl == "Cczwei":
+		elif auswahl == "CCZwei":
 			self.session.open(cczwei)
 		elif auswahl == "Filmtrailer":
 			self.session.open(trailer)
@@ -546,9 +546,9 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(forPlayersGenreScreen)
 		elif auswahl == "Tivi":
 			self.session.open(tiviGenreListeScreen)
-		elif auswahl == "My-Entertain":
+		elif auswahl == "My-Entertainment":
 			self.session.open(showMEHDGenre)
-		elif auswahl == "Songsto":
+		elif auswahl == "Songs.to":
 			self.session.open(showSongstoGenre)
 		elif auswahl == "Movie2k":
 			self.session.open(m2kGenreScreen, self.showM2KPorn)
@@ -556,7 +556,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(showIStreamGenre)
 		elif auswahl == "UltimateStreams":
 			self.session.open(showUSGenre)
-		elif auswahl == "MahlzeitTV":
+		elif auswahl == "mahlzeit.tv":
 			self.session.open(mahlzeitMainScreen)
 		elif auswahl == "AppleTrailer":
 			self.session.open(appletrailersGenreScreen)
@@ -571,9 +571,9 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(epornerGenreScreen)
 		elif auswahl == "HDPorn":
 			self.session.open(hdpornGenreScreen)
-		elif auswahl == "Pornerbros":
+		elif auswahl == "PornerBros":
 			self.session.open(pornerbrosGenreScreen)
-		elif auswahl == "PornHub":
+		elif auswahl == "Pornhub":
 			self.session.open(pornhubGenreScreen)
 		elif auswahl == "RedTube":
 			self.session.open(redtubeGenreScreen)
