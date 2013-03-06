@@ -55,7 +55,7 @@ class roflScreen(Screen):
 		if roflVideos:
 			self.roflListe = []
 			for roflUrl,roflPic,roflName in roflVideos:
-				self.roflListe.append((roflName, roflUrl, roflPic))
+				self.roflListe.append((decodeHtml(roflName), roflUrl, roflPic))
 			self.chooseMenuList.setList(map(auswahlListEntry, self.roflListe))
 			self.showPic()
 			self.keyLocked = False
