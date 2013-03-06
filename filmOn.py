@@ -3,7 +3,7 @@ from decrypt import *
 
 def filmonListEntry(entry):
 	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		] 
 
 class filmON(Screen):
@@ -43,11 +43,14 @@ class filmON(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.pageData).addErrback(self.dataError)
 	
 	def pageData(self, data):
-		foSender = re.findall('tags="(.*?)".*?><img.*?href="(/channel/.*?)"', data, re.S)
+		foSender = re.findall('<li chat-keyword=.*?tags="(.*?)".*?><img.*?href="(/channel/.*?)"', data, re.S)
 		if foSender:
 			for (foName,foUrl) in foSender:
 				foUrl = "http://www.filmon.com" + foUrl
 				print foUrl
+				foName = foName.replace('featured ', 'Most Watched: ')
+				foName = foName.replace(' Live TV ', ': ')
+				foName = foName.replace(' Video On Demand ', ' VoD: ')
 				self.senderliste.append((foName, foUrl))
 			self.chooseMenuList.setList(map(filmonListEntry, self.senderliste))
 			self.keyLocked = False
@@ -65,7 +68,7 @@ class filmON(Screen):
 		
 	def streamerData(self, data):
 		foTitle = self['genreList'].getCurrent()[0][0]
-		streamDaten = re.findall('var channel_low_quality_stream = "(.*?)".*?var stream_url = "(.*?)"', data, re.S)
+		streamDaten = re.findall('var channel_high_quality_stream = "(.*?)".*?var stream_url = "(.*?)"', data, re.S)
 		if streamDaten:
 			(rtmpFile, rtmpServer) = streamDaten[0]
 			streamUrl = "%s/%s" % (rtmpServer, rtmpFile)
