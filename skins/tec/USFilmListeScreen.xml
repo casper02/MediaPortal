@@ -1,0 +1,23 @@
+<!-- USFilmListeScreen -->
+		<screen name="UStreams" position="center,center" size="1280,720" flags="wfNoBorder">
+    <ePixmap position="0,0" size="1280,720" zPosition="-1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/mpback.png" />
+    <widget source="global.CurrentTime" render="Label" position="840,42" size="300,28" font="Regular; 26" halign="left" backgroundColor="#26181d20" transparent="1" foregroundColor="#00bbbbbb">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1140,42" size="100,28" font="Regular;26" halign="center" backgroundColor="#26181d20" transparent="1" foregroundColor="#00bbbbbb">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="session.VideoPicture" render="Pig" position="913,136" size="328,186" zPosition="3" backgroundColor="transparent" />
+    <eLabel position="912,135" size="330,188" backgroundColor="#00ffffff" zPosition="0" name="Videoback" foregroundColor="#00ffffff" />
+    <ePixmap position="925,652" size="90,27" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonbqp.png" alphatest="blend" backgroundColor="#26181d20" />
+    <ePixmap position="1035,652" size="90,27" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonbqm.png" alphatest="blend" backgroundColor="#26181d20" />
+	<!-- select screen -->
+    <widget name="leftContentTitle" position="55,190" size="850,25" backgroundColor="#26181d20" zPosition="5" foregroundColor="#00ffffff" font="Regular;22" halign="center" transparent="1" />
+    <widget name="name" position="913,331" size="328,100" backgroundColor="#26181d20" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="center" foregroundColor="#00ffffff" />
+    <widget name="filmList" position="55,240" size="850,300" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/sel.png" foregroundColor="#00bbbbbb" />
+    <widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/m_no_coverArt.png" position="1002,439" size="150,200" transparent="1" alphatest="blend" />
+    <widget name="handlung" position="55,560" size="850,140" backgroundColor="#26181d20" transparent="1" font="Regular;18" valign="top" foregroundColor="#00ffffff" />
+    <widget name="title" position="95,106" size="850,60" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="Regular;26" valign="center" halign="center" />
+    <eLabel text="Page" position="55,106" size="100,60" backgroundColor="#26181d20" transparent="1" foregroundColor="#00ffffff" font="Regular;20" valign="center" />
+    <widget name="page" position="125,106" size="45,60" backgroundColor="#26181d20" transparent="1" font="Regular;20" valign="center" foregroundColor="#00ffffff" />
+  </screen>
