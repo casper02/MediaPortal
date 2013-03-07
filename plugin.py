@@ -54,7 +54,7 @@ from youporn import *
 
 config.mediaportal = ConfigSubsection()
 config.mediaportal.pincode = ConfigPIN(default = 0000)
-config.mediaportal.skin = ConfigSelection(default = "original", choices = [("liquidblue", _("liquidblue")), ("original", _("original"))])
+config.mediaportal.skin = ConfigSelection(default = "original", choices = [("tec", _("tec")),("liquidblue", _("liquidblue")), ("original", _("original"))])
 config.mediaportal.showDoku = ConfigYesNo(default = True)
 config.mediaportal.showRofl = ConfigYesNo(default = True)
 config.mediaportal.showFail = ConfigYesNo(default = True)

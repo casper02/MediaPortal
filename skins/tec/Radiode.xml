@@ -1,0 +1,27 @@
+<!-- Radiode -->
+  <screen name="Radio.de" position="0,0" size="1280,720" flags="wfNoBorder">
+    <ePixmap position="0,0" size="1280,720" zPosition="-1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/mpback.png" />
+    <widget source="global.CurrentTime" render="Label" position="840,42" size="300,28" font="Regular; 26" halign="left" backgroundColor="#26181d20" transparent="1" foregroundColor="#00555555">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1140,42" size="100,28" font="Regular;26" halign="center" backgroundColor="#26181d20" transparent="1" foregroundColor="#00555555">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="session.VideoPicture" render="Pig" position="913,136" size="328,186" zPosition="3" backgroundColor="transparent" />
+    <eLabel position="912,135" size="330,188" backgroundColor="#00ffffff" zPosition="0" name="Videoback" foregroundColor="#00ffffff" />
+    <ePixmap position="925,652" size="90,27" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonbqp.png" alphatest="blend" backgroundColor="#26181d20" />
+    <ePixmap position="1035,652" size="90,27" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonbqm.png" alphatest="blend" backgroundColor="#26181d20" />
+ 	<!-- select screen -->
+    <widget name="leftContentTitle" position="55,285" size="440,26" backgroundColor="#26181d20" zPosition="5" foregroundColor="#00ffffff" font="Regular;22" halign="center" transparent="1" />
+    <widget name="streamlist" position="55,327" size="440,350" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/sel.png" />
+    <widget name="rightContentTitle" position="525,285" size="385,26" backgroundColor="#26181d20" zPosition="5" foregroundColor="#00ffffff" font="Regular;22" halign="center" transparent="1" />
+    <widget name="playlist" position="525,326" size="440,350" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/sel.png" />
+    <widget name="stationIcon" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/m_no_coverArt.png" position="998,487" size="160,120" transparent="1" alphatest="blend" />
+    <eLabel text="Play" position="55,165" size="120,25" backgroundColor="#26181d20" transparent="1" foregroundColor="#00ffffff" font="Regular;20" valign="top" />
+    <widget name="stationInfo" position="175,165" size="650,25" backgroundColor="#26181d20" foregroundColor="#00ffffff" transparent="1" font="Regular;20" valign="top" />
+    <widget source="session.CurrentService" render="Label" position="790,165" size="120,25" font="Regular;20" foregroundColor="#00ffffff" backgroundColor="#26181d20" halign="right" valign="top" transparent="1">
+      <convert type="ServicePosition">Position</convert>
+    </widget>
+    <eLabel text="Info" position="55,190" size="120,25" backgroundColor="#00ffffff" foregroundColor="#00ffffff" transparent="1" font="Regular;20" valign="top" />
+    <widget name="stationDesc" position="175,190" zPosition="1" size="640,60" backgroundColor="#26181d20" transparent="1" font="Regular;19" halign="left" valign="top" foregroundColor="#00ffffff" />
+  </screen>
