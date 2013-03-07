@@ -5,7 +5,7 @@ from decrypt import *
 import Queue
 import threading
 
-DOKUH_Version = "DOKUh.de v0.91"
+DOKUH_Version = "DOKUh.de v0.92"
 
 DOKUH_siteEncoding = 'utf-8'
 
@@ -13,11 +13,11 @@ DOKUH_siteEncoding = 'utf-8'
 Sondertastenbelegung:
 
 Genre Auswahl:
-	Rot: 	Menu Up
-	Blue:	Menu Down / Select
+	KeyLeft: 	Menu Up
+	KeyOK:		Menu Down / Select
 	
 Doku Auswahl:
-	Bouquet +/-, Rot/Blau	: Seitenweise blättern in 1 Schritten Up/Down
+	Bouquet +/-, Rot/Blau	: Seitenweise blättern in 1er Schritten Up/Down
 	'1', '4', '7',
 	'3', 6', '9'			: blättern in 2er, 5er, 10er Schritten Down/Up
 
@@ -45,10 +45,10 @@ class showDOKUHGenre(Screen):
 		self["actions"] = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions"], {
 			"ok"    : self.keyOK,
 			"cancel": self.keyCancel,
-			"up": self.keyUp,
-			"down": self.keyDown,
-			"blue"	: self.keyOK,
-			"red"	: self.keyMenuUp
+			"up"	: self.keyUp,
+			"down"	: self.keyDown,
+			"left"	: self.keyMenuUp,
+			"red"	: self.keyRed
 		}, -1)
 
 		self['title'] = Label(DOKUH_Version)
@@ -58,9 +58,7 @@ class showDOKUHGenre(Screen):
 		
 		self.menuLevel = 0
 		self.menuMaxLevel = 2
-		self.mainIdx = 0
-		self.subIdx_1 = 0
-		self.subIdx_2 = 0
+		self.menuIdx = [0,0,0]
 		self.keyLocked = True
 		self.genreSelected = False
 		self.menuListe = []
@@ -76,10 +74,10 @@ class showDOKUHGenre(Screen):
 		self.chooseMenuList.l.setItemHeight(25)
 		self['genreList'] = self.chooseMenuList
 		
-		#("BELIEBTESTE DOKUS", "/"),
-		#("MEISTGESEHENE DOKUS", "/"),
 		mainGenre = [
 			("NEUESTE DOKUS", ""),
+			("BELIEBTESTE DOKUS", "/"),
+			("MEISTGESEHENE DOKUS", "/"),
 			("Geschichte", "/geschichte"),
 			("Länder", "/lander"),
 			("Menschen", "/menschen"),
@@ -261,42 +259,31 @@ class showDOKUHGenre(Screen):
 			]
 			
 		self.genreMenu = [mainGenre,
-			[
-			None,subGenre_0,subGenre_1,subGenre_2,subGenre_3,subGenre_4,subGenre_5,subGenre_6,subGenre_7,subGenre_8,subGenre_9
+			[None,None,None,subGenre_0,subGenre_1,subGenre_2,subGenre_3,subGenre_4,subGenre_5,subGenre_6,subGenre_7,subGenre_8,subGenre_9
 			],
 			[
-			[
-			None
+			[None],
+			[None],
+			[None],
+			[subGenre_0_0,None,None,None,None,None,None
 			],
-			[
-			subGenre_0_0,None,None,None,None,None,None
+			[subGenre_1_0,subGenre_1_1,subGenre_1_2,subGenre_1_3,None
 			],
-			[
-			subGenre_1_0,subGenre_1_1,subGenre_1_2,subGenre_1_3,None
+			[subGenre_2_0,subGenre_2_1,None,None,None,None,None,None,None,subGenre_2_9,subGenre_2_10,subGenre_2_11
 			],
-			[
-			subGenre_2_0,subGenre_2_1,None,None,None,None,None,None,None,subGenre_2_9,subGenre_2_10,subGenre_2_11
+			[None,subGenre_3_1,subGenre_3_2,None,None,subGenre_3_5,None,subGenre_3_7
 			],
-			[
-			None,subGenre_3_1,subGenre_3_2,None,None,subGenre_3_5,None,subGenre_3_7
+			[subGenre_4_0,None,None,None,None
 			],
-			[
-			subGenre_4_0,None,None,None,None
+			[None,None,None,subGenre_5_3,None,None,None,None,None
 			],
-			[
-			None,None,None,subGenre_5_3,None,None,None,None,None
+			[None,None,None
 			],
-			[
-			None,None,None
+			[None,None,None
 			],
-			[
-			None,None,None
+			[None,None,None
 			],
-			[
-			None,None,None
-			],
-			[
-			None,None
+			[None,None
 			]
 			]
 			]
@@ -318,31 +305,36 @@ class showDOKUHGenre(Screen):
 
 	def loadMenu(self):
 		print "DOKUh.de:"
-		self.setMenu(0, 0)
+		self.setMenu(0, True)
 		self.keyLocked = False
+
+	def keyRed(self):
+		pass
 
 	def keyUp(self):
 		self['genreList'].up()
+		self.menuIdx[self.menuLevel] = self['genreList'].getSelectedIndex()
 		self.setGenreStrTitle()
 		
 	def keyDown(self):
 		self['genreList'].down()
+		self.menuIdx[self.menuLevel] = self['genreList'].getSelectedIndex()
 		self.setGenreStrTitle()
 		
 	def keyMenuUp(self):
 		print "keyMenuUp:"
 		if self.keyLocked:
 			return
-		menuIdx = self['genreList'].getSelectedIndex()
-		self.setMenu(-1, menuIdx)
+		self.menuIdx[self.menuLevel] = self['genreList'].getSelectedIndex()
+		self.setMenu(-1)
 
 	def keyOK(self):
 		print "keyOK:"
 		if self.keyLocked:
 			return
 			
-		menuIdx = self['genreList'].getSelectedIndex()
-		self.setMenu(+1, menuIdx)
+		self.menuIdx[self.menuLevel] = self['genreList'].getSelectedIndex()
+		self.setMenu(1)
 		
 		if self.genreSelected:
 			print "Genre selected"
@@ -350,63 +342,66 @@ class showDOKUHGenre(Screen):
 			print genreurl
 			self.session.open(DOKUHFilmListeScreen, genreurl, self.genreTitle)
 
-	def setMenu(self, levelIncr, menuIdx):
-		print "setMenu: ",levelIncr,menuIdx
+	def setMenu(self, levelIncr, menuInit=False):
+		print "setMenu: ",levelIncr
 		self.genreSelected = False
 		if (self.menuLevel+levelIncr) in range(self.menuMaxLevel+1):
 			if levelIncr < 0:
 				self.genreName[self.menuLevel] = ""
+			
 			self.menuLevel += levelIncr
-			self.menuListe = []
+			
+			if levelIncr > 0 or menuInit:
+				self.menuIdx[self.menuLevel] = 0
+			
 			if self.menuLevel == 0:
+				print "level-0"
 				if self.genreMenu[0] != None:
+					self.menuListe = []
 					for (Name,Url) in self.genreMenu[0]:
 						self.menuListe.append((Name,Url))
 					self.chooseMenuList.setList(map(DOKUHmenuListentry, self.menuListe))
-					self['genreList'].moveToIndex(self.mainIdx)
+					self['genreList'].moveToIndex(self.menuIdx[0])
 				else:
 					self.genreName[self.menuLevel] = ""
 					self.genreUrl[self.menuLevel] = ""
-					self.menuLevel = 0
 					print "No menu entrys!"
 			elif self.menuLevel == 1:
-				if self.genreMenu[1][menuIdx] != None:
-					if levelIncr > 0:
-						self.mainIdx = menuIdx
-						self.subIdx_1 = 0
-					for (Name,Url) in self.genreMenu[1][self.mainIdx]:
+				print "level-1"
+				if self.genreMenu[1][self.menuIdx[0]] != None:
+					self.menuListe = []
+					for (Name,Url) in self.genreMenu[1][self.menuIdx[0]]:
 						self.menuListe.append((Name,Url))
 					self.chooseMenuList.setList(map(DOKUHmenuListentry, self.menuListe))
-					self['genreList'].moveToIndex(self.subIdx_1)
+					self['genreList'].moveToIndex(self.menuIdx[1])
 				else:
 					self.genreName[self.menuLevel] = ""
 					self.genreUrl[self.menuLevel] = ""
-					self.menuLevel -= 1
+					self.menuLevel -= levelIncr
 					self.genreSelected = True
 					print "No menu entrys!"
 			elif self.menuLevel == 2:
-				if self.genreMenu[2][self.mainIdx][menuIdx] != None:
-					if levelIncr > 0:
-						self.subIdx_1 = menuIdx
-						self.subIdx_2 = 0
-					for (Name,Url) in self.genreMenu[2][self.mainIdx][self.subIdx_1]:
+				print "level-2"
+				if self.genreMenu[2][self.menuIdx[0]][self.menuIdx[1]] != None:
+					self.menuListe = []
+					for (Name,Url) in self.genreMenu[2][self.menuIdx[0]][self.menuIdx[1]]:
 						self.menuListe.append((Name,Url))
 					self.chooseMenuList.setList(map(DOKUHmenuListentry, self.menuListe))
-					self['genreList'].moveToIndex(self.subIdx_2)
+					self['genreList'].moveToIndex(self.menuIdx[2])
 				else:
 					self.genreName[self.menuLevel] = ""
 					self.genreUrl[self.menuLevel] = ""
-					self.menuLevel -= 1
+					self.menuLevel -= levelIncr
 					self.genreSelected = True
 					print "No menu entrys!"
 		else:
-			self.subIdx_2 = menuIdx
+			print "Entry selected"
 			self.genreSelected = True
 				
 		print "menuLevel: ",self.menuLevel
-		print "mainIdx: ",self.mainIdx
-		print "subIdx_1: ",self.subIdx_1
-		print "subIdx_2: ",self.subIdx_2
+		print "mainIdx: ",self.menuIdx[0]
+		print "subIdx_1: ",self.menuIdx[1]
+		print "subIdx_2: ",self.menuIdx[2]
 		print "genreSelected: ",self.genreSelected
 		print "menuListe: ",self.menuListe
 		print "genreUrl: ",self.genreUrl
@@ -497,10 +492,10 @@ class DOKUHFilmListeScreen(Screen):
 		self.page = 0
 		self.pages = 0;
 		self.genreNEUESTE = re.match(".*?NEUESTE DOKUS",self.genreName)
-		#self.genreBELIEBTESTE = re.match(".*?BELIEBTESTE DOKUS",self.genreName)
-		#self.genreMEISTGESEHEN = re.match(".*?MEISTGESEHENE DOKUS",self.genreName)
-		self.genreBELIEBTESTE = False
-		self.genreMEISTGESEHEN = False
+		self.genreBELIEBTESTE = re.match(".*?BELIEBTESTE DOKUS",self.genreName)
+		self.genreMEISTGESEHEN = re.match(".*?MEISTGESEHENE DOKUS",self.genreName)
+		#self.genreBELIEBTESTE = False
+		#self.genreMEISTGESEHEN = False
 		self.genreSpecial = self.genreNEUESTE or self.genreBELIEBTESTE or self.genreMEISTGESEHEN
 
 		self.setGenreStrTitle()
@@ -557,10 +552,10 @@ class DOKUHFilmListeScreen(Screen):
 			m=re.search('class="name">neueste Dokus<(.*?)<!-- end .section-box -->',data,re.S)
 		elif self.genreBELIEBTESTE:
 			print "Beliebteste Dokus suche..."
-			m=re.search('class="name">beliebteste Dokus<(.*?)',data,re.S)
+			m=re.search('class="name">beliebteste Dokus<(.*?)<!-- end .section-box -->',data,re.S)
 		elif self.genreMEISTGESEHEN:
 			print "Meistgesehene Dokus suche..."
-			m=re.search('class="name">meistgesehene Dokus<(.*?)',data,re.S)
+			m=re.search('class="name">meistgesehene Dokus<(.*?)<!-- end .section-box -->',data,re.S)
 		else:
 			print "Normal search.."
 			m=re.search('<div class="loop-content.*?class="thumb">(.*)<!-- end .loop-content -->',data,re.S)
@@ -817,7 +812,7 @@ class DOKUHFilmListeScreen(Screen):
 
 def DOKUHStreamListEntry(entry):
 	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0]+entry[3])
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]+entry[3])
 		] 
 class DOKUHStreams(Screen, ConfigListScreen):
 	
