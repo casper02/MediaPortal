@@ -159,7 +159,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige mahlzeit.tv:", config.mediaportal.showMahlzeitTV))
 		self.configlist.append(getConfigListEntry("Zeige Apple Movie Trailers:", config.mediaportal.showappletrailers))
 		self.configlist.append(getConfigListEntry("Zeige DOKUh:", config.mediaportal.showDOKUh))
-		self.configlist.sort()
+		self.configlist.sort(key=lambda t : tuple(t[0].lower()))
 		self.configlist.insert(0, ("Skinauswahl:", config.mediaportal.skin))
 		self.configlist.insert(0, ("Pincode:", config.mediaportal.pincode))
 		# porn
@@ -374,9 +374,9 @@ class haupt_Screen(Screen, ConfigListScreen):
 		if config.mediaportal.showyouporn.value:
 			self.fun.append(self.hauptListEntry("YouPorn", "youporn"))
 
-		self.movies.sort()
-		self.infos.sort()
-		self.fun.sort()		
+		self.movies.sort(key=lambda t : tuple(t[0][0].lower()))
+		self.infos.sort(key=lambda t : tuple(t[0][0].lower()))
+		self.fun.sort(key=lambda t : tuple(t[0][0].lower()))		
 
 		self["movies"].setList(self.movies)
 		self["movies"].l.setItemHeight(42)
