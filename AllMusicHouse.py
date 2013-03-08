@@ -5,7 +5,7 @@ from decrypt import *
 import Queue
 import threading
 
-AMH_Version = "AllMusicHouse.de v0.91"
+AMH_Version = "AllMusicHouse.de v0.92"
 
 AMH_siteEncoding = 'utf-8'
 
@@ -53,7 +53,7 @@ class show_AMH_Genre(Screen):
 		}, -1)
 
 		self['title'] = Label(AMH_Version)
-		self['ContentTitle'] = Label("Genre Auswahl")
+		self['ContentTitle'] = Label("Musik Auswahl")
 		self['name'] = Label("")
 		self['coverArt'] = Pixmap()
 		
@@ -111,7 +111,7 @@ class show_AMH_Genre(Screen):
 				
 			self.genreUrl[self.menuLevel] = genreLink
 		self.genreTitle = "%s%s%s" % (self.genreName[0],self.genreName[1],self.genreName[2])
-		self['name'].setText("Genre: "+self.genreTitle)
+		self['name'].setText("Auswahl: "+self.genreTitle)
 
 	def loadMenu(self):
 		print "AllMusicHouse.de:"
@@ -275,7 +275,7 @@ class AMH_FilmListeScreen(Screen):
 
 		self.sortOrder = 0
 		self.baseUrl = "http://www.allmusichouse.de"
-		self.genreTitle = "Musik in Genre "
+		self.genreTitle = "Musik in Auswahl "
 		self.sortParIMDB = ""
 		self.sortParAZ = ""
 		self.sortOrderStrAZ = ""
