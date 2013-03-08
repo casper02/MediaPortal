@@ -8,7 +8,7 @@
     <convert type="ClockToText">Default</convert>
   </widget>
   <widget source="session.VideoPicture" render="Pig" position="913,136" size="328,186" zPosition="3" backgroundColor="transparent" />
-  <eLabel position="912,142" size="330,188" backgroundColor="#00ffffff" zPosition="0" name="Videoback" foregroundColor="#00ffffff" />
+  <eLabel position="912,135" size="330,188" backgroundColor="#00ffffff" zPosition="0" name="Videoback" foregroundColor="#00ffffff" />
   <ePixmap position="65,130" size="90,27" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonmenue.png" alphatest="blend" backgroundColor="#26181d20" />
   <ePixmap position="65,180" size="90,27" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonhelp.png" alphatest="blend" backgroundColor="#26181d20" />
   <ePixmap position="65,230" size="90,27" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonexit.png" alphatest="blend" backgroundColor="#26181d20" />
