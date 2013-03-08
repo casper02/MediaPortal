@@ -5,7 +5,7 @@ from decrypt import *
 import Queue
 import threading
 
-DOKUH_Version = "DOKUh.de v0.92"
+DOKUH_Version = "DOKUh.de v0.93"
 
 DOKUH_siteEncoding = 'utf-8'
 
@@ -13,8 +13,8 @@ DOKUH_siteEncoding = 'utf-8'
 Sondertastenbelegung:
 
 Genre Auswahl:
-	KeyLeft: 	Menu Up
-	KeyOK:		Menu Down / Select
+	KeyLeft: 			Menu Up
+	KeyOK, KeyRight:	Menu Down / Select
 	
 Doku Auswahl:
 	Bouquet +/-, Rot/Blau	: Seitenweise blättern in 1er Schritten Up/Down
@@ -48,6 +48,7 @@ class showDOKUHGenre(Screen):
 			"up"	: self.keyUp,
 			"down"	: self.keyDown,
 			"left"	: self.keyMenuUp,
+			"right"	: self.keyOK,
 			"red"	: self.keyRed
 		}, -1)
 
@@ -467,7 +468,7 @@ class DOKUHFilmListeScreen(Screen):
 		self.baseUrl = "http://dokuh.de"
 		self.genreTitle = "Dokus in Genre "
 		self.sortParIMDB = ""
-		self.sortParAZ = ""
+		self.sortParAZ = "?orderby=title"
 		self.sortOrderStrAZ = ""
 		self.sortOrderStrIMDB = ""
 		self.sortOrderStrGenre = ""
@@ -515,7 +516,7 @@ class DOKUHFilmListeScreen(Screen):
 	def loadPage(self):
 		print "loadPage:"
 		if not self.genreSpecial:
-			url = "%s/page/%d/" % (self.genreLink, self.page)
+			url = "%s/page/%d/%s" % (self.genreLink, self.page, self.sortParAZ)
 		else:
 			url = self.baseUrl
 			
@@ -941,15 +942,6 @@ class DOKUHStreams(Screen, ConfigListScreen):
 		self.streamListe.append(("Read error !","","","",""))			
 		self.streamMenuList.setList(map(DOKUHStreamListEntry, self.streamListe))
 			
-	def got_link(self, stream_url):
-		print "got_link:"
-		if stream_url == None:
-			message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=3)
-		else:
-			sref = eServiceReference(0x1001, 0, stream_url)
-			sref.setName("%s%s" % (self.dokuName,self['streamList'].getCurrent()[0][2]))
-			self.session.open(MoviePlayer, sref)
-
 	# code von doku.me geliehen
 	def getVideoUrl(self, url):
 		# this part is from mtube plugin
