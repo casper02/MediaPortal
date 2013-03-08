@@ -229,14 +229,51 @@ std_headers = {
 }
 	
 def decodeHtml(text):
-	text = text.replace('&auml;','ae').replace('&Auml;','Ae').replace('&ouml;','oe').replace('&ouml;','Oe').replace('&uuml;','ue')
-	text = text.replace('&Uuml;','Ue').replace('&szlig;','ss').replace('&amp;','&').replace('&quot;','\"').replace('&gt;','\'')
-	text = text.replace('&#228;','ae').replace('&#246;','oe').replace('&#252;','ue').replace('&#223;','ss').replace('&#8230;','...')
-	text = text.replace('&#8222;',',').replace('&#8220;',"'").replace('&#8216;',"'").replace('&#8217;',"'").replace('&#8211;',"-")
-	text = text.replace('&#8230;','...').replace('&#8217;',"'").replace('&#128513;',":-)").replace('&#8221;','"')
-	text = text.replace('&#038;','&').replace('&#039;','\'').replace('&acute;','\'').replace('&ndash;','-')
-	text = text.replace('\u00c4','Ae').replace('\u00e4;',"ae").replace('\u00d6',"Oe").replace('\u00f6','oe').replace('&lsquo;','\'').replace('&rsquo;','\'')
-	text = text.replace('\u00dc','Ue').replace('\u00fc',"ue").replace('\u00df',"ss").replace('&bdquo;','"').replace('&rdquo;','"').replace('&ldquo;','"')
-	text = text.replace('&#196;','Ae').replace('&#228;',"ae").replace('&#214;',"Oe").replace('&#246;',"oe").replace('&#220;',"Ue").replace('&#252;',"ue")
-	text = text.replace('<br />\n','')
+	text = text.replace('&auml;','ae')
+	text = text.replace('\u00e4','ae')
+	text = text.replace('&#228;','ae')
+
+	text = text.replace('&Auml;','Ae')
+	text = text.replace('\u00c4','Ae')
+	text = text.replace('&#196;','Ae')
+	
+	text = text.replace('&ouml;','oe')
+	text = text.replace('\u00f6','oe')
+	text = text.replace('&#246;','oe')
+	
+	text = text.replace('&ouml;','Oe')
+	text = text.replace('\u00d6','Oe')
+	text = text.replace('&#214;','Oe')
+	
+	text = text.replace('&uuml;','ue')
+	text = text.replace('\u00fc','ue')
+	text = text.replace('&#252;','ue')
+	
+	text = text.replace('&Uuml;','Ue')
+	text = text.replace('\u00dc','Ue')
+	text = text.replace('&#220;','Ue')
+	
+	text = text.replace('&szlig;','ss')
+	text = text.replace('\u00df','ss')
+	text = text.replace('&#223;','ss')
+	
+	text = text.replace('&amp;','&')
+	text = text.replace('&quot;','\"')
+	text = text.replace('&gt;','\'')
+	text = text.replace('&acute;','\'')
+	text = text.replace('&ndash;','-')
+	text = text.replace('&bdquo;','"')
+	text = text.replace('&rdquo;','"')
+	text = text.replace('&ldquo;','"')
+	text = text.replace('&lsquo;','\'')
+	text = text.replace('&rsquo;','\'')
+	text = text.replace('&#038;','&')
+	text = text.replace('&#039;','\'')
+	text = text.replace('&#8211;',"-")
+	text = text.replace('&#8216;',"'")
+	text = text.replace('&#8217;',"'")
+	text = text.replace('&#8220;',"'")
+	text = text.replace('&#8221;','"')
+	text = text.replace('&#8222;',',')
+	text = text.replace('&#8230;','...')
 	return text	
