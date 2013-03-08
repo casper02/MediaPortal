@@ -5,7 +5,7 @@ from decrypt import *
 import Queue
 import threading
 
-AMH_Version = "AllMusicHouse.de v0.90"
+AMH_Version = "AllMusicHouse.de v0.91"
 
 AMH_siteEncoding = 'utf-8'
 
@@ -756,12 +756,22 @@ class AMH_Streams(Screen, ConfigListScreen):
 	def getVideoUrl(self, url):
 		# this part is from mtube plugin
 		print "got url:", url
+		"""
 		VIDEO_FMT_PRIORITY_MAP = {
 			'38' : 1, #MP4 Original (HD)
 			'37' : 2, #MP4 1080p (HD)
 			'22' : 3, #MP4 720p (HD)
 			'18' : 4, #MP4 360p
 			'35' : 5, #FLV 480p
+			'34' : 6, #FLV 360p
+		}
+		"""
+		VIDEO_FMT_PRIORITY_MAP = {
+			'38' : 3, #MP4 Original (HD)
+			'37' : 4, #MP4 1080p (HD)
+			'22' : 2, #MP4 720p (HD)
+			'18' : 5, #MP4 360p
+			'35' : 1, #FLV 480p
 			'34' : 6, #FLV 360p
 		}
 		video_url = None
