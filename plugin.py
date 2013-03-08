@@ -41,6 +41,7 @@ from UltimateStreams import *
 from mahlzeitTV import *
 from appletrailers import *
 from DOKUh import *
+from DokuHouse import *
 # porn
 from amateurporn import *
 from eporner import *
@@ -54,7 +55,7 @@ from youporn import *
 
 config.mediaportal = ConfigSubsection()
 config.mediaportal.pincode = ConfigPIN(default = 0000)
-config.mediaportal.skin = ConfigSelection(default = "original", choices = [("tec", _("tec")),("liquidblue", _("liquidblue")), ("original", _("original"))])
+config.mediaportal.skin = ConfigSelection(default = "original", choices = [("liquidblue", _("liquidblue")), ("original", _("original"))])
 config.mediaportal.showDoku = ConfigYesNo(default = True)
 config.mediaportal.showRofl = ConfigYesNo(default = True)
 config.mediaportal.showFail = ConfigYesNo(default = True)
@@ -93,6 +94,7 @@ config.mediaportal.show4Players = ConfigYesNo(default = True)
 config.mediaportal.showMahlzeitTV = ConfigYesNo(default = True)
 config.mediaportal.showappletrailers = ConfigYesNo(default = True)
 config.mediaportal.showDOKUh = ConfigYesNo(default = True)
+config.mediaportal.showDokuHouse = ConfigYesNo(default = True)
 # porn
 config.mediaportal.show4tube = ConfigYesNo(default = False)
 config.mediaportal.showamateurporn = ConfigYesNo(default = False)
@@ -159,7 +161,8 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige mahlzeit.tv:", config.mediaportal.showMahlzeitTV))
 		self.configlist.append(getConfigListEntry("Zeige Apple Movie Trailers:", config.mediaportal.showappletrailers))
 		self.configlist.append(getConfigListEntry("Zeige DOKUh:", config.mediaportal.showDOKUh))
-		self.configlist.sort(key=lambda t : tuple(t[0].lower()))
+		self.configlist.append(getConfigListEntry("Zeige DokuHouse:", config.mediaportal.showDokuHouse))
+		self.configlist.sort()
 		self.configlist.insert(0, ("Skinauswahl:", config.mediaportal.skin))
 		self.configlist.insert(0, ("Pincode:", config.mediaportal.pincode))
 		# porn
@@ -337,6 +340,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.infos.append(self.hauptListEntry("AppleTrailer", "appletrailers"))
 		if config.mediaportal.showDOKUh.value:
 			self.infos.append(self.hauptListEntry("DOKUh", "dokuh"))
+		if config.mediaportal.showDokuHouse.value:
+			self.infos.append(self.hauptListEntry("DokuHouse", "dokuhouse"))
 		# fun & TV
 		if config.mediaportal.showRofl.value:
 			self.fun.append(self.hauptListEntry("Rofl.to", "rofl"))
@@ -374,9 +379,9 @@ class haupt_Screen(Screen, ConfigListScreen):
 		if config.mediaportal.showyouporn.value:
 			self.fun.append(self.hauptListEntry("YouPorn", "youporn"))
 
-		self.movies.sort(key=lambda t : tuple(t[0][0].lower()))
-		self.infos.sort(key=lambda t : tuple(t[0][0].lower()))
-		self.fun.sort(key=lambda t : tuple(t[0][0].lower()))		
+		self.movies.sort()
+		self.infos.sort()
+		self.fun.sort()		
 
 		self["movies"].setList(self.movies)
 		self["movies"].l.setItemHeight(42)
@@ -568,6 +573,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(appletrailersGenreScreen)
 		elif auswahl == "DOKUh":
 			self.session.open(showDOKUHGenre)
+		elif auswahl == "DokuHouse":
+			self.session.open(show_DH_Genre)
 		# porn
 		elif auswahl == "4Tube":
 			self.session.open(fourtubeGenreScreen)
