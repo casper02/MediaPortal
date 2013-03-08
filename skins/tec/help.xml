@@ -9,19 +9,19 @@
   </widget>
   <widget source="session.VideoPicture" render="Pig" position="913,136" size="328,186" zPosition="3" backgroundColor="transparent" />
   <eLabel position="912,142" size="330,188" backgroundColor="#00ffffff" zPosition="0" name="Videoback" foregroundColor="#00ffffff" />
-  <ePixmap position="65,150" size="90,27" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonmenue.png" alphatest="blend" backgroundColor="#26181d20" />
-  <ePixmap position="65,200" size="90,27" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonhelp.png" alphatest="blend" backgroundColor="#26181d20" />
-  <ePixmap position="65,250" size="90,27" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonexit.png" alphatest="blend" backgroundColor="#26181d20" />
-  <ePixmap position="65,300" size="90,27" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonbqp.png" alphatest="blend" backgroundColor="#26181d20" />
-  <ePixmap position="65,350" size="90,27" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonbqm.png" alphatest="blend" backgroundColor="#26181d20" />
-  <ePixmap position="65,400" size="90,27" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttongreen.png" alphatest="blend" backgroundColor="#26181d20" />
+  <ePixmap position="65,130" size="90,27" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonmenue.png" alphatest="blend" backgroundColor="#26181d20" />
+  <ePixmap position="65,180" size="90,27" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonhelp.png" alphatest="blend" backgroundColor="#26181d20" />
+  <ePixmap position="65,230" size="90,27" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonexit.png" alphatest="blend" backgroundColor="#26181d20" />
+  <ePixmap position="65,280" size="90,27" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonbqp.png" alphatest="blend" backgroundColor="#26181d20" />
+  <ePixmap position="65,330" size="90,27" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonbqm.png" alphatest="blend" backgroundColor="#26181d20" />
+  <ePixmap position="65,380" size="90,27" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttongreen.png" alphatest="blend" backgroundColor="#26181d20" />
   <!-- select screen -->
    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/setup.png" position="989,424" zPosition="1" size="176,200" alphatest="on" />
-  <eLabel text="Setup" position="200,150" size="200,27" font="Regular;24" halign="left" foregroundColor="#00ffffff" transparent="1" backgroundColor="#26181d20" />
-  <eLabel text="FAQ" position="200,200" size="100,27" font="Regular;24" halign="left" foregroundColor="#00ffffff" transparent="1" backgroundColor="#26181d20" />
-  <eLabel text="Programm schliessen" position="200,250" size="300,27" font="Regular;24" halign="left" foregroundColor="#00ffffff" transparent="1" backgroundColor="#26181d20" />
-  <eLabel text="Seite weiter" position="200,300" size="300,27" font="Regular;24" halign="left" foregroundColor="#00ffffff" transparent="1" backgroundColor="#26181d20" />
-  <eLabel text="Seite zurück" position="200,350" size="300,27" font="Regular;24" halign="left" foregroundColor="#00ffffff" transparent="1" backgroundColor="#26181d20" />
-  <eLabel text="Seite auswählen" position="200,400" size="300,27" font="Regular;24" halign="left" foregroundColor="#00ffffff" transparent="1" backgroundColor="#26181d20" />
-  <ePixmap position="65,450" size="800,250" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/help.png" alphatest="blend" backgroundColor="#26181d20" />
+  <eLabel text="Setup" position="200,130" size="200,27" font="Regular;24" halign="left" foregroundColor="#00ffffff" transparent="1" backgroundColor="#26181d20" />
+  <eLabel text="FAQ" position="200,180" size="100,27" font="Regular;24" halign="left" foregroundColor="#00ffffff" transparent="1" backgroundColor="#26181d20" />
+  <eLabel text="Programm schliessen" position="200,230" size="300,27" font="Regular;24" halign="left" foregroundColor="#00ffffff" transparent="1" backgroundColor="#26181d20" />
+  <eLabel text="Seite weiter" position="200,280" size="300,27" font="Regular;24" halign="left" foregroundColor="#00ffffff" transparent="1" backgroundColor="#26181d20" />
+  <eLabel text="Seite zurück" position="200,330" size="300,27" font="Regular;24" halign="left" foregroundColor="#00ffffff" transparent="1" backgroundColor="#26181d20" />
+  <eLabel text="Seite auswählen" position="200,380" size="300,27" font="Regular;24" halign="left" foregroundColor="#00ffffff" transparent="1" backgroundColor="#26181d20" />
+  <eLabel text="Mit der MENÜ Taste könnt ihr im Hauptmenü einstellen welche Plugins angezeigt werden. Default PINCODE  '0000'. Eine Seite blättern mit den beiden 'Bouquet Tasten' ist immer dann möglich wenn 'Page 1' in einem Plugin auftaucht.&#xD;&#xA;Es gibt immer eine goldene Regel bei Streams.&#xD;&#xA;1. Sollte der Stream starten aber das Bild bleibt dunkel, dann bitte ein paar Sekunden länger abwarten&#xD;&#xA;    oder den Stream am PC überprüfen ob dieser dort läuft.&#xD;&#xA;2. Wenn der Stream zwischen durch stockt, merk dir den Zeitpunkt und stoppe den Stream, starte ihn erneut &#xD;&#xA;    und spule zum Zeitpunkt vor (mit der seekbar funktioniert das bestens).&#xD;&#xA;3. Startet der Mediaplay gar nicht, dann liegt es wohl am Plugin.&#xD;&#xA;4. Abends sind die Streamserver immer überlastet und man kann mit Bildhängern rechnen!&#xD;&#xA;5. Stockt ein Stream, ist vermutlich der Streamhoster überlastet, der Fehler liegt nicht beim Plugin.&#xD;&#xA;6. Wenn die Inhalte nicht abgespielt werden und der Movieplay 'Wiedergabe beenden' anzeigt, &#xD;&#xA;     bitte 'Nein, aber von Anfang an neu beginnen' auswählen.&#xD;&#xA;&#xD;&#xA;MediaPortal by einfall                                                                                                        http://www.vuplus-support.org" position="65,420" size="850,270" backgroundColor="#26181d20" font="Regular; 16" foregroundColor="#00ffffff" transparent="1" />
 </screen>
