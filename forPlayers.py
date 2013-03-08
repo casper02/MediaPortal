@@ -171,9 +171,6 @@ class forPlayersVideoScreen(Screen):
 					del self.picload
 
 	def loadPage(self):
-		print self.page
-		print self.selectionLink
-		print len(self.videosQueue)
 		if self.selectionLink == '1':
 			self.videosListe = []
 			self.queuedVideoList = []
