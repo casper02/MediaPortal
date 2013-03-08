@@ -23,7 +23,7 @@ from urllib import quote
 from urllib2 import urlopen, Request, HTTPError, URLError
 
 API_URL = 'http://app.4players.de/services/app/data.php'
-USER_AGENT = 'XBMC4PlayersApi'
+USER_AGENT = 'VuBox4PlayersApi'
 
 SYSTEMS = (
     '360', 'PC-CDROM', 'iPhone', 'iPad', 'Android', '3DS', 'NDS', 'Wii_U',
@@ -36,7 +36,7 @@ class NetworkError(Exception):
     pass
 
 
-class XBMC4PlayersApi(object):
+class VuBox4PlayersApi(object):
 
     LIMIT = 50
 
@@ -204,4 +204,4 @@ class XBMC4PlayersApi(object):
 
 
 def log(msg):
-    print '[XBMC4PlayersApi]: %s' % msg
+    print '[VuBox4PlayersApi]: %s' % msg

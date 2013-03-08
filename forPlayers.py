@@ -2,9 +2,9 @@
 from imports import *
 from decrypt import *
 
-from resources.lib.api import XBMC4PlayersApi, NetworkError, SYSTEMS
+from resources.lib.api import VuBox4PlayersApi, NetworkError, SYSTEMS
 
-api = XBMC4PlayersApi()
+api = VuBox4PlayersApi()
 
 def forPlayersGenreListEntry(entry):
 	return [entry,
