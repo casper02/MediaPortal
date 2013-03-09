@@ -791,6 +791,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		### porn
 		if config.mediaportal.show4tube.value:
 			self.plugin_liste.append(("4Tube", "4tube"))
+		if config.mediaportal.showahme.value:
+			self.plugin_liste.append(("Ah-Me", "ahme"))
 		if config.mediaportal.showamateurporn.value:
 			self.plugin_liste.append(("AmateurPorn", "amateurporn"))
 		if config.mediaportal.showeporner.value:
@@ -1005,6 +1007,11 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 				self.session.openWithCallback(self.pin4tube, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
 			else:
 				self.session.open(fourtubeGenreScreen)
+		elif auswahl == "Ah-Me":
+			if config.mediaportal.pornpin.value:
+				self.session.openWithCallback(self.pinahme, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
+			else:
+				self.session.open(pornrabbitGenreScreen)
 		elif auswahl == "AmateurPorn":
 			if config.mediaportal.pornpin.value:
 				self.session.openWithCallback(self.pinamateurporn, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
@@ -1054,6 +1061,10 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 	def pin4tube(self, pincode):
 		if pincode:
 			self.session.open(fourtubeGenreScreen)
+
+	def pinahme(self, pincode):
+		if pincode:
+			self.session.open(ahmeGenreScreen)
 
 	def pinamateurporn(self, pincode):
 		if pincode:
