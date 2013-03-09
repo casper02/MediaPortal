@@ -188,7 +188,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige YouPorn:", config.mediaportal.showyouporn))
 		self["config"].setList(self.configlist)
 
-		self['title'] = Label("MediaPortal - Setup - (Version 3.5.3)")
+		self['title'] = Label("MediaPortal - Setup - (Version 4.0.0)")
 		self['name'] = Label("Setup")
 		self['coverArt'] = Pixmap()
 		
