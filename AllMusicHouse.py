@@ -13,8 +13,8 @@ AMH_siteEncoding = 'utf-8'
 Sondertastenbelegung:
 
 Genre Auswahl:
-	KeyLeft: 			Menu Up
-	KeyOK,KeyRight:		Menu Down / Select
+	KeyLeft: 	Menu Up
+	KeyOK:		Menu Down / Select
 	
 Doku Auswahl:
 	Bouquet +/-, Rot/Blau	: Seitenweise blättern in 1er Schritten Up/Down
@@ -48,7 +48,6 @@ class show_AMH_Genre(Screen):
 			"up"	: self.keyUp,
 			"down"	: self.keyDown,
 			"left"	: self.keyMenuUp,
-			"right"	: self.keyOK,
 			"red"	: self.keyRed
 		}, -1)
 
