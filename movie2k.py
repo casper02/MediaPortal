@@ -288,7 +288,7 @@ class m2kKinoAlleFilmeListeScreen(Screen):
 			xxxGenreLink = self['filmList'].getCurrent()[0][1]
 			self.session.open(m2kXXXUpdateFilmeListeScreen, xxxGenreLink, 'X')
 
-    	def keyTMDbInfo(self):
+	def keyTMDbInfo(self):
 		if TMDbPresent:
 			title = self['filmList'].getCurrent()[0][0]
 			self.session.open(TMDbMain, title)
@@ -433,7 +433,7 @@ class m2kKinoFilmeListeScreen(Screen):
 		streamLink = self['filmList'].getCurrent()[0][1]
 		self.session.open(m2kStreamListeScreen, streamLink, streamName, "movie")
 
-    	def keyTMDbInfo(self):
+	def keyTMDbInfo(self):
 		if TMDbPresent:
 			title = self['filmList'].getCurrent()[0][0]
 			self.session.open(TMDbMain, title)
@@ -559,7 +559,7 @@ class m2kVideoFilmeListeScreen(Screen):
 		streamLink = self['filmList'].getCurrent()[0][1]
 		self.session.open(m2kStreamListeScreen, streamLink, streamName, "movie")
 
-    	def keyTMDbInfo(self):
+	def keyTMDbInfo(self):
 		if TMDbPresent:
 			title = self['filmList'].getCurrent()[0][0]
 			self.session.open(TMDbMain, title)
@@ -687,7 +687,7 @@ class m2kupdateFilmeListeScreen(Screen):
 		streamLink = self['filmList'].getCurrent()[0][1]
 		self.session.open(m2kStreamListeScreen, streamLink, streamName, "movie")
 
-    	def keyTMDbInfo(self):
+	def keyTMDbInfo(self):
 		if TMDbPresent:
 			title = self['filmList'].getCurrent()[0][0]
 			self.session.open(TMDbMain, title)
