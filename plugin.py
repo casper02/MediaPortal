@@ -834,7 +834,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		self.skin_dump += "<widget name=\"page\" position=\"1100,680\" size=\"100,40\" foregroundColor=\"#00ffffff\" backgroundColor=\"#26181d20\" transparent=\"1\" font=\"Regular;28\" valign=\"top\" halign=\"center\" />"
 		self.skin_dump += "<ePixmap position=\"0,0\" size=\"1280,720\" zPosition=\"-1\" pixmap=\"/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/mpback.png\" />"
 		self.skin_dump += "<widget source=\"session.VideoPicture\" render=\"Pig\" position=\"913,15\" size=\"320,180\" zPosition=\"3\" backgroundColor=\"transparent\" />"
-		self.skin_dump += "<widget name=\"frame\" position=\"20,210\" size=\"150,80\" pixmap=\"/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons_wall/selektor_blau_8bit.png\" zPosition=\"2\" transparent=\"0\" alphatest=\"blend\" />"
+		self.skin_dump += "<widget name=\"frame\" position=\"20,210\" size=\"150,80\" pixmap=\"/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons_wall/selektor_blau.png\" zPosition=\"2\" transparent=\"0\" alphatest=\"blend\" />"
 		self.skin_dump += skincontent
 		self.skin_dump += "</screen>"
 		
