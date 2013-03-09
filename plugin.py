@@ -58,6 +58,7 @@ from youporn import *
 config.mediaportal = ConfigSubsection()
 config.mediaportal.pincode = ConfigPIN(default = 0000)
 config.mediaportal.skin = ConfigSelection(default = "original", choices = [("tec", _("tec")),("liquidblue", _("liquidblue")), ("original", _("original"))])
+config.mediaportal.ansicht = ConfigSelection(default = "liste", choices = [("liste", _("liste")),("wall", _("wall"))])
 config.mediaportal.pornpin = ConfigYesNo(default = True)
 config.mediaportal.showDoku = ConfigYesNo(default = True)
 config.mediaportal.showRofl = ConfigYesNo(default = True)
@@ -170,6 +171,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige AllMusicHouse:", config.mediaportal.showAllMusicHouse))
 		self.configlist.sort(key=lambda t : tuple(t[0].lower()))
 		self.configlist.insert(0, ("Skinauswahl:", config.mediaportal.skin))
+		self.configlist.insert(0, ("HauptScreen-Ansicht", config.mediaportal.ansicht))
 		self.configlist.insert(0, ("XXX-Pincodeabfrage:", config.mediaportal.pornpin))
 		self.configlist.insert(0, ("Pincode:", config.mediaportal.pincode))
 		# porn
@@ -260,7 +262,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			"displayHelp" : self.keyHelp
 		}, -1)
 
-		self['title'] = Label("MediaPortal v3.5.3")
+		self['title'] = Label("MediaPortal v4.0.0")
 		
 		self['name'] = Label("Plugin Auswahl")
 		
@@ -423,7 +425,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 		
 	def pinok(self, pincode):
 		if pincode:
-			self.session.openWithCallback(self.layoutFinished, hauptScreenSetup)
+			self.session.openWithCallback(self.restart, hauptScreenSetup)
 
 	def keyUp(self):
 		exist = self[self.currenlist].getCurrent()
@@ -682,10 +684,453 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(youpornGenreScreen)
 			
 	def keyCancel(self):
-		self.close()
+		self.close(self.session, True)
 
+	def restart(self):
+		self.close(self.session, False)
+
+class haupt_Screen_Wall(Screen, ConfigListScreen):
+	def __init__(self, session):
+		self.session = session
+		self.plugin_liste = []
+		if config.mediaportal.showMyvideo.value:
+			self.plugin_liste.append(("MyVideo", "myvideo"))
+		if config.mediaportal.showKinderKino.value:
+			self.plugin_liste.append(("KinderKino", "kinderkino"))
+		if config.mediaportal.showKinoKiste.value:
+			self.plugin_liste.append(("KinoKiste", "kinokiste"))
+		if config.mediaportal.showBs.value:
+			self.plugin_liste.append(("Burning-Series", "burningseries"))
+		if config.mediaportal.show1channel.value:
+			self.plugin_liste.append(("1channel", "1channel"))
+		if config.mediaportal.showNetzKino.value:
+			self.plugin_liste.append(("NetzKino", "netzkino"))
+		if config.mediaportal.showBaskino.value:
+			self.plugin_liste.append(("Baskino", "baskino"))
+		if config.mediaportal.showKinox.value:
+			self.plugin_liste.append(("Kinox", "kinox"))
+		if config.mediaportal.showStreamOase.value:
+			self.plugin_liste.append(("StreamOase", "streamoase"))
+		if config.mediaportal.showtivi.value:
+			self.plugin_liste.append(("Tivi", "tivi"))
+		if config.mediaportal.showMEHD.value:
+			self.plugin_liste.append(("My-Entertainment", "mehd"))
+		if config.mediaportal.showUstreams.value:
+			self.plugin_liste.append(("UltimateStreams", "ustreams"))
+		if config.mediaportal.showM2k.value:
+			self.plugin_liste.append(("Movie2k", "movie2k"))
+		if config.mediaportal.showM2kPorn.value:
+			self.showM2KPorn = True
+		else:
+			self.showM2KPorn = False
+		if config.mediaportal.showIStream.value:
+			self.plugin_liste.append(("IStream", "istream"))
+		if config.mediaportal.showDoku.value:
+			self.plugin_liste.append(("Doku.me", "doku"))		
+		if config.mediaportal.showSportBild.value:
+			self.plugin_liste.append(("SportBild", "sportbild"))
+		if config.mediaportal.showAutoBild.value:
+			self.plugin_liste.append(("AutoBild", "autobild"))
+		if config.mediaportal.showLaola1.value:
+			self.plugin_liste.append(("Laola1 Live", "laola1"))
+		if config.mediaportal.showFocus.value:
+			self.plugin_liste.append(("Focus", "focus"))
+		if config.mediaportal.showCczwei.value:
+			self.plugin_liste.append(("CCZwei", "cczwei"))
+		if config.mediaportal.showTrailer.value:
+			self.plugin_liste.append(("Filmtrailer", "trailer"))
+		if config.mediaportal.showVutec.value:
+			self.plugin_liste.append(("Vutechtalk", "vutechtalk"))
+		if config.mediaportal.showDsc.value:
+			self.plugin_liste.append(("Dreamscreencast", "dreamscreencast"))
+		if config.mediaportal.showKoase.value:
+			self.plugin_liste.append(("Konzert Oase", "koase"))
+		if config.mediaportal.showNhl.value:
+			self.plugin_liste.append(("NHL", "nhl"))
+		if config.mediaportal.show4Players.value:
+			self.plugin_liste.append(("4Players", "4players"))
+		if config.mediaportal.showMahlzeitTV.value:
+			self.plugin_liste.append(("mahlzeit.tv", "mahlzeit"))
+		if config.mediaportal.showappletrailers.value:
+			self.plugin_liste.append(("AppleTrailer", "appletrailers"))
+		if config.mediaportal.showDOKUh.value:
+			self.plugin_liste.append(("DOKUh", "dokuh"))
+		if config.mediaportal.showDokuHouse.value:
+			self.plugin_liste.append(("DokuHouse", "dokuhouse"))
+		if config.mediaportal.showAllMusicHouse.value:
+			self.plugin_liste.append(("AllMusicHouse", "allmusichouse"))
+		if config.mediaportal.showRofl.value:
+			self.plugin_liste.append(("Rofl.to", "rofl"))
+		if config.mediaportal.showFail.value:
+			self.plugin_liste.append(("Fail.to", "fail"))
+		if config.mediaportal.showFilmOn.value:
+			self.plugin_liste.append(("FilmOn", "filmon"))
+		if config.mediaportal.showTvkino.value:
+			self.plugin_liste.append(("TV-Kino", "tvkino"))
+		if config.mediaportal.showRadio.value:
+			self.plugin_liste.append(("Radio.de", "radiode"))
+		if config.mediaportal.showSpobox.value:
+			self.plugin_liste.append(("Spobox", "spobox"))
+		if config.mediaportal.showSongsto.value:
+			self.plugin_liste.append(("Songs.to", "songsto"))
+			
+		### porn
+		if config.mediaportal.show4tube.value:
+			self.plugin_liste.append(("4Tube", "4tube"))
+		if config.mediaportal.showamateurporn.value:
+			self.plugin_liste.append(("AmateurPorn", "amateurporn"))
+		if config.mediaportal.showeporner.value:
+			self.plugin_liste.append(("Eporner", "eporner"))
+		if config.mediaportal.showhdporn.value:
+			self.plugin_liste.append(("HDPorn", "hdporn"))
+		if config.mediaportal.showpornerbros.value:
+			self.plugin_liste.append(("PornerBros", "pornerbros"))
+		if config.mediaportal.showPornhub.value:
+			self.plugin_liste.append(("Pornhub", "pornhub"))
+		if config.mediaportal.showpornrabbit.value:
+			self.plugin_liste.append(("PornRabbit", "pornrabbit"))
+		if config.mediaportal.showredtube.value:
+			self.plugin_liste.append(("RedTube", "redtube"))
+		if config.mediaportal.showXhamster.value:
+			self.plugin_liste.append(("xHamster", "xhamster"))
+		if config.mediaportal.showyouporn.value:
+			self.plugin_liste.append(("YouPorn", "youporn"))
+			
+		skincontent = ""
+		
+		posx = 20
+		posy = 210
+		for x in range(1,len(self.plugin_liste)+1):
+			skincontent += "<widget name=\"zeile" + str(x) + "\" position=\"" + str(posx) + "," + str(posy) + "\" size=\"150,80\" zPosition=\"1\" transparent=\"0\" alphatest=\"blend\" />"
+			posx += 155
+			#posx += 175
+			if x == 8 or x == 16 or x == 24 or x == 32 or x == 40:
+				posx = 20
+				posy += 85
+
+		print skincontent
+				
+		self.skin_dump = ""
+		self.skin_dump += "<screen name=\"MediaPortal\" position=\"0,0\" size=\"1280,720\" flags=\"wfNoBorder\">"
+		self.skin_dump += "<widget name=\"name\" position=\"20,150\" size=\"900,50\" foregroundColor=\"#00ffffff\" backgroundColor=\"#26181d20\" transparent=\"1\" font=\"Regular;28\" valign=\"top\" halign=\"center\" />"
+		self.skin_dump += "<ePixmap position=\"0,0\" size=\"1280,720\" zPosition=\"-1\" pixmap=\"/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/mpback.png\" />"
+		self.skin_dump += "<widget source=\"session.VideoPicture\" render=\"Pig\" position=\"913,15\" size=\"320,180\" zPosition=\"3\" backgroundColor=\"transparent\" />"
+		self.skin_dump += "<widget name=\"frame\" position=\"20,210\" size=\"150,80\" pixmap=\"/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons_wall/selektor_blau_24bit.png\" zPosition=\"2\" transparent=\"0\" alphatest=\"blend\" />"
+		self.skin_dump += skincontent
+		self.skin_dump += "</screen>"
+		
+		self.skin = self.skin_dump
+		
+		Screen.__init__(self, session)
+		
+		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions"], {
+			"ok"    : self.keyOK,
+			"up"    : self.keyUp,
+			"down"  : self.keyDown,
+			"cancel": self.keyCancel,
+			"left"  : self.keyLeft,
+			"right" : self.keyRight,
+			"menu" : self.keySetup
+		}, -1)
+		
+		self['name'] = Label("Plugin Auswahl")
+		self["frame"] = MovingPixmap()
+		for x in range(1,len(self.plugin_liste)+1):
+			self["zeile"+str(x)] = Pixmap()
+			self["zeile"+str(x)].show()
+		
+		self.selektor_index = 1
+		self.select_list = 0
+		self.onFirstExecBegin.append(self._onFirstExecBegin)
+		
+	def _onFirstExecBegin(self):
+		# load plugin icons
+		for x in range(1,len(self.plugin_liste)+1):
+			postername = self.plugin_liste[int(x)-1][1]
+			poster_path = "%s/%s.png" % ("/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons_wall", postername)
+			#poster_path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons_wall"
+			if not fileExists(poster_path):
+				poster_path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons_wall/no_icon.png"
+
+			self["zeile"+str(x)].instance.setPixmap(None)
+			self["zeile"+str(x)].hide()
+			pic = LoadPixmap(cached=True, path=poster_path)
+			if pic != None:
+				self["zeile"+str(x)].instance.setPixmap(pic)
+				if x <= 40:
+					self["zeile"+str(x)].show()
+					
+		# erstelle mainlist
+		self.widget_list()
+				
+	def widget_list(self):
+		count = 1
+		counting = 1
+		self.mainlist = []
+		list_dummy = []
+		self.plugin_counting = len(self.plugin_liste)
+		
+		for x in range(1,int(self.plugin_counting)+1):
+			if count == 40:
+				count += 1
+				counting += 1
+				list_dummy.append(x)
+				self.mainlist.append(list_dummy)
+				count = 1
+				list_dummy = []
+			else:
+				count += 1
+				counting += 1
+				list_dummy.append(x)
+				if int(counting) == int(self.plugin_counting)+1:
+					self.mainlist.append(list_dummy)
+					
+		print self.mainlist
+					
+	def move_selector(self):
+		plugin_name = self.plugin_liste[int(self.selektor_index)-1][0]
+		self['name'].setText(plugin_name)
+		position = self["zeile"+str(self.selektor_index)].instance.position()
+		self["frame"].moveTo(position.x(), position.y(), 1)
+		self["frame"].show()
+		self["frame"].startMoving()
+		
+	def keyOK(self):
+		auswahl = self.plugin_liste[int(self.selektor_index)-1][0]
+		print auswahl
+		if auswahl == "Doku.me":
+			self.session.open(dokuScreen)
+		elif auswahl == "Rofl.to":
+			self.session.open(roflScreen)
+		elif auswahl == "Fail.to":
+			self.session.open(failScreen)
+		elif auswahl == "KinderKino":
+			self.session.open(kinderKinoScreen)
+		elif auswahl == "MyVideo":
+			self.session.open(myVideoGenreScreen)
+		elif auswahl == "SportBild":
+			self.session.open(sportBildScreen)
+		elif auswahl == "Laola1 Live":
+			self.session.open(laolaScreen)
+		#elif auswahl == "Streamjunkies":
+		#	self.session.open(streamGenreScreen)
+		elif auswahl == "KinoKiste":
+			self.session.open(kinokisteGenreScreen)
+		elif auswahl == "Burning-Series":
+			self.session.open(bsMain)
+		elif auswahl == "1channel":
+			self.session.open(chMain)
+		elif auswahl == "Focus":
+			self.session.open(focusGenre)
+		#elif auswahl == "YourfreeTv":
+		#	self.session.open(yourFreeTv)
+		elif auswahl == "FilmOn":
+			self.session.open(filmON)
+		elif auswahl == "NetzKino":
+			self.session.open(netzKinoGenreScreen)
+		elif auswahl == "Spobox":
+			self.session.open(spoboxGenreScreen)
+		elif auswahl == "Radio.de":
+			self.session.open(Radiode)
+		elif auswahl == "CCZwei":
+			self.session.open(cczwei)
+		elif auswahl == "Filmtrailer":
+			self.session.open(trailer)
+		elif auswahl == "Baskino":
+			self.session.open(baskino)
+		elif auswahl == "Kinox":
+			self.session.open(kxMain) 
+		elif auswahl == "Vutechtalk":
+			self.session.open(vutechtalk)
+		elif auswahl == "Dreamscreencast":
+			self.session.open(dreamscreencast)
+		elif auswahl == "TV-Kino":
+			self.session.open(tvkino)
+		elif auswahl == "Konzert Oase":
+			self.session.open(oaseGenreScreen)
+		elif auswahl == "StreamOase":
+			self.session.open(oasetvGenreScreen)
+		elif auswahl == "AutoBild":
+			self.session.open(autoBildGenreScreen)
+		elif auswahl == "NHL":
+			self.session.open(nhlGenreScreen)
+		elif auswahl == "4Players":
+			self.session.open(forPlayersGenreScreen)
+		elif auswahl == "Tivi":
+			self.session.open(tiviGenreListeScreen)
+		elif auswahl == "My-Entertainment":
+			self.session.open(showMEHDGenre)
+		elif auswahl == "Songs.to":
+			self.session.open(showSongstoGenre)
+		elif auswahl == "Movie2k":
+			self.session.open(m2kGenreScreen, self.showM2KPorn)
+		elif auswahl == "IStream":
+			self.session.open(showIStreamGenre)
+		elif auswahl == "UltimateStreams":
+			self.session.open(showUSGenre)
+		elif auswahl == "mahlzeit.tv":
+			self.session.open(mahlzeitMainScreen)
+		elif auswahl == "AppleTrailer":
+			self.session.open(appletrailersGenreScreen)
+		elif auswahl == "DOKUh":
+			self.session.open(showDOKUHGenre)
+		elif auswahl == "DokuHouse":
+			self.session.open(show_DH_Genre)
+		elif auswahl == "AllMusicHouse":
+			self.session.open(show_AMH_Genre)
+		# porn
+		elif auswahl == "4Tube":
+			if config.mediaportal.pornpin.value:
+				self.session.openWithCallback(self.pin4tube, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
+			else:
+				self.session.open(fourtubeGenreScreen)
+		elif auswahl == "AmateurPorn":
+			if config.mediaportal.pornpin.value:
+				self.session.openWithCallback(self.pinamateurporn, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
+			else:
+				self.session.open(amateurpornGenreScreen)
+		elif auswahl == "Eporner":
+			if config.mediaportal.pornpin.value:
+				self.session.openWithCallback(self.pineporner, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
+			else:
+				self.session.open(epornerGenreScreen)
+		elif auswahl == "HDPorn":
+			if config.mediaportal.pornpin.value:
+				self.session.openWithCallback(self.pinhdporn, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
+			else:
+				self.session.open(hdpornGenreScreen)
+		elif auswahl == "PornerBros":
+			if config.mediaportal.pornpin.value:
+				self.session.openWithCallback(self.pinpornerbros, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
+			else:
+				self.session.open(pornerbrosGenreScreen)
+		elif auswahl == "Pornhub":
+			if config.mediaportal.pornpin.value:
+				self.session.openWithCallback(self.pinpornhub, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
+			else:
+				self.session.open(pornhubGenreScreen)
+		elif auswahl == "PornRabbit":
+			if config.mediaportal.pornpin.value:
+				self.session.openWithCallback(self.pinpornrabbit, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
+			else:
+				self.session.open(pornrabbitGenreScreen)
+		elif auswahl == "RedTube":
+			if config.mediaportal.pornpin.value:
+				self.session.openWithCallback(self.pinredtube, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
+			else:
+				self.session.open(redtubeGenreScreen)
+		elif auswahl == "xHamster":
+			if config.mediaportal.pornpin.value:
+				self.session.openWithCallback(self.pinxhamster, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
+			else:
+				self.session.open(xhamsterGenreScreen)
+		elif auswahl == "YouPorn":
+			if config.mediaportal.pornpin.value:
+				self.session.openWithCallback(self.pinyouporn, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
+			else:
+				self.session.open(youpornGenreScreen)
+
+	def pin4tube(self, pincode):
+		if pincode:
+			self.session.open(fourtubeGenreScreen)
+
+	def pinamateurporn(self, pincode):
+		if pincode:
+			self.session.open(amateurpornGenreScreen)
+
+	def pineporner(self, pincode):
+		if pincode:
+			self.session.open(epornerGenreScreen)
+
+	def pinhdporn(self, pincode):
+		if pincode:
+			self.session.open(hdpornGenreScreen)
+
+	def pinpornerbros(self, pincode):
+		if pincode:
+			self.session.open(pornerbrosGenreScreen)
+
+	def pinpornhub(self, pincode):
+		if pincode:
+			self.session.open(pornhubGenreScreen)
+
+	def pinpornrabbit(self, pincode):
+		if pincode:
+			self.session.open(pornrabbitGenreScreen)
+
+	def pinredtube(self, pincode):
+		if pincode:
+			self.session.open(redtubeGenreScreen)
+
+	def pinxhamster(self, pincode):
+		if pincode:
+			self.session.open(xhamsterGenreScreen)
+
+	def pinyouporn(self, pincode):
+		if pincode:
+			self.session.open(youpornGenreScreen)
+	
+	def	keyLeft(self):
+		if self.selektor_index > 1: 
+			self.selektor_index -= 1
+			self.move_selector()
+			print self.selektor_index
+			
+	def	keyRight(self):
+		if self.selektor_index < 40 and self.selektor_index != len(self.mainlist[int(self.select_list)]):
+			self.selektor_index += 1
+			self.move_selector()
+			print self.selektor_index
+			
+	def keyUp(self):
+		if self.selektor_index-8 > 1:
+			self.selektor_index -=8
+			self.move_selector()
+		else:
+			self.selektor_index = self.mainlist[int(self.select_list)][0]
+			self.move_selector()
+
+	def keyDown(self):
+		if self.selektor_index+8 <= len(self.mainlist[int(self.select_list)]):
+			self.selektor_index +=8
+			self.move_selector()
+		else:
+			self.selektor_index = self.mainlist[int(self.select_list)][-1]
+			self.move_selector()
+			
+	def keySetup(self):
+		print config.mediaportal.pincode.value
+		self.session.openWithCallback(self.pinok, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
+	
+	def keyHelp(self):
+		self.session.open(HelpScreen)
+
+	def getTriesEntry(self):
+		return config.ParentalControl.retries.setuppin
+		
+	def pinok(self, pincode):
+		if pincode:
+			self.session.openWithCallback(self.restart, hauptScreenSetup)
+			
+	def keyCancel(self):
+		self.close(self.session, True)
+
+	def restart(self):
+		self.close(self.session, False)
+
+def exit(session, result):
+	print result
+	if not result:
+		if config.mediaportal.ansicht.value == "liste":
+			session.openWithCallback(exit, haupt_Screen)
+		else:
+			session.openWithCallback(exit, haupt_Screen_Wall)		
+	
 def main(session, **kwargs):
-	session.open(haupt_Screen)
-
+	if config.mediaportal.ansicht.value == "liste":
+		session.openWithCallback(exit, haupt_Screen)
+	else:
+		session.openWithCallback(exit, haupt_Screen_Wall)
+	
 def Plugins(**kwargs):
 	return PluginDescriptor(name=_("MediaPortal"), description="MediaPortal", where = [PluginDescriptor.WHERE_PLUGINMENU, PluginDescriptor.WHERE_EXTENSIONSMENU], icon="plugin.png", fnc=main)
