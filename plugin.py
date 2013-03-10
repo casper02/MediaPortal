@@ -1145,8 +1145,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 	
 	def page_back(self):
 		if self.select_list > 0:
-			self.select_list -= 1
 			self.paint_hide()
+			self.select_list -= 1
 			self.paint_new()
 	
 	def paint_hide(self):
