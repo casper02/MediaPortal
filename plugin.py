@@ -59,7 +59,8 @@ from youporn import *
 config.mediaportal = ConfigSubsection()
 config.mediaportal.pincode = ConfigPIN(default = 0000)
 config.mediaportal.skin = ConfigSelection(default = "original", choices = [("tec", _("tec")),("liquidblue", _("liquidblue")), ("original", _("original"))])
-config.mediaportal.ansicht = ConfigSelection(default = "liste", choices = [("liste", _("liste")),("wall", _("wall"))])
+config.mediaportal.ansicht = ConfigSelection(default = "Liste", choices = [("liste", _("Liste")),("wall", _("Wall"))])
+config.mediaportal.selektor = ConfigSelection(default = "blau", choices = [("blue", _("blau")),("green", _(u"gr\xfcn")),("red", _("rot")),("turkis", _(u"t\xfcrkis"))])
 config.mediaportal.pornpin = ConfigYesNo(default = True)
 config.mediaportal.showDoku = ConfigYesNo(default = True)
 config.mediaportal.showRofl = ConfigYesNo(default = True)
@@ -174,6 +175,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.sort(key=lambda t : tuple(t[0].lower()))
 		self.configlist.insert(0, ("Skinauswahl:", config.mediaportal.skin))
 		self.configlist.insert(0, ("HauptScreen-Ansicht", config.mediaportal.ansicht))
+		self.configlist.insert(0, ("Selektor-Farbe", config.mediaportal.selektor))
 		self.configlist.insert(0, ("XXX-Pincodeabfrage:", config.mediaportal.pornpin))
 		self.configlist.insert(0, ("Pincode:", config.mediaportal.pincode))
 		# porn
@@ -834,7 +836,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		self.skin_dump += "<widget name=\"page\" position=\"1100,680\" size=\"100,40\" foregroundColor=\"#00ffffff\" backgroundColor=\"#26181d20\" transparent=\"1\" font=\"Regular;28\" valign=\"top\" halign=\"center\" />"
 		self.skin_dump += "<ePixmap position=\"0,0\" size=\"1280,720\" zPosition=\"-1\" pixmap=\"/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/mpback.png\" />"
 		self.skin_dump += "<widget source=\"session.VideoPicture\" render=\"Pig\" position=\"913,15\" size=\"320,180\" zPosition=\"3\" backgroundColor=\"transparent\" />"
-		self.skin_dump += "<widget name=\"frame\" position=\"20,210\" size=\"150,80\" pixmap=\"/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons_wall/selektor_blau.png\" zPosition=\"2\" transparent=\"0\" alphatest=\"blend\" />"
+		self.skin_dump += "<widget name=\"frame\" position=\"20,210\" size=\"150,80\" pixmap=\"/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons_wall/150x80_MP_Selektor_%s.png\" zPosition=\"2\" transparent=\"0\" alphatest=\"blend\" />" % config.mediaportal.selektor.value
 		self.skin_dump += skincontent
 		self.skin_dump += "</screen>"
 		
