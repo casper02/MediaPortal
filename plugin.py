@@ -871,6 +871,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		# load plugin icons
 		for x in range(1,len(self.plugin_liste)+1):
 			postername = self.plugin_liste[int(x)-1][1]
+			print x, postername
 			poster_path = "%s/%s.png" % ("/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons_wall", postername)
 			if not fileExists(poster_path):
 				poster_path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons_wall/no_icon.png"
@@ -911,9 +912,14 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		print self.mainlist
 		pageinfo = "%s / %s" % (self.select_list+1, len(self.mainlist))
 		self['page'].setText(pageinfo)
-					
+		select_nr = self.mainlist[int(self.select_list)][int(self.selektor_index)-1]
+		plugin_name = self.plugin_liste[int(select_nr)-1][0]
+		self['name'].setText(plugin_name)		
+				
 	def move_selector(self):
-		plugin_name = self.plugin_liste[int(self.selektor_index)-1][0]
+		print self.selektor_index
+		select_nr = self.mainlist[int(self.select_list)][int(self.selektor_index)-1]
+		plugin_name = self.plugin_liste[int(select_nr)-1][0]
 		self['name'].setText(plugin_name)
 		position = self["zeile"+str(self.selektor_index)].instance.position()
 		self["frame"].moveTo(position.x(), position.y(), 1)
@@ -921,7 +927,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		self["frame"].startMoving()
 		
 	def keyOK(self):
-		auswahl = self.plugin_liste[int(self.selektor_index)-1][0]
+		select_nr = self.mainlist[int(self.select_list)][int(self.selektor_index)-1]
+		auswahl = self.plugin_liste[int(select_nr)-1][0]
 		print auswahl
 		if auswahl == "Doku.me":
 			self.session.open(dokuScreen)
