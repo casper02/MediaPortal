@@ -827,20 +827,26 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			elif x == 40 or x == 80:
 				posx = 20
 				posy = 210
-
-		print skincontent
 				
 		self.skin_dump = ""
-		self.skin_dump += "<screen name=\"MediaPortal\" position=\"0,0\" size=\"1280,720\" flags=\"wfNoBorder\">"
-		self.skin_dump += "<widget name=\"name\" position=\"20,150\" size=\"900,50\" foregroundColor=\"#00ffffff\" backgroundColor=\"#26181d20\" transparent=\"1\" font=\"Regular;28\" valign=\"top\" halign=\"center\" />"
-		self.skin_dump += "<widget name=\"page\" position=\"1100,680\" size=\"100,40\" foregroundColor=\"#00ffffff\" backgroundColor=\"#26181d20\" transparent=\"1\" font=\"Regular;28\" valign=\"top\" halign=\"center\" />"
-		self.skin_dump += "<ePixmap position=\"0,0\" size=\"1280,720\" zPosition=\"-1\" pixmap=\"/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/mpback.png\" />"
-		self.skin_dump += "<widget source=\"session.VideoPicture\" render=\"Pig\" position=\"913,15\" size=\"320,180\" zPosition=\"3\" backgroundColor=\"transparent\" />"
+		#self.skin_dump += "<screen name=\"MediaPortal\" position=\"0,0\" size=\"1280,720\" flags=\"wfNoBorder\">"
+		#self.skin_dump += "<widget name=\"name\" position=\"20,150\" size=\"900,50\" foregroundColor=\"#00ffffff\" backgroundColor=\"#26181d20\" transparent=\"1\" font=\"Regular;28\" valign=\"top\" halign=\"center\" />"
+		#self.skin_dump += "<widget name=\"page\" position=\"1100,680\" size=\"100,40\" foregroundColor=\"#00ffffff\" backgroundColor=\"#26181d20\" transparent=\"1\" font=\"Regular;28\" valign=\"top\" halign=\"center\" />"
+		#self.skin_dump += "<ePixmap position=\"0,0\" size=\"1280,720\" zPosition=\"-1\" pixmap=\"/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/mpback.png\" />"
+		#self.skin_dump += "<widget source=\"session.VideoPicture\" render=\"Pig\" position=\"913,15\" size=\"320,180\" zPosition=\"3\" backgroundColor=\"transparent\" />"
 		self.skin_dump += "<widget name=\"frame\" position=\"20,210\" size=\"150,80\" pixmap=\"/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons_wall/150x80_MP_Selektor_%s.png\" zPosition=\"2\" transparent=\"0\" alphatest=\"blend\" />" % config.mediaportal.selektor.value
 		self.skin_dump += skincontent
 		self.skin_dump += "</screen>"
+		#self.skin = self.skin_dump
 		
-		self.skin = self.skin_dump
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/hauptScreenWall.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/hauptScreenWall.xml"
+		with open(path, "r") as f:
+			self.skin_dump2 = f.read()
+			self.skin_dump2 += self.skin_dump
+			self.skin = self.skin_dump2
+			f.close()
 		
 		Screen.__init__(self, session)
 		
@@ -872,7 +878,6 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		# load plugin icons
 		for x in range(1,len(self.plugin_liste)+1):
 			postername = self.plugin_liste[int(x)-1][1]
-			print x, postername
 			poster_path = "%s/%s.png" % ("/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons_wall", postername)
 			if not fileExists(poster_path):
 				poster_path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons_wall/no_icon.png"
@@ -918,7 +923,6 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		self['name'].setText(plugin_name)		
 				
 	def move_selector(self):
-		print self.selektor_index
 		select_nr = self.mainlist[int(self.select_list)][int(self.selektor_index)-1]
 		plugin_name = self.plugin_liste[int(select_nr)-1][0]
 		self['name'].setText(plugin_name)
@@ -1116,11 +1120,15 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		if self.selektor_index > 1: 
 			self.selektor_index -= 1
 			self.move_selector()
-			
+		else:
+			self.page_back()
+
 	def	keyRight(self):
 		if self.selektor_index < 40 and self.selektor_index != len(self.mainlist[int(self.select_list)]):
 			self.selektor_index += 1
 			self.move_selector()
+		else:
+			self.page_next()
 			
 	def keyUp(self):
 		if self.selektor_index-8 > 1:
@@ -1148,12 +1156,21 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		if self.select_list > 0:
 			self.paint_hide()
 			self.select_list -= 1
-			self.paint_new()
+			self.paint_new_last()
 	
 	def paint_hide(self):
 		for x in self.mainlist[int(self.select_list)]:
 			self["zeile"+str(x)].hide()
 	
+	def paint_new_last(self):
+		pageinfo = "%s / %s" % (self.select_list+1, len(self.mainlist))
+		self['page'].setText(pageinfo)
+		self.selektor_index = self.mainlist[int(self.select_list)][-1]
+		print self.selektor_index
+		self.move_selector()
+		for x in self.mainlist[int(self.select_list)]:
+			self["zeile"+str(x)].show()
+			
 	def paint_new(self):
 		pageinfo = "%s / %s" % (self.select_list+1, len(self.mainlist))
 		self['page'].setText(pageinfo)
