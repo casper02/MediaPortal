@@ -844,7 +844,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		
 		Screen.__init__(self, session)
 		
-		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions"], {
+		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions", "HelpActions"], {
 			"ok"    : self.keyOK,
 			"up"    : self.keyUp,
 			"down"  : self.keyDown,
@@ -853,7 +853,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			"right" : self.keyRight,
 			"nextBouquet" :	self.page_next,
 			"prevBouquet" :	self.page_back,
-			"menu" : self.keySetup
+			"menu" : self.keySetup,
+			"displayHelp" : self.keyHelp
 		}, -1)
 		
 		self['name'] = Label("Plugin Auswahl")
