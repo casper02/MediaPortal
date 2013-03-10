@@ -5,7 +5,7 @@ from decrypt import *
 import Queue
 import threading
 
-AMH_Version = "AllMusicHouse.de v0.92"
+AMH_Version = "AllMusicHouse.de v0.93"
 
 AMH_siteEncoding = 'utf-8'
 
@@ -27,7 +27,6 @@ def AMH_menuListentry(entry):
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		] 
 		
-#class show_AMH_Genre(Screen):
 class show_AMH_Genre(Screen):
 
 	def __init__(self, session):
@@ -48,14 +47,17 @@ class show_AMH_Genre(Screen):
 			"up"	: self.keyUp,
 			"down"	: self.keyDown,
 			"left"	: self.keyMenuUp,
-			"right"	: self.keyOK,
+			"right"	: self.keyRight,
 			"red"	: self.keyRed
 		}, -1)
 
 		self['title'] = Label(AMH_Version)
 		self['ContentTitle'] = Label("Musik Auswahl")
 		self['name'] = Label("")
-		self['coverArt'] = Pixmap()
+		self['F1'] = Label("")
+		self['F2'] = Label("")
+		self['F3'] = Label("")
+		self['F4'] = Label("")
 		
 		self.menuLevel = 0
 		self.menuMaxLevel = 0
@@ -68,14 +70,13 @@ class show_AMH_Genre(Screen):
 		self.genreName = ["","","",""]
 		self.genreUrl = ["","","",""]
 		self.genreTitle = ""
-		#self.subMenu = []
-		#self.keckse = {}
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
 		self.chooseMenuList.l.setItemHeight(25)
 		self['genreList'] = self.chooseMenuList
 		
-		mainGenre = [
+		self.genreMenu = [
+			[
 			("0-9", "/0-9"),
 			("A-B", "/a-c"),
 			("C-D", "/d-f"),
@@ -89,9 +90,7 @@ class show_AMH_Genre(Screen):
 			("T-U", "/t-u"),
 			("V-W", "/v-w"),
 			("X-Y-Z", "/x-y-z"),
-			]
-			
-		self.genreMenu = [mainGenre,
+			],
 			[None],
 			[
 			[None]
@@ -128,6 +127,10 @@ class show_AMH_Genre(Screen):
 		
 	def keyDown(self):
 		self['genreList'].down()
+		self.menuIdx[self.menuLevel] = self['genreList'].getSelectedIndex()
+		self.setGenreStrTitle()
+		
+	def keyRight(self):
 		self.menuIdx[self.menuLevel] = self['genreList'].getSelectedIndex()
 		self.setGenreStrTitle()
 		
@@ -267,10 +270,6 @@ class AMH_FilmListeScreen(Screen):
 			"9" : self.key_9,
 			"blue" :  self.keyPageUp,
 			"red" :  self.keyPageDown
-			#"seekBackManual" :  self.keyPageDownMan,
-			#"seekFwdManual" :  self.keyPageUpMan,
-			#"seekFwd" :  self.keyPageUp,
-			#"seekBack" :  self.keyPageDown
 		}, -1)
 
 		self.sortOrder = 0
@@ -285,17 +284,16 @@ class AMH_FilmListeScreen(Screen):
 		self['leftContentTitle'] = Label("")
 		self['name'] = Label("")
 		self['handlung'] = Label("")
-		self['coverArt'] = Pixmap()
 		self['page'] = Label("")
+		self['F1'] = Label("Page-")
+		self['F2'] = Label("")
+		self['F3'] = Label("")
+		self['F4'] = Label("Page+")
 		
 		self.timerStart = False
 		self.seekTimerRun = False
 		self.filmQ = Queue.Queue(0)
-		self.hanQ = Queue.Queue(0)
-		self.picQ = Queue.Queue(0)
-		self.updateP = 0
 		self.eventL = threading.Event()
-		self.eventP = threading.Event()
 		self.keyLocked = True
 		self.musicListe = []
 		self.keckse = {}
@@ -353,7 +351,7 @@ class AMH_FilmListeScreen(Screen):
 		print "loadPageData:"
 		
 		if self.genreSpecials:
-			print "Specials Dokus suche..."
+			print "Specials suche..."
 			m=re.search('<div id="content">(.*?)<!-- #content -->',data,re.S)
 		else:
 			print "Normal search.."
@@ -383,55 +381,25 @@ class AMH_FilmListeScreen(Screen):
 				self.musicListe.append((decodeHtml(name), url, desc.lstrip().rstrip()))
 			self.chooseMenuList.setList(map(AMH_FilmListEntry, self.musicListe))
 			
-			self.loadPicQueued()
 		else:
 			print "No music found !"
 			self.musicListe.append(("No music found !","",""))
 			self.chooseMenuList.setList(map(AMH_FilmListEntry, self.musicListe))
-			if self.filmQ.empty():
-				self.eventL.clear()
-			else:
-				self.loadPageQueued()
+		self.loadPic()
 
 	def loadPic(self):
 		print "loadPic:"
-		
-		if self.picQ.empty():
-			self.eventP.clear()
-			print "picQ is empty"
-			return
-		
-		if self.updateP:
-			print "Pict. or descr. update in progress"
-			print "eventP: ",self.eventP.is_set()
-			print "updateP: ",self.updateP
-			return
-			
-		while not self.picQ.empty():
-			self.picQ.get_nowait()
-		
 		streamName = self['filmList'].getCurrent()[0][0]
 		self['name'].setText(streamName)
-		streamPic = None
-		#streamUrl = self.baseUrl+re.sub('amp;','',self['filmList'].getCurrent()[0][1])
 		desc = self['filmList'].getCurrent()[0][2]
 		#print "streamName: ",streamName
-		#print "streamPic: ",streamPic
 		#print "streamUrl: ",streamUrl
 		self.getHandlung(desc)
-		self.updateP = 1
-		if streamPic == None:
-			print "ImageUrl is None !"
-			self.ShowCoverNone()
+		if not self.filmQ.empty():
+			self.loadPageQueued()
 		else:
-			print "Download pict."
-			#print "Url: ",streamPic
-			downloadPage(streamPic, "/tmp/Icon.jpg").addCallback(self.ShowCover).addErrback(self.dataErrorP)
-		
-	def dataErrorP(self, error):
-		print "dataError:"
-		print error
-		self.ShowCoverNone()
+			self.eventL.clear()
+		self.keyLocked	= False
 		
 	def getHandlung(self, desc):
 		print "getHandlung:"
@@ -444,47 +412,6 @@ class AMH_FilmListeScreen(Screen):
 	def setHandlung(self, data):
 		print "setHandlung:"
 		self['handlung'].setText(decodeHtml(data))
-		
-	def ShowCover(self, picData):
-		print "ShowCover:"
-		picPath = "/tmp/Icon.jpg"
-		self.ShowCoverFile(picPath)
-		
-	def ShowCoverNone(self):
-		print "ShowCoverNone:"
-		picPath = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png"
-		self.ShowCoverFile(picPath)
-	
-	def ShowCoverFile(self, picPath):
-		print "showCoverFile:"
-		if fileExists(picPath):
-			self['coverArt'].instance.setPixmap(None)
-			self.scale = AVSwitch().getFramebufferScale()
-			self.picload = ePicLoad()
-			size = self['coverArt'].instance.size()
-			self.picload.setPara((size.width(), size.height(), self.scale[0], self.scale[1], False, 1, "#FF000000"))
-			if self.picload.startDecode(picPath, 0, 0, False) == 0:
-				ptr = self.picload.getData()
-				if ptr != None:
-					self['coverArt'].instance.setPixmap(ptr.__deref__())
-					self['coverArt'].show()
-					del self.picload
-				
-		self.updateP = 0;
-		self.keyLocked	= False
-		if not self.filmQ.empty():
-			self.loadPageQueued()
-		else:
-			self.eventL.clear()
-			self.loadPic()
-			
-	def loadPicQueued(self):
-		print "loadPicQueued:"
-		self.picQ.put(None)
-		if not self.eventP.is_set():
-			self.eventP.set()
-			self.loadPic()
-		print "eventP: ",self.eventP.is_set()
 		
 	def keyOK(self):
 		if (self.keyLocked|self.eventL.is_set()):
@@ -523,7 +450,7 @@ class AMH_FilmListeScreen(Screen):
 		#print "key_repeatedUp"
 		if self.keyLocked:
 			return
-		self.loadPicQueued()
+		self.loadPic()
 		
 	def keyLeft(self):
 		if self.keyLocked:
@@ -631,20 +558,28 @@ class AMH_Streams(Screen, ConfigListScreen):
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
-			"ok"    : self.keyOK,
-			"cancel": self.keyCancel,
-			"up" : self.keyUp,
-			"down" : self.keyDown,
-			"right" : self.keyRight,
-			"left" : self.keyLeft
+			"ok"    	: self.keyOK,
+			"cancel"	: self.keyCancel,
+			"up" 		: self.keyUp,
+			"down" 		: self.keyDown,
+			"right" 	: self.keyRight,
+			"left" 		: self.keyLeft,
+			"yellow"	: self.keyYellow
 		}, -1)
 		
 		self['title'] = Label(AMH_Version)
 		self['ContentTitle'] = Label("Streams für "+dokuName)
-		self['coverArt'] = Pixmap()
 		self['handlung'] = Label("")
 		self['name'] = Label(dokuName)
+		self['vPrio'] = Label("")
+		self['F1'] = Label("")
+		self['F2'] = Label("")
+		self['F3'] = Label("VideoPrio")
+		self['F4'] = Label("")
 		
+		self.videoPrio = 0
+		self.videoPrioS = ['L','M','H']
+		self.setVideoPrio()
 		self.streamListe = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.streamMenuList.l.setFont(0, gFont('Regular', 24))
@@ -665,11 +600,16 @@ class AMH_Streams(Screen, ConfigListScreen):
 		#http://www.youtube.com/(embed|v)/3NDBxP2MEHw?
 		m = re.search('"http://www.youtube.com/(embed|v)/(.*?)("|\?).*?data-text="(.*?)"', data, re.S)
 		parts = re.search('<p>Part 1 von (.*?)<br', data)
+		mdesc = re.search('</iframe></p>.*?>(.*?)</p>', data, re.S)
 		self.streamListe = []
 		#if streams:
 		if m:
 			print "Streams found"
-			desc = ""
+			if mdesc:
+				print "Descr. found"
+				desc = mdesc.group(1)
+			else:
+				desc = ""
 			#for (videoTag,title) in streams:
 			if parts:
 				self.nParts = int(parts.group(1))
@@ -690,70 +630,36 @@ class AMH_Streams(Screen, ConfigListScreen):
 		if desc == None:
 			print "No Infos found !"
 			self['handlung'].setText("Keine infos gefunden.")
-			return
-		self.setHandlung(desc)
+		else:
+			self.setHandlung(desc)
 		
 	def setHandlung(self, data):
-		print "setHandlung:"
+		#print "setHandlung:"
 		self['handlung'].setText(decodeHtml(data))
 		
 	def loadPic(self):
 		print "loadPic:"
 		streamName = self['streamList'].getCurrent()[0][0]
 		self['name'].setText(streamName)
-		#streamPic = self['streamList'].getCurrent()[0][2]
-		streamPic = None
 		desc = self['streamList'].getCurrent()[0][2]
 		print "streamName: ",streamName
-		print "streamPic: ",streamPic
 		self.getHandlung(desc)
-		if streamPic == None:
-			print "ImageUrl is None !"
-			self.ShowCoverNone()
-		else:
-			print "Download pict."
-			print "Url: ",streamPic
-			downloadPage(streamPic, "/tmp/Icon.jpg").addCallback(self.ShowCover).addErrback(self.dataErrorP)
+		self.keyLocked = False
 		
-	def dataErrorP(self, error):
-		print "dataErrorP:"
-		print error
-		self.ShowCoverNone()
-	
-	def ShowCover(self, picData):
-		print "ShowCover:"
-		picPath = "/tmp/Icon.jpg"
-		self.ShowCoverFile(picPath)
-		
-	def ShowCoverNone(self):
-		print "ShowCoverNone:"
-		picPath = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png"
-		self.ShowCoverFile(picPath)
-	
-	def ShowCoverFile(self, picPath):
-		print "showCoverFile:"
-		if fileExists(picPath):
-			self['coverArt'].instance.setPixmap(None)
-			self.scale = AVSwitch().getFramebufferScale()
-			self.picload = ePicLoad()
-			size = self['coverArt'].instance.size()
-			self.picload.setPara((size.width(), size.height(), self.scale[0], self.scale[1], False, 1, "#FF000000"))
-			if self.picload.startDecode(picPath, 0, 0, False) == 0:
-				ptr = self.picload.getData()
-				if ptr != None:
-					self['coverArt'].instance.setPixmap(ptr.__deref__())
-					self['coverArt'].show()
-					del self.picload
-		self.keyLocked	= False
-			
 	def dataError(self, error):
 		print "dataError:"
 		print error
 		self.streamListe.append(("Read error !","",""))			
 		self.streamMenuList.setList(map(AMH_StreamListEntry, self.streamListe))
 			
-	# code von doku.me geliehen
-	def getVideoUrl(self, url):
+	def setVideoPrio(self):
+		if self.videoPrio+1 > 2:
+			self.videoPrio = 0
+		else:
+			self.videoPrio += 1
+		self['vPrio'].setText(self.videoPrioS[self.videoPrio])
+		
+	def getVideoUrl(self, url, videoPrio):
 		# this part is from mtube plugin
 		print "got url:", url
 		"""
@@ -766,14 +672,34 @@ class AMH_Streams(Screen, ConfigListScreen):
 			'34' : 6, #FLV 360p
 		}
 		"""
-		VIDEO_FMT_PRIORITY_MAP = {
-			'38' : 3, #MP4 Original (HD)
-			'37' : 4, #MP4 1080p (HD)
-			'22' : 2, #MP4 720p (HD)
-			'18' : 5, #MP4 360p
-			'35' : 1, #FLV 480p
-			'34' : 6, #FLV 360p
-		}
+		if videoPrio == 0:
+			VIDEO_FMT_PRIORITY_MAP = {
+				'38' : 5, #MP4 Original (HD)
+				'37' : 6, #MP4 1080p (HD)
+				'22' : 4, #MP4 720p (HD)
+				'18' : 3, #MP4 360p
+				'35' : 2, #FLV 480p
+				'34' : 1, #FLV 360p
+			}
+		elif videoPrio == 1:
+			VIDEO_FMT_PRIORITY_MAP = {
+				'38' : 4, #MP4 Original (HD)
+				'37' : 5, #MP4 1080p (HD)
+				'22' : 2, #MP4 720p (HD)
+				'18' : 3, #MP4 360p
+				'35' : 1, #FLV 480p
+				'34' : 2, #FLV 360p
+			}
+		else:
+			VIDEO_FMT_PRIORITY_MAP = {
+				'38' : 1, #MP4 Original (HD)
+				'37' : 2, #MP4 1080p (HD)
+				'22' : 3, #MP4 720p (HD)
+				'18' : 4, #MP4 360p
+				'35' : 5, #FLV 480p
+				'34' : 6, #FLV 360p
+			}
+		
 		video_url = None
 		video_id = url
 
@@ -863,12 +789,15 @@ class AMH_Streams(Screen, ConfigListScreen):
 		dhVideoId = self['streamList'].getCurrent()[0][1]
 		print "Title: ",dhTitle
 		print "VideoId: ",dhVideoId
-		dhLink = self.getVideoUrl(dhVideoId)
+		dhLink = self.getVideoUrl(dhVideoId, self.videoPrio)
 		if dhLink:
 			print dhLink
 			sref = eServiceReference(0x1001, 0, dhLink)
 			sref.setName(dhTitle)
 			self.session.open(MoviePlayer, sref)
+			
+	def keyYellow(self):
+		self.setVideoPrio()
 		
 	def keyUp(self):
 		if self.keyLocked:
