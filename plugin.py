@@ -256,6 +256,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			
 		Screen.__init__(self, session)
 		
+		registerFont("/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/mediaportal.ttf", "mediaportal", 100, False)
+	
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "HelpActions"], {
 			"ok"    : self.keyOK,
 			"up"    : self.keyUp,

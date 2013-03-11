@@ -1,5 +1,4 @@
 from imports import *
-from decrypt import *
 
 def xhamsterGenreListEntry(entry):
 	return [entry,

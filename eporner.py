@@ -1,5 +1,4 @@
 from imports import *
-from decrypt import *
 
 def epornerGenreListEntry(entry):
 	return [entry,
