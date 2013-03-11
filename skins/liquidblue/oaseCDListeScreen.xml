@@ -1,17 +1,17 @@
 <!-- oaseCDListeScreen -->
   <screen name="Konzert Oase" position="center,center" size="1280,720" flags="wfNoBorder">
     <ePixmap position="0,0" size="1280,720" zPosition="-1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/mpback.png" />
-    <widget source="global.CurrentTime" render="Label" position="840,42" size="300,28" font="Regular; 26" halign="left" backgroundColor="#26181d20" transparent="1" foregroundColor="#00bbbbbb">
+    <widget source="global.CurrentTime" render="Label" position="840,42" size="300,28" font="mediaportal; 26" halign="left" backgroundColor="#26181d20" transparent="1" foregroundColor="#00bbbbbb">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
-    <widget source="global.CurrentTime" render="Label" position="1140,42" size="100,28" font="Regular;26" halign="center" backgroundColor="#26181d20" transparent="1" foregroundColor="#00bbbbbb">
+    <widget source="global.CurrentTime" render="Label" position="1140,42" size="100,28" font="mediaportal;26" halign="center" backgroundColor="#26181d20" transparent="1" foregroundColor="#00bbbbbb">
       <convert type="ClockToText">Default</convert>
     </widget>
     <widget source="session.VideoPicture" render="Pig" position="913,136" size="328,186" zPosition="3" backgroundColor="transparent" />
     <eLabel position="912,135" size="330,188" backgroundColor="#00ffffff" zPosition="0" name="Videoback" foregroundColor="#00ffffff" />
     <!-- select screen -->
-    <widget name="name" position="913,331" size="328,100" backgroundColor="#26181d20" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="center" foregroundColor="#00ffffff" />
+    <widget name="name" position="913,331" size="328,100" backgroundColor="#26181d20" transparent="1" zPosition="1" font="mediaportal;24" valign="center" halign="center" foregroundColor="#00ffffff" />
     <widget name="filmList" position="55,190" size="850,500" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/sel.png" foregroundColor="#00bbbbbb" />
     <widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/no_coverArt.png" position="917,439" size="320,240" transparent="1" alphatest="blend" />
-    <widget name="title" position="55,106" size="850,60" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="Regular;26" valign="center" halign="center" />
+    <widget name="title" position="55,106" size="850,60" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="mediaportal;26" valign="center" halign="center" />
   </screen>

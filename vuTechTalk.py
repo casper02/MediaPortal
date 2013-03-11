@@ -37,7 +37,7 @@ class vutechtalk(Screen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('Regular', 24))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 		

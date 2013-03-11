@@ -47,13 +47,13 @@ class Radiode(Screen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('Regular', 24))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 		
 		self.playList = []
 		self.playMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.playMenuList.l.setFont(0, gFont('Regular', 24))
+		self.playMenuList.l.setFont(0, gFont('mediaportal', 24))
 		self.playMenuList.l.setItemHeight(25)
 		self['playlist'] = self.playMenuList
 		

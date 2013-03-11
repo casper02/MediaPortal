@@ -32,7 +32,7 @@ class showSongstoGenre(Screen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('Regular', 23))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self["streamlist"] = self.streamMenuList
 
@@ -108,7 +108,7 @@ class showSongstoAll(Screen, InfoBarBase, InfoBarSeek):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('Regular', 23))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self["streamlist"] = self.streamMenuList
 
@@ -248,7 +248,7 @@ class showSongstoTop(Screen, InfoBarBase, InfoBarSeek):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('Regular', 23))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self["streamlist"] = self.streamMenuList
 

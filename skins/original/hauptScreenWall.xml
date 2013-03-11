@@ -1,6 +1,6 @@
 <!-- Hauptscreen_Wall -->
 	<screen name="MediaPortal" position="0,0" size="1280,720" flags="wfNoBorder">
-		<widget name="name" position="20,150" size="900,50" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="Regular;28" valign="top" halign="center" />
-		<widget name="page" position="1100,680" size="100,40" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="Regular;28" valign="top" halign="center" />"
+		<widget name="name" position="20,150" size="900,50" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="mediaportal;28" valign="top" halign="center" />
+		<widget name="page" position="1100,680" size="100,40" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="mediaportal;28" valign="top" halign="center" />"
 		<ePixmap position="0,0" size="1280,720" zPosition="-1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/mpback.png" />"
 		<widget source="session.VideoPicture" render="Pig" position="913,15" size="320,180" zPosition="3" backgroundColor="transparent" />"
