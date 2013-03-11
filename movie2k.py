@@ -127,9 +127,30 @@ class m2kGenreScreen(Screen):
 		elif streamGenreName == "Alle Serien A-Z":
 			self.session.open(m2kSerienABCAuswahl, streamGenreLink)
 		elif streamGenreName == "Letzte Updates (XXX)":
-			self.session.open(m2kXXXUpdateFilmeListeScreen, streamGenreLink, '')
+			if config.mediaportal.pornpin.value:
+				self.session.openWithCallback(self.xxxupdate, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
+			else:
+				self.session.open(m2kXXXUpdateFilmeListeScreen, streamGenreLink, '')
+		elif streamGenreName == "Pornos":
+			if config.mediaportal.pornpin.value:
+				self.session.openWithCallback(self.xxxpornos, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
+			else:
+				self.session.open(m2kKinoAlleFilmeListeScreen, streamGenreLink)
 		else:
 			self.session.open(m2kKinoAlleFilmeListeScreen, streamGenreLink)
+
+	def getTriesEntry(self):
+		return config.ParentalControl.retries.setuppin
+
+	def xxxpornos(self, pincode):
+		if pincode:
+			streamGenreLink = self['genreList'].getCurrent()[0][1]
+			self.session.open(m2kKinoAlleFilmeListeScreen, streamGenreLink)
+
+	def xxxupdate(self, pincode):
+		if pincode:
+			streamGenreLink = self['genreList'].getCurrent()[0][1]
+			self.session.open(m2kXXXUpdateFilmeListeScreen, streamGenreLink, '')
 
 	def keyCancel(self):
 		self.close()
@@ -267,7 +288,7 @@ class m2kKinoAlleFilmeListeScreen(Screen):
 			xxxGenreLink = self['filmList'].getCurrent()[0][1]
 			self.session.open(m2kXXXUpdateFilmeListeScreen, xxxGenreLink, 'X')
 
-    	def keyTMDbInfo(self):
+	def keyTMDbInfo(self):
 		if TMDbPresent:
 			title = self['filmList'].getCurrent()[0][0]
 			self.session.open(TMDbMain, title)
@@ -412,7 +433,7 @@ class m2kKinoFilmeListeScreen(Screen):
 		streamLink = self['filmList'].getCurrent()[0][1]
 		self.session.open(m2kStreamListeScreen, streamLink, streamName, "movie")
 
-    	def keyTMDbInfo(self):
+	def keyTMDbInfo(self):
 		if TMDbPresent:
 			title = self['filmList'].getCurrent()[0][0]
 			self.session.open(TMDbMain, title)
@@ -538,7 +559,7 @@ class m2kVideoFilmeListeScreen(Screen):
 		streamLink = self['filmList'].getCurrent()[0][1]
 		self.session.open(m2kStreamListeScreen, streamLink, streamName, "movie")
 
-    	def keyTMDbInfo(self):
+	def keyTMDbInfo(self):
 		if TMDbPresent:
 			title = self['filmList'].getCurrent()[0][0]
 			self.session.open(TMDbMain, title)
@@ -666,7 +687,7 @@ class m2kupdateFilmeListeScreen(Screen):
 		streamLink = self['filmList'].getCurrent()[0][1]
 		self.session.open(m2kStreamListeScreen, streamLink, streamName, "movie")
 
-    	def keyTMDbInfo(self):
+	def keyTMDbInfo(self):
 		if TMDbPresent:
 			title = self['filmList'].getCurrent()[0][0]
 			self.session.open(TMDbMain, title)

@@ -2,9 +2,9 @@
 from imports import *
 from decrypt import *
 
-from resources.lib.api import XBMC4PlayersApi, NetworkError, SYSTEMS
+from resources.lib.api import VuBox4PlayersApi, NetworkError, SYSTEMS
 
-api = XBMC4PlayersApi()
+api = VuBox4PlayersApi()
 
 def forPlayersGenreListEntry(entry):
 	return [entry,
@@ -33,7 +33,6 @@ class forPlayersGenreScreen(Screen):
 		self['title'] = Label("4Players")
 		self['name'] = Label("Auswahl")
 		self['coverArt'] = Pixmap()
-		
 		self.selectionListe = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
@@ -82,7 +81,9 @@ class forPlayersVideoScreen(Screen):
 			"down"  : self.keyDown,
 			"left"  : self.keyLeft,
 			"right" : self.keyRight,
-			"info"  : self.keyInfo
+			"info"  : self.keyInfo,
+			"nextBouquet" : self.keyPageUp,
+			"prevBouquet" : self.keyPageDown
 		}, -1)
 		
 		self.page = 1
@@ -90,7 +91,10 @@ class forPlayersVideoScreen(Screen):
 		self['name'] = Label("")
 		self['page'] = Label("1")
 		self['playersPic'] = Pixmap()
+		self.juengstTS = ''
+		self.page = 1
 		self.videosListe = []
+		self.videosQueue = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
 		self.chooseMenuList.l.setItemHeight(25)
@@ -98,11 +102,13 @@ class forPlayersVideoScreen(Screen):
 		self.onLayoutFinish.append(self.loadVideos)
 		
 	def loadVideos(self):
-		limit = int(50)
 		if self.selectionLink == '1':
 			try:
+				limit = int(50)
 				api.set_systems(SYSTEMS)#Videos zu allen Systeme
 				videos = api.get_latest_videos(limit)
+				self.videosQueue.append((self.page, videos))
+				self.juengstTS = min((v['ts'] for v in videos))
 				self.showData(videos)
 			except NetworkError:
 				print 'Fehler API-Call...'
@@ -110,6 +116,7 @@ class forPlayersVideoScreen(Screen):
 				self.chooseMenuList.setList(map(forPlayersVideoListEntry, self.videosListe))
 		elif self.selectionLink == '2':
 			try:
+				limit = int(150)
 				api.set_systems(SYSTEMS)#Videos zu allen Systeme
 				videos = api.get_popular_videos(limit)
 				self.showData(videos)
@@ -119,6 +126,7 @@ class forPlayersVideoScreen(Screen):
 				self.chooseMenuList.setList(map(forPlayersVideoListEntry, self.videosListe))
 		elif self.selectionLink == '3':
 			try:
+				limit = int(150)
 				api.set_systems(SYSTEMS)#Videos zu allen Systeme
 				videos = api.get_latest_reviews(older_than=0)
 				self.showData(videos)
@@ -162,17 +170,38 @@ class forPlayersVideoScreen(Screen):
 					self['playersPic'].show()
 					del self.picload
 
+	def loadPage(self):
+		if self.selectionLink == '1':
+			self.videosListe = []
+			self.queuedVideoList = []
+			for queuedEntry in self.videosQueue:
+				if queuedEntry[0] == self.page:
+					self.queuedVideoList = queuedEntry[1]
+			if self.queuedVideoList:
+				self.showData(self.queuedVideoList)
+			else:
+				try:
+						api.set_systems(SYSTEMS)#Videos zu allen Systeme
+						videos = api.get_latest_videos(older_than=self.juengstTS)
+						self.juengstTS = min((v['ts'] for v in videos))
+						self.videosQueue.append((self.page, videos))
+						self.showData(videos)
+				except NetworkError:
+						print 'Fehler API-Call...'
+						self.videosListe.append(('4Players nicht verfuegbar....', "", "", ""))
+						self.chooseMenuList.setList(map(forPlayersVideoListEntry, self.videosListe))
+
 	def keyPageDown(self):
 		print "PageDown"
 		if not self.page < 2:
 			self.page -= 1
 			self.loadPage()
-		
+
 	def keyPageUp(self):
 		print "PageUP"
 		self.page += 1
 		self.loadPage()
-		
+
 	def keyLeft(self):
 		self['videosList'].pageUp()
 		self.showPic()

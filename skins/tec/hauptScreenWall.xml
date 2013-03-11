@@ -1,0 +1,13 @@
+<!-- Hauptscreen_Wall -->
+<screen name="MediaPortal" position="0,0" size="1280,720" flags="wfNoBorder">
+		<widget name="name" position="59,91" size="650,50" foregroundColor="#00aaaaaa" backgroundColor="#26181d20" transparent="1" font="Regular; 30" valign="center" halign="center" />
+		<widget name="page" position="290,660" size="100,40" foregroundColor="#00aaaaaa" backgroundColor="#26181d20" transparent="1" font="Regular;28" valign="center" halign="center" />"
+		<eLabel text="Page" position="240,660" size="100,40" font="Regular;28" halign="left" valign="center" foregroundColor="#00aaaaaa" transparent="1" backgroundColor="#26181d20" />"
+		<ePixmap position="0,0" size="1280,720" zPosition="-1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/mpback.png" />"
+		<widget source="session.VideoPicture" render="Pig" position="930,15" size="320,180" zPosition="3" backgroundColor="transparent" />"
+		<eLabel position="929,14" size="322,182" backgroundColor="#00aaaaaa" zPosition="0" name="Videoback" foregroundColor="#00aaaaaa" />"
+        <ePixmap position="940,660" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonmenue.png" alphatest="blend" backgroundColor="#26181d20" />"
+		<ePixmap position="1050,660" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonhelp.png" alphatest="blend" backgroundColor="#26181d20" />"
+		<ePixmap position="1160,660" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonexit.png" alphatest="blend" backgroundColor="#26181d20" />"
+		<ePixmap position="20,660" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonbqp.png" alphatest="blend" backgroundColor="#26181d20" />"
+		<ePixmap position="130,660" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonbqm.png" alphatest="blend" backgroundColor="#26181d20" />"
