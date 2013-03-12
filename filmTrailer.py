@@ -35,7 +35,7 @@ class trailer(Screen, ConfigListScreen):
 		self['leftContentTitle'] = Label("Trailer")
 		self['stationIcon'] = Pixmap()
 		self['page'] = Label("1")
-		self['name'] = Label("Trailer auswahl")
+		self['name'] = Label("Trailer Auswahl")
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
