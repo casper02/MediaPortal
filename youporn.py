@@ -198,6 +198,7 @@ class youpornFilmScreen(Screen):
 		
 	def loadpage(self):
 		self.keyLocked = True
+		self['name'].setText('Bitte warten...')
 		self.filmliste = []
 		self['page'].setText(str(self.page))
 		url = "%s%s" % (self.phCatLink, str(self.page))

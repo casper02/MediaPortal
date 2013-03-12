@@ -188,6 +188,7 @@ class pornrabbitFilmScreen(Screen):
 		
 	def loadpage(self):
 		self.keyLocked = True
+		self['name'].setText('Bitte warten...')
 		self.filmliste = []
 		self['page'].setText(str(self.page))
 		url = "http://www.pornrabbit.com%s%s/" % (self.phCatLink, str(self.page))

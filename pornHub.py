@@ -411,8 +411,8 @@ class pornhubFilmScreen(Screen):
 		self.onLayoutFinish.append(self.loadpage)
 		
 	def loadpage(self):
-		print "ja"
 		self.keyLocked = True
+		self['name'].setText('Bitte warten...')
 		self.filmliste = []
 		self['page'].setText(str(self.page))
 		url = "%s%s" % (self.phCatLink, str(self.page))

@@ -188,6 +188,7 @@ class pornerbrosFilmScreen(Screen):
 
 	def loadpage(self):
 		self.keyLocked = True
+		self['name'].setText('Bitte warten...')
 		self.streamList = []
 		self['page'].setText(str(self.page))
 		url = "%s%s/" % (self.phCatLink, str(self.page))

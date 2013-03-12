@@ -149,6 +149,7 @@ class amateurpornFilmScreen(Screen):
 		
 	def loadpage(self):
 		self.keyLocked = True
+		self['name'].setText('Bitte warten...')
 		self.filmliste = []
 		self['page'].setText(str(self.page))
 		url = "http://www.amateurporn.net%s/page%s.html" % (self.phCatLink, str(self.page))

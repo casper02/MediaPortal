@@ -210,6 +210,7 @@ class xhamster(Screen):
 		
 	def loadpage(self):
 		self.keyLocked = True
+		self['name'].setText('Bitte warten...')
 		self.streamList = []
 		self['page'].setText(str(self.page))
 		ptUrl = "%s%s.html" % (self.genreLink, str(self.page))

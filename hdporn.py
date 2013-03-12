@@ -189,6 +189,7 @@ class hdpornFilmScreen(Screen):
 		
 	def loadpage(self):
 		self.keyLocked = True
+		self['name'].setText('Bitte warten...')
 		self.filmliste = []
 		self['page'].setText(str(self.page))
 		url = "http://www.hdporn.net%s/page%s.html" % (self.phCatLink, str(self.page))
