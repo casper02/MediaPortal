@@ -16,7 +16,7 @@
   <widget name="name" position="913,356" size="328,100" backgroundColor="#26181d20" transparent="1" zPosition="1" font="mediaportal;24" valign="center" halign="center" foregroundColor="#00ffffff" />
   <widget name="genreList" position="55,180" size="850,450" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/sel.png" foregroundColor="#00555555" zPosition="0" />
   <widget name="title" position="153,106" size="670,60" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="mediaportal;26" valign="center" halign="center" />
-  <widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/m_no_coverArt.png" position="998,487" size="160,120" transparent="1" alphatest="blend" />
+  <widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/no_coverArt.png" position="917,439" size="320,200" transparent="1" alphatest="blend" />
   <eLabel text="Views" position="55,630" size="100,25" backgroundColor="#26181d20" transparent="1" foregroundColor="#00ffffff" font="mediaportal;20" valign="top" />
   <widget name="views" position="155,630" size="580,25" backgroundColor="#26181d20" transparent="1" font="mediaportal;20" valign="top" foregroundColor="#00ffffff" />
   <eLabel text="Runtime" position="55,655" size="100,25" backgroundColor="#26181d20" transparent="1" foregroundColor="#00ffffff" font="mediaportal;20" valign="top" />
