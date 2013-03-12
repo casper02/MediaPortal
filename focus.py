@@ -38,7 +38,7 @@ class focusGenre(Screen):
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
-		self.genreliste.append(("Neuste Videos", "http://www.focus.de/ajax/video/videoplaylist/?playlist_name=newest"))
+		self.genreliste.append(("Neueste Videos", "http://www.focus.de/ajax/video/videoplaylist/?playlist_name=newest"))
 		self.genreliste.append(("Politik", "http://www.focus.de/ajax/video/videoplaylist/?playlist_name=politik"))
 		self.genreliste.append(("Finanzen", "http://www.focus.de/ajax/video/videoplaylist/?playlist_name=finance"))
 		self.genreliste.append(("Wissen", "http://www.focus.de/ajax/video/videoplaylist/?playlist_name=knowledge"))

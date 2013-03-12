@@ -38,7 +38,7 @@ class oaseGenreScreen(Screen):
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
-		self.genreliste.append(("Neusten", "http://konzertoase.cixx6.com/"))
+		self.genreliste.append(("Neuesten", "http://konzertoase.cixx6.com/"))
 		self.genreliste.append(("Electro", "http://konzertoase.cixx6.com/category/electro/"))
 		self.genreliste.append(("Folk", "http://konzertoase.cixx6.com/category/folk/"))
 		self.genreliste.append(("Heavy Metal", "http://konzertoase.cixx6.com/category/heavy-metal/"))

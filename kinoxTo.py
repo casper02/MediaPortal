@@ -83,15 +83,15 @@ class kxMain(Screen):
 	def layoutFinished(self):
 		lt = localtime()
 		self.currentdatum = strftime("%d.%m.%Y", lt)
-		self.neuste_kino = "Frisches aus dem Kino vom %s" % self.currentdatum
-		self.neuste_online = "Neue Filme online vom %s" % self.currentdatum
+		self.neueste_kino = "Frisches aus dem Kino vom %s" % self.currentdatum
+		self.neueste_online = "Neue Filme online vom %s" % self.currentdatum
 		self.keyLocked = True
-		self.streamList.append((self.neuste_kino, "http://kinox.to"))
-		self.streamList.append((self.neuste_online, "http://kinox.to"))
+		self.streamList.append((self.neueste_kino, "http://kinox.to"))
+		self.streamList.append((self.neueste_online, "http://kinox.to"))
 		self.streamList.append(("Kinofilme", "http://kinox.to/Cine-Films.html"))
 		self.streamList.append(("Filme A-Z", "dump"))
 		self.streamList.append(("Serien A-Z","dump"))
-		self.streamList.append(("Neuste Serien", "http://kinox.to/Latest-Series.html"))
+		self.streamList.append(("Neueste Serien", "http://kinox.to/Latest-Series.html"))
 		self.streamList.append(("Watchlist","dump"))
 		self.streamMenuList.setList(map(kxMainListEntry, self.streamList))
 		self.keyLocked = False
@@ -105,16 +105,16 @@ class kxMain(Screen):
 		print auswahl
 		if auswahl == "Kinofilme":
 			self.session.open(kxKino, url)
-		elif auswahl == self.neuste_kino:
-			self.session.open(kxNeusteKino, url)
-		elif auswahl == self.neuste_online:
-			self.session.open(kxNeusteOnline, url)
+		elif auswahl == self.neueste_kino:
+			self.session.open(kxNeuesteKino, url)
+		elif auswahl == self.neueste_online:
+			self.session.open(kxNeuesteOnline, url)
 		elif auswahl == "Filme A-Z":
 			self.session.open(kxABC, url)
 		elif auswahl == "Serien A-Z":
 			self.session.open(kxSerienABC, url)
-		elif auswahl == "Neuste Serien":
-			self.session.open(kxNeusteSerien, url)
+		elif auswahl == "Neueste Serien":
+			self.session.open(kxNeuesteSerien, url)
 		elif auswahl == "Watchlist":
 			self.session.open(kxWatchlist)
 			
@@ -237,14 +237,14 @@ class kxKino(Screen):
 	def keyCancel(self):
 		self.close()
 
-class kxNeusteKino(Screen):
+class kxNeuesteKino(Screen):
 	
 	def __init__(self, session, kxGotLink):
 		self.kxGotLink = kxGotLink
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxNeusteKino.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxNeuesteKino.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxNeusteKino.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxNeuesteKino.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -284,9 +284,9 @@ class kxNeusteKino(Screen):
 		getPage(self.kxGotLink, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 		
 	def parseData(self, data):
-		neuste = re.findall('<div class="Opt leftOpt Headlne"><h1>.*?aus dem Kino vom.*?</h1></div>(.*?)</table>', data, re.S)
-		if neuste:
-			movies = re.findall('td class="Title"><a href="(.*?)" title=".*?" class="OverlayLabel">(.*?)</a></td>', neuste[0], re.S)
+		neueste = re.findall('<div class="Opt leftOpt Headlne"><h1>.*?aus dem Kino vom.*?</h1></div>(.*?)</table>', data, re.S)
+		if neueste:
+			movies = re.findall('td class="Title"><a href="(.*?)" title=".*?" class="OverlayLabel">(.*?)</a></td>', neueste[0], re.S)
 			if movies:
 				for (kxUrl,kxTitle) in movies:
 					kxUrl = "http://kinox.to" + kxUrl
@@ -364,14 +364,14 @@ class kxNeusteKino(Screen):
 	def keyCancel(self):
 		self.close()
 		
-class kxNeusteOnline(Screen):
+class kxNeuesteOnline(Screen):
 	
 	def __init__(self, session, kxGotLink):
 		self.kxGotLink = kxGotLink
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxNeusteOnline.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxNeuesteOnline.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxNeusteOnline.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxNeuesteOnline.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -411,10 +411,10 @@ class kxNeusteOnline(Screen):
 		getPage(self.kxGotLink, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 		
 	def parseData(self, data):
-		neuste = re.findall('<div class="Opt leftOpt Headlne"><h1>.*?Neue Filme online.*?</h1></div>(.*?)</table>', data, re.S)
-		if neuste:
-			print neuste[0]
-			movies = re.findall('td class="Title"><a href="(.*?)" title=".*?" class="OverlayLabel">(.*?)</a></td>', neuste[0], re.S)
+		neueste = re.findall('<div class="Opt leftOpt Headlne"><h1>.*?Neue Filme online.*?</h1></div>(.*?)</table>', data, re.S)
+		if neueste:
+			print neueste[0]
+			movies = re.findall('td class="Title"><a href="(.*?)" title=".*?" class="OverlayLabel">(.*?)</a></td>', neueste[0], re.S)
 			if movies:
 				for (kxUrl,kxTitle) in movies:
 					kxUrl = "http://kinox.to" + kxUrl
@@ -685,14 +685,14 @@ class kxABCpage(Screen):
 	def keyCancel(self):
 		self.close()
 
-class kxNeusteSerien(Screen):
+class kxNeuesteSerien(Screen):
 	
 	def __init__(self, session, kxGotLink):
 		self.kxGotLink = kxGotLink
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxNeusteSerien.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxNeuesteSerien.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxNeusteSerien.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxNeuesteSerien.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -711,7 +711,7 @@ class kxNeusteSerien(Screen):
 		}, -1)
 		
 		self['title'] = Label("Kinox.to")
-		self['leftContentTitle'] = Label("Neuste Serien")
+		self['leftContentTitle'] = Label("Neueste Serien")
 		self['stationIcon'] = Pixmap()
 		self['name'] = Label("")
 		self['handlung'] = Label("")
