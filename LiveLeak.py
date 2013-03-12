@@ -29,7 +29,7 @@ class LiveLeakScreen(Screen):
 		self['name'] = Label("Genre Auswahl")
 		self.genreliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
+		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.chooseMenuList.l.setItemHeight(25)
 		self['List'] = self.chooseMenuList
 
@@ -90,7 +90,7 @@ class LiveLeakClips(Screen):
 		self['name'] = Label("")
 		self['page'] = Label("1")
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
+		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.chooseMenuList.l.setItemHeight(25)
 		self['List'] = self.chooseMenuList
 

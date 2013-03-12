@@ -1,21 +1,21 @@
 <!-- show_DH_Genre -->
   <screen name="DokuHouse" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
-    <widget name="title" position="20,10" size="500,40" backgroundColor="#00101214" transparent="1" zPosition="10" font="Regular; 26" valign="center" halign="left" />
-    <widget source="global.CurrentTime" render="Label" position="730,8" size="150,30" backgroundColor="#00101214" transparent="1" zPosition="1" font="Regular; 26" valign="center" halign="right" foregroundColor="#00dcdcdc">
+    <widget name="title" position="20,10" size="500,40" backgroundColor="#00101214" transparent="1" zPosition="10" font="mediaportal; 26" valign="center" halign="left" />
+    <widget source="global.CurrentTime" render="Label" position="730,8" size="150,30" backgroundColor="#00101214" transparent="1" zPosition="1" font="mediaportal; 26" valign="center" halign="right" foregroundColor="#00dcdcdc">
       <convert type="ClockToText">Format:%-H:%M</convert>
     </widget>
-    <widget source="global.CurrentTime" render="Label" position="580,39" size="300,20" backgroundColor="#00101214" transparent="1" zPosition="1" font="Regular;18" valign="center" halign="right" foregroundColor="#00dcdcdc">
+    <widget source="global.CurrentTime" render="Label" position="580,39" size="300,20" backgroundColor="#00101214" transparent="1" zPosition="1" font="mediaportal;18" valign="center" halign="right" foregroundColor="#00dcdcdc">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
-    <widget name="ContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="Regular;22" halign="center" />
+    <widget name="ContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="mediaportal;22" halign="center" />
     <widget name="genreList" position="0,135" size="900,460" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" />
-    <widget name="name" position="20,95" size="860,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="Regular;26" valign="top" />
+    <widget name="name" position="20,95" size="860,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="mediaportal;26" valign="top" />
     <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/red.png" position="20,597" size="35,27" alphatest="blend" />
     <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/green.png" position="185,597" size="35,27" alphatest="blend" />
     <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/yellow.png" position="350,597" size="35,27" alphatest="blend" />
     <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/blue.png" position="515,597" size="35,27" alphatest="blend" />
-    <widget name="F1" position="60,600" size="100,30" transparent="1" font="Regular; 20" backgroundColor="#00101214" valign="bottom" />
-    <widget name="F2" position="225,600" size="100,30" transparent="1" backgroundColor="#00101214" font="Regular; 20" valign="bottom" />
-    <widget name="F3" position="390,600" size="100,30" transparent="1" font="Regular; 20" backgroundColor="#00101214" valign="bottom" />
-    <widget name="F4" position="555,600" size="100,30" transparent="1" font="Regular; 20" backgroundColor="#00101214" valign="bottom" />
+    <widget name="F1" position="60,600" size="100,30" transparent="1" font="mediaportal; 20" backgroundColor="#00101214" valign="bottom" />
+    <widget name="F2" position="225,600" size="100,30" transparent="1" backgroundColor="#00101214" font="mediaportal; 20" valign="bottom" />
+    <widget name="F3" position="390,600" size="100,30" transparent="1" font="mediaportal; 20" backgroundColor="#00101214" valign="bottom" />
+    <widget name="F4" position="555,600" size="100,30" transparent="1" font="mediaportal; 20" backgroundColor="#00101214" valign="bottom" />
   </screen>
