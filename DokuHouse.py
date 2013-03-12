@@ -444,7 +444,7 @@ class DH_FilmListeScreen(Screen):
 		
 	def loadPageQueued(self):
 		print "loadPageQueued:"
-		self['name'].setText('Bitte warten..')
+		self['name'].setText('Bitte warten...')
 		while not self.filmQ.empty():
 			url = self.filmQ.get_nowait()
 		#self.eventL.clear()
