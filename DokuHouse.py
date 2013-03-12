@@ -2,10 +2,12 @@
 
 from imports import *
 from decrypt import *
+from yt_url import *
 import Queue
 import threading
+from Components.ScrollLabel import ScrollLabel
 
-DH_Version = "DokuHouse.de v0.90"
+DH_Version = "DokuHouse.de v0.91"
 
 DH_siteEncoding = 'utf-8'
 
@@ -13,14 +15,17 @@ DH_siteEncoding = 'utf-8'
 Sondertastenbelegung:
 
 Genre Auswahl:
-	KeyLeft: 			Menu Up
-	KeyOK,KeyRight:		Menu Down / Select
+	KeyLeft					: Menu Up
+	KeyOK,KeyRight			: Menu Down / Select
 	
 Doku Auswahl:
 	Bouquet +/-, Rot/Blau	: Seitenweise blättern in 1er Schritten Up/Down
 	'1', '4', '7',
 	'3', 6', '9'			: blättern in 2er, 5er, 10er Schritten Down/Up
 
+Stream Auswahl:
+	Rot/Blau				: Die Beschreibung Seitenweise scrollen
+	Gelb					: Videopriorität 'L','M','H'
 """
 def DH_menuListentry(entry):
 	return [entry,
@@ -48,14 +53,17 @@ class show_DH_Genre(Screen):
 			"up"	: self.keyUp,
 			"down"	: self.keyDown,
 			"left"	: self.keyMenuUp,
-			"right"	: self.keyOK,
+			"right"	: self.keyRight,
 			"red"	: self.keyRed
 		}, -1)
 
 		self['title'] = Label(DH_Version)
 		self['ContentTitle'] = Label("Genre Auswahl")
 		self['name'] = Label("")
-		self['coverArt'] = Pixmap()
+		self['F1'] = Label("")
+		self['F2'] = Label("")
+		self['F3'] = Label("")
+		self['F4'] = Label("")
 		
 		self.menuLevel = 0
 		self.menuMaxLevel = 1
@@ -71,11 +79,12 @@ class show_DH_Genre(Screen):
 		#self.subMenu = []
 		#self.keckse = {}
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
+		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
 		self.chooseMenuList.l.setItemHeight(25)
 		self['genreList'] = self.chooseMenuList
 		
-		mainGenre = [
+		self.genreMenu = [
+			[
 			("*Specials", "/language"),
 			("Geschichte", "/geschichte"),
 			("Gesellschaft", "/gesellschaft"),
@@ -85,8 +94,10 @@ class show_DH_Genre(Screen):
 			("Technologie", "/technologie"),
 			("Umwelt", "/umwelt"),
 			("Wissenschaft", "/wissenschaft")
-			]
-		subGenre_0 = [
+			],
+			[
+			#subGenre_0 = 
+			[
 			("Aktenzeichen XY", "/aktenzeichen-xy-spezial"),
 			("Ancient Aliens", "/ancient-aliens-spezial"),
 			("Da wird mir übel", "/da-wird-mir-ubel-spezial"),
@@ -104,8 +115,9 @@ class show_DH_Genre(Screen):
 			("Unser Universum", "/unser-universum-spezial"),
 			("Wunder des Weltalls", "/wunder-des-weltalls-spezial"),
 			("Zukunft ohne Menschen", "/zukunft-ohne-menschen")
-			]
-		subGenre_1 = [
+			],
+			#subGenre_1 = 
+			[
 			("Antike", "/antike"),
 			("DDR", "/ddr"),
 			("International", "/international"),
@@ -117,8 +129,9 @@ class show_DH_Genre(Screen):
 			("Vietnamkrieg", "/vietnamkrieg"),
 			("Weltkrieg I", "/weltkrieg-i"),
 			("Weltkrieg II", "/weltkrieg-ii")
-			]
-		subGenre_2 = [
+			],
+			#subGenre_2 = 
+			[
 			("Drogen", "/drogen"),
 			("Ernährung", "/ernahrung"),
 			("Gesundheit", "/gesundheit"),
@@ -129,42 +142,48 @@ class show_DH_Genre(Screen):
 			("Religion", "/religion"),
 			("Sexualität", "/sexualitat"),
 			("Sport", "/sport")
-			]
-		subGenre_3 = [
+			],
+			#subGenre_3 = 
+			[
 			("Banden", "/banden"),
 			("Gesetzeshüter", "/gesetzeshuter"),
 			("Kriminalfälle", "/kriminalfalle-allgemein"),
 			("Serienmörder", "/serienmorder"),
 			("Strafanstalten", "/strafanstalten")
-			]
-		subGenre_4 = [
+			],
+			#subGenre_4 = 
+			[
 			("Games", "/games"),
 			("Internet", "/internet"),
 			("Kunst", "/kunst"),
 			("Musik", "/musik"),
 			("Television", "/television")
-			]
-		subGenre_5 = [
+			],
+			#subGenre_5 = 
+			[
 			("9/11", "/911"),
 			("Linksextremismus", "/linksextremismus"),
 			("Rechtsextremismus", "/rechtsextremismus"),
 			("Revolution", "/revolution"),
 			("Verschwörungen", "/verschworungen"),
 			("Wirtschaft", "/wirtschaft")
-			]
-		subGenre_6 = [
+			],
+			#subGenre_6 = 
+			[
 			("Technik", "/technik"),
 			("Verkehrsmittel", "/verkehrsmittel"),
 			("Waffen", "/waffen-technologie")
-			]
-		subGenre_7 = [
+			],
+			#subGenre_7 = 
+			[
 			("Architektur", "/architektur"),
 			("Erdkunde", "/erdkunde"),
 			("Mystery", "/mystery"),
 			("Natur", "/natur"),
 			("Tiere", "/tiere")
-			]
-		subGenre_8 = [
+			],
+			#subGenre_8 = 
+			[
 			("Ägyptologie", "/agyptologie"),
 			("Archäologie", "/archaologie"),
 			("Astronomie", "/astronomie"),
@@ -174,11 +193,9 @@ class show_DH_Genre(Screen):
 			("Physik", "/physik"),
 			("Ufologie", "/ufologie")
 			]
-			
-		self.genreMenu = [mainGenre,
-			[subGenre_0,subGenre_1,subGenre_2,subGenre_3,subGenre_4,subGenre_5,subGenre_6,subGenre_7,subGenre_8
 			],
 			[
+			#subGenre_0_0
 			[None]
 			]
 			]
@@ -223,6 +240,9 @@ class show_DH_Genre(Screen):
 		self.menuIdx[self.menuLevel] = self['genreList'].getSelectedIndex()
 		self.setMenu(-1)
 
+	def keyRight(self):
+		pass
+		
 	def keyOK(self):
 		print "keyOK:"
 		if self.keyLocked:
@@ -372,6 +392,10 @@ class DH_FilmListeScreen(Screen):
 		self['handlung'] = Label("")
 		self['coverArt'] = Pixmap()
 		self['page'] = Label("")
+		self['F1'] = Label("Page-")
+		self['F2'] = Label("")
+		self['F3'] = Label("")
+		self['F4'] = Label("Page+")
 		
 		self.timerStart = False
 		self.seekTimerRun = False
@@ -391,7 +415,7 @@ class DH_FilmListeScreen(Screen):
 		self.setGenreStrTitle()
 		
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
+		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
 		self.chooseMenuList.l.setItemHeight(25)
 		self['filmList'] = self.chooseMenuList
 		
@@ -420,7 +444,7 @@ class DH_FilmListeScreen(Screen):
 		
 	def loadPageQueued(self):
 		print "loadPageQueued:"
-		self['name'].setText('Bitte warten...')
+		self['name'].setText('Bitte warten..')
 		while not self.filmQ.empty():
 			url = self.filmQ.get_nowait()
 		#self.eventL.clear()
@@ -568,7 +592,7 @@ class DH_FilmListeScreen(Screen):
 		self.picQ.put(None)
 		if not self.eventP.is_set():
 			self.eventP.set()
-			self.loadPic()
+		self.loadPic()
 		print "eventP: ",self.eventP.is_set()
 		
 	def keyOK(self):
@@ -721,18 +745,29 @@ class DH_Streams(Screen, ConfigListScreen):
 			"up" : self.keyUp,
 			"down" : self.keyDown,
 			"right" : self.keyRight,
-			"left" : self.keyLeft
+			"left" : self.keyLeft,
+			"yellow"	: self.keyYellow,
+			"red" : self.keyPageUp,
+			"blue" : self.keyPageDown,
 		}, -1)
 		
 		self['title'] = Label(DH_Version)
 		self['ContentTitle'] = Label("Streams für "+dokuName)
+		self['handlung'] = ScrollLabel("")
+		self['name'] = Label(self.dokuName)
+		self['vPrio'] = Label("")
+		self['F1'] = Label("Text-")
+		self['F2'] = Label("")
+		self['F3'] = Label("VidPrio")
+		self['F4'] = Label("Text+")
 		self['coverArt'] = Pixmap()
-		self['handlung'] = Label("")
-		self['name'] = Label(dokuName)
 		
+		self.videoPrio = 1
+		self.videoPrioS = ['L','M','H']
+		self.setVideoPrio()
 		self.streamListe = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
+		self.streamMenuList.l.setFont(0, gFont('Regular', 24))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamList'] = self.streamMenuList
 		self.keyLocked = True
@@ -747,15 +782,33 @@ class DH_Streams(Screen, ConfigListScreen):
 		
 	def parseData(self, data):
 		print "parseData:"
-		#http://www.youtube.com/(embed|v)/3NDBxP2MEHw?
-		m = re.search('"http://www.youtube.com/(embed|v)/(.*?)("|\?).*?data-text="(.*?)"', data, re.S)
-		parts = re.search('<p>Part 1 von (.*?)<br', data)
-		self.streamListe = []
-		#if streams:
+		m = re.search('<!-- aeBeginAds -->(.*?)<!-- aeEndAds -->', data, re.S)
 		if m:
+			ldesc = re.findall('<p>(.*?</p>)',m.group(1),re.S)
+			if ldesc:
+				desc = ""
+				i = 0
+				for txt in ldesc:
+					txt = re.sub('<span.*?</span>','',txt)
+					txt = re.sub('\n','',txt)
+					if i > 0:
+						txt = re.sub('</p>','\n',txt)
+					txt = re.sub('&nbsp;',' ',txt)
+					desc = "%s%s" % (desc,re.sub('<.*?>','',txt))
+					i += 1
+		
+		self.streamListe = []
+		m2 = re.search('"http://www.youtube.com/(embed|v)/(.*?)("|\?).*?data-text="(.*?)"', m.group(1), re.S)
+		parts = re.search('<p>Part 1 von (.*?)<br', m.group(1))
+		img = re.search('<img class=.*?src="(.*?)"', m.group(1))
+		if img:
+			imgurl = img.group(1)
+			print "Image: ",imgurl
+		else:
+			imgurl = None
+			
+		if m2:
 			print "Streams found"
-			desc = ""
-			#for (videoTag,title) in streams:
 			if parts:
 				self.nParts = int(parts.group(1))
 				pstr = " [1/%d]" % self.nParts
@@ -763,10 +816,12 @@ class DH_Streams(Screen, ConfigListScreen):
 				self.nParts = 0
 				pstr = ""
 				
-			self.streamListe.append((decodeHtml(m.group(4))+pstr,m.group(2),desc))
+			self.streamListe.append((decodeHtml(m2.group(4))+pstr,m2.group(2),desc,imgurl))
 		else:
 			print "No dokus found !"
-			self.streamListe.append(("No streams found !","",""))
+			desc = None
+			self.streamListe.append(("No streams found !","","",""))
+			
 		self.streamMenuList.setList(map(DH_StreamListEntry, self.streamListe))
 		self.loadPic()
 		
@@ -774,9 +829,9 @@ class DH_Streams(Screen, ConfigListScreen):
 		print "getHandlung:"
 		if desc == None:
 			print "No Infos found !"
-			self['handlung'].setText("Keine infos gefunden.")
-			return
-		self.setHandlung(desc)
+			self['handlung'].setText("Keine weiteren Info's vorhanden !")
+		else:
+			self.setHandlung(desc)
 		
 	def setHandlung(self, data):
 		print "setHandlung:"
@@ -786,8 +841,7 @@ class DH_Streams(Screen, ConfigListScreen):
 		print "loadPic:"
 		streamName = self['streamList'].getCurrent()[0][0]
 		self['name'].setText(streamName)
-		#streamPic = self['streamList'].getCurrent()[0][2]
-		streamPic = None
+		streamPic = self['streamList'].getCurrent()[0][3]
 		desc = self['streamList'].getCurrent()[0][2]
 		print "streamName: ",streamName
 		print "streamPic: ",streamPic
@@ -834,101 +888,16 @@ class DH_Streams(Screen, ConfigListScreen):
 	def dataError(self, error):
 		print "dataError:"
 		print error
-		self.streamListe.append(("Read error !","",""))			
+		self.streamListe.append(("Read error !","","",""))			
 		self.streamMenuList.setList(map(DH_StreamListEntry, self.streamListe))
 			
-	# code von doku.me geliehen
-	def getVideoUrl(self, url):
-		# this part is from mtube plugin
-		print "got url:", url
-		VIDEO_FMT_PRIORITY_MAP = {
-			'38' : 1, #MP4 Original (HD)
-			'37' : 2, #MP4 1080p (HD)
-			'22' : 3, #MP4 720p (HD)
-			'18' : 4, #MP4 360p
-			'35' : 5, #FLV 480p
-			'34' : 6, #FLV 360p
-		}
-		video_url = None
-		video_id = url
-
-		# Getting video webpage
-		#URLs for YouTube video pages will change from the format http://www.youtube.com/watch?v=ylLzyHk54Z0 to http://www.youtube.com/watch#!v=ylLzyHk54Z0.
-		watch_url = 'http://www.youtube.com/watch?v=%s&gl=US&hl=en' % video_id
-		watchrequest = Request(watch_url, None, std_headers)
-		try:
-			print "[MyTube] trying to find out if a HD Stream is available",watch_url
-			watchvideopage = urlopen2(watchrequest).read()
-		except (URLError, HTTPException, socket.error), err:
-			print "[MyTube] Error: Unable to retrieve watchpage - Error code: ", str(err)
-			print "test", video_url
-
-		# Get video info
-		for el in ['&el=embedded', '&el=detailpage', '&el=vevo', '']:
-			info_url = ('http://www.youtube.com/get_video_info?&video_id=%s%s&ps=default&eurl=&gl=US&hl=en' % (video_id, el))
-			request = Request(info_url, None, std_headers)
-			try:
-				infopage = urlopen2(request).read()
-				videoinfo = parse_qs(infopage)
-				if ('url_encoded_fmt_stream_map' or 'fmt_url_map') in videoinfo:
-					break
-			except (URLError, HTTPException, socket.error), err:
-				print "[MyTube] Error: unable to download video infopage",str(err)
-				return video_url
-
-		if ('url_encoded_fmt_stream_map' or 'fmt_url_map') not in videoinfo:
-			# Attempt to see if YouTube has issued an error message
-			if 'reason' not in videoinfo:
-				print '[MyTube] Error: unable to extract "fmt_url_map" or "url_encoded_fmt_stream_map" parameter for unknown reason'
-			else:
-				reason = unquote_plus(videoinfo['reason'][0])
-				print '[MyTube] Error: YouTube said: %s' % reason.decode('utf-8')
-			print video_url
-
-		video_fmt_map = {}
-		fmt_infomap = {}
-		if videoinfo.has_key('url_encoded_fmt_stream_map'):
-			tmp_fmtUrlDATA = videoinfo['url_encoded_fmt_stream_map'][0].split(',')
+	def setVideoPrio(self):
+		if self.videoPrio+1 > 2:
+			self.videoPrio = 0
 		else:
-			tmp_fmtUrlDATA = videoinfo['fmt_url_map'][0].split(',')
-		for fmtstring in tmp_fmtUrlDATA:
-			fmturl = fmtid = fmtsig = ""
-			if videoinfo.has_key('url_encoded_fmt_stream_map'):
-				try:
-					for arg in fmtstring.split('&'):
-						if arg.find('=') >= 0:
-							print arg.split('=')
-							key, value = arg.split('=')
-							if key == 'itag':
-								if len(value) > 3:
-									value = value[:2]
-								fmtid = value
-							elif key == 'url':
-								fmturl = value
-							elif key == 'sig':
-								fmtsig = value
-								
-					if fmtid != "" and fmturl != "" and fmtsig != ""  and VIDEO_FMT_PRIORITY_MAP.has_key(fmtid):
-						video_fmt_map[VIDEO_FMT_PRIORITY_MAP[fmtid]] = { 'fmtid': fmtid, 'fmturl': unquote_plus(fmturl), 'fmtsig': fmtsig }
-						fmt_infomap[int(fmtid)] = "%s&signature=%s" %(unquote_plus(fmturl), fmtsig)
-					fmturl = fmtid = fmtsig = ""
-
-				except:
-					print "error parsing fmtstring:",fmtstring
-					
-			else:
-				(fmtid,fmturl) = fmtstring.split('|')
-			if VIDEO_FMT_PRIORITY_MAP.has_key(fmtid) and fmtid != "":
-				video_fmt_map[VIDEO_FMT_PRIORITY_MAP[fmtid]] = { 'fmtid': fmtid, 'fmturl': unquote_plus(fmturl) }
-				fmt_infomap[int(fmtid)] = unquote_plus(fmturl)
-		print "[MyTube] got",sorted(fmt_infomap.iterkeys())
-		if video_fmt_map and len(video_fmt_map):
-			print "[MyTube] found best available video format:",video_fmt_map[sorted(video_fmt_map.iterkeys())[0]]['fmtid']
-			best_video = video_fmt_map[sorted(video_fmt_map.iterkeys())[0]]
-			video_url = "%s&signature=%s" %(best_video['fmturl'].split(';')[0], best_video['fmtsig'])
-			print "[MyTube] found best available video url:",video_url
-
-		return video_url
+			self.videoPrio += 1
+			
+		self['vPrio'].setText(self.videoPrioS[self.videoPrio])
 		
 	def keyOK(self):
 		print "keyOK:"
@@ -936,14 +905,23 @@ class DH_Streams(Screen, ConfigListScreen):
 			return
 		dhTitle = self['streamList'].getCurrent()[0][0]
 		dhVideoId = self['streamList'].getCurrent()[0][1]
-		print "Title: ",dhTitle
-		print "VideoId: ",dhVideoId
-		dhLink = self.getVideoUrl(dhVideoId)
+		#print "Title: ",dhTitle
+		#print "VideoId: ",dhVideoId
+		dhLink = getVideoUrl(dhVideoId, self.videoPrio)
 		if dhLink:
-			print dhLink
+			#print dhLink
 			sref = eServiceReference(0x1001, 0, dhLink)
 			sref.setName(dhTitle)
 			self.session.open(MoviePlayer, sref)
+
+	def keyPageUp(self):
+		self['handlung'].pageUp()
+			
+	def keyPageDown(self):
+		self['handlung'].pageDown()
+			
+	def keyYellow(self):
+		self.setVideoPrio()
 		
 	def keyUp(self):
 		if self.keyLocked:
