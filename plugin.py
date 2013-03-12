@@ -43,6 +43,7 @@ from appletrailers import *
 from DOKUh import *
 from DokuHouse import *
 from AllMusicHouse import *
+from LiveLeak import *
 # porn
 from ahme import *
 from amateurporn import *
@@ -102,6 +103,7 @@ config.mediaportal.showappletrailers = ConfigYesNo(default = True)
 config.mediaportal.showDOKUh = ConfigYesNo(default = True)
 config.mediaportal.showDokuHouse = ConfigYesNo(default = True)
 config.mediaportal.showAllMusicHouse = ConfigYesNo(default = True)
+config.mediaportal.showLiveLeak = ConfigYesNo(default = True)
 # porn
 config.mediaportal.show4tube = ConfigYesNo(default = False)
 config.mediaportal.showahme = ConfigYesNo(default = False)
@@ -172,6 +174,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige DOKUh:", config.mediaportal.showDOKUh))
 		self.configlist.append(getConfigListEntry("Zeige DokuHouse:", config.mediaportal.showDokuHouse))
 		self.configlist.append(getConfigListEntry("Zeige AllMusicHouse:", config.mediaportal.showAllMusicHouse))
+		self.configlist.append(getConfigListEntry("Zeige LiveLeak:", config.mediaportal.showLiveLeak))
 		self.configlist.sort(key=lambda t : tuple(t[0].lower()))
 		self.configlist.insert(0, ("Skinauswahl:", config.mediaportal.skin))
 		self.configlist.insert(0, ("HauptScreen-Ansicht", config.mediaportal.ansicht))
@@ -239,7 +242,7 @@ class HelpScreen(Screen):
 class chooseMenuList(MenuList):
 	def __init__(self, list):
 		MenuList.__init__(self, list, True, eListboxPythonMultiContent)
-		self.l.setFont(0, gFont("mediaportal", 20))
+		self.l.setFont(0, gFont("Regular", 20))
 		self.l.setItemHeight(40)
 
 class haupt_Screen(Screen, ConfigListScreen):
@@ -256,8 +259,6 @@ class haupt_Screen(Screen, ConfigListScreen):
 			
 		Screen.__init__(self, session)
 		
-		registerFont("/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/mediaportal.ttf", "mediaportal", 100, False)
-	
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "HelpActions"], {
 			"ok"    : self.keyOK,
 			"up"    : self.keyUp,
@@ -366,6 +367,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.fun.append(self.hauptListEntry("Rofl.to", "rofl"))
 		if config.mediaportal.showFail.value:
 			self.fun.append(self.hauptListEntry("Fail.to", "fail"))
+		if config.mediaportal.showLiveLeak.value:
+			self.fun.append(self.hauptListEntry("LiveLeak", "liveleak"))
 		#if config.mediaportal.showYourfree.value:
 		#	self.fun.append(self.hauptListEntry("YourfreeTv", "yourfreetv"))
 		if config.mediaportal.showFilmOn.value:
@@ -600,6 +603,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(show_DH_Genre)
 		elif auswahl == "AllMusicHouse":
 			self.session.open(show_AMH_Genre)
+		elif auswahl == "LiveLeak":
+			self.session.open(LiveLeakScreen)
 		# porn
 		elif auswahl == "4Tube":
 			if config.mediaportal.pornpin.value:
@@ -791,6 +796,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("Spobox", "spobox"))
 		if config.mediaportal.showSongsto.value:
 			self.plugin_liste.append(("Songs.to", "songsto"))
+		if config.mediaportal.showLiveLeak.value:
+			self.plugin_liste.append(("LiveLeak", "liveleak"))
 			
 		### porn
 		if config.mediaportal.show4tube.value:
@@ -832,8 +839,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 				
 		self.skin_dump = ""
 		#self.skin_dump += "<screen name=\"MediaPortal\" position=\"0,0\" size=\"1280,720\" flags=\"wfNoBorder\">"
-		#self.skin_dump += "<widget name=\"name\" position=\"20,150\" size=\"900,50\" foregroundColor=\"#00ffffff\" backgroundColor=\"#26181d20\" transparent=\"1\" font=\"mediaportal;28\" valign=\"top\" halign=\"center\" />"
-		#self.skin_dump += "<widget name=\"page\" position=\"1100,680\" size=\"100,40\" foregroundColor=\"#00ffffff\" backgroundColor=\"#26181d20\" transparent=\"1\" font=\"mediaportal;28\" valign=\"top\" halign=\"center\" />"
+		#self.skin_dump += "<widget name=\"name\" position=\"20,150\" size=\"900,50\" foregroundColor=\"#00ffffff\" backgroundColor=\"#26181d20\" transparent=\"1\" font=\"Regular;28\" valign=\"top\" halign=\"center\" />"
+		#self.skin_dump += "<widget name=\"page\" position=\"1100,680\" size=\"100,40\" foregroundColor=\"#00ffffff\" backgroundColor=\"#26181d20\" transparent=\"1\" font=\"Regular;28\" valign=\"top\" halign=\"center\" />"
 		#self.skin_dump += "<ePixmap position=\"0,0\" size=\"1280,720\" zPosition=\"-1\" pixmap=\"/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/mpback.png\" />"
 		#self.skin_dump += "<widget source=\"session.VideoPicture\" render=\"Pig\" position=\"913,15\" size=\"320,180\" zPosition=\"3\" backgroundColor=\"transparent\" />"
 		self.skin_dump += "<widget name=\"frame\" position=\"20,210\" size=\"150,80\" pixmap=\"/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons_wall/150x80_MP_Selektor_%s.png\" zPosition=\"2\" transparent=\"0\" alphatest=\"blend\" />" % config.mediaportal.selektor.value
@@ -852,8 +859,6 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		
 		Screen.__init__(self, session)
 		
-		registerFont("/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/mediaportal.ttf", "mediaportal", 100, False)
-
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions", "HelpActions"], {
 			"ok"    : self.keyOK,
 			"up"    : self.keyUp,
@@ -1019,6 +1024,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(show_DH_Genre)
 		elif auswahl == "AllMusicHouse":
 			self.session.open(show_AMH_Genre)
+		elif auswahl == "LiveLeak":
+			self.session.open(LiveLeakScreen)
 		# porn
 		elif auswahl == "4Tube":
 			if config.mediaportal.pornpin.value:
