@@ -4,6 +4,7 @@ from imports import *
 from decrypt import *
 import Queue
 import threading
+from Components.ScrollLabel import ScrollLabel
 
 # teilweise von movie2k geliehen
 if fileExists('/usr/lib/enigma2/python/Plugins/Extensions/TMDb/plugin.pyo'):
@@ -17,17 +18,21 @@ else:
 	IMDbPresent = False
 	TMDbPresent = False
 
-IS_Version = "iStream.Ws v1.06"
+IS_Version = "iStream.ws v1.07"
 
 IS_siteEncoding = 'utf-8'
 
 """
 	Tastenfunktionen in der Filmliste:
-		Bouquet +/-, Rot/Blau	: Seitenweise blättern in 1 Schritten Up/Down
+		Bouquet +/-				: Seitenweise blättern in 1 Schritten Up/Down
 		'1', '4', '7',
 		'3', 6', '9'			: blättern in 2er, 5er, 10er Schritten Down/Up
 		Grün/Gelb				: Sortierung [A-Z] bzw. [IMDB]
 		INFO					: anzeige der IMDB-Bewertung
+
+	Stream Auswahl:
+		Rot/Blau				: Die Beschreibung Seitenweise scrollen
+
 """
 
 def IStreamGenreListEntry(entry):
@@ -57,6 +62,10 @@ class showIStreamGenre(Screen):
 		self['ContentTitle'] = Label("M e n ü")
 		self['name'] = Label("Genre Auswahl")
 		self['coverArt'] = Pixmap()
+		self['F1'] = Label("")
+		self['F2'] = Label("")
+		self['F3'] = Label("")
+		self['F4'] = Label("")
 		
 		self.keyLocked = True
 		self.genreListe = []
@@ -141,7 +150,6 @@ class IStreamFilmListeScreen(Screen):
 			
 		Screen.__init__(self, session)
 		
-		#self["actions"]  = ActionMap(["OkCancelActions","SetupActions", "NumberActions", "MenuActions","DirectionActions","InfobarSeekActions"], {
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions","DirectionActions"], {
 			"ok"    : self.keyOK,
 			"cancel": self.keyCancel,
@@ -167,13 +175,9 @@ class IStreamFilmListeScreen(Screen):
 			"9" : self.key_9,
 			"green" : self.keySortAZ,
 			"yellow" : self.keySortIMDB,
-			"blue" :  self.keyPageUp,
-			"red" :  self.keyPageDown,
+			"red" :  self.keyTxtPageUp,
+			"blue" :  self.keyTxtPageDown,
 			"info" :  self.keyTMDbInfo
-			#"seekBackManual" :  self.keyPageDownMan,
-			#"seekFwdManual" :  self.keyPageUpMan,
-			#"seekFwd" :  self.keyPageUp,
-			#"seekBack" :  self.keyPageDown
 		}, -1)
 
 		self.sortOrder = 0;
@@ -181,14 +185,18 @@ class IStreamFilmListeScreen(Screen):
 		self.sortParAZ = "?orderby=title&order=ASC"
 		self.genreTitle = "Filme in Genre "
 		self.sortOrderStrAZ = " - Sortierung A-Z"
-		self.sortOrderStrIMDB = " - Sortierung IMDB"
+		self.sortOrderStrIMDB = " - Sortierung IMDb"
 		self.sortOrderStrGenre = ""
 		self['title'] = Label(IS_Version)
 		self['leftContentTitle'] = Label("")
 		self['name'] = Label("")
-		self['handlung'] = Label("")
+		self['handlung'] = ScrollLabel("")
 		self['coverArt'] = Pixmap()
 		self['page'] = Label("")
+		self['F1'] = Label("Text-")
+		self['F2'] = Label("SortA-Z")
+		self['F3'] = Label("SortIMDb")
+		self['F4'] = Label("Text+")
 		
 		self.timerStart = False
 		self.seekTimerRun = False
@@ -275,6 +283,7 @@ class IStreamFilmListeScreen(Screen):
 					self.pages = int(m[0])
 				else:
 					self.pages = 1
+					
 				self.page = 1
 				print "Page: %d / %d" % (self.page,self.pages)
 				self['page'].setText("%d / %d" % (self.page,self.pages))
@@ -283,11 +292,8 @@ class IStreamFilmListeScreen(Screen):
 			for	(url,name,imageurl) in filme:
 				#print	"Url: ", url, "Name: ", name, "ImgUrl: ", imageurl
 				self.filmListe.append((decodeHtml(name), url, imageurl))
+				
 			self.chooseMenuList.setList(map(IStreamFilmListEntry,	self.filmListe))
-			
-			#if not self.filmQ.empty():
-			#	self.loadPageQueued()
-			#	return
 			self.loadPicQueued()
 		else:
 			print "No movies found !"
@@ -336,8 +342,13 @@ class IStreamFilmListeScreen(Screen):
 			self.ShowCoverNone()
 		else:
 			print "Download pict."
-			downloadPage(streamPic, "/tmp/Icon.jpg").addCallback(self.ShowCover)
+			downloadPage(streamPic, "/tmp/Icon.jpg").addCallback(self.ShowCover).addErrback(self.dataErrorP)
 	
+	def dataErrorP(self, error):
+		print "dataError:"
+		print error
+		self.ShowCoverNone()
+		
 	def getHandlung(self, url):
 		print "getHandlung:"
 		if url == None:
@@ -573,6 +584,12 @@ class IStreamFilmListeScreen(Screen):
 			title = self['filmList'].getCurrent()[0][0]
 			self.session.open(IMDB, title)
 
+	def keyTxtPageUp(self):
+		self['handlung'].pageUp()
+			
+	def keyTxtPageDown(self):
+		self['handlung'].pageDown()
+			
 	def keyCancel(self):
 		self.close()
 
@@ -598,15 +615,21 @@ class IStreamStreams(Screen, ConfigListScreen):
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
-			"ok"    : self.keyOK,
-			"cancel": self.keyCancel
+			"red" 		: self.keyTxtPageUp,
+			"blue" 		: self.keyTxtPageDown,
+			"ok"    	: self.keyOK,
+			"cancel"	: self.keyCancel
 		}, -1)
 		
 		self['title'] = Label(IS_Version)
 		self['ContentTitle'] = Label("Stream Auswahl")
 		self['coverArt'] = Pixmap()
-		self['handlung'] = Label("")
+		self['handlung'] = ScrollLabel("")
 		self['name'] = Label(filmName)
+		self['F1'] = Label("Text-")
+		self['F2'] = Label("")
+		self['F3'] = Label("")
+		self['F4'] = Label("Text+")
 		
 		self.streamListe = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -626,6 +649,13 @@ class IStreamStreams(Screen, ConfigListScreen):
 	def parseData(self, data):
 		print "parseData:"
 		streams = re.findall('a href="(.*?)".*?title=.*?\[(.*)\](.*)">', data)
+		mdesc = re.search('="og:description" content=\'(.*?)\'',data)
+		if mdesc:
+			print "Descr. found"
+			desc = mdesc.group(1)
+		else:
+			desc = "Keine weiteren Info's !"
+				
 		self.streamListe = []
 		if streams:
 			print "Streams found"
@@ -640,8 +670,10 @@ class IStreamStreams(Screen, ConfigListScreen):
 					print isUrl
 		else:
 			print "No Streams found"
-			self.streamListe.append(("No streams found !","",""))			
+			self.streamListe.append(("No streams found !","",""))
+			
 		self.streamMenuList.setList(map(IStreamStreamListEntry, self.streamListe))
+		self['handlung'].setText(decodeHtml(desc))
 		self.keyLocked = False			
 		print "imageUrl: ",self.imageUrl
 		if self.imageUrl:
@@ -668,6 +700,15 @@ class IStreamStreams(Screen, ConfigListScreen):
 		self.streamListe.append(("Read error !",""))			
 		self.streamMenuList.setList(map(IStreamStreamListEntry, self.streamListe))
 			
+	def got_link(self, stream_url):
+		print "got_link:"
+		if stream_url == None:
+			message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=3)
+		else:
+			sref = eServiceReference(0x1001, 0, stream_url)
+			sref.setName("%s%s" % (self.filmName,self['streamList'].getCurrent()[0][2]))
+			self.session.open(MoviePlayer, sref)
+	
 	def keyOK(self):
 		if self.keyLocked:
 			return
@@ -678,14 +719,11 @@ class IStreamStreams(Screen, ConfigListScreen):
 		print "get_streamLink:"
 		get_stream_link(self.session).check_link(streamLink, self.got_link)
 			
-	def got_link(self, stream_url):
-		print "got_link:"
-		if stream_url == None:
-			message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=3)
-		else:
-			sref = eServiceReference(0x1001, 0, stream_url)
-			sref.setName("%s%s" % (self.filmName,self['streamList'].getCurrent()[0][2]))
-			self.session.open(MoviePlayer, sref)
-	
+	def keyTxtPageUp(self):
+		self['handlung'].pageUp()
+			
+	def keyTxtPageDown(self):
+		self['handlung'].pageDown()
+			
 	def keyCancel(self):
 		self.close()
