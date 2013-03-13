@@ -4,8 +4,10 @@ from imports import *
 from decrypt import *
 import Queue
 import threading
+from Components.ScrollLabel import ScrollLabel
+from yt_url import *
 
-DOKUH_Version = "DOKUh.de v0.93"
+DOKUH_Version = "DOKUh.de v0.94"
 
 DOKUH_siteEncoding = 'utf-8'
 
@@ -13,13 +15,18 @@ DOKUH_siteEncoding = 'utf-8'
 Sondertastenbelegung:
 
 Genre Auswahl:
-	KeyLeft: 			Menu Up
-	KeyOK, KeyRight:	Menu Down / Select
+	KeyLeft				: Menu Up
+	KeyOK, KeyRight		: Menu Down / Select
 	
 Doku Auswahl:
-	Bouquet +/-, Rot/Blau	: Seitenweise blättern in 1er Schritten Up/Down
+	Bouquet +/-,		: Seitenweise blättern in 1er Schritten Up/Down
+	Rot/Blau			: Die Beschreibung Seitenweise scrollen
 	'1', '4', '7',
-	'3', 6', '9'			: blättern in 2er, 5er, 10er Schritten Down/Up
+	'3', 6', '9'		: blättern in 2er, 5er, 10er Schritten Down/Up
+
+Stream Auswahl:
+	Rot/Blau			: Die Beschreibung Seitenweise scrollen
+	Gelb				: Videopriorität 'L','M','H'
 
 """
 def DOKUHmenuListentry(entry):
@@ -48,7 +55,7 @@ class showDOKUHGenre(Screen):
 			"up"	: self.keyUp,
 			"down"	: self.keyDown,
 			"left"	: self.keyMenuUp,
-			"right"	: self.keyOK,
+			"right"	: self.keyRight,
 			"red"	: self.keyRed
 		}, -1)
 
@@ -56,6 +63,10 @@ class showDOKUHGenre(Screen):
 		self['ContentTitle'] = Label("Genre Auswahl")
 		self['name'] = Label("")
 		self['coverArt'] = Pixmap()
+		self['F1'] = Label("")
+		self['F2'] = Label("")
+		self['F3'] = Label("")
+		self['F4'] = Label("")
 		
 		self.menuLevel = 0
 		self.menuMaxLevel = 2
@@ -309,6 +320,9 @@ class showDOKUHGenre(Screen):
 		self.setMenu(0, True)
 		self.keyLocked = False
 
+	def keyRight(self):
+		pass
+		
 	def keyRed(self):
 		pass
 
@@ -456,17 +470,13 @@ class DOKUHFilmListeScreen(Screen):
 			"6" : self.key_6,
 			"7" : self.key_7,
 			"9" : self.key_9,
-			"blue" :  self.keyPageUp,
-			"red" :  self.keyPageDown
-			#"seekBackManual" :  self.keyPageDownMan,
-			#"seekFwdManual" :  self.keyPageUpMan,
-			#"seekFwd" :  self.keyPageUp,
-			#"seekBack" :  self.keyPageDown
+			"blue" :  self.keyTxtPageUp,
+			"red" :  self.keyTxtPageDown
 		}, -1)
 
 		self.sortOrder = 0
 		self.baseUrl = "http://dokuh.de"
-		self.genreTitle = "Dokus in Genre "
+		self.genreTitle = "Dokukanäle in Genre "
 		self.sortParIMDB = ""
 		self.sortParAZ = "?orderby=title"
 		self.sortOrderStrAZ = ""
@@ -475,9 +485,13 @@ class DOKUHFilmListeScreen(Screen):
 		self['title'] = Label(DOKUH_Version)
 		self['leftContentTitle'] = Label("")
 		self['name'] = Label("")
-		self['handlung'] = Label("")
+		self['handlung'] = ScrollLabel("")
 		self['coverArt'] = Pixmap()
 		self['page'] = Label("")
+		self['F1'] = Label("Text-")
+		self['F2'] = Label("")
+		self['F3'] = Label("")
+		self['F4'] = Label("Text+")
 		
 		self.timerStart = False
 		self.seekTimerRun = False
@@ -687,6 +701,12 @@ class DOKUHFilmListeScreen(Screen):
 			self.loadPic()
 		print "eventP: ",self.eventP.is_set()
 		
+	def keyTxtPageUp(self):
+		self['handlung'].pageUp()
+			
+	def keyTxtPageDown(self):
+		self['handlung'].pageDown()
+			
 	def keyOK(self):
 		if (self.keyLocked|self.eventL.is_set()):
 			return
@@ -832,20 +852,31 @@ class DOKUHStreams(Screen, ConfigListScreen):
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
-			"ok"    : self.keyOK,
-			"cancel": self.keyCancel,
-			"up" : self.keyUp,
-			"down" : self.keyDown,
-			"right" : self.keyRight,
-			"left" : self.keyLeft
+			"ok"    	: self.keyOK,
+			"cancel"	: self.keyCancel,
+			"up" 		: self.keyUp,
+			"down" 		: self.keyDown,
+			"right" 	: self.keyPageDown,
+			"left" 		: self.keyPageUp,
+			"yellow"	: self.keyYellow,
+			"red" 		: self.keyTxtPageUp,
+			"blue" 		: self.keyTxtPageDown
 		}, -1)
 		
 		self['title'] = Label(DOKUH_Version)
 		self['ContentTitle'] = Label("Streams für "+dokuName)
 		self['coverArt'] = Pixmap()
-		self['handlung'] = Label("")
+		self['handlung'] = ScrollLabel("")
 		self['name'] = Label(dokuName)
+		self['F1'] = Label("Text-")
+		self['F2'] = Label("")
+		self['F3'] = Label("VidPrio")
+		self['F4'] = Label("Text+")
+		self['vPrio'] = Label("")
 		
+		self.videoPrio = 1
+		self.videoPrioS = ['L','M','H']
+		self.setVideoPrio()
 		self.streamListe = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
@@ -873,6 +904,7 @@ class DOKUHStreams(Screen, ConfigListScreen):
 		else:
 			print "No dokus found !"
 			self.streamListe.append(("No streams found !","","","",""))
+			
 		self.streamMenuList.setList(map(DOKUHStreamListEntry, self.streamListe))
 		self.loadPic()
 		
@@ -882,6 +914,7 @@ class DOKUHStreams(Screen, ConfigListScreen):
 			print "No Infos found !"
 			self['handlung'].setText("Keine infos gefunden.")
 			return
+			
 		self.setHandlung(desc)
 		
 	def setHandlung(self, data):
@@ -942,98 +975,13 @@ class DOKUHStreams(Screen, ConfigListScreen):
 		self.streamListe.append(("Read error !","","","",""))			
 		self.streamMenuList.setList(map(DOKUHStreamListEntry, self.streamListe))
 			
-	# code von doku.me geliehen
-	def getVideoUrl(self, url):
-		# this part is from mtube plugin
-		print "got url:", url
-		VIDEO_FMT_PRIORITY_MAP = {
-			'38' : 1, #MP4 Original (HD)
-			'37' : 2, #MP4 1080p (HD)
-			'22' : 3, #MP4 720p (HD)
-			'18' : 4, #MP4 360p
-			'35' : 5, #FLV 480p
-			'34' : 6, #FLV 360p
-		}
-		video_url = None
-		video_id = url
-
-		# Getting video webpage
-		#URLs for YouTube video pages will change from the format http://www.youtube.com/watch?v=ylLzyHk54Z0 to http://www.youtube.com/watch#!v=ylLzyHk54Z0.
-		watch_url = 'http://www.youtube.com/watch?v=%s&gl=US&hl=en' % video_id
-		watchrequest = Request(watch_url, None, std_headers)
-		try:
-			print "[MyTube] trying to find out if a HD Stream is available",watch_url
-			watchvideopage = urlopen2(watchrequest).read()
-		except (URLError, HTTPException, socket.error), err:
-			print "[MyTube] Error: Unable to retrieve watchpage - Error code: ", str(err)
-			print "test", video_url
-
-		# Get video info
-		for el in ['&el=embedded', '&el=detailpage', '&el=vevo', '']:
-			info_url = ('http://www.youtube.com/get_video_info?&video_id=%s%s&ps=default&eurl=&gl=US&hl=en' % (video_id, el))
-			request = Request(info_url, None, std_headers)
-			try:
-				infopage = urlopen2(request).read()
-				videoinfo = parse_qs(infopage)
-				if ('url_encoded_fmt_stream_map' or 'fmt_url_map') in videoinfo:
-					break
-			except (URLError, HTTPException, socket.error), err:
-				print "[MyTube] Error: unable to download video infopage",str(err)
-				return video_url
-
-		if ('url_encoded_fmt_stream_map' or 'fmt_url_map') not in videoinfo:
-			# Attempt to see if YouTube has issued an error message
-			if 'reason' not in videoinfo:
-				print '[MyTube] Error: unable to extract "fmt_url_map" or "url_encoded_fmt_stream_map" parameter for unknown reason'
-			else:
-				reason = unquote_plus(videoinfo['reason'][0])
-				print '[MyTube] Error: YouTube said: %s' % reason.decode('utf-8')
-			print video_url
-
-		video_fmt_map = {}
-		fmt_infomap = {}
-		if videoinfo.has_key('url_encoded_fmt_stream_map'):
-			tmp_fmtUrlDATA = videoinfo['url_encoded_fmt_stream_map'][0].split(',')
+	def setVideoPrio(self):
+		if self.videoPrio+1 > 2:
+			self.videoPrio = 0
 		else:
-			tmp_fmtUrlDATA = videoinfo['fmt_url_map'][0].split(',')
-		for fmtstring in tmp_fmtUrlDATA:
-			fmturl = fmtid = fmtsig = ""
-			if videoinfo.has_key('url_encoded_fmt_stream_map'):
-				try:
-					for arg in fmtstring.split('&'):
-						if arg.find('=') >= 0:
-							print arg.split('=')
-							key, value = arg.split('=')
-							if key == 'itag':
-								if len(value) > 3:
-									value = value[:2]
-								fmtid = value
-							elif key == 'url':
-								fmturl = value
-							elif key == 'sig':
-								fmtsig = value
-								
-					if fmtid != "" and fmturl != "" and fmtsig != ""  and VIDEO_FMT_PRIORITY_MAP.has_key(fmtid):
-						video_fmt_map[VIDEO_FMT_PRIORITY_MAP[fmtid]] = { 'fmtid': fmtid, 'fmturl': unquote_plus(fmturl), 'fmtsig': fmtsig }
-						fmt_infomap[int(fmtid)] = "%s&signature=%s" %(unquote_plus(fmturl), fmtsig)
-					fmturl = fmtid = fmtsig = ""
-
-				except:
-					print "error parsing fmtstring:",fmtstring
-					
-			else:
-				(fmtid,fmturl) = fmtstring.split('|')
-			if VIDEO_FMT_PRIORITY_MAP.has_key(fmtid) and fmtid != "":
-				video_fmt_map[VIDEO_FMT_PRIORITY_MAP[fmtid]] = { 'fmtid': fmtid, 'fmturl': unquote_plus(fmturl) }
-				fmt_infomap[int(fmtid)] = unquote_plus(fmturl)
-		print "[MyTube] got",sorted(fmt_infomap.iterkeys())
-		if video_fmt_map and len(video_fmt_map):
-			print "[MyTube] found best available video format:",video_fmt_map[sorted(video_fmt_map.iterkeys())[0]]['fmtid']
-			best_video = video_fmt_map[sorted(video_fmt_map.iterkeys())[0]]
-			video_url = "%s&signature=%s" %(best_video['fmturl'].split(';')[0], best_video['fmtsig'])
-			print "[MyTube] found best available video url:",video_url
-
-		return video_url
+			self.videoPrio += 1
+			
+		self['vPrio'].setText(self.videoPrioS[self.videoPrio])
 		
 	def keyOK(self):
 		print "keyOK:"
@@ -1041,15 +989,15 @@ class DOKUHStreams(Screen, ConfigListScreen):
 			return
 		dhTitle = self['streamList'].getCurrent()[0][0]
 		dhVideoId = self['streamList'].getCurrent()[0][1]
-		print "Title: ",dhTitle
-		print "VideoId: ",dhVideoId
-		dhLink = self.getVideoUrl(dhVideoId)
+		#print "Title: ",dhTitle
+		#print "VideoId: ",dhVideoId
+		dhLink = getVideoUrl(dhVideoId, self.videoPrio)
 		if dhLink:
-			print dhLink
+			#print dhLink
 			sref = eServiceReference(0x1001, 0, dhLink)
 			sref.setName(dhTitle)
 			self.session.open(MoviePlayer, sref)
-		
+
 	def keyUp(self):
 		if self.keyLocked:
 			return
@@ -1062,18 +1010,27 @@ class DOKUHStreams(Screen, ConfigListScreen):
 		self['streamList'].down()
 		self.loadPic()
 		
-	def keyLeft(self):
+	def keyPageUp(self):
 		if self.keyLocked:
 			return
 		self['streamList'].pageUp()
 		self.loadPic()
 		
-	def keyRight(self):
+	def keyPageDown(self):
 		if self.keyLocked:
 			return
 		self['streamList'].pageDown()
 		self.loadPic()
 	
+	def keyTxtPageUp(self):
+		self['handlung'].pageUp()
+			
+	def keyTxtPageDown(self):
+		self['handlung'].pageDown()
+			
+	def keyYellow(self):
+		self.setVideoPrio()
+		
 	def keyCancel(self):
 		self.close()
 		

@@ -7,7 +7,7 @@ import Queue
 import threading
 from Components.ScrollLabel import ScrollLabel
 
-DH_Version = "DokuHouse.de v0.91"
+DH_Version = "DokuHouse.de v0.92"
 
 DH_siteEncoding = 'utf-8'
 
@@ -19,9 +19,10 @@ Genre Auswahl:
 	KeyOK,KeyRight			: Menu Down / Select
 	
 Doku Auswahl:
-	Bouquet +/-, Rot/Blau	: Seitenweise blättern in 1er Schritten Up/Down
+	Bouquet +/-				: Seitenweise blättern in 1er Schritten Up/Down
 	'1', '4', '7',
 	'3', 6', '9'			: blättern in 2er, 5er, 10er Schritten Down/Up
+	Rot/Blau				: Die Beschreibung Seitenweise scrollen
 
 Stream Auswahl:
 	Rot/Blau				: Die Beschreibung Seitenweise scrollen
@@ -370,8 +371,8 @@ class DH_FilmListeScreen(Screen):
 			"6" : self.key_6,
 			"7" : self.key_7,
 			"9" : self.key_9,
-			"blue" :  self.keyPageUp,
-			"red" :  self.keyPageDown
+			"blue" :  self.keyTxtPageUp,
+			"red" :  self.keyTxtPageDown
 			#"seekBackManual" :  self.keyPageDownMan,
 			#"seekFwdManual" :  self.keyPageUpMan,
 			#"seekFwd" :  self.keyPageUp,
@@ -389,13 +390,13 @@ class DH_FilmListeScreen(Screen):
 		self['title'] = Label(DH_Version)
 		self['leftContentTitle'] = Label("")
 		self['name'] = Label("")
-		self['handlung'] = Label("")
+		self['handlung'] = ScrollLabel("")
 		self['coverArt'] = Pixmap()
 		self['page'] = Label("")
-		self['F1'] = Label("Page-")
+		self['F1'] = Label("Text-")
 		self['F2'] = Label("")
 		self['F3'] = Label("")
-		self['F4'] = Label("Page+")
+		self['F4'] = Label("Text+")
 		
 		self.timerStart = False
 		self.seekTimerRun = False
@@ -716,6 +717,12 @@ class DH_FilmListeScreen(Screen):
 		#print "keyPageUpFast(10)"
 		self.keyPageUpFast(10)
 
+	def keyTxtPageUp(self):
+		self['handlung'].pageUp()
+			
+	def keyTxtPageDown(self):
+		self['handlung'].pageDown()
+			
 	def keyCancel(self):
 		self.close()
 
