@@ -37,7 +37,7 @@ from songsTo import *
 from myEntertainment import *
 from movie2k import *
 from iStreamWS import *
-from UltimateStreams import *
+#from UltimateStreams import *
 from mahlzeitTV import *
 from appletrailers import *
 from DOKUh import *
@@ -96,7 +96,8 @@ config.mediaportal.showSongsto = ConfigYesNo(default = True)
 config.mediaportal.showMEHD = ConfigYesNo(default = True)
 config.mediaportal.showIStream = ConfigYesNo(default = True)
 config.mediaportal.showM2k = ConfigYesNo(default = True)
-config.mediaportal.showUstreams = ConfigYesNo(default = True)
+# Ustreams deaktiviert.
+config.mediaportal.showUstreams = ConfigYesNo(default = False)
 config.mediaportal.show4Players = ConfigYesNo(default = True)
 config.mediaportal.showMahlzeitTV = ConfigYesNo(default = True)
 config.mediaportal.showappletrailers = ConfigYesNo(default = True)
@@ -167,7 +168,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige Songs.to:", config.mediaportal.showSongsto))
 		self.configlist.append(getConfigListEntry("Zeige My-Entertainment:", config.mediaportal.showMEHD))
 		self.configlist.append(getConfigListEntry("Zeige IStream:", config.mediaportal.showIStream))
-		self.configlist.append(getConfigListEntry("Zeige UltimateStreams:", config.mediaportal.showUstreams))
+		#self.configlist.append(getConfigListEntry("Zeige UltimateStreams:", config.mediaportal.showUstreams))
 		self.configlist.append(getConfigListEntry("Zeige 4Players:", config.mediaportal.show4Players))
 		self.configlist.append(getConfigListEntry("Zeige mahlzeit.tv:", config.mediaportal.showMahlzeitTV))
 		self.configlist.append(getConfigListEntry("Zeige Apple Movie Trailers:", config.mediaportal.showappletrailers))
