@@ -1,22 +1,22 @@
 from imports import *
 
-def ahmeGenreListEntry(entry):
+def beegGenreListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		] 
 
-def ahmeFilmListEntry(entry):
+def beegFilmListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		] 
 		
-class ahmeGenreScreen(Screen):
+class beegGenreScreen(Screen):
 	
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/ahmeGenreScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/beegGenreScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/ahmeGenreScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/beegGenreScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -33,7 +33,7 @@ class ahmeGenreScreen(Screen):
 			"left" : self.keyLeft
 		}, -1)
 
-		self['title'] = Label("Ah-Me.com")
+		self['title'] = Label("beeg.com")
 		self['name'] = Label("Genre Auswahl")
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
@@ -49,57 +49,23 @@ class ahmeGenreScreen(Screen):
 		
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "http://www.ah-me.com/channels.php"
+		url = "http://beeg.com/"
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		phCats = re.findall('class="categories">.*?<a href="(.*?)page1.html".*?<img src="(.*?)" alt="(.*?)"', data, re.S)
+		phCats = re.findall('href="/tag(.*?)".*?>(.*?)</a>', data, re.S)
 		if phCats:
-			for (phUrl, phImage, phTitle) in phCats:
-				self.genreliste.append((phTitle, phUrl, phImage))
+			for (phUrl, phTitle) in phCats:
+				self.genreliste.append((phTitle, phUrl))
 			self.genreliste.sort()
-			self.genreliste.insert(0, ("High Definition", "http://www.ah-me.com/high-definition/", None))
-			self.genreliste.insert(0, ("Longest", "http://www.ah-me.com/long-movies/", None))
-			self.genreliste.insert(0, ("Top Rated", "http://www.ah-me.com/top-rated/", None))
-			self.genreliste.insert(0, ("Most Popular", "http://www.ah-me.com/most-viewed/", None))
-			self.genreliste.insert(0, ("Most Recent", "http://www.ah-me.com/", None))
-			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
-			self.chooseMenuList.setList(map(ahmeGenreListEntry, self.genreliste))
+			self.genreliste.insert(0, ("Longest", "/section/long-videos/"))
+			self.genreliste.insert(0, ("Newest", "/section/home/"))
+			self.genreliste.insert(0, ("--- Search ---", "callSuchen"))
+			self.chooseMenuList.setList(map(beegGenreListEntry, self.genreliste))
 			self.keyLocked = False
-			self.showInfos()
 
 	def dataError(self, error):
 		print error
-
-	def showInfos(self):
-		phImage = self['genreList'].getCurrent()[0][2]
-		print phImage
-		if not phImage == None:
-			downloadPage(phImage, "/tmp/phIcon.jpg").addCallback(self.ShowCover)
-		else:
-			self.ShowCoverNone()
-
-	def ShowCover(self, picData):
-		picPath = "/tmp/phIcon.jpg"
-		self.ShowCoverFile(picPath)
-		
-	def ShowCoverNone(self):
-		picPath = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/images/no_coverArt.png" % config.mediaportal.skin.value
-		self.ShowCoverFile(picPath)
-		
-	def ShowCoverFile(self, picPath):
-		if fileExists(picPath):
-			self['coverArt'].instance.setPixmap(None)
-			self.scale = AVSwitch().getFramebufferScale()
-			self.picload = ePicLoad()
-			size = self['coverArt'].instance.size()
-			self.picload.setPara((size.width(), size.height(), self.scale[0], self.scale[1], False, 1, "#FF000000"))
-			if self.picload.startDecode(picPath, 0, 0, False) == 0:
-				ptr = self.picload.getData()
-				if ptr != None:
-					self['coverArt'].instance.setPixmap(ptr.__deref__())
-					self['coverArt'].show()
-					del self.picload
 
 	def keyOK(self):
 		streamGenreName = self['genreList'].getCurrent()[0][0]
@@ -108,7 +74,7 @@ class ahmeGenreScreen(Screen):
 
 		else:
 			streamGenreLink = self['genreList'].getCurrent()[0][1]
-			self.session.open(ahmeFilmScreen, streamGenreLink)
+			self.session.open(beegFilmScreen, streamGenreLink, streamGenreName)
 		
 	def suchen(self):
 		self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoard, title = (_("Suchkriterium eingeben")), text = self.suchString)
@@ -116,44 +82,42 @@ class ahmeGenreScreen(Screen):
 	def SuchenCallback(self, callback = None, entry = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '+')
-			streamGenreLink = 'http://www.ah-me.com/search/%s/' % (self.suchString)
-			self.session.open(ahmeFilmScreen, streamGenreLink)
+			streamGenreLink = 'http://beeg.com/search?q=%s' % (self.suchString)
+			streamGenreName = "--- Search ---"
+			self.session.open(beegFilmScreen, streamGenreLink, streamGenreName)
 
 	def keyLeft(self):
 		if self.keyLocked:
 			return
 		self['genreList'].pageUp()
-		self.showInfos()
 		
 	def keyRight(self):
 		if self.keyLocked:
 			return
 		self['genreList'].pageDown()
-		self.showInfos()
 		
 	def keyUp(self):
 		if self.keyLocked:
 			return
 		self['genreList'].up()
-		self.showInfos()
 		
 	def keyDown(self):
 		if self.keyLocked:
 			return
 		self['genreList'].down()
-		self.showInfos()
 
 	def keyCancel(self):
 		self.close()
 
-class ahmeFilmScreen(Screen):
+class beegFilmScreen(Screen):
 	
-	def __init__(self, session, phCatLink):
+	def __init__(self, session, phCatLink, phCatName):
 		self.session = session
 		self.phCatLink = phCatLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/ahmeFilmScreen.xml" % config.mediaportal.skin.value
+		self.phCatName = phCatName
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/beegFilmScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/ahmeFilmScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/beegFilmScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -173,7 +137,7 @@ class ahmeFilmScreen(Screen):
 			"green" : self.keyPageNumber
 		}, -1)
 
-		self['title'] = Label("Ah-Me.com")
+		self['title'] = Label("beeg.com")
 		self['name'] = Label("Film Auswahl")
 		self['views'] = Label("")
 		self['runtime'] = Label("")
@@ -195,16 +159,33 @@ class ahmeFilmScreen(Screen):
 		self['name'].setText('Bitte warten...')
 		self.filmliste = []
 		self['page'].setText(str(self.page))
-		url = "%spage%s.html" % (self.phCatLink, str(self.page))
+		if self.phCatName == "--- Search ---":
+			url = "%s&page=%s" % (self.phCatLink, str(self.page))
+		elif self.phCatName == "Newest":
+			url = "http://beeg.com%s%s/" % (self.phCatLink, str(self.page))
+		elif self.phCatName == "Longest":
+			url = "http://beeg.com%s%s/" % (self.phCatLink, str(self.page))
+		else:
+			url = "http://beeg.com/tag%s/%s/" % (self.phCatLink, str(self.page))		
 		print url
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
 	def loadData(self, data):
-		phMovies = re.findall('mianitura.*?<a href="(.*?)"><img src="(.*?)" alt="(.*?)".*?hour3">(.*?)</div>', data, re.S)
-		if phMovies:
-			for (phUrl, phImage, phTitle, phRuntime) in phMovies:
-				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage, phRuntime))
-			self.chooseMenuList.setList(map(ahmeFilmListEntry, self.filmliste))
+		m = re.search('tumbid  =\[(.*)\].*?var tumbalt',data,re.S)
+		n = re.search('tumbalt =\[(.*)\].*?var writestr',data,re.S)
+		mx = m.group(1) + ","
+		nx = n.group(1) + ","
+		phId = re.findall('(.*?),', mx, re.S)
+		phThumb = re.findall('\'(.*?)\',', nx, re.S)
+		x = 0
+		if phId:
+			for phVideoId in phId:
+				phUrl = 'http://beeg.com/%s' % phVideoId
+				phImage = 'http://cdn.anythumb.com/236x177/%s.jpg' % phVideoId
+				phTitle = phThumb[x]
+				self.filmliste.append((phTitle, phUrl, phImage))
+				x = x + 1
+			self.chooseMenuList.setList(map(beegFilmListEntry, self.filmliste))
 			self.showInfos()
 		self.keyLocked = False
 
@@ -214,9 +195,7 @@ class ahmeFilmScreen(Screen):
 	def showInfos(self):
 		phTitle = self['genreList'].getCurrent()[0][0]
 		phImage = self['genreList'].getCurrent()[0][2]
-		phRuntime = self['genreList'].getCurrent()[0][3]
 		self['name'].setText(phTitle)
-		self['runtime'].setText(phRuntime)
 		if not phImage == None:
 			downloadPage(phImage, "/tmp/Icon.jpg").addCallback(self.ShowCover)
 		else:
@@ -301,7 +280,7 @@ class ahmeFilmScreen(Screen):
 			getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
-		videoPage = re.findall('<video src="(.*?)"', data, re.S)
+		videoPage = re.findall('\'file\': \'(.*?)\',', data, re.S)
 		if videoPage:
 			for phurl in videoPage:
 				print phurl

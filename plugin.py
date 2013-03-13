@@ -47,6 +47,7 @@ from LiveLeak import *
 # porn
 from ahme import *
 from amateurporn import *
+from beeg import *
 from eporner import *
 from hdporn import *
 from pornerbros import *
@@ -109,6 +110,7 @@ config.mediaportal.showLiveLeak = ConfigYesNo(default = True)
 config.mediaportal.show4tube = ConfigYesNo(default = False)
 config.mediaportal.showahme = ConfigYesNo(default = False)
 config.mediaportal.showamateurporn = ConfigYesNo(default = False)
+config.mediaportal.showbeeg = ConfigYesNo(default = False)
 config.mediaportal.showeporner = ConfigYesNo(default = False)
 config.mediaportal.showhdporn = ConfigYesNo(default = False)
 config.mediaportal.showM2kPorn = ConfigYesNo(default = False)
@@ -186,6 +188,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige 4Tube:", config.mediaportal.show4tube))
 		self.configlist.append(getConfigListEntry("Zeige Ah-Me:", config.mediaportal.showahme))
 		self.configlist.append(getConfigListEntry("Zeige AmateurPorn:", config.mediaportal.showamateurporn))
+		self.configlist.append(getConfigListEntry("Zeige beeg:", config.mediaportal.showbeeg))
 		self.configlist.append(getConfigListEntry("Zeige Eporner:", config.mediaportal.showeporner))
 		self.configlist.append(getConfigListEntry("Zeige HDPorn:", config.mediaportal.showhdporn))
 		self.configlist.append(getConfigListEntry("Zeige Movie2k-Porn:", config.mediaportal.showM2kPorn))
@@ -391,6 +394,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.fun.append(self.hauptListEntry("Ah-Me", "ahme"))
 		if config.mediaportal.showamateurporn.value:
 			self.fun.append(self.hauptListEntry("AmateurPorn", "amateurporn"))
+		if config.mediaportal.showahme.value:
+			self.fun.append(self.hauptListEntry("beeg", "beeg"))
 		if config.mediaportal.showeporner.value:
 			self.fun.append(self.hauptListEntry("Eporner", "eporner"))
 		if config.mediaportal.showhdporn.value:
@@ -624,6 +629,11 @@ class haupt_Screen(Screen, ConfigListScreen):
 				self.session.openWithCallback(self.pinamateurporn, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
 			else:
 				self.session.open(amateurpornGenreScreen)
+		elif auswahl == "beeg":
+			if config.mediaportal.pornpin.value:
+				self.session.openWithCallback(self.pinbeeg, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
+			else:
+				self.session.open(beegGenreScreen)
 		elif auswahl == "Eporner":
 			if config.mediaportal.pornpin.value:
 				self.session.openWithCallback(self.pineporner, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
@@ -676,6 +686,10 @@ class haupt_Screen(Screen, ConfigListScreen):
 	def pinamateurporn(self, pincode):
 		if pincode:
 			self.session.open(amateurpornGenreScreen)
+
+	def pinbeeg(self, pincode):
+		if pincode:
+			self.session.open(beegGenreScreen)
 
 	def pineporner(self, pincode):
 		if pincode:
@@ -809,6 +823,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("Ah-Me", "ahme"))
 		if config.mediaportal.showamateurporn.value:
 			self.plugin_liste.append(("AmateurPorn", "amateurporn"))
+		if config.mediaportal.showbeeg.value:
+			self.plugin_liste.append(("beeg", "beeg"))
 		if config.mediaportal.showeporner.value:
 			self.plugin_liste.append(("Eporner", "eporner"))
 		if config.mediaportal.showhdporn.value:
@@ -1047,6 +1063,11 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 				self.session.openWithCallback(self.pinamateurporn, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
 			else:
 				self.session.open(amateurpornGenreScreen)
+		elif auswahl == "beeg":
+			if config.mediaportal.pornpin.value:
+				self.session.openWithCallback(self.pinbeeg, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
+			else:
+				self.session.open(pornrabbitGenreScreen)
 		elif auswahl == "Eporner":
 			if config.mediaportal.pornpin.value:
 				self.session.openWithCallback(self.pineporner, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
@@ -1099,6 +1120,10 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 	def pinamateurporn(self, pincode):
 		if pincode:
 			self.session.open(amateurpornGenreScreen)
+
+	def pinbeeg(self, pincode):
+		if pincode:
+			self.session.open(beegGenreScreen)
 
 	def pineporner(self, pincode):
 		if pincode:
