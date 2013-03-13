@@ -5,8 +5,9 @@ from decrypt import *
 from yt_url import *
 import Queue
 import threading
+from Components.ScrollLabel import ScrollLabel
 
-AMH_Version = "AllMusicHouse.de v0.93"
+AMH_Version = "AllMusicHouse.de v0.94"
 
 AMH_siteEncoding = 'utf-8'
 
@@ -14,13 +15,18 @@ AMH_siteEncoding = 'utf-8'
 Sondertastenbelegung:
 
 Genre Auswahl:
-	KeyLeft: 			Menu Up
-	KeyOK,KeyRight:		Menu Down / Select
+	KeyLeft				: Menu Up
+	KeyOK,KeyRight		: Menu Down / Select
 	
 Doku Auswahl:
-	Bouquet +/-, Rot/Blau	: Seitenweise blättern in 1er Schritten Up/Down
+	Bouquet +/-			: Seitenweise blättern in 1er Schritten Up/Down
 	'1', '4', '7',
-	'3', 6', '9'			: blättern in 2er, 5er, 10er Schritten Down/Up
+	'3', 6', '9'		: blättern in 2er, 5er, 10er Schritten Down/Up
+	Rot/Blau			: Die Beschreibung Seitenweise scrollen
+
+Stream Auswahl:
+	Rot/Blau			: Die Beschreibung Seitenweise scrollen
+	Gelb				: Videopriorität 'L','M','H'
 
 """
 def AMH_menuListentry(entry):
@@ -269,8 +275,8 @@ class AMH_FilmListeScreen(Screen):
 			"6" : self.key_6,
 			"7" : self.key_7,
 			"9" : self.key_9,
-			"blue" :  self.keyPageUp,
-			"red" :  self.keyPageDown
+			"blue" :  self.keyTxtPageUp,
+			"red" :  self.keyTxtPageDown
 		}, -1)
 
 		self.sortOrder = 0
@@ -284,12 +290,12 @@ class AMH_FilmListeScreen(Screen):
 		self['title'] = Label(AMH_Version)
 		self['leftContentTitle'] = Label("")
 		self['name'] = Label("")
-		self['handlung'] = Label("")
+		self['handlung'] = ScrollLabel("")
 		self['page'] = Label("")
-		self['F1'] = Label("Page-")
+		self['F1'] = Label("Text-")
 		self['F2'] = Label("")
 		self['F3'] = Label("")
-		self['F4'] = Label("Page+")
+		self['F4'] = Label("Text+")
 		
 		self.timerStart = False
 		self.seekTimerRun = False
@@ -535,6 +541,12 @@ class AMH_FilmListeScreen(Screen):
 		#print "keyPageUpFast(10)"
 		self.keyPageUpFast(10)
 
+	def keyTxtPageUp(self):
+		self['handlung'].pageUp()
+			
+	def keyTxtPageDown(self):
+		self['handlung'].pageDown()
+			
 	def keyCancel(self):
 		self.close()
 
@@ -565,18 +577,20 @@ class AMH_Streams(Screen, ConfigListScreen):
 			"down" 		: self.keyDown,
 			"right" 	: self.keyRight,
 			"left" 		: self.keyLeft,
+			"blue" 		: self.keyTxtPageUp,
+			"red" 		: self.keyTxtPageDown,
 			"yellow"	: self.keyYellow
 		}, -1)
 		
 		self['title'] = Label(AMH_Version)
 		self['ContentTitle'] = Label("Streams für "+dokuName)
-		self['handlung'] = Label("")
+		self['handlung'] = ScrollLabel("")
 		self['name'] = Label(dokuName)
 		self['vPrio'] = Label("")
-		self['F1'] = Label("")
+		self['F1'] = Label("Text-")
 		self['F2'] = Label("")
 		self['F3'] = Label("VidPrio")
-		self['F4'] = Label("")
+		self['F4'] = Label("Text+")
 		
 		self.videoPrio = 0
 		self.videoPrioS = ['L','M','H']
@@ -702,6 +716,12 @@ class AMH_Streams(Screen, ConfigListScreen):
 		self['streamList'].pageDown()
 		self.loadPic()
 	
+	def keyTxtPageUp(self):
+		self['handlung'].pageUp()
+			
+	def keyTxtPageDown(self):
+		self['handlung'].pageDown()
+			
 	def keyCancel(self):
 		self.close()
 		
