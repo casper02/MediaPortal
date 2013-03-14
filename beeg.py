@@ -145,6 +145,7 @@ class beegFilmScreen(Screen):
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
 		self.page = 1
+		self.lastpage = 1
 		
 		self.filmliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -171,6 +172,14 @@ class beegFilmScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
 	def loadData(self, data):
+		pagerbox = re.search('<div class="pager-box">(.*?)</div>', data, re.S)
+		if pagerbox:
+			lastp = re.findall('<a href=".*?" target="_self">(.*?)</a>', pagerbox.group(1), re.S)
+			if lastp:
+				last = lastp[len(lastp)-1]
+				self.lastpage = int(last)
+		else:
+			self.lastpage = 1
 		m = re.search('tumbid  =\[(.*)\].*?var tumbalt',data,re.S)
 		n = re.search('tumbalt =\[(.*)\].*?var writestr',data,re.S)
 		mx = m.group(1) + ","
@@ -229,8 +238,12 @@ class beegFilmScreen(Screen):
 
 	def callbackkeyPageNumber(self, answer):
 		if answer is not None:
-			self.page = int(answer)
-			self.loadpage()
+			if int(answer) < self.lastpage + 1:
+				self.page = int(answer)
+				self.loadpage()
+			else:
+				self.page = self.lastpage
+				self.loadpage()
 
 	def keyPageDown(self):
 		print "PageDown"
@@ -244,8 +257,9 @@ class beegFilmScreen(Screen):
 		print "PageUP"
 		if self.keyLocked:
 			return
-		self.page += 1
-		self.loadpage()
+		if self.page < self.lastpage:
+			self.page += 1
+			self.loadpage()
 		
 	def keyLeft(self):
 		if self.keyLocked:
