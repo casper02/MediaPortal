@@ -399,7 +399,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.fun.append(self.hauptListEntry("Ah-Me", "ahme"))
 		if config.mediaportal.showamateurporn.value:
 			self.fun.append(self.hauptListEntry("AmateurPorn", "amateurporn"))
-		if config.mediaportal.showahme.value:
+		if config.mediaportal.showbeeg.value:
 			self.fun.append(self.hauptListEntry("beeg", "beeg"))
 		if config.mediaportal.showeporner.value:
 			self.fun.append(self.hauptListEntry("Eporner", "eporner"))
@@ -1068,7 +1068,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			if config.mediaportal.pornpin.value:
 				self.session.openWithCallback(self.pinahme, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
 			else:
-				self.session.open(pornrabbitGenreScreen)
+				self.session.open(ahmeGenreScreen)
 		elif auswahl == "AmateurPorn":
 			if config.mediaportal.pornpin.value:
 				self.session.openWithCallback(self.pinamateurporn, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
@@ -1078,7 +1078,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			if config.mediaportal.pornpin.value:
 				self.session.openWithCallback(self.pinbeeg, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
 			else:
-				self.session.open(pornrabbitGenreScreen)
+				self.session.open(beegGenreScreen)
 		elif auswahl == "Eporner":
 			if config.mediaportal.pornpin.value:
 				self.session.openWithCallback(self.pineporner, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
