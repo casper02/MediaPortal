@@ -26,7 +26,7 @@ class xhamsterGenreScreen(Screen):
 		
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions"], {
 			"ok" : self.keyOK,
-			"cancel": self.keyCancel,
+			"cancel" : self.keyCancel,
 			"up" : self.keyUp,
 			"down" : self.keyDown,
 			"right" : self.keyRight,
