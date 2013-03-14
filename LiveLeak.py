@@ -144,39 +144,38 @@ class LiveLeakClips(Screen):
 		if not self.page < 2:
 			self.page -= 1
 			self.loadPage()
-		
+
 	def keyPageUp(self):
 		print "PageUP"
 		if self.keyLocked:
 			return
-		if not self.page > 2:
-			self.page += 1
-			self.loadPage()
-		
+		self.page += 1
+		self.loadPage()
+
 	def keyLeft(self):
 		if self.keyLocked:
 			return
 		self['List'].pageUp()
 		self.showPic()
-		
+
 	def keyRight(self):
 		if self.keyLocked:
 			return
 		self['List'].pageDown()
 		self.showPic()
-		
+
 	def keyUp(self):
 		if self.keyLocked:
 			return
 		self['List'].up()
 		self.showPic()
-		
+
 	def keyDown(self):
 		if self.keyLocked:
 			return
 		self['List'].down()
 		self.showPic()
-		
+
 	def keyOK(self):
 		if self.keyLocked:
 			return
