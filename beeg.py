@@ -183,6 +183,7 @@ class beegFilmScreen(Screen):
 				phUrl = 'http://beeg.com/%s' % phVideoId
 				phImage = 'http://cdn.anythumb.com/236x177/%s.jpg' % phVideoId
 				phTitle = phThumb[x]
+				phTitle = phTitle.replace("\\'","'")
 				self.filmliste.append((phTitle, phUrl, phImage))
 				x = x + 1
 			self.chooseMenuList.setList(map(beegFilmListEntry, self.filmliste))

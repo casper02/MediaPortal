@@ -108,7 +108,7 @@ class LiveLeakClips(Screen):
 			self.feedliste = []
 			for (lltitle,llurl,llimage) in rssfeed:
 				if not re.match('LiveLeak.com Rss Feed', lltitle, re.S|re.I):
-					self.feedliste.append((lltitle,llurl,llimage))
+					self.feedliste.append((decodeHtml(lltitle),llurl,llimage))
 			self.chooseMenuList.setList(map(LiveLeakEntry, self.feedliste))
 			self.keyLocked = False
 			self.showPic()
