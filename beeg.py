@@ -284,7 +284,7 @@ class beegFilmScreen(Screen):
 		if videoPage:
 			for phurl in videoPage:
 				print phurl
-				url = phurl
+				url = phurl + '?start=0'
 				self.play(url)
 		self.keyLocked = False
 		
