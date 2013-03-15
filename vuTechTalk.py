@@ -1,9 +1,8 @@
 from imports import *
-from decrypt import *
 
 def vutechtalkListEntry(entry):
 	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 830, 25, 0, RT_HALIGN_LEFT, entry[0])
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT, entry[0])
 		]
 
 class vutechtalk(Screen):
@@ -37,7 +36,7 @@ class vutechtalk(Screen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 		
