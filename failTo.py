@@ -28,7 +28,8 @@ class failScreen(Screen):
 			"left"  : self.keyLeft,
 			"right" : self.keyRight,
 			"nextBouquet" : self.keyPageUp,
-			"prevBouquet" : self.keyPageDown
+			"prevBouquet" : self.keyPageDown,
+			"green" : self.keyPageNumber
 		}, -1)
 		
 		self.keyLocked = True
@@ -51,10 +52,11 @@ class failScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
 		
 	def loadPageData(self, data):
-		flVideos = re.findall('<a href="(.*?)" title="(.*?) anschauen"><img src="(.*?)"', data)
+		parse = re.search('<body>(.*?)Fan werden', data, re.S)
+		flVideos = re.findall('class="entry">.*?</span><a href="(.*?)" title=".*?">(.*?)</a></h3>.*?class="preview".*?<img src="(.*?)"', parse.group(1), re.S)
 		if flVideos:
 			self.flListe = []
-			for (flUrl,flTitle,flImage) in flVideos:
+			for (flUrl, flTitle, flImage) in flVideos:
 				flUrl = "http://www.fail.to" + flUrl
 				flImage = "http://www.fail.to" + flImage
 				self.flListe.append((flTitle, flUrl, flImage))
@@ -85,6 +87,14 @@ class failScreen(Screen):
 					self['roflPic'].instance.setPixmap(ptr.__deref__())
 					self['roflPic'].show()
 					del self.picload
+
+	def keyPageNumber(self):
+		self.session.openWithCallback(self.callbackkeyPageNumber, VirtualKeyBoard, title = (_("Seitennummer eingeben")), text = str(self.page))
+
+	def callbackkeyPageNumber(self, answer):
+		if answer is not None:
+			self.page = int(answer)
+			self.loadPage()
 
 	def keyPageDown(self):
 		print "PageDown"
