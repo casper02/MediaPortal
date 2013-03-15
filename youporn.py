@@ -53,7 +53,7 @@ class youpornGenreScreen(Screen):
 		getPage(url, headers={'Cookie': 'age_verified=1', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		phCats = re.findall('<a href="/category(.*?)"><img src="(.*?)" alt="(.*?)"><span', data, re.S)
+		phCats = re.findall('class="cat_pic">.*?<a href="/category(.*?)".*?<img src="(.*?)" alt="(.*?)"><span class="cat_overlay', data, re.S)
 		if phCats:
 			for (phUrl, phImage, phTitle) in phCats:
 				phUrl = "http://www.youporn.com/category" + phUrl + '?page='
@@ -101,7 +101,6 @@ class youpornGenreScreen(Screen):
 					self['coverArt'].instance.setPixmap(ptr.__deref__())
 					self['coverArt'].show()
 					del self.picload
-
 
 	def keyOK(self):
 		streamGenreName = self['genreList'].getCurrent()[0][0]
@@ -202,8 +201,10 @@ class youpornFilmScreen(Screen):
 		getPage(url, headers={'Cookie': 'age_verified=1', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
 	def loadData(self, data):
-		parse = re.search('Sub menu dropdown.*?/Sub menu dropdown(.*?)pagination', data, re.S)
-		phMovies = re.findall('class="wrapping-video-box">.*?<a href="(.*?)">.*?<img src="(.*?)" alt="(.*?)".*?class="duration">(.*?)<span>length.*?views">(.*?)<span>views', parse.group(1), re.S)
+		parse = re.search('Sub menu dropdown.*?/Sub menu dropdown(.*?)Our Friends', data, re.S)
+		if not parse:
+			parse = re.search('Sub menu dropdown.*?/Sub menu dropdown(.*?)pagination', data, re.S)
+		phMovies = re.findall('class="wrapping-video-box">.*?<a href="(.*?)">.*?<img src="(.*?)" alt="(.*?)".*?class="duration">(.*?)<span>length.*?class="views">(.*?) <span>views', parse.group(1), re.S)
 		if phMovies:
 			for (phUrl, phImage, phTitle, phRuntime, phViews) in phMovies:
 				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage, phRuntime, phViews))
