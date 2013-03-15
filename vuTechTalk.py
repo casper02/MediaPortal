@@ -2,7 +2,7 @@ from imports import *
 
 def vutechtalkListEntry(entry):
 	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 900, 25, 0, RT_HALIGN_LEFT, entry[0])
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT, entry[0])
 		]
 
 class vutechtalk(Screen):
