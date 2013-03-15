@@ -1,0 +1,12 @@
+<!-- scienceTvGenreScreen -->
+  <screen name="ScienceTv" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
+    <widget name="title" position="20,10" size="500,40" backgroundColor="#00101214" transparent="1" zPosition="10" font="mediaportal; 26" valign="center" halign="left" />
+    <widget source="global.CurrentTime" render="Label" position="730,8" size="150,30" backgroundColor="#00101214" transparent="1" zPosition="1" font="mediaportal; 26" valign="center" halign="right" foregroundColor="#00dcdcdc">
+      <convert type="ClockToText">Format:%-H:%M</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="580,39" size="300,20" backgroundColor="#00101214" transparent="1" zPosition="1" font="mediaportal;18" valign="center" halign="right" foregroundColor="#00dcdcdc">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <widget name="leftContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="mediaportal;22" halign="center" />
+    <widget name="genreList" position="0,135" size="900,460" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" />
+  </screen>
