@@ -243,8 +243,15 @@ class SzeneStreamsStreamListeScreen(Screen):
 		
 	def loadPageData(self, data):
 		print "daten bekommen"
-		streams = re.findall('<legend><b><font color="#ff0000">(.*?)</font></b>.*?target="_blank" href="(.*?)"', data, re.S)
-		streams += re.findall('<legend><b><font color="#ff0000">(.*?)</font></b>.*?iframe src="(.*?)"', data, re.S)
+		raw = re.findall('(<legend><b><font color="#ff0000">.*?</fieldset></div>)', data, re.S)
+		if raw:
+			streams = []
+			for each in raw:
+				if re.match('.*?iframe src', each, re.S|re.I):
+					streams += re.findall('<font color="#ff0000">(.*?)</font>.*?<iframe src="(.*?)"', each, re.S|re.I)
+				else:
+					streams += re.findall('<font color="#ff0000">(.*?)</font>.*?target="_blank" href="(.*?)"', each, re.S|re.I)
+
 		if streams:
 			for (hostername,stream) in streams:
 				if re.match('.*?(putlocker|sockshare|streamclou|xvidstage|filenuke|movreel|nowvideo|xvidstream|uploadc|vreer|MonsterUploads|Novamov|Videoweed|Divxstage|Ginbig|Flashstrea|Movshare|yesload|faststream|Vidstream|PrimeShare|flashx|Divxmov|Putme|Zooupload|Wupfile)', hostername.strip(' '), re.S|re.I):
