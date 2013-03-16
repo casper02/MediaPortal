@@ -46,6 +46,7 @@ from AllMusicHouse import *
 from LiveLeak import *
 from DokuStream import *
 from ScienceTV import *
+from SzeneStreams import *
 # porn
 from ahme import *
 from amateurporn import *
@@ -110,6 +111,7 @@ config.mediaportal.showAllMusicHouse = ConfigYesNo(default = True)
 config.mediaportal.showLiveLeak = ConfigYesNo(default = True)
 config.mediaportal.showDokuStream = ConfigYesNo(default = True)
 config.mediaportal.showScienceTV = ConfigYesNo(default = True)
+config.mediaportal.showSzeneStreams = ConfigYesNo(default = True)
 # porn
 config.mediaportal.show4tube = ConfigYesNo(default = False)
 config.mediaportal.showahme = ConfigYesNo(default = False)
@@ -184,6 +186,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige LiveLeak:", config.mediaportal.showLiveLeak))
 		self.configlist.append(getConfigListEntry("Zeige DokuStream:", config.mediaportal.showDokuStream))
 		self.configlist.append(getConfigListEntry("Zeige ScienceTV:", config.mediaportal.showScienceTV))
+		self.configlist.append(getConfigListEntry("Zeige SzeneStreams:", config.mediaportal.showSzeneStreams))
 		self.configlist.sort(key=lambda t : tuple(t[0].lower()))
 		self.configlist.insert(0, ("Skinauswahl:", config.mediaportal.skin))
 		self.configlist.insert(0, ("HauptScreen-Ansicht", config.mediaportal.ansicht))
@@ -339,6 +342,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.showM2KPorn = False
 		if config.mediaportal.showIStream.value:
 			self.movies.append(self.hauptListEntry("IStream", "istream"))
+		if config.mediaportal.showSzeneStreams.value:
+			self.movies.append(self.hauptListEntry("SzeneStreams", "szenestreams"))
 		# info
 		if config.mediaportal.showDoku.value:
 			self.infos.append(self.hauptListEntry("Doku.me", "doku"))		
@@ -627,6 +632,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(show_DS_Genre)
 		elif auswahl == "ScienceTV":
 			self.session.open(scienceTvGenreScreen)
+		elif auswahl == "SzeneStreams":
+			self.session.open(SzeneStreamsGenreScreen)
 		# porn
 		elif auswahl == "4Tube":
 			if config.mediaportal.pornpin.value:
@@ -833,6 +840,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("DokuStream", "dokustream"))
 		if config.mediaportal.showScienceTV.value:
 			self.plugin_liste.append(("ScienceTV", "sciencetv"))
+		if config.mediaportal.showSzeneStreams.value:
+			self.plugin_liste.append(("SzeneStreams", "szenestreams"))
 			
 		### porn
 		if config.mediaportal.show4tube.value:
@@ -1069,6 +1078,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(show_DS_Genre)
 		elif auswahl == "ScienceTV":
 			self.session.open(scienceTvGenreScreen)
+		elif auswahl == "SzeneStreams":
+			self.session.open(SzeneStreamsGenreScreen)
 		# porn
 		elif auswahl == "4Tube":
 			if config.mediaportal.pornpin.value:
