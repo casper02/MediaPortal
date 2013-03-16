@@ -35,7 +35,7 @@ class forPlayersGenreScreen(Screen):
 		self['coverArt'] = Pixmap()
 		self.selectionListe = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
+		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.chooseMenuList.l.setItemHeight(25)
 		self['selectionList'] = self.chooseMenuList
 		self.onLayoutFinish.append(self.layoutFinished)
@@ -96,7 +96,7 @@ class forPlayersVideoScreen(Screen):
 		self.videosListe = []
 		self.videosQueue = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
+		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.chooseMenuList.l.setItemHeight(25)
 		self['videosList'] = self.chooseMenuList
 		self.onLayoutFinish.append(self.loadVideos)

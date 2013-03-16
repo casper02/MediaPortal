@@ -1,9 +1,8 @@
 from imports import *
-from decrypt import *
 
 def cczweiListEntry(entry):
 	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 580, 25, 0, RT_HALIGN_LEFT, entry[0])
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT, entry[0])
 		] 
 class cczwei(Screen):
 		
@@ -28,7 +27,7 @@ class cczwei(Screen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('Regular', 24))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 
@@ -40,12 +39,17 @@ class cczwei(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 		
 	def parseData(self, data):
-		videos = re.findall('<b>Folge (.*?)</b>.*?<a href="(index.php.*?)">(.*?)</a>', data, re.S)
+		parse = re.search('CLASS="header"><b>TV-SENDUNGEN(.*?)class="header">AKTUELLE', data, re.S)
+		videos = re.findall('<b>Folge (.*?)</b>.*?<a href="(index.php.*?)">(.*?)</a>', parse.group(1), re.S)
 		if videos:
-			for (folge,url,title) in videos:
-				title = "Folge %s - %s" % (folge,title)
+			for (folge, url, title) in videos:
+				title = "Folge %s - %s" % (folge, title)
+				title = title.replace('\xe4','ae')
+				title = title.replace('\xf6','oe')
+				title = title.replace('\xfc','ue')
+				title = title.replace('\xdf','ss')
 				url = "http://www.cczwei.de/" + url
-				self.streamList.append((title,folge))
+				self.streamList.insert(0, (title, folge))
 			self.streamMenuList.setList(map(cczweiListEntry, self.streamList))
 			self.keyLocked = False
 
@@ -56,16 +60,15 @@ class cczwei(Screen):
 		exist = self['streamlist'].getCurrent()
 		if self.keyLocked or exist == None:
 			return
-
 		auswahl = self['streamlist'].getCurrent()[0][1]
-		print auswahl
-		if int(auswahl) < 100:
-			test = "http://cczwei.mirror.speedpartner.de/cc2tv/CC2_0%s.avi" % auswahl
-		else:
-			test = "http://cczwei.mirror.speedpartner.de/cc2tv/CC2_%s.avi" % auswahl
-			
-		print test
-		sref = eServiceReference(0x1001, 0, test)
+		if int(auswahl) < 10:
+			auswahl = "00" + auswahl
+		elif int(auswahl) < 100:
+			auswahl = "0" + auswahl
+		file = "http://cczwei.mirror.speedpartner.de/cc2tv/CC2_%s.mp4" % auswahl
+		xxxtitle = self['streamlist'].getCurrent()[0][0]
+		sref = eServiceReference(0x1001, 0, file)
+		sref.setName(xxxtitle)
 		self.session.open(MoviePlayer, sref)
 				
 	def keyCancel(self):

@@ -9,7 +9,7 @@ def mahlzeitTVGenreListEntry(entry):
 class chooseMenuList(MenuList):
 	def __init__(self, list):
 		MenuList.__init__(self, list, True, eListboxPythonMultiContent)
-		self.l.setFont(0, gFont("Regular", 20))
+		self.l.setFont(0, gFont("mediaportal", 20))
 		self.l.setItemHeight(25)
 		
 class mahlzeitMainScreen(Screen):
@@ -353,7 +353,7 @@ class mahlzeitStreamScreen(Screen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('Regular', 23))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 

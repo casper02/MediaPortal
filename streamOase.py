@@ -31,14 +31,14 @@ class oasetvGenreScreen(Screen):
 		
 		self.genreliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
+		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.chooseMenuList.l.setItemHeight(25)
 		self['genreList'] = self.chooseMenuList
 		
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
-		self.genreliste.append(("Neusten", "http://stream-oase.tv/index.php/hd-oase/video/latest?start="))
+		self.genreliste.append(("Neuesten", "http://stream-oase.tv/index.php/hd-oase/video/latest?start="))
 		self.genreliste.append(("Action", "http://stream-oase.tv/index.php/hd-oase/category/action?start="))
 		self.genreliste.append(("Abenteuer", "http://stream-oase.tv/index.php/hd-oase/category/abenteuer?start="))
 		self.genreliste.append(("Drama", "http://stream-oase.tv/index.php/hd-oase/category/drama?start="))
@@ -100,7 +100,7 @@ class oasetvFilmListeScreen(Screen):
 		self.keckse = {}
 		self.page = 0
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
+		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.chooseMenuList.l.setItemHeight(25)
 		self['filmList'] = self.chooseMenuList
 		
@@ -268,7 +268,7 @@ class oasetvCDListeScreen(Screen):
 		self.keckse = {}
 		self.filmliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
+		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.chooseMenuList.l.setItemHeight(25)
 		self['filmList'] = self.chooseMenuList
 		

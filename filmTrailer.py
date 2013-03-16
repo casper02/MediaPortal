@@ -35,11 +35,11 @@ class trailer(Screen, ConfigListScreen):
 		self['leftContentTitle'] = Label("Trailer")
 		self['stationIcon'] = Pixmap()
 		self['page'] = Label("1")
-		self['name'] = Label("Trailer auswahl")
+		self['name'] = Label("Trailer Auswahl")
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('Regular', 24))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 		

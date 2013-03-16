@@ -1,5 +1,4 @@
 from imports import *
-from decrypt import *
 
 def appletrailersGenreListEntry(entry):
 	return [entry,
@@ -42,7 +41,7 @@ class appletrailersGenreScreen(Screen):
 		
 		self.genreliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
+		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.chooseMenuList.l.setItemHeight(25)
 		self['genreList'] = self.chooseMenuList
 		
@@ -94,7 +93,20 @@ class appletrailersFilmScreen(Screen):
 			f.close()
 			
 		Screen.__init__(self, session)
-		
+
+		self.useragent = "QuickTime/7.6.2 (qtver=7.6.2;os=Windows NT 5.1Service Pack 3)"
+
+		try:
+			config.mediaplayer.useAlternateUserAgent.value = True
+			config.mediaplayer.alternateUserAgent.value = self.useragent
+			config.mediaplayer.useAlternateUserAgent.save()
+			config.mediaplayer.alternateUserAgent.save()
+			config.mediaplayer.save()
+		except Exception, errormsg:
+			config.mediaplayer = ConfigSubsection()
+			config.mediaplayer.useAlternateUserAgent = ConfigYesNo(default=True)
+			config.mediaplayer.alternateUserAgent = ConfigText(default=self.useragent)		
+
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions"], {
 			"ok" : self.keyOK,
 			"cancel" : self.keyCancel,
@@ -116,7 +128,7 @@ class appletrailersFilmScreen(Screen):
 		
 		self.filmliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
+		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.chooseMenuList.l.setItemHeight(25)
 		self['genreList'] = self.chooseMenuList
 		
@@ -211,19 +223,20 @@ class appletrailersFilmScreen(Screen):
 		self.play(phLink)
 		
 	def play(self,file):
-		self.useragent = "QuickTime/7.6.2 (qtver=7.6.2;os=Windows NT 5.1Service Pack 3)"
-		config.mediaplayer.useAlternateUserAgent.value = True
-		config.mediaplayer.alternateUserAgent.value = self.useragent
-		config.mediaplayer.useAlternateUserAgent.save()
-		config.mediaplayer.alternateUserAgent.save()
-		config.mediaplayer.save()
-
 		xxxtitle = self['genreList'].getCurrent()[0][0]
 		sref = eServiceReference(0x1001, 0, file)
 		sref.setName(xxxtitle)
 		self.session.open(MoviePlayer, sref)
 
 	def keyCancel(self):
-		config.mediaplayer.useAlternateUserAgent.value = False
-		config.mediaplayer.useAlternateUserAgent.save()
+		try:
+			config.mediaplayer.useAlternateUserAgent.value = False
+			config.mediaplayer.alternateUserAgent.value = ""
+			config.mediaplayer.useAlternateUserAgent.save()
+			config.mediaplayer.alternateUserAgent.save()
+			config.mediaplayer.save()
+		except Exception, errormsg:
+			config.mediaplayer = ConfigSubsection()
+			config.mediaplayer.useAlternateUserAgent = ConfigYesNo(default=False)
+			config.mediaplayer.alternateUserAgent = ConfigText(default="")
 		self.close()

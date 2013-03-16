@@ -1,5 +1,4 @@
 from imports import *
-from decrypt import *
 
 def pornerbrosGenreListEntry(entry):
 	return [entry,
@@ -42,7 +41,7 @@ class pornerbrosGenreScreen(Screen):
 		
 		self.genreliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
+		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.chooseMenuList.l.setItemHeight(25)
 		self['genreList'] = self.chooseMenuList
 		
@@ -181,7 +180,7 @@ class pornerbrosFilmScreen(Screen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('Regular', 23))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 
@@ -189,6 +188,7 @@ class pornerbrosFilmScreen(Screen):
 
 	def loadpage(self):
 		self.keyLocked = True
+		self['name'].setText('Bitte warten...')
 		self.streamList = []
 		self['page'].setText(str(self.page))
 		url = "%s%s/" % (self.phCatLink, str(self.page))

@@ -8,8 +8,8 @@ class dokumeFilmeListEntry(GUIComponent, object):
 		GUIComponent.__init__(self)
 		self.l = eListboxPythonMultiContent()
 		self.l.setBuildFunc(self.buildList)
-		self.l.setFont(0, gFont("Regular", 22))
-		self.l.setFont(1, gFont("Regular", 18))
+		self.l.setFont(0, gFont("mediaportal", 22))
+		self.l.setFont(1, gFont("mediaportal", 18))
 		self.l.setItemHeight(25)
 
 	def buildList(self, entry):

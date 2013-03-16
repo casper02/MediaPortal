@@ -220,60 +220,9 @@ def urs(a, b):
 		a = (a >> b)
 	return a
 	
-
 std_headers = {
 	'User-Agent': 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.2.6) Gecko/20100627 Firefox/3.6.6',
 	'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
 	'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
 	'Accept-Language': 'en-us,en;q=0.5',
 }
-	
-def decodeHtml(text):
-	text = text.replace('&auml;','ae')
-	text = text.replace('\u00e4','ae')
-	text = text.replace('&#228;','ae')
-
-	text = text.replace('&Auml;','Ae')
-	text = text.replace('\u00c4','Ae')
-	text = text.replace('&#196;','Ae')
-	
-	text = text.replace('&ouml;','oe')
-	text = text.replace('\u00f6','oe')
-	text = text.replace('&#246;','oe')
-	
-	text = text.replace('&ouml;','Oe')
-	text = text.replace('\u00d6','Oe')
-	text = text.replace('&#214;','Oe')
-	
-	text = text.replace('&uuml;','ue')
-	text = text.replace('\u00fc','ue')
-	text = text.replace('&#252;','ue')
-	
-	text = text.replace('&Uuml;','Ue')
-	text = text.replace('\u00dc','Ue')
-	text = text.replace('&#220;','Ue')
-	
-	text = text.replace('&szlig;','ss')
-	text = text.replace('\u00df','ss')
-	text = text.replace('&#223;','ss')
-	
-	text = text.replace('&amp;','&')
-	text = text.replace('&quot;','\"')
-	text = text.replace('&gt;','\'')
-	text = text.replace('&acute;','\'')
-	text = text.replace('&ndash;','-')
-	text = text.replace('&bdquo;','"')
-	text = text.replace('&rdquo;','"')
-	text = text.replace('&ldquo;','"')
-	text = text.replace('&lsquo;','\'')
-	text = text.replace('&rsquo;','\'')
-	text = text.replace('&#038;','&')
-	text = text.replace('&#039;','\'')
-	text = text.replace('&#8211;',"-")
-	text = text.replace('&#8216;',"'")
-	text = text.replace('&#8217;',"'")
-	text = text.replace('&#8220;',"'")
-	text = text.replace('&#8221;','"')
-	text = text.replace('&#8222;',',')
-	text = text.replace('&#8230;','...')
-	return text	

@@ -31,14 +31,14 @@ class focusGenre(Screen):
 		
 		self.genreliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
+		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.chooseMenuList.l.setItemHeight(25)
 		self['genreList'] = self.chooseMenuList
 		
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
-		self.genreliste.append(("Neuste Videos", "http://www.focus.de/ajax/video/videoplaylist/?playlist_name=newest"))
+		self.genreliste.append(("Neueste Videos", "http://www.focus.de/ajax/video/videoplaylist/?playlist_name=newest"))
 		self.genreliste.append(("Politik", "http://www.focus.de/ajax/video/videoplaylist/?playlist_name=politik"))
 		self.genreliste.append(("Finanzen", "http://www.focus.de/ajax/video/videoplaylist/?playlist_name=finance"))
 		self.genreliste.append(("Wissen", "http://www.focus.de/ajax/video/videoplaylist/?playlist_name=knowledge"))
@@ -95,7 +95,7 @@ class focus(Screen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('Regular', 23))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 

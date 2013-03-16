@@ -15,4 +15,16 @@
     <widget name="genreList" position="55,240" size="850,450" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/sel.png" foregroundColor="#00555555" />
     <!-- <widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/no_coverArt.png" position="998,487" size="160,120" transparent="1" alphatest="blend" /> -->
     <widget name="name" position="75,106" size="850,60" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="mediaportal;26" valign="center" halign="center" />
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonred.png" position="55,680" size="90,36" alphatest="blend" zPosition="0" />
+    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttongreen.png" position="305,680" size="90,36" alphatest="blend" zPosition="0" />
+    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonyellow.png" position="565,680" size="90,36" alphatest="blend" zPosition="0" />
+    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonblue.png" position="815,680" size="90,36" alphatest="blend" zPosition="0" />
+    <widget name="F1" position="55,680" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
+    <widget name="F2" position="305,680" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
+    <widget name="F3" position="565,680" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
+    <widget name="F4" position="815,680" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" /> 
+    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonglas.png" position="55,680" size="90,36" alphatest="blend" zPosition="2" />
+    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonglas.png" position="305,680" size="90,36" alphatest="blend" zPosition="2" />
+    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonglas.png" position="565,680" size="90,36" alphatest="blend" zPosition="2" />
+    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonglas.png" position="815,680" size="90,36" alphatest="blend" zPosition="2" />	 
   </screen>

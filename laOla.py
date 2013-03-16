@@ -47,7 +47,7 @@ class laolaScreen(Screen):
 		self['name'] = Label("")
 		self.laListe = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.chooseMenuList.l.setFont(0, gFont('Regular', 23))
+		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.chooseMenuList.l.setItemHeight(50)
 		self['roflList'] = self.chooseMenuList
 

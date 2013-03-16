@@ -37,15 +37,20 @@ from songsTo import *
 from myEntertainment import *
 from movie2k import *
 from iStreamWS import *
-from UltimateStreams import *
+#from UltimateStreams import *
 from mahlzeitTV import *
 from appletrailers import *
 from DOKUh import *
 from DokuHouse import *
 from AllMusicHouse import *
+from LiveLeak import *
+from DokuStream import *
+from ScienceTV import *
+from SzeneStreams import *
 # porn
 from ahme import *
 from amateurporn import *
+from beeg import *
 from eporner import *
 from hdporn import *
 from pornerbros import *
@@ -95,17 +100,23 @@ config.mediaportal.showSongsto = ConfigYesNo(default = True)
 config.mediaportal.showMEHD = ConfigYesNo(default = True)
 config.mediaportal.showIStream = ConfigYesNo(default = True)
 config.mediaportal.showM2k = ConfigYesNo(default = True)
-config.mediaportal.showUstreams = ConfigYesNo(default = True)
+# Ustreams deaktiviert.
+config.mediaportal.showUstreams = ConfigYesNo(default = False)
 config.mediaportal.show4Players = ConfigYesNo(default = True)
 config.mediaportal.showMahlzeitTV = ConfigYesNo(default = True)
 config.mediaportal.showappletrailers = ConfigYesNo(default = True)
 config.mediaportal.showDOKUh = ConfigYesNo(default = True)
 config.mediaportal.showDokuHouse = ConfigYesNo(default = True)
 config.mediaportal.showAllMusicHouse = ConfigYesNo(default = True)
+config.mediaportal.showLiveLeak = ConfigYesNo(default = True)
+config.mediaportal.showDokuStream = ConfigYesNo(default = True)
+config.mediaportal.showScienceTV = ConfigYesNo(default = True)
+config.mediaportal.showSzeneStreams = ConfigYesNo(default = True)
 # porn
 config.mediaportal.show4tube = ConfigYesNo(default = False)
 config.mediaportal.showahme = ConfigYesNo(default = False)
 config.mediaportal.showamateurporn = ConfigYesNo(default = False)
+config.mediaportal.showbeeg = ConfigYesNo(default = False)
 config.mediaportal.showeporner = ConfigYesNo(default = False)
 config.mediaportal.showhdporn = ConfigYesNo(default = False)
 config.mediaportal.showM2kPorn = ConfigYesNo(default = False)
@@ -129,7 +140,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 			f.close()
 			
 		Screen.__init__(self, session)
-		
+
 		self.configlist = []
 		ConfigListScreen.__init__(self, self.configlist)
 		self.configlist.append(getConfigListEntry("Zeige Doku.me:", config.mediaportal.showDoku))
@@ -165,13 +176,17 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige Songs.to:", config.mediaportal.showSongsto))
 		self.configlist.append(getConfigListEntry("Zeige My-Entertainment:", config.mediaportal.showMEHD))
 		self.configlist.append(getConfigListEntry("Zeige IStream:", config.mediaportal.showIStream))
-		self.configlist.append(getConfigListEntry("Zeige UltimateStreams:", config.mediaportal.showUstreams))
+		#self.configlist.append(getConfigListEntry("Zeige UltimateStreams:", config.mediaportal.showUstreams))
 		self.configlist.append(getConfigListEntry("Zeige 4Players:", config.mediaportal.show4Players))
 		self.configlist.append(getConfigListEntry("Zeige mahlzeit.tv:", config.mediaportal.showMahlzeitTV))
 		self.configlist.append(getConfigListEntry("Zeige Apple Movie Trailers:", config.mediaportal.showappletrailers))
 		self.configlist.append(getConfigListEntry("Zeige DOKUh:", config.mediaportal.showDOKUh))
 		self.configlist.append(getConfigListEntry("Zeige DokuHouse:", config.mediaportal.showDokuHouse))
 		self.configlist.append(getConfigListEntry("Zeige AllMusicHouse:", config.mediaportal.showAllMusicHouse))
+		self.configlist.append(getConfigListEntry("Zeige LiveLeak:", config.mediaportal.showLiveLeak))
+		self.configlist.append(getConfigListEntry("Zeige DokuStream:", config.mediaportal.showDokuStream))
+		self.configlist.append(getConfigListEntry("Zeige ScienceTV:", config.mediaportal.showScienceTV))
+		self.configlist.append(getConfigListEntry("Zeige SzeneStreams:", config.mediaportal.showSzeneStreams))
 		self.configlist.sort(key=lambda t : tuple(t[0].lower()))
 		self.configlist.insert(0, ("Skinauswahl:", config.mediaportal.skin))
 		self.configlist.insert(0, ("HauptScreen-Ansicht", config.mediaportal.ansicht))
@@ -182,6 +197,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige 4Tube:", config.mediaportal.show4tube))
 		self.configlist.append(getConfigListEntry("Zeige Ah-Me:", config.mediaportal.showahme))
 		self.configlist.append(getConfigListEntry("Zeige AmateurPorn:", config.mediaportal.showamateurporn))
+		self.configlist.append(getConfigListEntry("Zeige beeg:", config.mediaportal.showbeeg))
 		self.configlist.append(getConfigListEntry("Zeige Eporner:", config.mediaportal.showeporner))
 		self.configlist.append(getConfigListEntry("Zeige HDPorn:", config.mediaportal.showhdporn))
 		self.configlist.append(getConfigListEntry("Zeige Movie2k-Porn:", config.mediaportal.showM2kPorn))
@@ -239,7 +255,7 @@ class HelpScreen(Screen):
 class chooseMenuList(MenuList):
 	def __init__(self, list):
 		MenuList.__init__(self, list, True, eListboxPythonMultiContent)
-		self.l.setFont(0, gFont("Regular", 20))
+		self.l.setFont(0, gFont("mediaportal", 20))
 		self.l.setItemHeight(40)
 
 class haupt_Screen(Screen, ConfigListScreen):
@@ -255,6 +271,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			f.close()
 			
 		Screen.__init__(self, session)
+
+		registerFont("/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/mediaportal.ttf", "mediaportal", 100, False)
 		
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "HelpActions"], {
 			"ok"    : self.keyOK,
@@ -324,6 +342,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.showM2KPorn = False
 		if config.mediaportal.showIStream.value:
 			self.movies.append(self.hauptListEntry("IStream", "istream"))
+		if config.mediaportal.showSzeneStreams.value:
+			self.movies.append(self.hauptListEntry("SzeneStreams", "szenestreams"))
 		# info
 		if config.mediaportal.showDoku.value:
 			self.infos.append(self.hauptListEntry("Doku.me", "doku"))		
@@ -359,11 +379,15 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.infos.append(self.hauptListEntry("DokuHouse", "dokuhouse"))
 		if config.mediaportal.showAllMusicHouse.value:
 			self.infos.append(self.hauptListEntry("AllMusicHouse", "allmusichouse"))
+		if config.mediaportal.showDokuStream.value:
+			self.infos.append(self.hauptListEntry("DokuStream", "dokustream"))
 		# fun & TV
 		if config.mediaportal.showRofl.value:
 			self.fun.append(self.hauptListEntry("Rofl.to", "rofl"))
 		if config.mediaportal.showFail.value:
 			self.fun.append(self.hauptListEntry("Fail.to", "fail"))
+		if config.mediaportal.showLiveLeak.value:
+			self.fun.append(self.hauptListEntry("LiveLeak", "liveleak"))
 		#if config.mediaportal.showYourfree.value:
 		#	self.fun.append(self.hauptListEntry("YourfreeTv", "yourfreetv"))
 		if config.mediaportal.showFilmOn.value:
@@ -376,6 +400,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.fun.append(self.hauptListEntry("Spobox", "spobox"))
 		if config.mediaportal.showSongsto.value:
 			self.fun.append(self.hauptListEntry("Songs.to", "songsto"))
+		if config.mediaportal.showScienceTV.value:
+			self.fun.append(self.hauptListEntry("ScienceTV", "sciencetv"))
 		# porn
 		if config.mediaportal.show4tube.value:
 			self.fun.append(self.hauptListEntry("4Tube", "4tube"))
@@ -383,6 +409,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.fun.append(self.hauptListEntry("Ah-Me", "ahme"))
 		if config.mediaportal.showamateurporn.value:
 			self.fun.append(self.hauptListEntry("AmateurPorn", "amateurporn"))
+		if config.mediaportal.showbeeg.value:
+			self.fun.append(self.hauptListEntry("beeg", "beeg"))
 		if config.mediaportal.showeporner.value:
 			self.fun.append(self.hauptListEntry("Eporner", "eporner"))
 		if config.mediaportal.showhdporn.value:
@@ -598,6 +626,14 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(show_DH_Genre)
 		elif auswahl == "AllMusicHouse":
 			self.session.open(show_AMH_Genre)
+		elif auswahl == "LiveLeak":
+			self.session.open(LiveLeakScreen)
+		elif auswahl == "DokuStream":
+			self.session.open(show_DS_Genre)
+		elif auswahl == "ScienceTV":
+			self.session.open(scienceTvGenreScreen)
+		elif auswahl == "SzeneStreams":
+			self.session.open(SzeneStreamsGenreScreen)
 		# porn
 		elif auswahl == "4Tube":
 			if config.mediaportal.pornpin.value:
@@ -614,6 +650,11 @@ class haupt_Screen(Screen, ConfigListScreen):
 				self.session.openWithCallback(self.pinamateurporn, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
 			else:
 				self.session.open(amateurpornGenreScreen)
+		elif auswahl == "beeg":
+			if config.mediaportal.pornpin.value:
+				self.session.openWithCallback(self.pinbeeg, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
+			else:
+				self.session.open(beegGenreScreen)
 		elif auswahl == "Eporner":
 			if config.mediaportal.pornpin.value:
 				self.session.openWithCallback(self.pineporner, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
@@ -666,6 +707,10 @@ class haupt_Screen(Screen, ConfigListScreen):
 	def pinamateurporn(self, pincode):
 		if pincode:
 			self.session.open(amateurpornGenreScreen)
+
+	def pinbeeg(self, pincode):
+		if pincode:
+			self.session.open(beegGenreScreen)
 
 	def pineporner(self, pincode):
 		if pincode:
@@ -741,6 +786,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.showM2KPorn = False
 		if config.mediaportal.showIStream.value:
 			self.plugin_liste.append(("IStream", "istream"))
+		if config.mediaportal.showSzeneStreams.value:
+			self.plugin_liste.append(("SzeneStreams", "szenestreams"))
 		if config.mediaportal.showDoku.value:
 			self.plugin_liste.append(("Doku.me", "doku"))		
 		if config.mediaportal.showSportBild.value:
@@ -789,6 +836,12 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("Spobox", "spobox"))
 		if config.mediaportal.showSongsto.value:
 			self.plugin_liste.append(("Songs.to", "songsto"))
+		if config.mediaportal.showLiveLeak.value:
+			self.plugin_liste.append(("LiveLeak", "liveleak"))
+		if config.mediaportal.showDokuStream.value:
+			self.plugin_liste.append(("DokuStream", "dokustream"))
+		if config.mediaportal.showScienceTV.value:
+			self.plugin_liste.append(("ScienceTV", "sciencetv"))
 			
 		### porn
 		if config.mediaportal.show4tube.value:
@@ -797,6 +850,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("Ah-Me", "ahme"))
 		if config.mediaportal.showamateurporn.value:
 			self.plugin_liste.append(("AmateurPorn", "amateurporn"))
+		if config.mediaportal.showbeeg.value:
+			self.plugin_liste.append(("beeg", "beeg"))
 		if config.mediaportal.showeporner.value:
 			self.plugin_liste.append(("Eporner", "eporner"))
 		if config.mediaportal.showhdporn.value:
@@ -830,11 +885,11 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 				
 		self.skin_dump = ""
 		#self.skin_dump += "<screen name=\"MediaPortal\" position=\"0,0\" size=\"1280,720\" flags=\"wfNoBorder\">"
-		#self.skin_dump += "<widget name=\"name\" position=\"20,150\" size=\"900,50\" foregroundColor=\"#00ffffff\" backgroundColor=\"#26181d20\" transparent=\"1\" font=\"Regular;28\" valign=\"top\" halign=\"center\" />"
-		#self.skin_dump += "<widget name=\"page\" position=\"1100,680\" size=\"100,40\" foregroundColor=\"#00ffffff\" backgroundColor=\"#26181d20\" transparent=\"1\" font=\"Regular;28\" valign=\"top\" halign=\"center\" />"
+		#self.skin_dump += "<widget name=\"name\" position=\"20,150\" size=\"900,50\" foregroundColor=\"#00ffffff\" backgroundColor=\"#26181d20\" transparent=\"1\" font=\"mediaportal;28\" valign=\"top\" halign=\"center\" />"
+		#self.skin_dump += "<widget name=\"page\" position=\"1100,680\" size=\"100,40\" foregroundColor=\"#00ffffff\" backgroundColor=\"#26181d20\" transparent=\"1\" font=\"mediaportal;28\" valign=\"top\" halign=\"center\" />"
 		#self.skin_dump += "<ePixmap position=\"0,0\" size=\"1280,720\" zPosition=\"-1\" pixmap=\"/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/mpback.png\" />"
 		#self.skin_dump += "<widget source=\"session.VideoPicture\" render=\"Pig\" position=\"913,15\" size=\"320,180\" zPosition=\"3\" backgroundColor=\"transparent\" />"
-		self.skin_dump += "<widget name=\"frame\" position=\"20,210\" size=\"150,80\" pixmap=\"/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons_wall/150x80_MP_Selektor_%s.png\" zPosition=\"2\" transparent=\"0\" alphatest=\"blend\" />" % config.mediaportal.selektor.value
+		self.skin_dump += "<widget name=\"frame\" position=\"20,210\" size=\"150,80\" pixmap=\"/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons_wall/Selektor_%s.png\" zPosition=\"2\" transparent=\"0\" alphatest=\"blend\" />" % config.mediaportal.selektor.value
 		self.skin_dump += skincontent
 		self.skin_dump += "</screen>"
 		#self.skin = self.skin_dump
@@ -849,6 +904,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			f.close()
 		
 		Screen.__init__(self, session)
+
+		registerFont("/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/mediaportal.ttf", "mediaportal", 100, False)
 		
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions", "HelpActions"], {
 			"ok"    : self.keyOK,
@@ -1015,6 +1072,14 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(show_DH_Genre)
 		elif auswahl == "AllMusicHouse":
 			self.session.open(show_AMH_Genre)
+		elif auswahl == "LiveLeak":
+			self.session.open(LiveLeakScreen)
+		elif auswahl == "DokuStream":
+			self.session.open(show_DS_Genre)
+		elif auswahl == "ScienceTV":
+			self.session.open(scienceTvGenreScreen)
+		elif auswahl == "SzeneStreams":
+			self.session.open(SzeneStreamsGenreScreen)
 		# porn
 		elif auswahl == "4Tube":
 			if config.mediaportal.pornpin.value:
@@ -1025,12 +1090,17 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			if config.mediaportal.pornpin.value:
 				self.session.openWithCallback(self.pinahme, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
 			else:
-				self.session.open(pornrabbitGenreScreen)
+				self.session.open(ahmeGenreScreen)
 		elif auswahl == "AmateurPorn":
 			if config.mediaportal.pornpin.value:
 				self.session.openWithCallback(self.pinamateurporn, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
 			else:
 				self.session.open(amateurpornGenreScreen)
+		elif auswahl == "beeg":
+			if config.mediaportal.pornpin.value:
+				self.session.openWithCallback(self.pinbeeg, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
+			else:
+				self.session.open(beegGenreScreen)
 		elif auswahl == "Eporner":
 			if config.mediaportal.pornpin.value:
 				self.session.openWithCallback(self.pineporner, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
@@ -1083,6 +1153,10 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 	def pinamateurporn(self, pincode):
 		if pincode:
 			self.session.open(amateurpornGenreScreen)
+
+	def pinbeeg(self, pincode):
+		if pincode:
+			self.session.open(beegGenreScreen)
 
 	def pineporner(self, pincode):
 		if pincode:
