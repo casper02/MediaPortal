@@ -786,6 +786,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.showM2KPorn = False
 		if config.mediaportal.showIStream.value:
 			self.plugin_liste.append(("IStream", "istream"))
+		if config.mediaportal.showSzeneStreams.value:
+			self.plugin_liste.append(("SzeneStreams", "szenestreams"))
 		if config.mediaportal.showDoku.value:
 			self.plugin_liste.append(("Doku.me", "doku"))		
 		if config.mediaportal.showSportBild.value:
@@ -840,8 +842,6 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("DokuStream", "dokustream"))
 		if config.mediaportal.showScienceTV.value:
 			self.plugin_liste.append(("ScienceTV", "sciencetv"))
-		if config.mediaportal.showSzeneStreams.value:
-			self.plugin_liste.append(("SzeneStreams", "szenestreams"))
 			
 		### porn
 		if config.mediaportal.show4tube.value:
