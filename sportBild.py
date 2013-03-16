@@ -1,5 +1,4 @@
 from imports import *
-from decrypt import *
 
 def sportBildListEntry(entry):
 	return [entry,
@@ -60,7 +59,7 @@ class sportBildScreen(Screen):
 			self.spListe = []
 			for (spUrl,spImage,spTitle,spRuntime,spDate) in spVideos:
 				spImage = "http://sportbild.bild.de" + spImage
-				self.spListe.append((spTitle, spUrl, spImage, spRuntime, spDate))
+				self.spListe.append((decodeHtml(spTitle), spUrl, spImage, spRuntime, spDate))
 			self.chooseMenuList.setList(map(sportBildListEntry, self.spListe))
 			self.keyLocked = False
 			self.showPic()
