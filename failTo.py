@@ -143,7 +143,7 @@ class failScreen(Screen):
 
 	def parseData(self, data):
 		flTitle = self['roflList'].getCurrent()[0][0]
-		flStream = re.findall("'file','(.*?)'", data)
+		flStream = re.findall("'file': '(.*?)'", data)
 		if flStream:
 			rflStream = "http://www.fail.to" + flStream[0]
 			print rflStream
