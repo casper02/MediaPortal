@@ -147,17 +147,17 @@ class laolaScreen(Screen):
 			print "Dieser Stream wurde noch nicht gestartet."
 			message = self.session.open(MessageBox, _("Dieser Stream wurde noch nicht gestartet."), MessageBox.TYPE_INFO, timeout=3)
 		else:
-			xml = re.findall('"flashvars".*?videopfad=(.*?.xml)', data)
+			id = re.findall('streamid=(.*?)&', data, re.S)
+			xml = 'http://streamaccess.unas.tv/hdflash/1/hdlaola1_%s.xml?t=.smil&partnerid=1&streamid=%s' % (id[0], id[0])
 			if xml:
-				getPage(xml[0], headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseXML).addErrback(self.dataError)
+				getPage(xml, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseXML).addErrback(self.dataError)
 			
 	def parseXML(self, data):
 		laTitle = self['roflList'].getCurrent()[0][0]
 		main_url = re.findall('<meta name="httpBase" content="(.*?)"', data)
 		url_string = re.findall('<video src="(.*?)" system-bitrate="(.*?)"', data, re.S)
 		if main_url and url_string:
-			(hash, bitrate) =  url_string[-1]
-			stream_url = "%s%s%s" % (main_url[0], hash, bitrate)
+			stream_url = "%s%s%s" % (main_url[0], url_string[2][0], url_string[2][1])
 			print stream_url
 			sref = eServiceReference(0x1001, 0, stream_url)
 			sref.setName(laTitle)

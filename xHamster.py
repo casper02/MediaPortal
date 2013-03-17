@@ -14,9 +14,9 @@ class xhamsterGenreScreen(Screen):
 	
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/xhamsterGenreScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/XXXGenreScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/xhamsterGenreScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/XXXGenreScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -148,9 +148,9 @@ class xhamsterFilmScreen(Screen):
 	def __init__(self, session, genreLink):
 		self.session = session
 		self.genreLink = genreLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/xhamsterFilmScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/XXXFilmScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/xhamsterFilmScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/XXXFilmScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -183,7 +183,7 @@ class xhamsterFilmScreen(Screen):
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
-		self['streamlist'] = self.streamMenuList
+		self['genreList'] = self.streamMenuList
 
 		self.onLayoutFinish.append(self.loadpage)
 		
@@ -208,10 +208,10 @@ class xhamsterFilmScreen(Screen):
 		self.keyLocked = False
 
 	def showInfos(self):
-		ptTitle = self['streamlist'].getCurrent()[0][0]
-		ptImage = self['streamlist'].getCurrent()[0][1]
-		ptViews  = self['streamlist'].getCurrent()[0][3]
-		ptRuntime = self['streamlist'].getCurrent()[0][4]
+		ptTitle = self['genreList'].getCurrent()[0][0]
+		ptImage = self['genreList'].getCurrent()[0][1]
+		ptViews  = self['genreList'].getCurrent()[0][3]
+		ptRuntime = self['genreList'].getCurrent()[0][4]
 		self.ptRead(ptImage)
 		self['name'].setText(ptTitle)
 		self['views'].setText(ptViews)
@@ -241,12 +241,12 @@ class xhamsterFilmScreen(Screen):
 	def keyOK(self):
 		if self.keyLocked:
 			return
-		xhLink = self['streamlist'].getCurrent()[0][2]
+		xhLink = self['genreList'].getCurrent()[0][2]
 		print xhLink
 		getPage(xhLink, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.playData).addErrback(self.dataError)
 		
 	def playData(self, data):
-		xhTitle = self['streamlist'].getCurrent()[0][0]
+		xhTitle = self['genreList'].getCurrent()[0][0]
 		xhServer = re.findall("'srv': '(.*?)'", data)
 		xhFile = re.findall("'file': '(.*?)'", data)
 		if re.match('.*?http%3A', xhFile[0]):
@@ -287,25 +287,25 @@ class xhamsterFilmScreen(Screen):
 	def keyLeft(self):
 		if self.keyLocked:
 			return
-		self['streamlist'].pageUp()
+		self['genreList'].pageUp()
 		self.showInfos()
 		
 	def keyRight(self):
 		if self.keyLocked:
 			return
-		self['streamlist'].pageDown()
+		self['genreList'].pageDown()
 		self.showInfos()
 		
 	def keyUp(self):
 		if self.keyLocked:
 			return
-		self['streamlist'].up()
+		self['genreList'].up()
 		self.showInfos()
 		
 	def keyDown(self):
 		if self.keyLocked:
 			return
-		self['streamlist'].down()
+		self['genreList'].down()
 		self.showInfos()
 		
 	def keyCancel(self):

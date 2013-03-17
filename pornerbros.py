@@ -14,9 +14,9 @@ class pornerbrosGenreScreen(Screen):
 	
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/pornerbrosGenreScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/XXXGenreScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/pornerbrosGenreScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/XXXGenreScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -147,9 +147,9 @@ class pornerbrosFilmScreen(Screen):
 	def __init__(self, session, phCatLink):
 		self.session = session
 		self.phCatLink = phCatLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/pornerbrosFilmScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/XXXFilmScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/pornerbrosFilmScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/XXXFilmScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -182,7 +182,7 @@ class pornerbrosFilmScreen(Screen):
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
-		self['streamlist'] = self.streamMenuList
+		self['genreList'] = self.streamMenuList
 
 		self.onLayoutFinish.append(self.loadpage)
 
@@ -207,10 +207,10 @@ class pornerbrosFilmScreen(Screen):
 	def showInfos(self):
 		if self.keyLocked:
 			return
-		ptTitle = self['streamlist'].getCurrent()[0][0]
-		ptImage = self['streamlist'].getCurrent()[0][3]
-		ptRuntime = self['streamlist'].getCurrent()[0][4]
-		ptViews = self['streamlist'].getCurrent()[0][5]
+		ptTitle = self['genreList'].getCurrent()[0][0]
+		ptImage = self['genreList'].getCurrent()[0][3]
+		ptRuntime = self['genreList'].getCurrent()[0][4]
+		ptViews = self['genreList'].getCurrent()[0][5]
 		ptViews = ptViews.replace(' ','')
 		ptViews = ptViews.replace('views','')
 		ptViews = ptViews.replace('\r','')
@@ -245,9 +245,9 @@ class pornerbrosFilmScreen(Screen):
 	def keyOK(self):
 		if self.keyLocked:
 			return
-                scriptid = self['streamlist'].getCurrent()[0][2]
+                scriptid = self['genreList'].getCurrent()[0][2]
                 xhLink = 'http://www.pornerbros.com/content/%s.js' % scriptid
-		xhTitle = self['streamlist'].getCurrent()[0][0]
+		xhTitle = self['genreList'].getCurrent()[0][0]
             	data = urllib.urlopen(xhLink).read()
             	xhStream = re.findall("url.*?escape.*?'(.*?)'", data, re.S)
 		
@@ -284,25 +284,25 @@ class pornerbrosFilmScreen(Screen):
 	def keyLeft(self):
 		if self.keyLocked:
 			return
-		self['streamlist'].pageUp()
+		self['genreList'].pageUp()
 		self.showInfos()
 		
 	def keyRight(self):
 		if self.keyLocked:
 			return
-		self['streamlist'].pageDown()
+		self['genreList'].pageDown()
 		self.showInfos()
 		
 	def keyUp(self):
 		if self.keyLocked:
 			return
-		self['streamlist'].up()
+		self['genreList'].up()
 		self.showInfos()
 		
 	def keyDown(self):
 		if self.keyLocked:
 			return
-		self['streamlist'].down()
+		self['genreList'].down()
 		self.showInfos()
 		
 	def keyCancel(self):
