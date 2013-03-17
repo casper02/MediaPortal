@@ -1,16 +1,16 @@
 from imports import *
 
-def youpornGenreListEntry(entry):
+def wetplaceGenreListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		] 
 
-def youpornFilmListEntry(entry):
+def wetplaceFilmListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		] 
 		
-class youpornGenreScreen(Screen):
+class wetplaceGenreScreen(Screen):
 	
 	def __init__(self, session):
 		self.session = session
@@ -33,7 +33,7 @@ class youpornGenreScreen(Screen):
 			"left" : self.keyLeft
 		}, -1)
 
-		self['title'] = Label("YouPorn.com")
+		self['title'] = Label("WetPlace.com")
 		self['name'] = Label("Genre Auswahl")
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
@@ -49,23 +49,21 @@ class youpornGenreScreen(Screen):
 		
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "http://www.youporn.com/categories/alphabetical/"
-		getPage(url, headers={'Cookie': 'age_verified=1', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
+		url = "http://www.wetplace.com/categories/"
+		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		phCats = re.findall('class="cat_pic">.*?<a href="/category(.*?)".*?<img src="(.*?)" alt="(.*?)"><span class="cat_overlay', data, re.S)
+		parse = re.search('class="category">(.*?)categories_block', data, re.S)
+		phCats = re.findall('<img class="thumb" src="(.*?)" alt="(.*?)"/>.*?<div class="title"><a href="(.*?)"', parse.group(1), re.S)
 		if phCats:
-			for (phUrl, phImage, phTitle) in phCats:
-				phUrl = "http://www.youporn.com/category" + phUrl + '?page='
+			for (phImage, phTitle, phUrl) in phCats:
 				self.genreliste.append((phTitle, phUrl, phImage))
 			self.genreliste.sort()
-			self.genreliste.insert(0, ("Most Discussed", "http://www.youporn.com/most_discussed/?page=", None))
-			self.genreliste.insert(0, ("Most Favorited", "http://www.youporn.com/most_favorited/?page=", None))
-			self.genreliste.insert(0, ("Most Viewed", "http://www.youporn.com/most_viewed/?page=", None))
-			self.genreliste.insert(0, ("Top Rated", "http://www.youporn.com/top_rated/?page=", None))
-			self.genreliste.insert(0, ("New", "http://www.youporn.com/?page=", None))
+			self.genreliste.insert(0, ("Most Popular", "http://www.wetplace.com/most-popular/", None))
+			self.genreliste.insert(0, ("Top Rated", "http://www.wetplace.com/top-rated/", None))
+			self.genreliste.insert(0, ("Newest", "http://www.wetplace.com/", None))
 			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
-			self.chooseMenuList.setList(map(youpornGenreListEntry, self.genreliste))
+			self.chooseMenuList.setList(map(wetplaceGenreListEntry, self.genreliste))
 			self.keyLocked = False
 			self.showInfos()
 
@@ -109,7 +107,7 @@ class youpornGenreScreen(Screen):
 
 		else:
 			streamGenreLink = self['genreList'].getCurrent()[0][1]
-			self.session.open(youpornFilmScreen, streamGenreLink)
+			self.session.open(wetplaceFilmScreen, streamGenreLink)
 		
 	def suchen(self):
 		self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoard, title = (_("Suchkriterium eingeben")), text = self.suchString)
@@ -117,8 +115,8 @@ class youpornGenreScreen(Screen):
 	def SuchenCallback(self, callback = None, entry = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '+')
-			streamGenreLink = 'http://www.youporn.com/search/?query=%s&page=' % (self.suchString)
-			self.session.open(youpornFilmScreen, streamGenreLink)
+			streamGenreLink = 'http://www.wetplace.com/search/?q=%s' % self.suchString
+			self.session.open(wetplaceFilmScreen, streamGenreLink)
 
 	def keyLeft(self):
 		if self.keyLocked:
@@ -147,7 +145,7 @@ class youpornGenreScreen(Screen):
 	def keyCancel(self):
 		self.close()
 
-class youpornFilmScreen(Screen):
+class wetplaceFilmScreen(Screen):
 	
 	def __init__(self, session, phCatLink):
 		self.session = session
@@ -174,7 +172,7 @@ class youpornFilmScreen(Screen):
 			"green" : self.keyPageNumber
 		}, -1)
 
-		self['title'] = Label("YouPorn.com")
+		self['title'] = Label("WetPlace.com")
 		self['name'] = Label("Film Auswahl")
 		self['views'] = Label("")
 		self['runtime'] = Label("")
@@ -196,19 +194,21 @@ class youpornFilmScreen(Screen):
 		self['name'].setText('Bitte warten...')
 		self.filmliste = []
 		self['page'].setText(str(self.page))
-		url = "%s%s" % (self.phCatLink, str(self.page))
+		cat = self.phCatLink
+		search = re.search('/search/(.*)', cat, re.S)
+		if search:
+			url = 'http://www.wetplace.com/search/%s/%s' % (str(self.page), str(search.group(1)))
+		else:
+			url = "%s%s/" % (self.phCatLink, str(self.page))
 		print url
-		getPage(url, headers={'Cookie': 'age_verified=1', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
+		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
 	def loadData(self, data):
-		parse = re.search('Sub menu dropdown.*?/Sub menu dropdown(.*?)Our Friends', data, re.S)
-		if not parse:
-			parse = re.search('Sub menu dropdown.*?/Sub menu dropdown(.*?)pagination', data, re.S)
-		phMovies = re.findall('class="wrapping-video-box">.*?<a href="(.*?)">.*?<img src="(.*?)" alt="(.*?)".*?class="duration">(.*?)<span>length.*?class="views">(.*?) <span>views', parse.group(1), re.S)
+		phMovies = re.findall('class="video">.*?<a href="(.*?)".*?title="(.*?)"><img class="thumb" src="(.*?)"', data, re.S)
 		if phMovies:
-			for (phUrl, phImage, phTitle, phRuntime, phViews) in phMovies:
-				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage, phRuntime, phViews))
-			self.chooseMenuList.setList(map(youpornFilmListEntry, self.filmliste))
+			for (phUrl, phTitle, phImage) in phMovies:
+				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage))
+			self.chooseMenuList.setList(map(wetplaceFilmListEntry, self.filmliste))
 			self.showInfos()
 		self.keyLocked = False
 
@@ -218,11 +218,7 @@ class youpornFilmScreen(Screen):
 	def showInfos(self):
 		phTitle = self['genreList'].getCurrent()[0][0]
 		phImage = self['genreList'].getCurrent()[0][2]
-		phRuntime = self['genreList'].getCurrent()[0][3]
-		phViews = self['genreList'].getCurrent()[0][4]
 		self['name'].setText(phTitle)
-		self['runtime'].setText(phRuntime)
-		self['views'].setText(phViews)
 		downloadPage(phImage, "/tmp/Icon.jpg").addCallback(self.ShowCover)
 		
 	def ShowCover(self, picData):
@@ -290,19 +286,17 @@ class youpornFilmScreen(Screen):
 		if self.keyLocked:
 			return
 		phTitle = self['genreList'].getCurrent()[0][0]
-		phLink = 'http://www.youporn.com' + self['genreList'].getCurrent()[0][1]
+		phLink = self['genreList'].getCurrent()[0][1]
 		self.keyLocked = True
-		getPage(phLink, headers={'Cookie': 'age_verified=1', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVideoPage).addErrback(self.dataError)
+		getPage(phLink, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
-		videoPage = re.findall('video src="(.*?)" width', data, re.S)
+		videoPage = re.findall('<source type="video/mp4" src="(.*?)">', data, re.S)
 		if videoPage:
-			for (phurl) in videoPage:
-				url = '%s' % (phurl)
-				videos = urllib.unquote(url)
-				videos = videos.replace('&amp;','&')
+			for phurl in videoPage:
+				url = phurl
 				self.keyLocked = False
-				self.play(videos)
+				self.play(url)
 		
 	def play(self,file):
 		xxxtitle = self['genreList'].getCurrent()[0][0]

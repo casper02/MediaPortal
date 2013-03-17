@@ -19,16 +19,12 @@
     <widget name="handlung" position="55,533" size="850,140" backgroundColor="#26181d20" transparent="1" font="mediaportal;18" valign="top" foregroundColor="#00ffffff" />
     <eLabel text="Page" position="55,106" size="100,60" backgroundColor="#26181d20" transparent="1" foregroundColor="#00ffffff" font="mediaportal;20" valign="center" />
     <widget name="page" position="125,106" size="100,60" backgroundColor="#26181d20" transparent="1" font="mediaportal;20" valign="center" foregroundColor="#00ffffff" />
-    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/buttonred.png" position="55,680" size="90,36" alphatest="blend" zPosition="0" />
-    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/buttongreen.png" position="305,680" size="90,36" alphatest="blend" zPosition="0" />
-    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/buttonyellow.png" position="565,680" size="90,36" alphatest="blend" zPosition="0" />
-    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/buttonblue.png" position="815,680" size="90,36" alphatest="blend" zPosition="0" />
-    <widget name="F1" position="55,680" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
-    <widget name="F2" position="305,680" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
-    <widget name="F3" position="565,680" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
-    <widget name="F4" position="815,680" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" /> 
-    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/buttonglas.png" position="55,680" size="90,36" alphatest="blend" zPosition="2" />
-    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/buttonglas.png" position="305,680" size="90,36" alphatest="blend" zPosition="2" />
-    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/buttonglas.png" position="565,680" size="90,36" alphatest="blend" zPosition="2" />
-    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/buttonglas.png" position="815,680" size="90,36" alphatest="blend" zPosition="2" />	
+     <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/buttonred.png" position="96,666" size="250,60" alphatest="blend" zPosition="0" />
+<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/buttongreen.png" position="255,666" size="250,60" alphatest="blend" zPosition="0" />
+<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/buttonyellow.png" position="416,666" size="250,60" alphatest="blend" zPosition="0" />
+<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/buttonblue.png" position="576,666" size="250,60" alphatest="blend" zPosition="0" />
+    <widget name="F1" position="96,666" size="250,60" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
+    <widget name="F2" position="255,666" size="250,60" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
+    <widget name="F3" position="416,666" size="250,60" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
+    <widget name="F4" position="576,666" size="250,60" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" /> 
 </screen>

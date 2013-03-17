@@ -10,12 +10,10 @@
     </widget>
     <widget source="session.VideoPicture" render="Pig" position="913,136" size="328,186" zPosition="3" backgroundColor="transparent" />
     <eLabel position="912,135" size="330,188" backgroundColor="#00ffffff" zPosition="0" name="Videoback" foregroundColor="#00ffffff" />
-    <ePixmap position="925,680" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />
+    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/buttongrey_l.png" position="722,663" size="250,60" alphatest="blend" zPosition="0" />
 	<eLabel text="CH+" position="925,680" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/buttonglas.png" position="925,680" size="90,36" alphatest="blend" zPosition="2" />
-    <ePixmap position="1035,680" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />
+    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/buttongrey_m.png" position="859,663" size="250,60" alphatest="blend" zPosition="0" />
 	<eLabel text="CH-" position="1035,680" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/buttonglas.png" position="1035,680" size="90,36" alphatest="blend" zPosition="2" />
 	<!-- select screen -->
     <widget name="leftContentTitle" position="55,190" size="850,25" backgroundColor="#26181d20" zPosition="5" foregroundColor="#00ffffff" font="mediaportal;22" halign="center" transparent="1" />
     <widget name="name" position="913,331" size="328,100" backgroundColor="#26181d20" transparent="1" zPosition="1" font="mediaportal;24" valign="center" halign="center" foregroundColor="#00ffffff" />
