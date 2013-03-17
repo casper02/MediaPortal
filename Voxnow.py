@@ -198,22 +198,30 @@ class VoxnowFilmeListeScreen(Screen):
 		if self.keyLocked:
 			return
 		self.streamName = self['List'].getCurrent()[0][0]
-		link = self['List'].getCurrent()[0][1]
-		print link
-		getPage(link, agent=std_headers, cookies=self.keckse, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.get_xml).addErrback(self.dataError)
+		self.pageurl = self['List'].getCurrent()[0][1]
+		print self.pageurl
+		getPage(self.pageurl, agent=std_headers, cookies=self.keckse, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.get_xml).addErrback(self.dataError)
 
 	def get_xml(self, data):
 		print "xml data"
-		stream = re.findall("'playerdata': '(.*?)'", data, re.S)
-		if stream:
-			print stream[0].replace('amp;',''), self.keckse
-			getPage(stream[0].replace('amp;',''), agent=std_headers, cookies=self.keckse, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.get_stream).addErrback(self.dataError)
+		self.stream = re.findall("'playerdata': '(.*?)'", data, re.S)
+		if self.stream:
+			print self.stream[0].replace('amp;',''), self.keckse
+			getPage(self.stream[0].replace('amp;',''), agent=std_headers, cookies=self.keckse, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.get_stream).addErrback(self.dataError)
 		else:
 			print "nix"
 			
 	def get_stream(self, data):
 		print "stream data"
-		print data
+		rtmpe_data = re.findall('<filename.*?><!\[CDATA\[(rtmpe://.*?voxnow/)(.*?)\]\]></filename>', data, re.S)
+		if rtmpe_data:
+			print rtmpe_data, self.pageurl
+			(host, playpath) = rtmpe_data[0]
+			print host, playpath
+			final = "%s swfUrl=http://www.voxnow.de/includes/vodplayer.swf pageurl=%s playpath=mp4:%s" % (host, self.pageurl, playpath)
+			print final
+			sref = eServiceReference(0x1001, 0, final)
+			self.session.open(MoviePlayer, sref)
 	
 	def keyTMDbInfo(self):
 		if TMDbPresent:
