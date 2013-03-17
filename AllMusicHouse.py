@@ -639,6 +639,14 @@ class AMH_Streams(Screen, ConfigListScreen):
 			self.streamListe.append(("No streams found !","",""))
 		self.streamMenuList.setList(map(AMH_StreamListEntry, self.streamListe))
 		self.loadPic()
+
+	def youtubeErr(self, error):
+		self.keyLocked = True
+		print "youtubeErr: "
+		self.streamListe = []
+		self.streamListe.append(("Das Video kann leider nicht abgespielt werden !","",""))
+		self.streamMenuList.setList(map(AMH_StreamListEntry, self.streamListe))
+		self['handlung'].setText(str(error))
 		
 	def getHandlung(self, desc):
 		print "getHandlung:"
@@ -681,8 +689,10 @@ class AMH_Streams(Screen, ConfigListScreen):
 		dhTitle = self['streamList'].getCurrent()[0][0]
 		dhVideoId = self['streamList'].getCurrent()[0][1]
 		print "Title: ",dhTitle
-		print "VideoId: ",dhVideoId
-		dhLink = getVideoUrl(dhVideoId, self.videoPrio)
+		#print "VideoId: ",dhVideoId
+		y = youtubeUrl(self.session)
+		y.addErrback(self.youtubeErr)
+		dhLink = y.getVideoUrl(dhVideoId, self.videoPrio)
 		if dhLink:
 			print dhLink
 			sref = eServiceReference(0x1001, 0, dhLink)
