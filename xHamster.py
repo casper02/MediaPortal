@@ -174,11 +174,12 @@ class xhamsterFilmScreen(Screen):
 		self['name'] = Label("Film Auswahl")
 		self['views'] = Label("")
 		self['runtime'] = Label("")
-		self['page'] = Label("1")
+		self['page'] = Label("")
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
 		self.page = 1
-		
+		self.lastpage = 1
+
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
@@ -191,12 +192,20 @@ class xhamsterFilmScreen(Screen):
 		self.keyLocked = True
 		self['name'].setText('Bitte warten...')
 		self.streamList = []
-		self['page'].setText(str(self.page))
 		ptUrl = "%s%s.html" % (self.genreLink, str(self.page))
 		print ptUrl
 		getPage(ptUrl, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.pageData).addErrback(self.dataError)
 		
 	def pageData(self, data):
+		lastpparse = re.search('class="pager">(.*)</div>', data, re.S)
+		lastp = re.findall('href=.*html.*>(.*[0-9])<.*?', lastpparse.group(1), re.S)
+		if lastp:
+			lastp = lastp[0]
+			print lastp
+			self.lastpage = int(lastp)
+		else:
+			self.lastpage = 1
+		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 		parse = re.search('<h2>.*?</h2>.*?<h2>.*?</h2>(.*?)</table>', data, re.S)
 		xhListe = re.findall('<a href="(/movies/.*?)" class=\'hRotator\' >.*?<img src=\'(.*?)\'.*?alt="(.*?)"/>.*?<div class="moduleFeaturedDetails">Runtime: (.*?)<BR>Views: (.*?)</div>', parse.group(1), re.S)
 		if xhListe:
@@ -216,7 +225,6 @@ class xhamsterFilmScreen(Screen):
 		self['name'].setText(ptTitle)
 		self['views'].setText(ptViews)
 		self['runtime'].setText(ptRuntime)
-		self['page'].setText(str(self.page))
 
 	def ptRead(self, stationIconLink):
 		downloadPage(stationIconLink, "/tmp/xhIcon.jpg").addCallback(self.ptCoverShow)
@@ -266,8 +274,12 @@ class xhamsterFilmScreen(Screen):
 
 	def callbackkeyPageNumber(self, answer):
 		if answer is not None:
-			self.page = int(answer)
-			self.loadpage()
+			if int(answer) < self.lastpage + 1:
+				self.page = int(answer)
+				self.loadpage()
+			else:
+				self.page = self.lastpage
+				self.loadpage()
 
 	def keyPageDown(self):
 		print "PageDown"
@@ -281,8 +293,9 @@ class xhamsterFilmScreen(Screen):
 		print "PageUP"
 		if self.keyLocked:
 			return
-		self.page += 1
-		self.loadpage()
+		if self.page < self.lastpage:
+			self.page += 1
+			self.loadpage()
 		
 	def keyLeft(self):
 		if self.keyLocked:
