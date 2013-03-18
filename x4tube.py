@@ -53,35 +53,28 @@ class fourtubeGenreScreen(Screen):
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
-		self.genreliste.append(("--- Search ---", "callSuchen"))
-		self.genreliste.append(("Lastest", "http://www.4tube.com/videos?page="))
-		self.genreliste.append(("Featured", "http://www.4tube.com/featured?sort=ctr&page="))
-		self.genreliste.append(("Full", "http://www.4tube.com/videos/full-length?sort=ctr&page="))
-		self.genreliste.append(("Pornstars", "http://www.4tube.com/pornstars?page="	))
-		self.genreliste.append(("Anal", "http://www.4tube.com/find/tags/anal?sort=ctr&page="))
-		self.genreliste.append(("Asian", "http://www.4tube.com/find/tags/asian?sort=ctr&page="))
-		self.genreliste.append(("Babe", "http://www.4tube.com/find/tags/babe?sort=ctr&page="))
-		self.genreliste.append(("Big Dick", "http://www.4tube.com/find/tags/big-dick?sort=ctr&page="))
-		self.genreliste.append(("Big Tits", "http://www.4tube.com/find/tags/big-tits?sort=ctr&page="))
-		self.genreliste.append(("Blowjobs", "http://www.4tube.com/find/tags/blowjobs?sort=ctr&page="))
-		self.genreliste.append(("Creampie", "http://www.4tube.com/find/tags/creampie?sort=ctr&page="))
-		self.genreliste.append(("Cumshots", "http://www.4tube.com/find/tags/cumshots?sort=ctr&page="))
-		self.genreliste.append(("Deepthroat", "http://www.4tube.com/find/tags/deep-throat?sort=ctr&page="))
-		self.genreliste.append(("Double Penetration", "http://www.4tube.com/find/tags/double-penetration?sort=ctr&page="))
-		self.genreliste.append(("Ebony", "http://www.4tube.com/find/tags/ebony?sort=ctr&page="))
-		self.genreliste.append(("Fisting", "http://www.4tube.com/find/tags/fisting?sort=ctr&page="))
-		self.genreliste.append(("Handjob", "http://www.4tube.com/find/tags/handjob?sort=ctr&page="))
-		self.genreliste.append(("Hardcore", "http://www.4tube.com/find/tags/hardcore?sort=ctr&page="))
-		self.genreliste.append(("Interracial", "http://www.4tube.com/find/tags/interracial?sort=ctr&page="))
-		self.genreliste.append(("Latinas", "http://www.4tube.com/find/tags/latinas?sort=ctr&page="))
-		self.genreliste.append(("Lesbians", "http://www.4tube.com/find/tags/lesbians?sort=ctr&page="))
-		self.genreliste.append(("Masturbation", "http://www.4tube.com/find/tags/masturbation?sort=ctr&page="))
-		self.genreliste.append(("MILF", "http://www.4tube.com/find/tags/milf?sort=ctr&page="))
-		self.genreliste.append(("Solo", "http://www.4tube.com/find/tags/solo?sort=ctr&page="))
-		self.genreliste.append(("Squirting", "http://www.4tube.com/find/tags/squirting?sort=ctr&page="))
-		self.genreliste.append(("Teens", "http://www.4tube.com/find/tags/teens?sort=ctr&page="))
-		self.genreliste.append(("Toys", "http://www.4tube.com/find/tags/toys?sort=ctr&page="))		
-		self.chooseMenuList.setList(map(fourtubeGenreListEntry, self.genreliste))
+		self.keyLocked = True
+		url = "http://www.4tube.com/videos"
+		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)	
+
+	def genreData(self, data):
+		parse = re.search('Popular Tags(.*?)End Section', data, re.S)
+		phCats = re.findall('<a class=".*?" href="(.*?)">(.*?)</a>', parse.group(1), re.S)
+		if phCats:
+			for (phUrl, phTitle) in phCats:
+				phUrl = "http://www.4tube.com" + phUrl + '?sort=ctr&page='
+				self.genreliste.append((phTitle, phUrl))
+			self.genreliste.sort()
+			self.genreliste.insert(0, ("Pornstars", "http://www.4tube.com/pornstars?page="))
+			self.genreliste.insert(0, ("Full", "http://www.4tube.com/videos/full-length?sort=ctr&page="))
+			self.genreliste.insert(0, ("Featured", "http://www.4tube.com/featured?sort=ctr&page="))
+			self.genreliste.insert(0, ("Lastest", "http://www.4tube.com/videos?page="))
+			self.genreliste.insert(0, ("--- Search ---", "callSuchen"))
+			self.chooseMenuList.setList(map(fourtubeGenreListEntry, self.genreliste))
+			self.keyLocked = False
+
+	def dataError(self, error):
+		print error
 
 	def keyOK(self):
 		streamGenreName = self['genreList'].getCurrent()[0][0]
@@ -331,6 +324,8 @@ class fourtubeFilmScreen(Screen):
 		phTitle = self['genreList'].getCurrent()[0][0]
 		phImage = self['genreList'].getCurrent()[0][2]
 		phRuntime = self['genreList'].getCurrent()[0][3]
+		phRuntime = phRuntime.replace('[ ','')
+		phRuntime = phRuntime.replace(' ]','')
 		self['name'].setText(phTitle)
 		self['runtime'].setText(phRuntime)
 		downloadPage(phImage, "/tmp/Icon.jpg").addCallback(self.ShowCover)
