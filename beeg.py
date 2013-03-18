@@ -56,6 +56,7 @@ class beegGenreScreen(Screen):
 		phCats = re.findall('href="/tag(.*?)".*?>(.*?)</a>', data, re.S)
 		if phCats:
 			for (phUrl, phTitle) in phCats:
+				phTitle = phTitle.title()
 				self.genreliste.append((phTitle, phUrl))
 			self.genreliste.sort()
 			self.genreliste.insert(0, ("Longest", "/section/long-videos/"))
@@ -141,7 +142,7 @@ class beegFilmScreen(Screen):
 		self['name'] = Label("Film Auswahl")
 		self['views'] = Label("")
 		self['runtime'] = Label("")
-		self['page'] = Label("1")
+		self['page'] = Label("")
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
 		self.page = 1
@@ -159,7 +160,6 @@ class beegFilmScreen(Screen):
 		self.keyLocked = True
 		self['name'].setText('Bitte warten...')
 		self.filmliste = []
-		self['page'].setText(str(self.page))
 		if self.phCatName == "--- Search ---":
 			url = "%s&page=%s" % (self.phCatLink, str(self.page))
 		elif self.phCatName == "Newest":
@@ -172,14 +172,14 @@ class beegFilmScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
 	def loadData(self, data):
-		pagerbox = re.search('<div class="pager-box">(.*?)</div>', data, re.S)
+		pagerbox = re.search('class="pager-box">(.*)</div>', data, re.S)
 		if pagerbox:
-			lastp = re.findall('<a href=".*?" target="_self">(.*?)</a>', pagerbox.group(1), re.S)
+			lastp = re.findall('<a\s.*target="_self".*>(.?[0-9])</a>\s{0,2}<a\s.*id="paging_prev">', pagerbox.group(1), re.S)
 			if lastp:
-				last = lastp[len(lastp)-1]
-				self.lastpage = int(last)
+				self.lastpage = int(lastp[0])
 		else:
 			self.lastpage = 1
+		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 		m = re.search('tumbid  =\[(.*)\].*?var tumbalt',data,re.S)
 		n = re.search('tumbalt =\[(.*)\].*?var writestr',data,re.S)
 		mx = m.group(1) + ","
