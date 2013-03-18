@@ -206,7 +206,7 @@ class xhamsterFilmScreen(Screen):
 		else:
 			self.lastpage = 1
 		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
-		parse = re.search('<h2>.*?</h2>.*?<h2>.*?</h2>(.*?)</table>', data, re.S)
+		parse = re.search('<h2>.*</h2>(.*?)</table>', data, re.S)
 		xhListe = re.findall('<a href="(/movies/.*?)" class=\'hRotator\' >.*?<img src=\'(.*?)\'.*?alt="(.*?)"/>.*?<div class="moduleFeaturedDetails">Runtime: (.*?)<BR>Views: (.*?)</div>', parse.group(1), re.S)
 		if xhListe:
 			for (xhLink, xhImage, xhName, xhRuntime, xhxhViews) in xhListe:
