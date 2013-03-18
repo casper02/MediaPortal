@@ -48,45 +48,59 @@ class redtubeGenreScreen(Screen):
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
-		self.genreliste.append(("--- Search ---", "callSuchen"))
-		self.genreliste.append(("Newest", "http://www.redtube.com/?page="))
-		self.genreliste.append(("Top Rated", "http://www.redtube.com/top?page="))
-		self.genreliste.append(("Most Viewed", "http://www.redtube.com/mostviewed?page="))
-		self.genreliste.append(("Most Favored", "http://www.redtube.com/mostfavored?page="))
-		self.genreliste.append(("Amateur", "http://www.redtube.com/redtube/amateur?page="))
-		self.genreliste.append(("Anal", "http://www.redtube.com/redtube/anal?page="))
-		self.genreliste.append(("Asian", "http://www.redtube.com/redtube/asian?page="))
-		self.genreliste.append(("Big Tits", "http://www.redtube.com/redtube/bigtits?page="))
-		self.genreliste.append(("Blonde", "http://www.redtube.com/redtube/blonde?page="))
-		self.genreliste.append(("Blowjob", "http://www.redtube.com/redtube/blowjob?page="))
-		self.genreliste.append(("Creampie", "http://www.redtube.com/redtube/creampie?page="))
-		self.genreliste.append(("Cumshot", "http://www.redtube.com/redtube/cumshot?page="))
-		self.genreliste.append(("Double Penetration", "http://www.redtube.com/redtube/doublepenetration?page="))
-		self.genreliste.append(("Ebony", "http://www.redtube.com/redtube/ebony?page="))
-		self.genreliste.append(("Facials", "http://www.redtube.com/redtube/facials?page="))
-		self.genreliste.append(("Fetish", "http://www.redtube.com/redtube/fetish?page="))
-		self.genreliste.append(("Gangbang", "http://www.redtube.com/redtube/gangbang?page="))
-		self.genreliste.append(("Gay", "http://www.redtube.com/redtube/gay?page="))
-		self.genreliste.append(("Group", "http://www.redtube.com/redtube/group?page="))
-		self.genreliste.append(("Hentai", "http://www.redtube.com/redtube/hentai?page="))
-		self.genreliste.append(("Interracial", "http://www.redtube.com/redtube/interracial?page="))
-		self.genreliste.append(("Japanese", "http://www.redtube.com/redtube/japanese?page="))
-		self.genreliste.append(("Latina", "http://www.redtube.com/redtube/latina?page="))
-		self.genreliste.append(("Lesbian", "http://www.redtube.com/redtube/lesbian?page="))
-		self.genreliste.append(("Lingerie", "http://www.redtube.com/redtube/lingerie?page="))
-		self.genreliste.append(("Masturbation", "http://www.redtube.com/redtube/masturbation?page="))
-		self.genreliste.append(("Mature", "http://www.redtube.com/redtube/mature?page="))
-		self.genreliste.append(("MILF", "http://www.redtube.com/redtube/milf?page="))
-		self.genreliste.append(("POV", "http://www.redtube.com/redtube/pov?page="))
-		self.genreliste.append(("Public", "http://www.redtube.com/redtube/public?page="))
-		self.genreliste.append(("Redhead", "http://www.redtube.com/redtube/redhead?page="))
-		self.genreliste.append(("Shemale", "http://www.redtube.com/redtube/shemale?page="))
-		self.genreliste.append(("Squirting", "http://www.redtube.com/redtube/squirting?page="))
-		self.genreliste.append(("Teens", "http://www.redtube.com/redtube/teens?page="))
-		self.genreliste.append(("Vintage", "http://www.redtube.com/redtube/vintage?page="))
-		self.genreliste.append(("Wild & Crazy", "http://www.redtube.com/redtube/wildcrazy?page="))
-		self.chooseMenuList.setList(map(redtubeGenreListEntry, self.genreliste))
+		self.keyLocked = True
+		url = "http://www.redtube.com/channels"
+		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)	
 
+	def genreData(self, data):
+		phCats = re.findall('class="video">.*?<a href="(.*?)" title="(.*?)">.*?src="(.*?)" />', data, re.S)
+		if phCats:
+			for (phUrl, phTitle, phImage) in phCats:
+				phUrl = "http://www.redtube.com" + phUrl + '?page='
+				self.genreliste.append((phTitle, phUrl, phImage))
+			self.genreliste.sort()
+			self.genreliste.insert(0, ("Most Favored", "http://www.redtube.com/mostfavored?page=", None))
+			self.genreliste.insert(0, ("Most Viewed", "http://www.redtube.com/mostviewed?page=", None))
+			self.genreliste.insert(0, ("Top Rated", "http://www.redtube.com/top?page=", None))
+			self.genreliste.insert(0, ("Newest", "http://www.redtube.com/?page=", None))
+			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
+			self.chooseMenuList.setList(map(redtubeGenreListEntry, self.genreliste))
+			self.keyLocked = False
+			self.showInfos()	
+
+	def dataError(self, error):
+		print error
+
+	def showInfos(self):
+		phImage = self['genreList'].getCurrent()[0][2]
+		print phImage
+		if not phImage == None:
+			downloadPage(phImage, "/tmp/phIcon.jpg").addCallback(self.ShowCover)
+		else:
+			self.ShowCoverNone()
+
+	def ShowCover(self, picData):
+		picPath = "/tmp/phIcon.jpg"
+		self.ShowCoverFile(picPath)
+		
+	def ShowCoverNone(self):
+		picPath = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/images/no_coverArt.png" % config.mediaportal.skin.value
+		self.ShowCoverFile(picPath)
+		
+	def ShowCoverFile(self, picPath):
+		if fileExists(picPath):
+			self['coverArt'].instance.setPixmap(None)
+			self.scale = AVSwitch().getFramebufferScale()
+			self.picload = ePicLoad()
+			size = self['coverArt'].instance.size()
+			self.picload.setPara((size.width(), size.height(), self.scale[0], self.scale[1], False, 1, "#FF000000"))
+			if self.picload.startDecode(picPath, 0, 0, False) == 0:
+				ptr = self.picload.getData()
+				if ptr != None:
+					self['coverArt'].instance.setPixmap(ptr.__deref__())
+					self['coverArt'].show()
+					del self.picload
+					
 	def keyOK(self):
 		streamGenreName = self['genreList'].getCurrent()[0][0]
 		if streamGenreName == "--- Search ---":
@@ -106,16 +120,28 @@ class redtubeGenreScreen(Screen):
 			self.session.open(redtubeFilmScreen, streamGenreLink)
 
 	def keyLeft(self):
+		if self.keyLocked:
+			return
 		self['genreList'].pageUp()
+		self.showInfos()
 		
 	def keyRight(self):
+		if self.keyLocked:
+			return
 		self['genreList'].pageDown()
+		self.showInfos()
 		
 	def keyUp(self):
+		if self.keyLocked:
+			return
 		self['genreList'].up()
+		self.showInfos()
 		
 	def keyDown(self):
+		if self.keyLocked:
+			return
 		self['genreList'].down()
+		self.showInfos()
 
 	def keyCancel(self):
 		self.close()
