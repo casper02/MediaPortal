@@ -177,11 +177,12 @@ class ahmeFilmScreen(Screen):
 		self['name'] = Label("Film Auswahl")
 		self['views'] = Label("")
 		self['runtime'] = Label("")
-		self['page'] = Label("1")
+		self['page'] = Label("")
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
 		self.page = 1
-		
+		self.lastpage = 1
+
 		self.filmliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
@@ -194,12 +195,20 @@ class ahmeFilmScreen(Screen):
 		self.keyLocked = True
 		self['name'].setText('Bitte warten...')
 		self.filmliste = []
-		self['page'].setText(str(self.page))
 		url = "%spage%s.html" % (self.phCatLink, str(self.page))
 		print url
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
 	def loadData(self, data):
+		lastpparse = re.search('class="top_pages">(.*)</div><!--/top pages', data, re.S)
+		lastp = re.findall('href=.*html.*>(.*[0-9])<.*?', lastpparse.group(1), re.S)
+		if lastp:
+			lastp = lastp[0]
+			print lastp
+			self.lastpage = int(lastp)
+		else:
+			self.lastpage = 1
+		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 		phMovies = re.findall('mianitura.*?<a href="(.*?)"><img src="(.*?)" alt="(.*?)".*?hour3">(.*?)</div>', data, re.S)
 		if phMovies:
 			for (phUrl, phImage, phTitle, phRuntime) in phMovies:
@@ -249,8 +258,12 @@ class ahmeFilmScreen(Screen):
 
 	def callbackkeyPageNumber(self, answer):
 		if answer is not None:
-			self.page = int(answer)
-			self.loadpage()
+			if int(answer) < self.lastpage + 1:
+				self.page = int(answer)
+				self.loadpage()
+			else:
+				self.page = self.lastpage
+				self.loadpage()
 
 	def keyPageDown(self):
 		print "PageDown"
@@ -264,8 +277,9 @@ class ahmeFilmScreen(Screen):
 		print "PageUP"
 		if self.keyLocked:
 			return
-		self.page += 1
-		self.loadpage()
+		if self.page < self.lastpage:
+			self.page += 1
+			self.loadpage()
 		
 	def keyLeft(self):
 		if self.keyLocked:
