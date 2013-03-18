@@ -63,6 +63,7 @@ class fourtubeGenreScreen(Screen):
 		if phCats:
 			for (phUrl, phTitle) in phCats:
 				phUrl = "http://www.4tube.com" + phUrl + '?sort=ctr&page='
+				phTitle = phTitle.title()
 				self.genreliste.append((phTitle, phUrl))
 			self.genreliste.sort()
 			self.genreliste.insert(0, ("Pornstars", "http://www.4tube.com/pornstars?page="))
