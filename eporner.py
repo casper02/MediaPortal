@@ -64,7 +64,7 @@ class epornerGenreScreen(Screen):
 			self.genreliste.insert(0, ("Top Rated", "http://www.eporner.com/top_rated//", None))
 			self.genreliste.insert(0, ("Popular", "http://www.eporner.com/weekly_top//", None))
 			self.genreliste.insert(0, ("On Air", "http://www.eporner.com/currently//", None))
-			self.genreliste.insert(0, ("New", "http://www.eporner.com//", None))
+			self.genreliste.insert(0, ("New", "http://www.eporner.com/", None))
 			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.chooseMenuList.setList(map(epornerGenreListEntry, self.genreliste))
 			self.keyLocked = False
@@ -179,11 +179,12 @@ class epornerFilmScreen(Screen):
 		self['name'] = Label("Film Auswahl")
 		self['views'] = Label("")
 		self['runtime'] = Label("")
-		self['page'] = Label("1")
+		self['page'] = Label("")
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
 		self.page = 0
-		
+		self.lastpage = 0
+
 		self.filmliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
@@ -196,12 +197,19 @@ class epornerFilmScreen(Screen):
 		self.keyLocked = True
 		self['name'].setText('Bitte warten...')
 		self.filmliste = []
-		self['page'].setText(str(self.page+1))
 		url = "%s%s//" % (self.phCatLink, str(self.page))
 		print url
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
 	def loadData(self, data):
+		lastp = re.findall('class="numlist2">.*?of\s(.*?[0-9])\s', data, re.S)
+		if lastp:
+			lastp = round((float(lastp[0]) / 32) + 0.5)
+			print lastp
+			self.lastpage = int(lastp)
+		else:
+			self.lastpage = 0
+		self['page'].setText(str(self.page+1) + ' / ' + str(self.lastpage))
 		if self.phCatLink == "http://www.eporner.com/top_rated//":
 			phMovies = re.findall('<div class="mbtit"><a href="(.*?)" title="(.*?)".*?src="(.*?)".*?<span>TIME:</span> (.*?)</div>', data, re.S)
 			if phMovies:
@@ -251,8 +259,12 @@ class epornerFilmScreen(Screen):
 
 	def callbackkeyPageNumber(self, answer):
 		if answer is not None:
-			self.page = int(answer)-1
-			self.loadpage()
+			if int(answer)-1 < self.lastpage:
+				self.page = int(answer)-1
+				self.loadpage()
+			else:
+				self.page = self.lastpage-1
+				self.loadpage()			
 
 	def keyPageDown(self):
 		print "PageDown"
@@ -266,9 +278,10 @@ class epornerFilmScreen(Screen):
 		print "PageUP"
 		if self.keyLocked:
 			return
-		self.page += 1
-		self.loadpage()
-		
+		if self.page+1 < self.lastpage:
+			self.page += 1
+			self.loadpage()
+			
 	def keyLeft(self):
 		if self.keyLocked:
 			return
