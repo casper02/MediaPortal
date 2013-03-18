@@ -176,10 +176,11 @@ class wetplaceFilmScreen(Screen):
 		self['name'] = Label("Film Auswahl")
 		self['views'] = Label("")
 		self['runtime'] = Label("")
-		self['page'] = Label("1")
+		self['page'] = Label("")
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
 		self.page = 1
+		self.lastpage = 1
 		
 		self.filmliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -193,7 +194,6 @@ class wetplaceFilmScreen(Screen):
 		self.keyLocked = True
 		self['name'].setText('Bitte warten...')
 		self.filmliste = []
-		self['page'].setText(str(self.page))
 		cat = self.phCatLink
 		search = re.search('/search/(.*)', cat, re.S)
 		if search:
@@ -204,6 +204,14 @@ class wetplaceFilmScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
 	def loadData(self, data):
+		lastp = re.findall('<div>Showing.*of\s(.*?[0-9])\sitems', data, re.S)
+		if lastp:
+			lastp = round((float(lastp[0]) / 40) + 0.5)
+			print lastp
+			self.lastpage = int(lastp)
+		else:
+			self.lastpage = 1
+		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 		phMovies = re.findall('class="video">.*?<a href="(.*?)".*?title="(.*?)"><img class="thumb" src="(.*?)"', data, re.S)
 		if phMovies:
 			for (phUrl, phTitle, phImage) in phMovies:
@@ -240,8 +248,12 @@ class wetplaceFilmScreen(Screen):
 
 	def callbackkeyPageNumber(self, answer):
 		if answer is not None:
-			self.page = int(answer)
-			self.loadpage()
+			if int(answer) < self.lastpage + 1:
+				self.page = int(answer)
+				self.loadpage()
+			else:
+				self.page = self.lastpage
+				self.loadpage()
 
 	def keyPageDown(self):
 		print "PageDown"
@@ -255,8 +267,9 @@ class wetplaceFilmScreen(Screen):
 		print "PageUP"
 		if self.keyLocked:
 			return
-		self.page += 1
-		self.loadpage()
+		if self.page < self.lastpage:
+			self.page += 1
+			self.loadpage()
 		
 	def keyLeft(self):
 		if self.keyLocked:
