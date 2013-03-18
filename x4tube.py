@@ -155,7 +155,7 @@ class fourtubePornstarsScreen(Screen):
 		self['name'] = Label("Pornstars Auswahl")
 		self['views'] = Label("")
 		self['runtime'] = Label("")
-		self['page'] = Label("1")
+		self['page'] = Label("")
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
 		self.page = 1
@@ -172,12 +172,19 @@ class fourtubePornstarsScreen(Screen):
 		self.keyLocked = True
 		self['name'].setText('Bitte warten...')
 		self.filmliste = []
-		self['page'].setText(str(self.page))
 		url = "%s%s" % (self.phCatLink, str(self.page))
 		print url
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
 	def loadData(self, data):
+		lastp = re.findall('class="last"\shref=".*page=(.*?)"\stitle="Last\spage">', data, re.S)
+		if lastp:
+			lastp = lastp[0]
+			print lastp
+			self.lastpage = int(lastp)
+		else:
+			self.lastpage = 1
+		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 		Movies = re.findall('pornstarInfoLarge_pornstar"><a title=.*?href="(.*?)".*?class="thumb" src="(.*?)" title="(.*?)"',data,re.S) 
 		if Movies:
 			for (Url, Image, Title) in Movies:
@@ -214,8 +221,12 @@ class fourtubePornstarsScreen(Screen):
 
 	def callbackkeyPageNumber(self, answer):
 		if answer is not None:
-			self.page = int(answer)
-			self.loadpage()
+			if int(answer) < self.lastpage + 1:
+				self.page = int(answer)
+				self.loadpage()
+			else:
+				self.page = self.lastpage
+				self.loadpage()
 
 	def keyPageDown(self):
 		print "PageDown"
@@ -229,8 +240,9 @@ class fourtubePornstarsScreen(Screen):
 		print "PageUP"
 		if self.keyLocked:
 			return
-		self.page += 1
-		self.loadpage()
+		if self.page < self.lastpage:
+			self.page += 1
+			self.loadpage()
 		
 	def keyLeft(self):
 		if self.keyLocked:
@@ -296,7 +308,7 @@ class fourtubeSitesScreen(Screen):
 		self['name'] = Label("Sites Auswahl")
 		self['views'] = Label("")
 		self['runtime'] = Label("")
-		self['page'] = Label("1")
+		self['page'] = Label("")
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
 		self.page = 1
@@ -313,12 +325,19 @@ class fourtubeSitesScreen(Screen):
 		self.keyLocked = True
 		self['name'].setText('Bitte warten...')
 		self.filmliste = []
-		self['page'].setText(str(self.page))
 		url = "%s%s" % (self.phCatLink, str(self.page))
 		print url
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
 	def loadData(self, data):
+		lastp = re.findall('class="last"\shref=".*page=(.*?)"\stitle="Last\spage">', data, re.S)
+		if lastp:
+			lastp = lastp[0]
+			print lastp
+			self.lastpage = int(lastp)
+		else:
+			self.lastpage = 1
+		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 		Movies = re.findall('class="siteInfo"><span class="name"><a href="(.*?)">(.*?)</a></span><a href=".*?"><img class="thumb" src="(.*?)"',data,re.S) 
 		if Movies:
 			for (Url, Title, Image) in Movies:
@@ -356,8 +375,12 @@ class fourtubeSitesScreen(Screen):
 
 	def callbackkeyPageNumber(self, answer):
 		if answer is not None:
-			self.page = int(answer)
-			self.loadpage()
+			if int(answer) < self.lastpage + 1:
+				self.page = int(answer)
+				self.loadpage()
+			else:
+				self.page = self.lastpage
+				self.loadpage()
 
 	def keyPageDown(self):
 		print "PageDown"
@@ -371,8 +394,9 @@ class fourtubeSitesScreen(Screen):
 		print "PageUP"
 		if self.keyLocked:
 			return
-		self.page += 1
-		self.loadpage()
+		if self.page < self.lastpage:
+			self.page += 1
+			self.loadpage()
 		
 	def keyLeft(self):
 		if self.keyLocked:
@@ -438,10 +462,11 @@ class fourtubeFilmScreen(Screen):
 		self['name'] = Label("Film Auswahl")
 		self['views'] = Label("")
 		self['runtime'] = Label("")
-		self['page'] = Label("1")
+		self['page'] = Label("")
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
 		self.page = 1
+		self.lastpage = 1
 		
 		self.filmliste = []
 		self.filmQualitaet = []
@@ -456,12 +481,19 @@ class fourtubeFilmScreen(Screen):
 		self.keyLocked = True
 		self['name'].setText('Bitte warten...')
 		self.filmliste = []
-		self['page'].setText(str(self.page))
 		url = "%s%s" % (self.phCatLink, str(self.page))
 		print url
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
 	def loadData(self, data):
+		lastp = re.findall('class="last"\shref=".*page=(.*?)"\stitle="Last\spage">', data, re.S)
+		if lastp:
+			lastp = lastp[0]
+			print lastp
+			self.lastpage = int(lastp)
+		else:
+			self.lastpage = 1
+		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 		phMovies = re.findall('videoInfoPornstar.*?item" href="(.*?)">.*?src="(.*?.jpeg)" title="(.*?)".*?length">(.*?)<', data, re.S)
 		if phMovies:
 			for (phUrl, phImage, phTitle, phRuntime) in phMovies:
@@ -502,8 +534,12 @@ class fourtubeFilmScreen(Screen):
 
 	def callbackkeyPageNumber(self, answer):
 		if answer is not None:
-			self.page = int(answer)
-			self.loadpage()
+			if int(answer) < self.lastpage + 1:
+				self.page = int(answer)
+				self.loadpage()
+			else:
+				self.page = self.lastpage
+				self.loadpage()
 
 	def keyPageDown(self):
 		print "PageDown"
@@ -517,8 +553,9 @@ class fourtubeFilmScreen(Screen):
 		print "PageUP"
 		if self.keyLocked:
 			return
-		self.page += 1
-		self.loadpage()
+		if self.page < self.lastpage:
+			self.page += 1
+			self.loadpage()
 		
 	def keyLeft(self):
 		if self.keyLocked:
