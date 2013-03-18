@@ -178,11 +178,12 @@ class pornerbrosFilmScreen(Screen):
 		self['name'] = Label("Film Auswahl")
 		self['views'] = Label("")
 		self['runtime'] = Label("")
-		self['page'] = Label("1")
+		self['page'] = Label("")
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
 		self.page = 1
-		
+		self.lastpage = 1
+
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
@@ -195,7 +196,6 @@ class pornerbrosFilmScreen(Screen):
 		self.keyLocked = True
 		self['name'].setText('Bitte warten...')
 		self.streamList = []
-		self['page'].setText(str(self.page))
 		cat = self.phCatLink
 		search = re.search('/search/(.*)', cat, re.S)
 		if search:
@@ -206,6 +206,14 @@ class pornerbrosFilmScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.pageData).addErrback(self.dataError)
 
 	def pageData(self, data):
+		lastp = re.findall('<title>Page.*?of\s(.*?[0-9])\s', data, re.S)
+		if lastp:
+			lastp = lastp[0]
+			print lastp
+			self.lastpage = int(lastp)
+		else:
+			self.lastpage = 1
+		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 		parse = re.search('<h2>Today(.*)', data, re.S)
 		if not parse:
 			parse = re.search('<h2>Videos found(.*)', data, re.S)
@@ -230,7 +238,6 @@ class pornerbrosFilmScreen(Screen):
 		self.ptRead(ptImage)
 		self['name'].setText(ptTitle)
 		self['runtime'].setText(ptRuntime)
-		self['page'].setText(str(self.page))
 		self['views'].setText(ptViews)
 		
 	def ptRead(self, stationIconLink):
@@ -274,8 +281,12 @@ class pornerbrosFilmScreen(Screen):
 
 	def callbackkeyPageNumber(self, answer):
 		if answer is not None:
-			self.page = int(answer)
-			self.loadpage()
+			if int(answer) < self.lastpage + 1:
+				self.page = int(answer)
+				self.loadpage()
+			else:
+				self.page = self.lastpage
+				self.loadpage()
 
 	def keyPageDown(self):
 		print "PageDown"
@@ -289,8 +300,9 @@ class pornerbrosFilmScreen(Screen):
 		print "PageUP"
 		if self.keyLocked:
 			return
-		self.page += 1
-		self.loadpage()
+		if self.page < self.lastpage:
+			self.page += 1
+			self.loadpage()
 		
 	def keyLeft(self):
 		if self.keyLocked:
