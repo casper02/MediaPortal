@@ -14,4 +14,4 @@
 	<widget name="genreList" position="55,190" size="850,445" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/sel.png" foregroundColor="#00ffffff" />
 	<!-- <widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/no_coverArt.png" position="998,487" size="160,120" transparent="1" alphatest="blend" /> -->
 	<widget name="name" position="95,106" size="850,60" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="mediaportal;26" valign="center" halign="center" />
-</screen>en>
+</screen>
