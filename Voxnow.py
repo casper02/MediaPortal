@@ -184,15 +184,14 @@ class VoxnowFilmeListeScreen(Screen):
 		free = re.findall('<div class="line linespacer">FREE(.*?)<div class="line linespacer">PAY', data, re.S)
 		if free:
 			folgen = re.findall('<a href="(.*?)" title="(.*?)">.*?</a> </div>', free[0])
-		
-		if folgen:
-			self.filmliste = []
-			for (url,title) in folgen:
-				print title
-				url = "http://www.voxnow.de" + url.replace('amp;','')
-				self.filmliste.append((decodeHtml(title), url))
-			self.chooseMenuList.setList(map(VoxnowFilmListEntry, self.filmliste))
-			self.keyLocked = False
+			if folgen:
+				self.filmliste = []
+				for (url,title) in folgen:
+					print title
+					url = "http://www.voxnow.de" + url.replace('amp;','')
+					self.filmliste.append((decodeHtml(title), url))
+				self.chooseMenuList.setList(map(VoxnowFilmListEntry, self.filmliste))
+				self.keyLocked = False
 
 	def keyOK(self):
 		if self.keyLocked:
@@ -218,7 +217,7 @@ class VoxnowFilmeListeScreen(Screen):
 			print rtmpe_data, self.pageurl
 			(host, playpath) = rtmpe_data[0]
 			print host, playpath
-			final = "%s swfUrl=http://www.voxnow.de/includes/vodplayer.swf pageurl=%s playpath=mp4:%s" % (host, self.pageurl, playpath)
+			final = "%s swfUrl=http://www.voxnow.de/includes/vodplayer.swf pageurl=%s playpath=mp4:%s swfVfy=1" % (host, self.pageurl, playpath)
 			print final
 			sref = eServiceReference(0x1001, 0, final)
 			self.session.open(MoviePlayer, sref)
