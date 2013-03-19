@@ -1,7 +1,7 @@
 <!-- forPlayersVideoScreen -->
 		<screen name="4Players" position="center,center" size="1280,720" flags="wfNoBorder">
     <ePixmap position="2,1" size="1280,720" zPosition="-1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/mpback.png" />
-  <ePixmap position="50,39" size="630,60" zPosition="0" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/mediaportal.png" />
+  <ePixmap position="50,39" size="630,60" zPosition="0" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/mediaportal.png" transparent="1" />
     <widget source="global.CurrentTime" render="Label" position="840,47" size="300,28" font="mediaportal; 26" halign="left" backgroundColor="#26181d20" transparent="1" foregroundColor="#00555555">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
