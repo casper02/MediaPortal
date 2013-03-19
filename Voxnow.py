@@ -181,9 +181,9 @@ class VoxnowFilmeListeScreen(Screen):
 		
 	def loadPageData(self, data):
 		print "daten bekommen"
-		free = re.findall('<div class="line linespacer">FREE(.*?)<div class="line linespacer">PAY', data, re.S)
+		free = re.findall('teaser_content_row.*?FREE(.*?)pagesel', data, re.S)
 		if free:
-			folgen = re.findall('<a href="(.*?)" title="(.*?)">.*?</a> </div>', free[0])
+			folgen = re.findall('id="title_basic_.*?[0-9]"><a\shref="(.*?)"\stitle="(.*?)">.*?kostenlos</a>', free[0])
 			if folgen:
 				self.filmliste = []
 				for (url,title) in folgen:
