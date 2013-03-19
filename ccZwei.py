@@ -49,7 +49,7 @@ class cczwei(Screen):
 				title = title.replace('\xfc','ue')
 				title = title.replace('\xdf','ss')
 				url = "http://www.cczwei.de/" + url
-				self.streamList.insert(0, (title, folge))
+				self.streamList.append((title, folge))
 			self.streamMenuList.setList(map(cczweiListEntry, self.streamList))
 			self.keyLocked = False
 

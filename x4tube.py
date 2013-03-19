@@ -10,6 +10,11 @@ def fourtubePornstarsListEntry(entry):
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		] 
 
+def fourtubeSitesListEntry(entry):
+	return [entry,
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
+		] 
+
 def fourtubeFilmListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
@@ -53,35 +58,30 @@ class fourtubeGenreScreen(Screen):
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
-		self.genreliste.append(("--- Search ---", "callSuchen"))
-		self.genreliste.append(("Lastest", "http://www.4tube.com/videos?page="))
-		self.genreliste.append(("Featured", "http://www.4tube.com/featured?sort=ctr&page="))
-		self.genreliste.append(("Full", "http://www.4tube.com/videos/full-length?sort=ctr&page="))
-		self.genreliste.append(("Pornstars", "http://www.4tube.com/pornstars?page="	))
-		self.genreliste.append(("Anal", "http://www.4tube.com/find/tags/anal?sort=ctr&page="))
-		self.genreliste.append(("Asian", "http://www.4tube.com/find/tags/asian?sort=ctr&page="))
-		self.genreliste.append(("Babe", "http://www.4tube.com/find/tags/babe?sort=ctr&page="))
-		self.genreliste.append(("Big Dick", "http://www.4tube.com/find/tags/big-dick?sort=ctr&page="))
-		self.genreliste.append(("Big Tits", "http://www.4tube.com/find/tags/big-tits?sort=ctr&page="))
-		self.genreliste.append(("Blowjobs", "http://www.4tube.com/find/tags/blowjobs?sort=ctr&page="))
-		self.genreliste.append(("Creampie", "http://www.4tube.com/find/tags/creampie?sort=ctr&page="))
-		self.genreliste.append(("Cumshots", "http://www.4tube.com/find/tags/cumshots?sort=ctr&page="))
-		self.genreliste.append(("Deepthroat", "http://www.4tube.com/find/tags/deep-throat?sort=ctr&page="))
-		self.genreliste.append(("Double Penetration", "http://www.4tube.com/find/tags/double-penetration?sort=ctr&page="))
-		self.genreliste.append(("Ebony", "http://www.4tube.com/find/tags/ebony?sort=ctr&page="))
-		self.genreliste.append(("Fisting", "http://www.4tube.com/find/tags/fisting?sort=ctr&page="))
-		self.genreliste.append(("Handjob", "http://www.4tube.com/find/tags/handjob?sort=ctr&page="))
-		self.genreliste.append(("Hardcore", "http://www.4tube.com/find/tags/hardcore?sort=ctr&page="))
-		self.genreliste.append(("Interracial", "http://www.4tube.com/find/tags/interracial?sort=ctr&page="))
-		self.genreliste.append(("Latinas", "http://www.4tube.com/find/tags/latinas?sort=ctr&page="))
-		self.genreliste.append(("Lesbians", "http://www.4tube.com/find/tags/lesbians?sort=ctr&page="))
-		self.genreliste.append(("Masturbation", "http://www.4tube.com/find/tags/masturbation?sort=ctr&page="))
-		self.genreliste.append(("MILF", "http://www.4tube.com/find/tags/milf?sort=ctr&page="))
-		self.genreliste.append(("Solo", "http://www.4tube.com/find/tags/solo?sort=ctr&page="))
-		self.genreliste.append(("Squirting", "http://www.4tube.com/find/tags/squirting?sort=ctr&page="))
-		self.genreliste.append(("Teens", "http://www.4tube.com/find/tags/teens?sort=ctr&page="))
-		self.genreliste.append(("Toys", "http://www.4tube.com/find/tags/toys?sort=ctr&page="))		
-		self.chooseMenuList.setList(map(fourtubeGenreListEntry, self.genreliste))
+		self.keyLocked = True
+		url = "http://www.4tube.com/videos"
+		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)	
+
+	def genreData(self, data):
+		parse = re.search('Popular Tags(.*?)End Section', data, re.S)
+		phCats = re.findall('<a class=".*?" href="(.*?)">(.*?)</a>', parse.group(1), re.S)
+		if phCats:
+			for (phUrl, phTitle) in phCats:
+				phUrl = "http://www.4tube.com" + phUrl + '?sort=ctr&page='
+				phTitle = phTitle.title()
+				self.genreliste.append((phTitle, phUrl))
+			self.genreliste.sort()
+			self.genreliste.insert(0, ("Websites", "http://www.4tube.com/sites?page="))
+			self.genreliste.insert(0, ("Pornstars", "http://www.4tube.com/pornstars?page="))
+			self.genreliste.insert(0, ("Full", "http://www.4tube.com/videos/full-length?sort=ctr&page="))
+			self.genreliste.insert(0, ("Featured", "http://www.4tube.com/featured?sort=ctr&page="))
+			self.genreliste.insert(0, ("Lastest", "http://www.4tube.com/videos?page="))
+			self.genreliste.insert(0, ("--- Search ---", "callSuchen"))
+			self.chooseMenuList.setList(map(fourtubeGenreListEntry, self.genreliste))
+			self.keyLocked = False
+
+	def dataError(self, error):
+		print error
 
 	def keyOK(self):
 		streamGenreName = self['genreList'].getCurrent()[0][0]
@@ -92,6 +92,10 @@ class fourtubeGenreScreen(Screen):
 			streamGenreLink = self['genreList'].getCurrent()[0][1]
 			self.session.open(fourtubePornstarsScreen, streamGenreLink)
 			
+		elif streamGenreName == "Websites":
+			streamGenreLink = self['genreList'].getCurrent()[0][1]
+			self.session.open(fourtubeSitesScreen, streamGenreLink)
+
 		else:
 			streamGenreLink = self['genreList'].getCurrent()[0][1]
 			self.session.open(fourtubeFilmScreen, streamGenreLink)
@@ -151,7 +155,7 @@ class fourtubePornstarsScreen(Screen):
 		self['name'] = Label("Pornstars Auswahl")
 		self['views'] = Label("")
 		self['runtime'] = Label("")
-		self['page'] = Label("1")
+		self['page'] = Label("")
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
 		self.page = 1
@@ -168,12 +172,19 @@ class fourtubePornstarsScreen(Screen):
 		self.keyLocked = True
 		self['name'].setText('Bitte warten...')
 		self.filmliste = []
-		self['page'].setText(str(self.page))
 		url = "%s%s" % (self.phCatLink, str(self.page))
 		print url
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
 	def loadData(self, data):
+		lastp = re.findall('class="last"\shref=".*page=(.*?)"\stitle="Last\spage">', data, re.S)
+		if lastp:
+			lastp = lastp[0]
+			print lastp
+			self.lastpage = int(lastp)
+		else:
+			self.lastpage = 1
+		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 		Movies = re.findall('pornstarInfoLarge_pornstar"><a title=.*?href="(.*?)".*?class="thumb" src="(.*?)" title="(.*?)"',data,re.S) 
 		if Movies:
 			for (Url, Image, Title) in Movies:
@@ -210,8 +221,12 @@ class fourtubePornstarsScreen(Screen):
 
 	def callbackkeyPageNumber(self, answer):
 		if answer is not None:
-			self.page = int(answer)
-			self.loadpage()
+			if int(answer) < self.lastpage + 1:
+				self.page = int(answer)
+				self.loadpage()
+			else:
+				self.page = self.lastpage
+				self.loadpage()
 
 	def keyPageDown(self):
 		print "PageDown"
@@ -225,8 +240,163 @@ class fourtubePornstarsScreen(Screen):
 		print "PageUP"
 		if self.keyLocked:
 			return
-		self.page += 1
-		self.loadpage()
+		if self.page < self.lastpage:
+			self.page += 1
+			self.loadpage()
+		
+	def keyLeft(self):
+		if self.keyLocked:
+			return
+		self['genreList'].pageUp()
+		self.showInfos()
+		
+	def keyRight(self):
+		if self.keyLocked:
+			return
+		self['genreList'].pageDown()
+		self.showInfos()
+		
+	def keyUp(self):
+		if self.keyLocked:
+			return
+		self['genreList'].up()
+		self.showInfos()
+		
+	def keyDown(self):
+		if self.keyLocked:
+			return
+		self['genreList'].down()
+		self.showInfos()
+		
+	def keyCancel(self):
+		self.close()
+
+	def keyOK(self):
+		if self.keyLocked:
+			return
+		streamGenreLink = self['genreList'].getCurrent()[0][1] + '?page='
+		self.session.open(fourtubeFilmScreen, streamGenreLink)
+
+class fourtubeSitesScreen(Screen):
+	
+	def __init__(self, session, phCatLink):
+		self.session = session
+		self.phCatLink = phCatLink
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/XXXFilmScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/XXXFilmScreen.xml"
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
+		Screen.__init__(self, session)
+		
+		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions"], {
+			"ok" : self.keyOK,
+			"cancel" : self.keyCancel,
+			"up" : self.keyUp,
+			"down" : self.keyDown,
+			"right" : self.keyRight,
+			"left" : self.keyLeft,
+			"nextBouquet" : self.keyPageUp,
+			"prevBouquet" : self.keyPageDown,
+			"green" : self.keyPageNumber
+		}, -1)
+
+		self['title'] = Label("4Tube.com")
+		self['name'] = Label("Sites Auswahl")
+		self['views'] = Label("")
+		self['runtime'] = Label("")
+		self['page'] = Label("")
+		self['coverArt'] = Pixmap()
+		self.keyLocked = True
+		self.page = 1
+		
+		self.filmliste = []
+		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
+		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
+		self.chooseMenuList.l.setItemHeight(25)
+		self['genreList'] = self.chooseMenuList
+		
+		self.onLayoutFinish.append(self.loadpage)
+		
+	def loadpage(self):
+		self.keyLocked = True
+		self['name'].setText('Bitte warten...')
+		self.filmliste = []
+		url = "%s%s" % (self.phCatLink, str(self.page))
+		print url
+		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
+	
+	def loadData(self, data):
+		lastp = re.findall('class="last"\shref=".*page=(.*?)"\stitle="Last\spage">', data, re.S)
+		if lastp:
+			lastp = lastp[0]
+			print lastp
+			self.lastpage = int(lastp)
+		else:
+			self.lastpage = 1
+		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
+		Movies = re.findall('class="siteInfo"><span class="name"><a href="(.*?)">(.*?)</a></span><a href=".*?"><img class="thumb" src="(.*?)"',data,re.S) 
+		if Movies:
+			for (Url, Title, Image) in Movies:
+				Url = 'http://www.4tube.com' + Url
+				self.filmliste.append((Title,Url,Image))
+			self.chooseMenuList.setList(map(fourtubeSitesListEntry, self.filmliste))
+			self.showInfos()
+		self.keyLocked = False
+
+	def dataError(self, error):
+		print error
+
+	def showInfos(self):
+		phTitle = self['genreList'].getCurrent()[0][0]
+		phImage = self['genreList'].getCurrent()[0][2]
+		self['name'].setText(phTitle)
+		downloadPage(phImage, "/tmp/phIcon.jpg").addCallback(self.ShowCover)
+		
+	def ShowCover(self, picData):
+		if fileExists("/tmp/phIcon.jpg"):
+			self['coverArt'].instance.setPixmap(None)
+			self.scale = AVSwitch().getFramebufferScale()
+			self.picload = ePicLoad()
+			size = self['coverArt'].instance.size()
+			self.picload.setPara((size.width(), size.height(), self.scale[0], self.scale[1], False, 1, "#FF000000"))
+			if self.picload.startDecode("/tmp/phIcon.jpg", 0, 0, False) == 0:
+				ptr = self.picload.getData()
+				if ptr != None:
+					self['coverArt'].instance.setPixmap(ptr.__deref__())
+					self['coverArt'].show()
+					del self.picload
+
+	def keyPageNumber(self):
+		self.session.openWithCallback(self.callbackkeyPageNumber, VirtualKeyBoard, title = (_("Seitennummer eingeben")), text = str(self.page))
+
+	def callbackkeyPageNumber(self, answer):
+		if answer is not None:
+			if int(answer) < self.lastpage + 1:
+				self.page = int(answer)
+				self.loadpage()
+			else:
+				self.page = self.lastpage
+				self.loadpage()
+
+	def keyPageDown(self):
+		print "PageDown"
+		if self.keyLocked:
+			return
+		if not self.page < 2:
+			self.page -= 1
+			self.loadpage()
+		
+	def keyPageUp(self):
+		print "PageUP"
+		if self.keyLocked:
+			return
+		if self.page < self.lastpage:
+			self.page += 1
+			self.loadpage()
 		
 	def keyLeft(self):
 		if self.keyLocked:
@@ -266,9 +436,9 @@ class fourtubeFilmScreen(Screen):
 	def __init__(self, session, phCatLink):
 		self.session = session
 		self.phCatLink = phCatLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/fourtubeFilmScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/XXXFilmScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/fourtubeFilmScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/XXXFilmScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -292,10 +462,11 @@ class fourtubeFilmScreen(Screen):
 		self['name'] = Label("Film Auswahl")
 		self['views'] = Label("")
 		self['runtime'] = Label("")
-		self['page'] = Label("1")
+		self['page'] = Label("")
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
 		self.page = 1
+		self.lastpage = 1
 		
 		self.filmliste = []
 		self.filmQualitaet = []
@@ -310,12 +481,19 @@ class fourtubeFilmScreen(Screen):
 		self.keyLocked = True
 		self['name'].setText('Bitte warten...')
 		self.filmliste = []
-		self['page'].setText(str(self.page))
 		url = "%s%s" % (self.phCatLink, str(self.page))
 		print url
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
 	def loadData(self, data):
+		lastp = re.findall('class="last"\shref=".*page=(.*?)"\stitle="Last\spage">', data, re.S)
+		if lastp:
+			lastp = lastp[0]
+			print lastp
+			self.lastpage = int(lastp)
+		else:
+			self.lastpage = 1
+		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 		phMovies = re.findall('videoInfoPornstar.*?item" href="(.*?)">.*?src="(.*?.jpeg)" title="(.*?)".*?length">(.*?)<', data, re.S)
 		if phMovies:
 			for (phUrl, phImage, phTitle, phRuntime) in phMovies:
@@ -331,6 +509,8 @@ class fourtubeFilmScreen(Screen):
 		phTitle = self['genreList'].getCurrent()[0][0]
 		phImage = self['genreList'].getCurrent()[0][2]
 		phRuntime = self['genreList'].getCurrent()[0][3]
+		phRuntime = phRuntime.replace('[ ','')
+		phRuntime = phRuntime.replace(' ]','')
 		self['name'].setText(phTitle)
 		self['runtime'].setText(phRuntime)
 		downloadPage(phImage, "/tmp/Icon.jpg").addCallback(self.ShowCover)
@@ -354,8 +534,12 @@ class fourtubeFilmScreen(Screen):
 
 	def callbackkeyPageNumber(self, answer):
 		if answer is not None:
-			self.page = int(answer)
-			self.loadpage()
+			if int(answer) < self.lastpage + 1:
+				self.page = int(answer)
+				self.loadpage()
+			else:
+				self.page = self.lastpage
+				self.loadpage()
 
 	def keyPageDown(self):
 		print "PageDown"
@@ -369,8 +553,9 @@ class fourtubeFilmScreen(Screen):
 		print "PageUP"
 		if self.keyLocked:
 			return
-		self.page += 1
-		self.loadpage()
+		if self.page < self.lastpage:
+			self.page += 1
+			self.loadpage()
 		
 	def keyLeft(self):
 		if self.keyLocked:

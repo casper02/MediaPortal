@@ -2,15 +2,15 @@
   <screen name="KinoKiste" position="center,center" size="1280,720" flags="wfNoBorder">
     <ePixmap position="2,1" size="1280,720" zPosition="-1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/mpback.png" />
   <ePixmap position="50,39" size="630,60" zPosition="0" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/mediaportal.png" />
-    <widget source="global.CurrentTime" render="Label" position="840,42" size="300,28" font="mediaportal; 26" halign="left" backgroundColor="#26181d20" transparent="1" foregroundColor="#00555555">
+    <widget source="global.CurrentTime" render="Label" position="840,47" size="300,28" font="mediaportal; 26" halign="left" backgroundColor="#26181d20" transparent="1" foregroundColor="#00555555">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
-    <widget source="global.CurrentTime" render="Label" position="1140,42" size="100,28" font="mediaportal;26" halign="center" backgroundColor="#26181d20" transparent="1" foregroundColor="#00555555">
+    <widget source="global.CurrentTime" render="Label" position="1140,47" size="100,28" font="mediaportal;26" halign="center" backgroundColor="#26181d20" transparent="1" foregroundColor="#00555555">
       <convert type="ClockToText">Default</convert>
     </widget>
     <widget source="session.VideoPicture" render="Pig" position="913,136" size="328,186" zPosition="3" backgroundColor="transparent" />
     <eLabel position="912,135" size="330,188" backgroundColor="#00ffffff" zPosition="0" name="Videoback" foregroundColor="#00ffffff" />
-    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/buttongrey_l.png" position="722,663" size="250,60" alphatest="blend" zPosition="0" />
+    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/buttongrey_r.png" position="997,663" size="250,60" alphatest="blend" zPosition="0" />
 	<eLabel text="CH+" position="925,680" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
     <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/cube/images/buttongrey_m.png" position="859,663" size="250,60" alphatest="blend" zPosition="0" />
 	<eLabel text="CH-" position="1035,680" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />

@@ -907,7 +907,7 @@ class DS_Streams(Screen, ConfigListScreen):
 		dhVideoId = self['streamList'].getCurrent()[0][1]
 		#print "Title: ",dhTitle
 		#print "VideoId: ",dhVideoId
-		dhLink = getVideoUrl(dhVideoId, self.videoPrio)
+		dhLink = youtubeUrl(self.session).getVideoUrl(dhVideoId, self.videoPrio)
 		if dhLink:
 			#print dhLink
 			sref = eServiceReference(0x1001, 0, dhLink)

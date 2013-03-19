@@ -178,10 +178,11 @@ class youpornFilmScreen(Screen):
 		self['name'] = Label("Film Auswahl")
 		self['views'] = Label("")
 		self['runtime'] = Label("")
-		self['page'] = Label("1")
+		self['page'] = Label("")
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
 		self.page = 1
+		self.lastpage = 1
 		
 		self.filmliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -195,12 +196,20 @@ class youpornFilmScreen(Screen):
 		self.keyLocked = True
 		self['name'].setText('Bitte warten...')
 		self.filmliste = []
-		self['page'].setText(str(self.page))
 		url = "%s%s" % (self.phCatLink, str(self.page))
 		print url
 		getPage(url, headers={'Cookie': 'age_verified=1', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
 	def loadData(self, data):
+		lastpparse = re.search('id="pagination">(.*)</nav>', data, re.S)
+		lastp = re.findall('<li>.*">(.*?[0-9])<.*/li>', lastpparse.group(1), re.S)
+		if lastp:
+			lastp = lastp[0]
+			print lastp
+			self.lastpage = int(lastp)
+		else:
+			self.lastpage = 1
+		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 		parse = re.search('Sub menu dropdown.*?/Sub menu dropdown(.*?)Our Friends', data, re.S)
 		if not parse:
 			parse = re.search('Sub menu dropdown.*?/Sub menu dropdown(.*?)pagination', data, re.S)
@@ -244,8 +253,12 @@ class youpornFilmScreen(Screen):
 
 	def callbackkeyPageNumber(self, answer):
 		if answer is not None:
-			self.page = int(answer)
-			self.loadpage()
+			if int(answer) < self.lastpage + 1:
+				self.page = int(answer)
+				self.loadpage()
+			else:
+				self.page = self.lastpage
+				self.loadpage()
 
 	def keyPageDown(self):
 		print "PageDown"
@@ -259,8 +272,9 @@ class youpornFilmScreen(Screen):
 		print "PageUP"
 		if self.keyLocked:
 			return
-		self.page += 1
-		self.loadpage()
+		if self.page < self.lastpage:
+			self.page += 1
+			self.loadpage()
 		
 	def keyLeft(self):
 		if self.keyLocked:
