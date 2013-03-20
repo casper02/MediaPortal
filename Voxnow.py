@@ -20,9 +20,9 @@ class VoxnowGenreScreen(Screen):
 	
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/VoxnowGenreScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/RTLnowGenreScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/VoxnowGenreScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/RTLnowGenreScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -39,7 +39,7 @@ class VoxnowGenreScreen(Screen):
 			"left" : self.keyLeft
 		}, -1)
 		
-		self['title'] = Label("Voxnow.de")
+		self['title'] = Label("VOXNOW.de")
 		self['name'] = Label("Genre Auswahl")
 		self['handlung'] = Label("")
 		self['Pic'] = Pixmap()
@@ -138,9 +138,9 @@ class VoxnowFilmeListeScreen(Screen):
 	def __init__(self, session, streamGenreLink):
 		self.session = session
 		self.streamGenreLink = streamGenreLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/VoxnowFilmeScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/RTLnowFilmeScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/VoxnowFilmeScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/RTLnowFilmeScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -160,7 +160,7 @@ class VoxnowFilmeListeScreen(Screen):
 			#"prevBouquet" : self.keyPageDown
 		}, -1)
 
-		self['title'] = Label("Voxnow.de")
+		self['title'] = Label("VOXNOW.de")
 		self['name'] = Label("Film Auswahl")
 		
 		self.keyLocked = True

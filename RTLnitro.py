@@ -38,7 +38,7 @@ class RTLnitroGenreScreen(Screen):
 			"left" : self.keyLeft
 		}, -1)
 		
-		self['title'] = Label("RTLnitro.de")
+		self['title'] = Label("RTLNITRONOW.de")
 		self['name'] = Label("Genre Auswahl")
 		self['handlung'] = Label("")
 		self['Pic'] = Pixmap()
@@ -152,7 +152,7 @@ class RTLnitroFilmeListeScreen(Screen):
 			"cancel": self.keyCancel
 		}, -1)
 
-		self['title'] = Label("RTLnitro.de")
+		self['title'] = Label("RTLNITRONOW.de")
 		self['name'] = Label("Film Auswahl")
 		
 		self.keyLocked = True

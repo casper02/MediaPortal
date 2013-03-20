@@ -38,7 +38,7 @@ class RTLnowGenreScreen(Screen):
 			"left" : self.keyLeft
 		}, -1)
 		
-		self['title'] = Label("RTLnow.de")
+		self['title'] = Label("RTLNOW.de")
 		self['name'] = Label("Genre Auswahl")
 		self['handlung'] = Label("")
 		self['Pic'] = Pixmap()
@@ -152,7 +152,7 @@ class RTLnowFilmeListeScreen(Screen):
 			"cancel": self.keyCancel
 		}, -1)
 
-		self['title'] = Label("RTLnow.de")
+		self['title'] = Label("RTLNOW.de")
 		self['name'] = Label("Film Auswahl")
 		
 		self.keyLocked = True

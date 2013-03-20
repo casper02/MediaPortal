@@ -157,7 +157,8 @@ class laolaScreen(Screen):
 		main_url = re.findall('<meta name="httpBase" content="(.*?)"', data)
 		url_string = re.findall('<video src="(.*?)" system-bitrate="(.*?)"', data, re.S)
 		if main_url and url_string:
-			stream_url = "%s%s%s" % (main_url[0], url_string[2][0], url_string[2][1])
+			x = len(url_string)-1
+			stream_url = "%s%s%s" % (main_url[0], url_string[x][0], url_string[x][1])
 			print stream_url
 			sref = eServiceReference(0x1001, 0, stream_url)
 			sref.setName(laTitle)
