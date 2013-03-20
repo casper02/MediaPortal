@@ -39,7 +39,7 @@ class VoxnowGenreScreen(Screen):
 			"left" : self.keyLeft
 		}, -1)
 		
-		self['title'] = Label("Voxnow.de")
+		self['title'] = Label("VOXNOW.de")
 		self['name'] = Label("Genre Auswahl")
 		self['handlung'] = Label("")
 		self['Pic'] = Pixmap()
@@ -160,7 +160,7 @@ class VoxnowFilmeListeScreen(Screen):
 			#"prevBouquet" : self.keyPageDown
 		}, -1)
 
-		self['title'] = Label("Voxnow.de")
+		self['title'] = Label("VOXNOW.de")
 		self['name'] = Label("Film Auswahl")
 		
 		self.keyLocked = True
