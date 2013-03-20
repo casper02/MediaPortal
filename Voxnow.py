@@ -219,6 +219,7 @@ class VoxnowFilmeListeScreen(Screen):
 			print host, playpath
 			final = "%s swfUrl=http://www.voxnow.de/includes/vodplayer.swf pageurl=%s playpath=mp4:%s swfVfy=1" % (host, self.pageurl, playpath)
 			print final
+			sref.setName(self.streamName)
 			sref = eServiceReference(0x1001, 0, final)
 			self.session.open(MoviePlayer, sref)
 	
