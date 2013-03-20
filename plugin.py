@@ -47,7 +47,11 @@ from LiveLeak import *
 from DokuStream import *
 from ScienceTV import *
 from SzeneStreams import *
+
+# mediatheken
 from Voxnow import *
+from RTLnow import *
+
 # porn
 from ahme import *
 from amateurporn import *
@@ -119,6 +123,7 @@ config.mediaportal.showSzeneStreams = ConfigYesNo(default = True)
 
 # mediatheken
 config.mediaportal.showVoxnow = ConfigYesNo(default = True)
+config.mediaportal.showRTLnow = ConfigYesNo(default = True)
 
 # porn
 config.mediaportal.show4tube = ConfigYesNo(default = False)
@@ -199,6 +204,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige ScienceTV:", config.mediaportal.showScienceTV))
 		self.configlist.append(getConfigListEntry("Zeige SzeneStreams:", config.mediaportal.showSzeneStreams))
 		self.configlist.append(getConfigListEntry("Zeige Voxnow:", config.mediaportal.showVoxnow))
+		self.configlist.append(getConfigListEntry("Zeige RTLnow:", config.mediaportal.showRTLnow))
 		self.configlist.sort(key=lambda t : tuple(t[0].lower()))
 		self.configlist.insert(0, ("Skinauswahl:", config.mediaportal.skin))
 		self.configlist.insert(0, ("HauptScreen-Ansicht", config.mediaportal.ansicht))
@@ -361,6 +367,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.movies.append(self.hauptListEntry("SzeneStreams", "szenestreams"))
 		if config.mediaportal.showVoxnow.value:
 			self.movies.append(self.hauptListEntry("Voxnow", "voxnow"))
+		if config.mediaportal.showRTLnow.value:
+			self.movies.append(self.hauptListEntry("RTLnow", "rtlnoe"))
 		# info
 		if config.mediaportal.showDoku.value:
 			self.infos.append(self.hauptListEntry("Doku.me", "doku"))		
@@ -659,6 +667,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(SzeneStreamsGenreScreen)
 		elif auswahl == "Voxnow":
 			self.session.open(VoxnowGenreScreen)
+		elif auswahl == "RTLnow":
+			self.session.open(RTLnowGenreScreen)
 		# porn
 		elif auswahl == "4Tube":
 			if config.mediaportal.pornpin.value:
@@ -894,8 +904,12 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("DokuStream", "dokustream"))
 		if config.mediaportal.showScienceTV.value:
 			self.plugin_liste.append(("ScienceTV", "sciencetv"))
+			
+		### mediatheken	
 		if config.mediaportal.showVoxnow.value:
 			self.plugin_liste.append(("Voxnow", "voxnow"))
+		if config.mediaportal.showRTLnow.value:
+			self.plugin_liste.append(("RTLnow", "rtlnow"))
 			
 		### porn
 		if config.mediaportal.show4tube.value:
@@ -1142,6 +1156,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(SzeneStreamsGenreScreen)
 		elif auswahl == "Voxnow":
 			self.session.open(VoxnowGenreScreen)
+		elif auswahl == "RTLnow":
+			self.session.open(RTLnowGenreScreen)
 		# porn
 		elif auswahl == "4Tube":
 			if config.mediaportal.pornpin.value:
