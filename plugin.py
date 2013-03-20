@@ -1003,6 +1003,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		}, -1)
 		
 		self['name'] = Label("Plugin Auswahl")
+		self['blue'] = Label("")
 		self['page'] = Label("")
 		self["frame"] = MovingPixmap()
 		for x in range(1,len(self.plugin_liste)+1):
@@ -1016,6 +1017,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 	def _onFirstExecBegin(self):
 		# load plugin icons
 		print "Set Filter:", self.setFilter
+		self['blue'].setText(self.setFilter)
 		if self.setFilter != "ALL":
 			dump_liste = self.plugin_liste
 			self.plugin_liste = []
