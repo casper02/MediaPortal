@@ -1423,6 +1423,8 @@ def exit(session, result, filter):
 		if config.mediaportal.ansicht.value == "liste":
 			session.openWithCallback(exit, haupt_Screen)
 		else:
+			if filter == "dump":
+				filter = "ALL"
 			session.openWithCallback(exit, haupt_Screen_Wall, filter)		
 	
 def main(session, **kwargs):
