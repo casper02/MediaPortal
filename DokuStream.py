@@ -7,7 +7,7 @@ import Queue
 import threading
 from Components.ScrollLabel import ScrollLabel
 
-DS_Version = "Doku-Stream.org v0.90"
+DS_Version = "Doku-Stream.org v0.91"
 
 DS_siteEncoding = 'utf-8'
 
@@ -15,8 +15,8 @@ DS_siteEncoding = 'utf-8'
 Sondertastenbelegung:
 
 Genre Auswahl:
-	KeyLeft					: Menu Up
-	KeyOK,KeyRight			: Menu Down / Select
+	KeyCancel		: Menu Up / Exit
+	KeyOK			: Menu Down / Select
 	
 Doku Auswahl:
 	Bouquet +/-				: Seitenweise blättern in 1er Schritten Up/Down
@@ -38,9 +38,9 @@ class show_DS_Genre(Screen):
 
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/show_DS_Genre.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/defaultGenreScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/show_DS_Genre.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/defaultGenreScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -53,7 +53,7 @@ class show_DS_Genre(Screen):
 			"cancel": self.keyCancel,
 			"up"	: self.keyUp,
 			"down"	: self.keyDown,
-			"left"	: self.keyMenuUp,
+			"left"	: self.keyLeft,
 			"right"	: self.keyRight,
 			"red"	: self.keyRed
 		}, -1)
@@ -212,7 +212,14 @@ class show_DS_Genre(Screen):
 		self.setMenu(-1)
 
 	def keyRight(self):
-		pass
+		self['genreList'].pageDown()
+		self.menuIdx[self.menuLevel] = self['genreList'].getSelectedIndex()
+		self.setGenreStrTitle()
+		
+	def keyLeft(self):
+		self['genreList'].pageUp()
+		self.menuIdx[self.menuLevel] = self['genreList'].getSelectedIndex()
+		self.setGenreStrTitle()
 		
 	def keyOK(self):
 		print "keyOK:"
@@ -302,8 +309,10 @@ class show_DS_Genre(Screen):
 		self.setGenreStrTitle()		
 		
 	def keyCancel(self):
-		self.close()
-	
+		if self.menuLevel == 0:
+			self.close()
+		else:
+			self.keyMenuUp()
 
 def DS_FilmListEntry(entry):
 	return [entry,
@@ -315,9 +324,9 @@ class DS_FilmListeScreen(Screen):
 		self.session = session
 		self.genreLink = genreLink
 		self.genreName = genreName
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/DS_FilmListeScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/dokuListScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/DS_FilmListeScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/dokuListScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -365,7 +374,7 @@ class DS_FilmListeScreen(Screen):
 		self.sortOrderStrIMDB = ""
 		self.sortOrderStrGenre = ""
 		self['title'] = Label(DS_Version)
-		self['leftContentTitle'] = Label("")
+		self['ContentTitle'] = Label("")
 		self['name'] = Label("")
 		self['handlung'] = ScrollLabel("")
 		self['coverArt'] = Pixmap()
@@ -374,6 +383,9 @@ class DS_FilmListeScreen(Screen):
 		self['F2'] = Label("")
 		self['F3'] = Label("")
 		self['F4'] = Label("Text+")
+		self['Page'] = Label("Page")
+		self['VideoPrio'] = Label("")
+		self['vPrio'] = Label("")
 		
 		self.timerStart = False
 		self.seekTimerRun = False
@@ -397,14 +409,14 @@ class DS_FilmListeScreen(Screen):
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.chooseMenuList.l.setItemHeight(25)
-		self['filmList'] = self.chooseMenuList
+		self['liste'] = self.chooseMenuList
 		
 		self.onLayoutFinish.append(self.loadPage)
 
 	def setGenreStrTitle(self):
 		genreName = "%s%s" % (self.genreTitle,self.genreName)
 		#print genreName
-		self['leftContentTitle'].setText(genreName)
+		self['ContentTitle'].setText(genreName)
 
 	def loadPage(self):
 		print "loadPage:"
@@ -508,10 +520,10 @@ class DS_FilmListeScreen(Screen):
 		while not self.picQ.empty():
 			self.picQ.get_nowait()
 		
-		streamName = self['filmList'].getCurrent()[0][0]
+		streamName = self['liste'].getCurrent()[0][0]
 		self['name'].setText(streamName)
-		streamPic = self['filmList'].getCurrent()[0][2]
-		#streamUrl = self.baseUrl+re.sub('amp;','',self['filmList'].getCurrent()[0][1])
+		streamPic = self['liste'].getCurrent()[0][2]
+		#streamUrl = self.baseUrl+re.sub('amp;','',self['liste'].getCurrent()[0][1])
 		desc = None
 		#print "streamName: ",streamName
 		#print "streamPic: ",streamPic
@@ -588,9 +600,9 @@ class DS_FilmListeScreen(Screen):
 		if (self.keyLocked|self.eventL.is_set()):
 			return
 
-		streamLink = self['filmList'].getCurrent()[0][1]
-		streamName = self['filmList'].getCurrent()[0][0]
-		streamPic = self['filmList'].getCurrent()[0][2]
+		streamLink = self['liste'].getCurrent()[0][1]
+		streamName = self['liste'].getCurrent()[0][0]
+		streamPic = self['liste'].getCurrent()[0][2]
 		print "Open DS_Streams:"
 		print "Name: ",streamName
 		print "Link: ",streamLink
@@ -599,24 +611,24 @@ class DS_FilmListeScreen(Screen):
 	def keyUp(self):
 		if self.keyLocked:
 			return
-		self['filmList'].up()
+		self['liste'].up()
 		
 	def keyDown(self):
 		if self.keyLocked:
 			return
-		self['filmList'].down()
+		self['liste'].down()
 		
 	def keyUpRepeated(self):
 		#print "keyUpRepeated"
 		if self.keyLocked:
 			return
-		self['filmList'].up()
+		self['liste'].up()
 		
 	def keyDownRepeated(self):
 		#print "keyDownRepeated"
 		if self.keyLocked:
 			return
-		self['filmList'].down()
+		self['liste'].down()
 		
 	def key_repeatedUp(self):
 		#print "key_repeatedUp"
@@ -627,22 +639,22 @@ class DS_FilmListeScreen(Screen):
 	def keyLeft(self):
 		if self.keyLocked:
 			return
-		self['filmList'].pageUp()
+		self['liste'].pageUp()
 		
 	def keyRight(self):
 		if self.keyLocked:
 			return
-		self['filmList'].pageDown()
+		self['liste'].pageDown()
 			
 	def keyLeftRepeated(self):
 		if self.keyLocked:
 			return
-		self['filmList'].pageUp()
+		self['liste'].pageUp()
 		
 	def keyRightRepeated(self):
 		if self.keyLocked:
 			return
-		self['filmList'].pageDown()
+		self['liste'].pageDown()
 			
 	def keyPageDown(self):
 		#print "keyPageDown()"
@@ -726,9 +738,9 @@ class DS_Streams(Screen, ConfigListScreen):
 		self.dokuUrl = dokuUrl
 		self.dokuName = dokuName
 		self.imgUrl = imgurl
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/DS_Streams.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/dokuListScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/DS_Streams.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/dokuListScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -758,6 +770,9 @@ class DS_Streams(Screen, ConfigListScreen):
 		self['F3'] = Label("VidPrio")
 		self['F4'] = Label("Text+")
 		self['coverArt'] = Pixmap()
+		self['VideoPrio'] = Label("VideoPrio")
+		self['Page'] = Label("")
+		self['page'] = Label("")
 		
 		self.videoPrio = 1
 		self.videoPrioS = ['L','M','H']
@@ -766,7 +781,7 @@ class DS_Streams(Screen, ConfigListScreen):
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
 		self.streamMenuList.l.setItemHeight(25)
-		self['streamList'] = self.streamMenuList
+		self['liste'] = self.streamMenuList
 		self.keyLocked = True
 		self.onLayoutFinish.append(self.loadPage)
 		
@@ -839,10 +854,10 @@ class DS_Streams(Screen, ConfigListScreen):
 		
 	def loadPic(self):
 		print "loadPic:"
-		streamName = self['streamList'].getCurrent()[0][0]
+		streamName = self['liste'].getCurrent()[0][0]
 		self['name'].setText(streamName)
-		streamPic = self['streamList'].getCurrent()[0][3]
-		desc = self['streamList'].getCurrent()[0][2]
+		streamPic = self['liste'].getCurrent()[0][3]
+		desc = self['liste'].getCurrent()[0][2]
 		print "streamName: ",streamName
 		print "streamPic: ",streamPic
 		self.getHandlung(desc)
@@ -903,8 +918,8 @@ class DS_Streams(Screen, ConfigListScreen):
 		print "keyOK:"
 		if self.keyLocked:
 			return
-		dhTitle = self['streamList'].getCurrent()[0][0]
-		dhVideoId = self['streamList'].getCurrent()[0][1]
+		dhTitle = self['liste'].getCurrent()[0][0]
+		dhVideoId = self['liste'].getCurrent()[0][1]
 		#print "Title: ",dhTitle
 		#print "VideoId: ",dhVideoId
 		dhLink = youtubeUrl(self.session).getVideoUrl(dhVideoId, self.videoPrio)
@@ -926,25 +941,25 @@ class DS_Streams(Screen, ConfigListScreen):
 	def keyUp(self):
 		if self.keyLocked:
 			return
-		self['streamList'].up()
+		self['liste'].up()
 		self.loadPic()
 		
 	def keyDown(self):
 		if self.keyLocked:
 			return
-		self['streamList'].down()
+		self['liste'].down()
 		self.loadPic()
 		
 	def keyLeft(self):
 		if self.keyLocked:
 			return
-		self['streamList'].pageUp()
+		self['liste'].pageUp()
 		self.loadPic()
 		
 	def keyRight(self):
 		if self.keyLocked:
 			return
-		self['streamList'].pageDown()
+		self['liste'].pageDown()
 		self.loadPic()
 	
 	def keyCancel(self):

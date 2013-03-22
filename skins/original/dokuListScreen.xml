@@ -1,5 +1,5 @@
-<!-- DH_FilmListeScreen -->
-  <screen name="DokuHouse" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
+<!-- dokuListScreen -->
+  <screen name="dokuList" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
     <widget name="title" position="20,10" size="500,40" backgroundColor="#00101214" transparent="1" zPosition="10" font="mediaportal; 26" valign="center" halign="left" />
     <widget source="global.CurrentTime" render="Label" position="730,8" size="150,30" backgroundColor="#00101214" transparent="1" zPosition="1" font="mediaportal; 26" valign="center" halign="right" foregroundColor="#00dcdcdc">
       <convert type="ClockToText">Format:%-H:%M</convert>
@@ -7,14 +7,16 @@
     <widget source="global.CurrentTime" render="Label" position="580,39" size="300,20" backgroundColor="#00101214" transparent="1" zPosition="1" font="mediaportal;18" valign="center" halign="right" foregroundColor="#00dcdcdc">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
-    <widget name="leftContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="mediaportal;22" halign="center" />
-    <widget name="filmList" position="0,85" size="900,180" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" />
-    <eLabel position="20,295" size="860,2" backgroundColor="#00555556" />
-    <widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/no_coverArt.png" position="20,340" size="340,255" transparent="1" alphatest="blend" borderWidth="2" borderColor="#00555556" />
-    <widget name="name" position="20,305" size="860,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="mediaportal;26" valign="top" />
-    <widget name="handlung" position="370,335" size="510,260" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="top" />
-    <eLabel text="Page" position="755,600" size="56,25" backgroundColor="#00101214" transparent="1" foregroundColor="#00555556" font="mediaportal;20" valign="center" halign="right" />
-    <widget name="page" position="815,600" size="65,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="right" />
+    <widget name="ContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="0" foregroundColor="#00000000" font="mediaportal;22" halign="center" />
+    <widget name="liste" position="0,86" size="900,303" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" />
+    <eLabel position="20,390" size="860,2" backgroundColor="#00555556" />
+    <widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/no_coverArt.png" position="20,396" size="270,200" transparent="1" alphatest="blend" borderWidth="2" borderColor="#00555556" />
+    <widget name="name" position="300,395" size="580,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="mediaportal;26" valign="top" zPosition="0" />
+    <widget name="handlung" position="300,425" size="580,170" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="top" zPosition="0" />
+    <widget name="VideoPrio" position="744,600" size="105,24" backgroundColor="#00101214" transparent="1" foregroundColor="#00555556" font="mediaportal; 20" valign="center" halign="right" zPosition="1" />
+    <widget name="vPrio" position="855,600" size="25,24" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="center" zPosition="1" foregroundColor="#00dcdcdc" />
+    <widget name="Page" position="765,600" size="56,25" backgroundColor="#00101214" transparent="1" foregroundColor="#00555556" font="mediaportal;20" valign="center" halign="right" zPosition="0" />
+    <widget name="page" position="820,600" size="60,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="right" zPosition="0" />
     <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/red.png" position="20,597" size="35,27" alphatest="blend" />
     <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/green.png" position="165,597" size="35,27" alphatest="blend" />
     <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/yellow.png" position="310,597" size="35,27" alphatest="blend" />
