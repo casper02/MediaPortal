@@ -1,7 +1,7 @@
 ﻿from imports import *
 from decrypt import *
 
-STV_Version = "Science-Tv.com v0.90"
+STV_Version = "Science-Tv.com v0.91"
 
 STV_siteEncoding = 'utf-8'
 
@@ -14,9 +14,9 @@ class scienceTvGenreScreen(Screen):
 	
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/scienceTvGenreScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/defaultGenreScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/scienceTvGenreScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/defaultGenreScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -31,7 +31,12 @@ class scienceTvGenreScreen(Screen):
 		
 		
 		self['title'] = Label(STV_Version)
-		self['leftContentTitle'] = Label("M e n ü")
+		self['ContentTitle'] = Label("M e n ü")
+		self['name'] = Label("")
+		self['F1'] = Label("")
+		self['F2'] = Label("")
+		self['F3'] = Label("")
+		self['F4'] = Label("")
 		
 		self.genreliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
