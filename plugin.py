@@ -172,15 +172,15 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		ConfigListScreen.__init__(self, self.configlist)
 
 		## Allgemein
-		self.configlist.insert(1, ("----- Allgemein -----", config.mediaportal.fake_entry))
-		self.configlist.insert(0, ("RTMPDump benutzen:", config.mediaportal.useRtmpDump))
-		self.configlist.insert(0, ("RTMPDump Cachepath:", config.mediaportal.storagepath)) 
-		self.configlist.insert(0, ("Skinauswahl:", config.mediaportal.skin))
-		self.configlist.insert(0, ("HauptScreen-Ansicht", config.mediaportal.ansicht))
-		self.configlist.insert(0, ("Selektor-Farbe", config.mediaportal.selektor))
-		self.configlist.insert(0, ("XXX-Pincodeabfrage:", config.mediaportal.pornpin))
-		self.configlist.insert(0, ("Pincode:", config.mediaportal.pincode))
-		self.configlist.insert(0, ("Filter:", config.mediaportal.filter))
+		self.configlist.append(("----- Allgemein -----", config.mediaportal.fake_entry))
+		self.configlist.append(("Filter:", config.mediaportal.filter))
+		self.configlist.append(("Pincode:", config.mediaportal.pincode))
+		self.configlist.append(("XXX-Pincodeabfrage:", config.mediaportal.pornpin))
+		self.configlist.append(("Selektor-Farbe", config.mediaportal.selektor))
+		self.configlist.append(("HauptScreen-Ansicht", config.mediaportal.ansicht))
+		self.configlist.append(("Skinauswahl:", config.mediaportal.skin))
+		self.configlist.append(("RTMPDump benutzen:", config.mediaportal.useRtmpDump))
+		self.configlist.append(("RTMPDump Cachepath:", config.mediaportal.storagepath)) 
 		
 		### Grauzone
 		self.configlist.append(getConfigListEntry("----- Grauzone -----", config.mediaportal.fake_entry))
