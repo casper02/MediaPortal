@@ -253,13 +253,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 	def keyOK(self):
 		for x in self["config"].list:
 			x[1].save()
-		
-		"""
-		if not os_path.isdir(config.mediaportal.storagepath.value):
-			self.session.open(MessageBox, "The directory %s does not exist!" % config.mediaportal.storagepath.value, MessageBox.TYPE_ERROR)
-			return
-		"""
-		
+
 		if config.mediaportal.storagepath.value != self.oldstoragepathvalue:
 			os_system("rm -rf "+self.oldstoragepathvalue)
 			os_system("mkdir -p "+config.mediaportal.storagepath.value)
@@ -1054,6 +1048,29 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		self.selektor_index = 1
 		self.select_list = 0
 		self.onFirstExecBegin.append(self._onFirstExecBegin)
+		
+		if not self.checkStoragePath():
+			return 
+			
+	def checkStoragePath(self):
+		tmppath = config.mediaportal.storagepath.value
+		if tmppath != "/tmp" and tmppath != "/media/ba":
+			if os_path.islink(tmppath):
+				tmppath = os_readlink(tmppath)
+			loopcount = 0
+			while not os_path.ismount(tmppath):
+				loopcount += 1
+				tmppath = os_path.dirname(tmppath)
+				if tmppath == "/" or tmppath == "" or loopcount > 50:
+					self.session.open(MessageBox, _("Error: Can not create cache-folders inside flash memory. Check your Cache-Folder Settings!"), type=MessageBox.TYPE_INFO, timeout=20)
+					return False
+
+		os_system("mkdir -p "+config.mediaportal.storagepath.value)
+		if not os_path.exists(config.mediaportal.storagepath.value):
+			self.session.open(MessageBox, _("Error: No write permission to create cache-folders. Check your Cache-Folder Settings!"), type=MessageBox.TYPE_INFO, timeout=20)
+			return False
+		else:
+			return True		
 		
 	def _onFirstExecBegin(self):
 		# load plugin icons

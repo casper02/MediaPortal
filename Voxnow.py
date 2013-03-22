@@ -174,11 +174,17 @@ class VoxnowFilmeListeScreen(Screen):
 		self['List'] = self.chooseMenuList
 
 		self.useragent = "QuickTime/7.6.2 (qtver=7.6.2;os=Windows NT 5.1Service Pack 3)"
-		config.mediaplayer.useAlternateUserAgent.value = True
-		config.mediaplayer.alternateUserAgent.value = self.useragent
-		config.mediaplayer.useAlternateUserAgent.save()
-		config.mediaplayer.alternateUserAgent.save()
-		config.mediaplayer.save()
+
+		try:
+			config.mediaplayer.useAlternateUserAgent.value = True
+			config.mediaplayer.alternateUserAgent.value = self.useragent
+			config.mediaplayer.useAlternateUserAgent.save()
+			config.mediaplayer.alternateUserAgent.save()
+			config.mediaplayer.save()
+		except Exception, errormsg:
+			config.mediaplayer = ConfigSubsection()
+			config.mediaplayer.useAlternateUserAgent = ConfigYesNo(default=True)
+			config.mediaplayer.alternateUserAgent = ConfigText(default=self.useragent)
 		
 		self.onLayoutFinish.append(self.loadPage)
 		
@@ -244,4 +250,14 @@ class VoxnowFilmeListeScreen(Screen):
 			self.session.open(TMDbMain, title)
 			
 	def keyCancel(self):
+		try:
+			config.mediaplayer.useAlternateUserAgent.value = False
+			config.mediaplayer.alternateUserAgent.value = ""
+			config.mediaplayer.useAlternateUserAgent.save()
+			config.mediaplayer.alternateUserAgent.save()
+			config.mediaplayer.save()
+		except Exception, errormsg:
+			config.mediaplayer = ConfigSubsection()
+			config.mediaplayer.useAlternateUserAgent = ConfigYesNo(default=False)
+			config.mediaplayer.alternateUserAgent = ConfigText(default="")
 		self.close()
