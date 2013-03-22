@@ -253,11 +253,13 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 	def keyOK(self):
 		for x in self["config"].list:
 			x[1].save()
-			
+		
+		"""
 		if not os_path.isdir(config.mediaportal.storagepath.value):
 			self.session.open(MessageBox, "The directory %s does not exist!" % config.mediaportal.storagepath.value, MessageBox.TYPE_ERROR)
 			return
-
+		"""
+		
 		if config.mediaportal.storagepath.value != self.oldstoragepathvalue:
 			os_system("rm -rf "+self.oldstoragepathvalue)
 			os_system("mkdir -p "+config.mediaportal.storagepath.value)
