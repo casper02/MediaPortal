@@ -18,7 +18,7 @@ else:
 	IMDbPresent = False
 	TMDbPresent = False
 
-IS_Version = "iStream.ws v1.07"
+IS_Version = "iStream.ws v1.08"
 
 IS_siteEncoding = 'utf-8'
 
@@ -43,9 +43,9 @@ class showIStreamGenre(Screen):
 	
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/showIStreamGenre.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/defaultGenreScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/showIStreamGenre.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/defaultGenreScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -61,7 +61,6 @@ class showIStreamGenre(Screen):
 		self['title'] = Label(IS_Version)
 		self['ContentTitle'] = Label("M e n ü")
 		self['name'] = Label("Genre Auswahl")
-		self['coverArt'] = Pixmap()
 		self['F1'] = Label("")
 		self['F2'] = Label("")
 		self['F3'] = Label("")
@@ -140,9 +139,9 @@ class IStreamFilmListeScreen(Screen):
 		self.session = session
 		self.genreLink = genreLink
 		self.genreName = genreName
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/IStreamFilmListeScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/defaultListScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/IStreamFilmListeScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/defaultListScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -188,10 +187,11 @@ class IStreamFilmListeScreen(Screen):
 		self.sortOrderStrIMDB = " - Sortierung IMDb"
 		self.sortOrderStrGenre = ""
 		self['title'] = Label(IS_Version)
-		self['leftContentTitle'] = Label("")
+		self['ContentTitle'] = Label("")
 		self['name'] = Label("")
 		self['handlung'] = ScrollLabel("")
 		self['coverArt'] = Pixmap()
+		self['Page'] = Label("Page")
 		self['page'] = Label("")
 		self['F1'] = Label("Text-")
 		self['F2'] = Label("SortA-Z")
@@ -218,7 +218,7 @@ class IStreamFilmListeScreen(Screen):
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.chooseMenuList.l.setItemHeight(25)
-		self['filmList'] = self.chooseMenuList
+		self['liste'] = self.chooseMenuList
 		
 		self.onLayoutFinish.append(self.loadPage)
 
@@ -230,7 +230,7 @@ class IStreamFilmListeScreen(Screen):
 				self.sortOrderStrGenre = self.sortOrderStrIMDB
 		else:
 			self.sortOrderStrGenre = ""
-		self['leftContentTitle'].setText("%s%s%s" % (self.genreTitle,self.genreName,self.sortOrderStrGenre))
+		self['ContentTitle'].setText("%s%s%s" % (self.genreTitle,self.genreName,self.sortOrderStrGenre))
 
 	def loadPage(self):
 		print "loadPage:"
@@ -330,11 +330,11 @@ class IStreamFilmListeScreen(Screen):
 		while not self.picQ.empty():
 			self.picQ.get_nowait()
 		
-		streamName = self['filmList'].getCurrent()[0][0]
+		streamName = self['liste'].getCurrent()[0][0]
 		self['name'].setText(streamName)
-		streamPic = self['filmList'].getCurrent()[0][2]
+		streamPic = self['liste'].getCurrent()[0][2]
 		
-		streamUrl = self['filmList'].getCurrent()[0][1]
+		streamUrl = self['liste'].getCurrent()[0][1]
 		self.getHandlung(streamUrl)
 		self.updateP = 1
 		if streamPic == None:
@@ -428,32 +428,32 @@ class IStreamFilmListeScreen(Screen):
 		if (self.keyLocked|self.eventL.is_set()|self.eventH.is_set()):
 			return
 
-		streamLink = self['filmList'].getCurrent()[0][1]
-		streamName = self['filmList'].getCurrent()[0][0]
-		imageLink = self['filmList'].getCurrent()[0][2]
+		streamLink = self['liste'].getCurrent()[0][1]
+		streamName = self['liste'].getCurrent()[0][0]
+		imageLink = self['liste'].getCurrent()[0][2]
 		self.session.open(IStreamStreams, streamLink, streamName, imageLink)
 	
 	def keyUp(self):
 		if self.keyLocked:
 			return
-		self['filmList'].up()
+		self['liste'].up()
 		
 	def keyDown(self):
 		if self.keyLocked:
 			return
-		self['filmList'].down()
+		self['liste'].down()
 		
 	def keyUpRepeated(self):
 		#print "keyUpRepeated"
 		if self.keyLocked:
 			return
-		self['filmList'].up()
+		self['liste'].up()
 		
 	def keyDownRepeated(self):
 		#print "keyDownRepeated"
 		if self.keyLocked:
 			return
-		self['filmList'].down()
+		self['liste'].down()
 		
 	def key_repeatedUp(self):
 		#print "key_repeatedUp"
@@ -464,22 +464,22 @@ class IStreamFilmListeScreen(Screen):
 	def keyLeft(self):
 		if self.keyLocked:
 			return
-		self['filmList'].pageUp()
+		self['liste'].pageUp()
 		
 	def keyRight(self):
 		if self.keyLocked:
 			return
-		self['filmList'].pageDown()
+		self['liste'].pageDown()
 			
 	def keyLeftRepeated(self):
 		if self.keyLocked:
 			return
-		self['filmList'].pageUp()
+		self['liste'].pageUp()
 		
 	def keyRightRepeated(self):
 		if self.keyLocked:
 			return
-		self['filmList'].pageDown()
+		self['liste'].pageDown()
 			
 	def keyPageDown(self):
 		#print "keyPageDown()"
@@ -578,10 +578,10 @@ class IStreamFilmListeScreen(Screen):
 	# teilweise von movie2k geliehen
 	def keyTMDbInfo(self):
 		if not self.keyLocked and TMDbPresent:
-			title = self['filmList'].getCurrent()[0][0]
+			title = self['liste'].getCurrent()[0][0]
 			self.session.open(TMDbMain, title)
 		elif not self.keyLocked and IMDbPresent:
-			title = self['filmList'].getCurrent()[0][0]
+			title = self['liste'].getCurrent()[0][0]
 			self.session.open(IMDB, title)
 
 	def keyTxtPageUp(self):
@@ -604,9 +604,9 @@ class IStreamStreams(Screen, ConfigListScreen):
 		self.filmUrl = filmUrl
 		self.filmName = filmName
 		self.imageUrl = imageLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/IStreamStreams.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/defaultListScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/IStreamStreams.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/defaultListScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -626,6 +626,8 @@ class IStreamStreams(Screen, ConfigListScreen):
 		self['coverArt'] = Pixmap()
 		self['handlung'] = ScrollLabel("")
 		self['name'] = Label(filmName)
+		self['Page'] = Label("")
+		self['page'] = Label("")
 		self['F1'] = Label("Text-")
 		self['F2'] = Label("")
 		self['F3'] = Label("")
@@ -635,7 +637,7 @@ class IStreamStreams(Screen, ConfigListScreen):
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
 		self.streamMenuList.l.setItemHeight(25)
-		self['streamList'] = self.streamMenuList
+		self['liste'] = self.streamMenuList
 		self.keyLocked = True
 		self.onLayoutFinish.append(self.loadPage)
 		
@@ -706,13 +708,13 @@ class IStreamStreams(Screen, ConfigListScreen):
 			message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=3)
 		else:
 			sref = eServiceReference(0x1001, 0, stream_url)
-			sref.setName("%s%s" % (self.filmName,self['streamList'].getCurrent()[0][2]))
+			sref.setName("%s%s" % (self.filmName,self['liste'].getCurrent()[0][2]))
 			self.session.open(MoviePlayer, sref)
 	
 	def keyOK(self):
 		if self.keyLocked:
 			return
-		streamLink = self['streamList'].getCurrent()[0][1]
+		streamLink = self['liste'].getCurrent()[0][1]
 		fp = urllib.urlopen(streamLink.replace('http://video.istream.ws/embed.php?m=','http://istream.ws/mirror.php?m='))
 		streamLink = fp.geturl()
 		fp.close()

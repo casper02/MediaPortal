@@ -62,7 +62,6 @@ class showDOKUHGenre(Screen):
 		self['title'] = Label(DOKUH_Version)
 		self['ContentTitle'] = Label("Genre Auswahl")
 		self['name'] = Label("")
-		self['coverArt'] = Pixmap()
 		self['F1'] = Label("")
 		self['F2'] = Label("")
 		self['F3'] = Label("")
