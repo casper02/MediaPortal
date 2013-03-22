@@ -47,7 +47,12 @@ from LiveLeak import *
 from DokuStream import *
 from ScienceTV import *
 from SzeneStreams import *
+
+# mediatheken
 from Voxnow import *
+from RTLnow import *
+from RTLnitro import *
+
 # porn
 from ahme import *
 from amateurporn import *
@@ -119,6 +124,8 @@ config.mediaportal.showSzeneStreams = ConfigYesNo(default = True)
 
 # mediatheken
 config.mediaportal.showVoxnow = ConfigYesNo(default = True)
+config.mediaportal.showRTLnow = ConfigYesNo(default = True)
+config.mediaportal.showRTLnitro = ConfigYesNo(default = True)
 
 # porn
 config.mediaportal.show4tube = ConfigYesNo(default = False)
@@ -198,7 +205,10 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige DokuStream:", config.mediaportal.showDokuStream))
 		self.configlist.append(getConfigListEntry("Zeige ScienceTV:", config.mediaportal.showScienceTV))
 		self.configlist.append(getConfigListEntry("Zeige SzeneStreams:", config.mediaportal.showSzeneStreams))
-		self.configlist.append(getConfigListEntry("Zeige Voxnow:", config.mediaportal.showVoxnow))
+		# mediatheken
+		self.configlist.append(getConfigListEntry("Zeige VOXNOW:", config.mediaportal.showVoxnow))
+		self.configlist.append(getConfigListEntry("Zeige RTLNOW:", config.mediaportal.showRTLnow))
+		self.configlist.append(getConfigListEntry("Zeige RTLNITRONOW:", config.mediaportal.showRTLnitro))
 		self.configlist.sort(key=lambda t : tuple(t[0].lower()))
 		self.configlist.insert(0, ("Skinauswahl:", config.mediaportal.skin))
 		self.configlist.insert(0, ("HauptScreen-Ansicht", config.mediaportal.ansicht))
@@ -224,7 +234,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige YouPorn:", config.mediaportal.showyouporn))
 		self["config"].setList(self.configlist)
 
-		self['title'] = Label("MediaPortal - Setup - (Version 4.0.0)")
+		self['title'] = Label("MediaPortal - Setup - (Version 4.1.0)")
 		self['name'] = Label("Setup")
 		self['coverArt'] = Pixmap()
 		
@@ -300,7 +310,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			"displayHelp" : self.keyHelp
 		}, -1)
 
-		self['title'] = Label("MediaPortal v4.0.0")
+		self['title'] = Label("MediaPortal v4.1.0")
 		
 		self['name'] = Label("Plugin Auswahl")
 		
@@ -360,7 +370,11 @@ class haupt_Screen(Screen, ConfigListScreen):
 		if config.mediaportal.showSzeneStreams.value:
 			self.movies.append(self.hauptListEntry("SzeneStreams", "szenestreams"))
 		if config.mediaportal.showVoxnow.value:
-			self.movies.append(self.hauptListEntry("Voxnow", "voxnow"))
+			self.movies.append(self.hauptListEntry("VOXNOW", "voxnow"))
+		if config.mediaportal.showRTLnow.value:
+			self.movies.append(self.hauptListEntry("RTLNOW", "rtlnow"))
+		if config.mediaportal.showRTLnitro.value:
+			self.movies.append(self.hauptListEntry("RTLNITRONOW", "rtlnitro"))
 		# info
 		if config.mediaportal.showDoku.value:
 			self.infos.append(self.hauptListEntry("Doku.me", "doku"))		
@@ -657,8 +671,13 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(scienceTvGenreScreen)
 		elif auswahl == "SzeneStreams":
 			self.session.open(SzeneStreamsGenreScreen)
-		elif auswahl == "Voxnow":
+		# mediatheken
+		elif auswahl == "VOXNOW":
 			self.session.open(VoxnowGenreScreen)
+		elif auswahl == "RTLNOW":
+			self.session.open(RTLnowGenreScreen)
+		elif auswahl == "RTLNITRONOW":
+			self.session.open(RTLnitroGenreScreen)
 		# porn
 		elif auswahl == "4Tube":
 			if config.mediaportal.pornpin.value:
@@ -797,137 +816,145 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(youpornGenreScreen)
 			
 	def keyCancel(self):
-		self.close(self.session, True)
+		self.close(self.session, True, "dump")
 
 	def restart(self):
-		self.close(self.session, False)
+		self.close(self.session, False, "dump")
 
 class haupt_Screen_Wall(Screen, ConfigListScreen):
-	def __init__(self, session):
+	def __init__(self, session, filter):
 		self.session = session
+		self.setFilter = filter
+
 		self.plugin_liste = []
 		if config.mediaportal.showMyvideo.value:
-			self.plugin_liste.append(("MyVideo", "myvideo"))
+			self.plugin_liste.append(("MyVideo", "myvideo", "Mediathek"))
 		if config.mediaportal.showKinderKino.value:
-			self.plugin_liste.append(("KinderKino", "kinderkino"))
+			self.plugin_liste.append(("KinderKino", "kinderkino", "Mediathek"))
 		if config.mediaportal.showKinoKiste.value:
-			self.plugin_liste.append(("KinoKiste", "kinokiste"))
+			self.plugin_liste.append(("KinoKiste", "kinokiste", "Grauzone"))
 		if config.mediaportal.showBs.value:
-			self.plugin_liste.append(("Burning-Series", "burningseries"))
+			self.plugin_liste.append(("Burning-Series", "burningseries", "Grauzone"))
 		if config.mediaportal.show1channel.value:
-			self.plugin_liste.append(("1channel", "1channel"))
+			self.plugin_liste.append(("1channel", "1channel", "Grauzone"))
 		if config.mediaportal.showNetzKino.value:
-			self.plugin_liste.append(("NetzKino", "netzkino"))
+			self.plugin_liste.append(("NetzKino", "netzkino", "Mediathek"))
 		if config.mediaportal.showBaskino.value:
-			self.plugin_liste.append(("Baskino", "baskino"))
+			self.plugin_liste.append(("Baskino", "baskino", "Grauzone"))
 		if config.mediaportal.showKinox.value:
-			self.plugin_liste.append(("Kinox", "kinox"))
+			self.plugin_liste.append(("Kinox", "kinox", "Grauzone"))
 		if config.mediaportal.showStreamOase.value:
-			self.plugin_liste.append(("StreamOase", "streamoase"))
+			self.plugin_liste.append(("StreamOase", "streamoase", "Grauzone"))
 		if config.mediaportal.showtivi.value:
-			self.plugin_liste.append(("Tivi", "tivi"))
+			self.plugin_liste.append(("Tivi", "tivi", "Mediathek"))
 		if config.mediaportal.showMEHD.value:
-			self.plugin_liste.append(("My-Entertainment", "mehd"))
+			self.plugin_liste.append(("My-Entertainment", "mehd", "Grauzone"))
 		if config.mediaportal.showUstreams.value:
-			self.plugin_liste.append(("UltimateStreams", "ustreams"))
+			self.plugin_liste.append(("UltimateStreams", "ustreams", "Grauzone"))
 		if config.mediaportal.showM2k.value:
-			self.plugin_liste.append(("Movie2k", "movie2k"))
+			self.plugin_liste.append(("Movie2k", "movie2k", "Grauzone"))
 		if config.mediaportal.showM2kPorn.value:
 			self.showM2KPorn = True
 		else:
 			self.showM2KPorn = False
 		if config.mediaportal.showIStream.value:
-			self.plugin_liste.append(("IStream", "istream"))
+			self.plugin_liste.append(("IStream", "istream", "Grauzone"))
 		if config.mediaportal.showSzeneStreams.value:
-			self.plugin_liste.append(("SzeneStreams", "szenestreams"))
+			self.plugin_liste.append(("SzeneStreams", "szenestreams", "Grauzone"))
 		if config.mediaportal.showDoku.value:
-			self.plugin_liste.append(("Doku.me", "doku"))		
+			self.plugin_liste.append(("Doku.me", "doku", "Mediathek"))		
 		if config.mediaportal.showSportBild.value:
-			self.plugin_liste.append(("SportBild", "sportbild"))
+			self.plugin_liste.append(("SportBild", "sportbild", "Mediathek"))
 		if config.mediaportal.showAutoBild.value:
-			self.plugin_liste.append(("AutoBild", "autobild"))
+			self.plugin_liste.append(("AutoBild", "autobild", "Mediathek"))
 		if config.mediaportal.showLaola1.value:
-			self.plugin_liste.append(("Laola1 Live", "laola1"))
+			self.plugin_liste.append(("Laola1 Live", "laola1", "Sport"))
 		if config.mediaportal.showFocus.value:
-			self.plugin_liste.append(("Focus", "focus"))
+			self.plugin_liste.append(("Focus", "focus", "Mediathek"))
 		if config.mediaportal.showCczwei.value:
-			self.plugin_liste.append(("CCZwei", "cczwei"))
+			self.plugin_liste.append(("CCZwei", "cczwei", "Mediathek"))
 		if config.mediaportal.showTrailer.value:
-			self.plugin_liste.append(("Filmtrailer", "trailer"))
+			self.plugin_liste.append(("Filmtrailer", "trailer", "Mediathek"))
 		if config.mediaportal.showVutec.value:
-			self.plugin_liste.append(("Vutechtalk", "vutechtalk"))
+			self.plugin_liste.append(("Vutechtalk", "vutechtalk", "Mediathek"))
 		if config.mediaportal.showDsc.value:
-			self.plugin_liste.append(("Dreamscreencast", "dreamscreencast"))
+			self.plugin_liste.append(("Dreamscreencast", "dreamscreencast", "Mediathek"))
 		if config.mediaportal.showKoase.value:
-			self.plugin_liste.append(("Konzert Oase", "koase"))
+			self.plugin_liste.append(("Konzert Oase", "koase", "Grauzone"))
 		if config.mediaportal.showNhl.value:
-			self.plugin_liste.append(("NHL", "nhl"))
+			self.plugin_liste.append(("NHL", "nhl", "Sport"))
 		if config.mediaportal.show4Players.value:
-			self.plugin_liste.append(("4Players", "4players"))
+			self.plugin_liste.append(("4Players", "4players", "Mediathek"))
 		if config.mediaportal.showMahlzeitTV.value:
-			self.plugin_liste.append(("mahlzeit.tv", "mahlzeit"))
+			self.plugin_liste.append(("mahlzeit.tv", "mahlzeit", "Mediathek"))
 		if config.mediaportal.showappletrailers.value:
-			self.plugin_liste.append(("AppleTrailer", "appletrailers"))
+			self.plugin_liste.append(("AppleTrailer", "appletrailers", "Mediathek"))
 		if config.mediaportal.showDOKUh.value:
-			self.plugin_liste.append(("DOKUh", "dokuh"))
+			self.plugin_liste.append(("DOKUh", "dokuh", "Mediathek"))
 		if config.mediaportal.showDokuHouse.value:
-			self.plugin_liste.append(("DokuHouse", "dokuhouse"))
+			self.plugin_liste.append(("DokuHouse", "dokuhouse", "Mediathek"))
 		if config.mediaportal.showAllMusicHouse.value:
-			self.plugin_liste.append(("AllMusicHouse", "allmusichouse"))
+			self.plugin_liste.append(("AllMusicHouse", "allmusichouse", "Fun"))
 		if config.mediaportal.showRofl.value:
-			self.plugin_liste.append(("Rofl.to", "rofl"))
+			self.plugin_liste.append(("Rofl.to", "rofl", "Fun"))
 		if config.mediaportal.showFail.value:
-			self.plugin_liste.append(("Fail.to", "fail"))
+			self.plugin_liste.append(("Fail.to", "fail", "Fun"))
 		if config.mediaportal.showFilmOn.value:
-			self.plugin_liste.append(("FilmOn", "filmon"))
+			self.plugin_liste.append(("FilmOn", "filmon", "Fun"))
 		if config.mediaportal.showTvkino.value:
-			self.plugin_liste.append(("TV-Kino", "tvkino"))
+			self.plugin_liste.append(("TV-Kino", "tvkino", "Fun"))
 		if config.mediaportal.showRadio.value:
-			self.plugin_liste.append(("Radio.de", "radiode"))
+			self.plugin_liste.append(("Radio.de", "radiode", "Fun"))
 		if config.mediaportal.showSpobox.value:
-			self.plugin_liste.append(("Spobox", "spobox"))
+			self.plugin_liste.append(("Spobox", "spobox", "Sport"))
 		if config.mediaportal.showSongsto.value:
-			self.plugin_liste.append(("Songs.to", "songsto"))
+			self.plugin_liste.append(("Songs.to", "songsto", "Fun"))
 		if config.mediaportal.showLiveLeak.value:
-			self.plugin_liste.append(("LiveLeak", "liveleak"))
+			self.plugin_liste.append(("LiveLeak", "liveleak", "Fun"))
 		if config.mediaportal.showDokuStream.value:
-			self.plugin_liste.append(("DokuStream", "dokustream"))
+			self.plugin_liste.append(("DokuStream", "dokustream", "Mediathek"))
 		if config.mediaportal.showScienceTV.value:
-			self.plugin_liste.append(("ScienceTV", "sciencetv"))
+			self.plugin_liste.append(("ScienceTV", "sciencetv", "Mediathek"))
+			
+		### mediatheken	
 		if config.mediaportal.showVoxnow.value:
-			self.plugin_liste.append(("Voxnow", "voxnow"))
+			self.plugin_liste.append(("VOXNOW", "voxnow", "Mediathek"))
+		if config.mediaportal.showRTLnow.value:
+			self.plugin_liste.append(("RTLNOW", "rtlnow", "Mediathek"))
+		if config.mediaportal.showRTLnitro.value:
+			self.plugin_liste.append(("RTLNITRONOW", "rtlnitro", "Mediathek"))
 			
 		### porn
 		if config.mediaportal.show4tube.value:
-			self.plugin_liste.append(("4Tube", "4tube"))
+			self.plugin_liste.append(("4Tube", "4tube", "Porn"))
 		if config.mediaportal.showahme.value:
-			self.plugin_liste.append(("Ah-Me", "ahme"))
+			self.plugin_liste.append(("Ah-Me", "ahme", "Porn"))
 		if config.mediaportal.showamateurporn.value:
-			self.plugin_liste.append(("AmateurPorn", "amateurporn"))
+			self.plugin_liste.append(("AmateurPorn", "amateurporn", "Porn"))
 		if config.mediaportal.showbeeg.value:
-			self.plugin_liste.append(("beeg", "beeg"))
+			self.plugin_liste.append(("beeg", "beeg", "Porn"))
 		if config.mediaportal.showeporner.value:
-			self.plugin_liste.append(("Eporner", "eporner"))
+			self.plugin_liste.append(("Eporner", "eporner", "Porn"))
 		if config.mediaportal.showhdporn.value:
-			self.plugin_liste.append(("HDPorn", "hdporn"))
+			self.plugin_liste.append(("HDPorn", "hdporn", "Porn"))
 		if config.mediaportal.showpinkrod.value:
-			self.plugin_liste.append(("Pinkrod", "pinkrod"))
+			self.plugin_liste.append(("Pinkrod", "pinkrod", "Porn"))
 		if config.mediaportal.showpornerbros.value:
-			self.plugin_liste.append(("PornerBros", "pornerbros"))
+			self.plugin_liste.append(("PornerBros", "pornerbros", "Porn"))
 		if config.mediaportal.showPornhub.value:
-			self.plugin_liste.append(("Pornhub", "pornhub"))
+			self.plugin_liste.append(("Pornhub", "pornhub", "Porn"))
 		if config.mediaportal.showpornrabbit.value:
-			self.plugin_liste.append(("PornRabbit", "pornrabbit"))
+			self.plugin_liste.append(("PornRabbit", "pornrabbit", "Porn"))
 		if config.mediaportal.showredtube.value:
-			self.plugin_liste.append(("RedTube", "redtube"))
+			self.plugin_liste.append(("RedTube", "redtube", "Porn"))
 		if config.mediaportal.showthenewporn.value:
-			self.plugin_liste.append(("TheNewPorn", "thenewporn"))
+			self.plugin_liste.append(("TheNewPorn", "thenewporn", "Porn"))
 		if config.mediaportal.showwetplace.value:
-			self.plugin_liste.append(("WetPlace", "wetplace"))
+			self.plugin_liste.append(("WetPlace", "wetplace", "Porn"))
 		if config.mediaportal.showXhamster.value:
-			self.plugin_liste.append(("xHamster", "xhamster"))
+			self.plugin_liste.append(("xHamster", "xhamster", "Porn"))
 		if config.mediaportal.showyouporn.value:
-			self.plugin_liste.append(("YouPorn", "youporn"))
+			self.plugin_liste.append(("YouPorn", "youporn", "Porn"))
 			
 		skincontent = ""
 		
@@ -944,15 +971,9 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 				posy = 210
 				
 		self.skin_dump = ""
-		#self.skin_dump += "<screen name=\"MediaPortal\" position=\"0,0\" size=\"1280,720\" flags=\"wfNoBorder\">"
-		#self.skin_dump += "<widget name=\"name\" position=\"20,150\" size=\"900,50\" foregroundColor=\"#00ffffff\" backgroundColor=\"#26181d20\" transparent=\"1\" font=\"mediaportal;28\" valign=\"top\" halign=\"center\" />"
-		#self.skin_dump += "<widget name=\"page\" position=\"1100,680\" size=\"100,40\" foregroundColor=\"#00ffffff\" backgroundColor=\"#26181d20\" transparent=\"1\" font=\"mediaportal;28\" valign=\"top\" halign=\"center\" />"
-		#self.skin_dump += "<ePixmap position=\"0,0\" size=\"1280,720\" zPosition=\"-1\" pixmap=\"/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/mpback.png\" />"
-		#self.skin_dump += "<widget source=\"session.VideoPicture\" render=\"Pig\" position=\"913,15\" size=\"320,180\" zPosition=\"3\" backgroundColor=\"transparent\" />"
 		self.skin_dump += "<widget name=\"frame\" position=\"20,210\" size=\"150,80\" pixmap=\"/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons_wall/Selektor_%s.png\" zPosition=\"2\" transparent=\"0\" alphatest=\"blend\" />" % config.mediaportal.selektor.value
 		self.skin_dump += skincontent
 		self.skin_dump += "</screen>"
-		#self.skin = self.skin_dump
 		
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/hauptScreenWall.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
@@ -977,10 +998,12 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			"nextBouquet" :	self.page_next,
 			"prevBouquet" :	self.page_back,
 			"menu" : self.keySetup,
-			"displayHelp" : self.keyHelp
+			"displayHelp" : self.keyHelp,
+			"blue" : self.chFilter
 		}, -1)
 		
 		self['name'] = Label("Plugin Auswahl")
+		self['blue'] = Label("")
 		self['page'] = Label("")
 		self["frame"] = MovingPixmap()
 		for x in range(1,len(self.plugin_liste)+1):
@@ -993,6 +1016,16 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		
 	def _onFirstExecBegin(self):
 		# load plugin icons
+		print "Set Filter:", self.setFilter
+		self['blue'].setText(self.setFilter)
+		if self.setFilter != "ALL":
+			dump_liste = self.plugin_liste
+			self.plugin_liste = []
+			self.plugin_liste = [x for x in dump_liste if self.setFilter == x[2]]
+			self.plugin_liste.sort(key=lambda t : tuple(t[0].lower()))
+			for each in self.plugin_liste:
+				print each
+
 		for x in range(1,len(self.plugin_liste)+1):
 			postername = self.plugin_liste[int(x)-1][1]
 			poster_path = "%s/%s.png" % ("/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons_wall", postername)
@@ -1140,8 +1173,13 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(scienceTvGenreScreen)
 		elif auswahl == "SzeneStreams":
 			self.session.open(SzeneStreamsGenreScreen)
-		elif auswahl == "Voxnow":
+		# mediatheken
+		elif auswahl == "VOXNOW":
 			self.session.open(VoxnowGenreScreen)
+		elif auswahl == "RTLNOW":
+			self.session.open(RTLnowGenreScreen)
+		elif auswahl == "RTLNITRONOW":
+			self.session.open(RTLnitroGenreScreen)
 		# porn
 		elif auswahl == "4Tube":
 			if config.mediaportal.pornpin.value:
@@ -1356,25 +1394,44 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		if pincode:
 			self.session.openWithCallback(self.restart, hauptScreenSetup)
 			
+	def chFilter(self):
+		print self.setFilter
+		if self.setFilter == "ALL":
+			self.setFilter = "Mediathek"
+		elif self.setFilter == "Mediathek":
+			self.setFilter = "Grauzone"
+		elif self.setFilter == "Grauzone":
+			self.setFilter = "Sport"
+		elif self.setFilter == "Sport":
+			self.setFilter = "Fun"
+		elif self.setFilter == "Fun":
+			self.setFilter = "Porn"
+		elif self.setFilter == "Porn":
+			self.setFilter = "ALL"
+		print self.setFilter
+		self.restart()
+		
 	def keyCancel(self):
-		self.close(self.session, True)
+		self.close(self.session, True, self.setFilter)
 
 	def restart(self):
-		self.close(self.session, False)
+		self.close(self.session, False, self.setFilter)
 
-def exit(session, result):
-	print result
+def exit(session, result, filter):
+	print result, filter
 	if not result:
 		if config.mediaportal.ansicht.value == "liste":
 			session.openWithCallback(exit, haupt_Screen)
 		else:
-			session.openWithCallback(exit, haupt_Screen_Wall)		
+			if filter == "dump":
+				filter = "ALL"
+			session.openWithCallback(exit, haupt_Screen_Wall, filter)		
 	
 def main(session, **kwargs):
 	if config.mediaportal.ansicht.value == "liste":
 		session.openWithCallback(exit, haupt_Screen)
 	else:
-		session.openWithCallback(exit, haupt_Screen_Wall)
+		session.openWithCallback(exit, haupt_Screen_Wall, "ALL")
 	
 def Plugins(**kwargs):
 	return PluginDescriptor(name=_("MediaPortal"), description="MediaPortal", where = [PluginDescriptor.WHERE_PLUGINMENU, PluginDescriptor.WHERE_EXTENSIONSMENU], icon="plugin.png", fnc=main)

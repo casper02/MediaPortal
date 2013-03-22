@@ -1,22 +1,21 @@
 from imports import *
-#from decrypt import *
 
-def VoxnowGenreListEntry(entry):
+def RTLnowGenreListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		]
 
-def VoxnowFilmListEntry(entry):
+def RTLnowFilmListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		] 
 
-def VoxnowHosterListEntry(entry):
+def RTLnowHosterListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		] 
 
-class VoxnowGenreScreen(Screen):
+class RTLnowGenreScreen(Screen):
 	
 	def __init__(self, session):
 		self.session = session
@@ -39,7 +38,7 @@ class VoxnowGenreScreen(Screen):
 			"left" : self.keyLeft
 		}, -1)
 		
-		self['title'] = Label("VOXNOW.de")
+		self['title'] = Label("RTLNOW.de")
 		self['name'] = Label("Genre Auswahl")
 		self['handlung'] = Label("")
 		self['Pic'] = Pixmap()
@@ -55,7 +54,7 @@ class VoxnowGenreScreen(Screen):
 		
 	def loadPage(self):
 		self.keyLocked = True
-		url = "http://www.voxnow.de/sendung_a_z.php"
+		url = "http://rtl-now.rtl.de/sendung_a_z.php"
 		getPage(url, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
 		
 	def loadPageData(self, data):
@@ -65,15 +64,15 @@ class VoxnowGenreScreen(Screen):
 			genre = []
 			for each in raw:
 				if re.match('.*?FREE.*?Jetzt ansehen', each, re.S|re.I):
-					genre += re.findall('<div class="m03img">.*?<a href="(.*?)" target="_self">\n<img border="0" height="136" width="216" src="(.*?)">\n</a></div>.*?<span class="m03date">FREE.*?<br></span><h2>(.*?)</h2>\n(.*?)</div>', each, re.S|re.I)
-		if genre:
-			for (url,image,title,handlung) in genre:
-					print title
-					url = "http://www.voxnow.de/" + url
-					self.genreliste.append((title,url,image,handlung))
-			self.chooseMenuList.setList(map(VoxnowGenreListEntry, self.genreliste))
-			self.loadPic()
-			self.keyLocked = False
+					genre += re.findall('<div class="m03img">.*?<a href="(.*?)" target="_self">\n<img border="0" alt="" src="(.*?)">\n</a></div>.*?<span class="m03date">FREE.*?<br></span>\n<h2>(.*?)</h2>\n(.*?)</div>', each, re.S|re.I)
+			if genre:
+				for (url,image,title,handlung) in genre:
+						print title
+						url = "http://rtl-now.rtl.de/" + url
+						self.genreliste.append((title,url,image,handlung))
+				self.chooseMenuList.setList(map(RTLnowGenreListEntry, self.genreliste))
+				self.loadPic()
+				self.keyLocked = False
 
 	def dataError(self, error):
 		print error
@@ -104,7 +103,7 @@ class VoxnowGenreScreen(Screen):
 		if self.keyLocked:
 			return
 		streamGenreLink = self['List'].getCurrent()[0][1]
-		self.session.open(VoxnowFilmeListeScreen, streamGenreLink)
+		self.session.open(RTLnowFilmeListeScreen, streamGenreLink)
 		
 	def keyLeft(self):
 		if self.keyLocked:
@@ -133,7 +132,7 @@ class VoxnowGenreScreen(Screen):
 	def keyCancel(self):
 		self.close()
 
-class VoxnowFilmeListeScreen(Screen):
+class RTLnowFilmeListeScreen(Screen):
 	
 	def __init__(self, session, streamGenreLink):
 		self.session = session
@@ -151,16 +150,9 @@ class VoxnowFilmeListeScreen(Screen):
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions"], {
 			"ok"    : self.keyOK,
 			"cancel": self.keyCancel
-			#"up" : self.keyUp,
-			#"down" : self.keyDown,
-			#"right" : self.keyRight,
-			#"left" : self.keyLeft,
-			#"red" : self.keyTMDbInfo,
-			#"nextBouquet" : self.keyPageUp,
-			#"prevBouquet" : self.keyPageDown
 		}, -1)
 
-		self['title'] = Label("VOXNOW.de")
+		self['title'] = Label("RTLNOW.de")
 		self['name'] = Label("Film Auswahl")
 		
 		self.keyLocked = True
@@ -188,9 +180,9 @@ class VoxnowFilmeListeScreen(Screen):
 				self.filmliste = []
 				for (url,title) in folgen:
 					print title
-					url = "http://www.voxnow.de" + url.replace('amp;','')
+					url = "http://rtl-now.rtl.de" + url.replace('amp;','')
 					self.filmliste.append((decodeHtml(title), url))
-				self.chooseMenuList.setList(map(VoxnowFilmListEntry, self.filmliste))
+				self.chooseMenuList.setList(map(RTLnowFilmListEntry, self.filmliste))
 				self.keyLocked = False
 
 	def keyOK(self):
@@ -206,18 +198,18 @@ class VoxnowFilmeListeScreen(Screen):
 		self.stream = re.findall("'playerdata': '(.*?)'", data, re.S)
 		if self.stream:
 			print self.stream[0].replace('amp;',''), self.keckse
-			getPage(self.stream[0].replace('amp;',''), agent=std_headers, cookies=self.keckse, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.get_stream).addErrback(self.dataError)
+			getPage(self.stream[0].replace('amp;',''), agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.get_stream).addErrback(self.dataError)
 		else:
 			print "nix"
 			
 	def get_stream(self, data):
 		print "stream data"
-		rtmpe_data = re.findall('<filename.*?><!\[CDATA\[(rtmpe://.*?voxnow/)(.*?)\]\]></filename>', data, re.S)
+		rtmpe_data = re.findall('<filename.*?><!\[CDATA\[(rtmpe://.*?rtlnow/)(.*?)\]\]></filename>', data, re.S|re.I)
 		if rtmpe_data:
 			print rtmpe_data, self.pageurl
 			(host, playpath) = rtmpe_data[0]
 			print host, playpath
-			final = "%s swfUrl=http://www.voxnow.de/includes/vodplayer.swf pageurl=%s playpath=mp4:%s swfVfy=1" % (host, self.pageurl, playpath)
+			final = "%s swfUrl=http://rtl-now.rtl.de/includes/vodplayer.swf pageurl=%s playpath=mp4:%s swfVfy=1" % (host, self.pageurl, playpath)
 			print final
 			sref = eServiceReference(0x1001, 0, final)
 			sref.setName(self.streamName)
