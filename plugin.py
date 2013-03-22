@@ -277,7 +277,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 
 		if config.mediaportal.storagepath.value != self.oldstoragepathvalue:
 			os_system("rm -rf "+self.oldstoragepathvalue)
-			os_system("mkdir -p "+config.mediaportal.storagepath.value)
+			#os_system("mkdir -p "+config.mediaportal.storagepath.value)
 			
 		configfile.save()
 		self.close()
