@@ -172,15 +172,15 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		ConfigListScreen.__init__(self, self.configlist)
 
 		## Allgemein
-		self.configlist.append(("----- Allgemein -----", config.mediaportal.fake_entry))
-		self.configlist.append(("Filter:", config.mediaportal.filter))
-		self.configlist.append(("Pincode:", config.mediaportal.pincode))
-		self.configlist.append(("XXX-Pincodeabfrage:", config.mediaportal.pornpin))
-		self.configlist.append(("Selektor-Farbe", config.mediaportal.selektor))
-		self.configlist.append(("HauptScreen-Ansicht", config.mediaportal.ansicht))
-		self.configlist.append(("Skinauswahl:", config.mediaportal.skin))
-		self.configlist.append(("RTMPDump benutzen:", config.mediaportal.useRtmpDump))
-		self.configlist.append(("RTMPDump Cachepath:", config.mediaportal.storagepath)) 
+		self.configlist.append(getConfigListEntry("----- Allgemein -----", config.mediaportal.fake_entry))
+		self.configlist.append(getConfigListEntry("Filter:", config.mediaportal.filter))
+		self.configlist.append(getConfigListEntry("Pincode:", config.mediaportal.pincode))
+		self.configlist.append(getConfigListEntry("XXX-Pincodeabfrage:", config.mediaportal.pornpin))
+		self.configlist.append(getConfigListEntry("Selektor-Farbe", config.mediaportal.selektor))
+		self.configlist.append(getConfigListEntry("HauptScreen-Ansicht", config.mediaportal.ansicht))
+		self.configlist.append(getConfigListEntry("Skinauswahl:", config.mediaportal.skin))
+		self.configlist.append(getConfigListEntry("RTMPDump benutzen:", config.mediaportal.useRtmpDump))
+		self.configlist.append(getConfigListEntry("RTMPDump Cachepath:", config.mediaportal.storagepath)) 
 		
 		### Grauzone
 		self.configlist.append(getConfigListEntry("----- Grauzone -----", config.mediaportal.fake_entry))
@@ -1083,12 +1083,12 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 				loopcount += 1
 				tmppath = os_path.dirname(tmppath)
 				if tmppath == "/" or tmppath == "" or loopcount > 50:
-					#self.session.open(MessageBox, _("Error: Can not create cache-folders inside flash memory. Check your Cache-Folder Settings!"), type=MessageBox.TYPE_INFO, timeout=20)
+					self.session.open(MessageBox, _("Error: Can not create cache-folders inside flash memory. Check your Cache-Folder Settings!"), type=MessageBox.TYPE_INFO, timeout=20)
 					return False
 
 		os_system("mkdir -p "+config.mediaportal.storagepath.value)
 		if not os_path.exists(config.mediaportal.storagepath.value):
-			#self.session.open(MessageBox, _("Error: No write permission to create cache-folders. Check your Cache-Folder Settings!"), type=MessageBox.TYPE_INFO, timeout=20)
+			self.session.open(MessageBox, _("Error: No write permission to create cache-folders. Check your Cache-Folder Settings!"), type=MessageBox.TYPE_INFO, timeout=20)
 			return False
 		else:
 			return True		
