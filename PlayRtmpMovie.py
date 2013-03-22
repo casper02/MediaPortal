@@ -7,7 +7,7 @@ from os import path as os_path
 
 class PlayRtmpMovie(Screen):
 	skin = """
-		<screen position="center,center" size="450,240" title="Speichern ..." >
+		<screen position="center,center" size="450,240" title="Caching..." >
 			<widget source="label_filename" transparent="1" render="Label" zPosition="2" position="10,10" size="430,21" font="Regular;19" />
 			<widget source="label_speed" transparent="1" render="Label" zPosition="2" position="10,60" size="430,21" font="Regular;19" />
 			<widget source="label_timeleft" transparent="1" render="Label" zPosition="2" position="10,85" size="430,21" font="Regular;19" />
