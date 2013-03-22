@@ -1,6 +1,7 @@
 # General imports
 from imports import *
 from decrypt import *
+from os import path as os_path, readlink as os_readlink, system as os_system
 	
 # Stream-Sites import
 from forPlayers import *
@@ -75,6 +76,8 @@ config.mediaportal.pincode = ConfigPIN(default = 0000)
 config.mediaportal.skin = ConfigSelection(default = "original", choices = [("tec", _("tec")),("liquidblue", _("liquidblue")), ("original", _("original"))])
 config.mediaportal.ansicht = ConfigSelection(default = "liste", choices = [("liste", _("Liste")),("wall", _("Wall"))])
 config.mediaportal.selektor = ConfigSelection(default = "blue", choices = [("blue", _("blau")),("green", _(u"gr\xfcn")),("red", _("rot")),("turkis", _(u"t\xfcrkis"))])
+config.mediaportal.useRtmpDump = ConfigYesNo(default = False)
+config.mediaportal.storagepath = ConfigText(default="/media/hdd/mediaportal/tmp/", fixed_size=False)
 config.mediaportal.pornpin = ConfigYesNo(default = True)
 config.mediaportal.showDoku = ConfigYesNo(default = True)
 config.mediaportal.showRofl = ConfigYesNo(default = True)
@@ -158,6 +161,8 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 			f.close()
 			
 		Screen.__init__(self, session)
+		
+		self.oldstoragepathvalue = config.mediaportal.storagepath.value
 
 		self.configlist = []
 		ConfigListScreen.__init__(self, self.configlist)
@@ -210,6 +215,8 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige RTLNOW:", config.mediaportal.showRTLnow))
 		self.configlist.append(getConfigListEntry("Zeige RTLNITRONOW:", config.mediaportal.showRTLnitro))
 		self.configlist.sort(key=lambda t : tuple(t[0].lower()))
+		self.configlist.insert(0, ("RTMPDUMP benutzen:", config.mediaportal.useRtmpDump))
+		self.configlist.insert(0, ("RTMPDUMP Cachepath:", config.mediaportal.storagepath))
 		self.configlist.insert(0, ("Skinauswahl:", config.mediaportal.skin))
 		self.configlist.insert(0, ("HauptScreen-Ansicht", config.mediaportal.ansicht))
 		self.configlist.insert(0, ("Selektor-Farbe", config.mediaportal.selektor))
@@ -246,6 +253,15 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 	def keyOK(self):
 		for x in self["config"].list:
 			x[1].save()
+			
+		if not os_path.isdir(config.mediaportal.storagepath.value):
+			self.session.open(MessageBox, "The directory %s does not exist!" % config.mediaportal.storagepath.value, MessageBox.TYPE_ERROR)
+			return
+
+		if config.mediaportal.storagepath.value != self.oldstoragepathvalue:
+			os_system("rm -rf "+self.oldstoragepathvalue)
+			os_system("mkdir -p "+config.mediaportal.storagepath.value)
+			
 		configfile.save()
 		self.close()
 	
@@ -476,6 +492,29 @@ class haupt_Screen(Screen, ConfigListScreen):
 		self["fun"].setList(self.fun)
 		self["fun"].l.setItemHeight(42)
 		self.keyRight()
+		
+		if not self.checkStoragePath():
+			return 
+			
+	def checkStoragePath(self):
+		tmppath = config.mediaportal.storagepath.value
+		if tmppath != "/tmp" and tmppath != "/media/ba":
+			if os_path.islink(tmppath):
+				tmppath = os_readlink(tmppath)
+			loopcount = 0
+			while not os_path.ismount(tmppath):
+				loopcount += 1
+				tmppath = os_path.dirname(tmppath)
+				if tmppath == "/" or tmppath == "" or loopcount > 50:
+					self.session.open(MessageBox, _("Error: Can not create cache-folders inside flash memory. Check your Cache-Folder Settings!"), type=MessageBox.TYPE_INFO, timeout=20)
+					return False
+
+		os_system("mkdir -p "+config.mediaportal.storagepath.value)
+		if not os_path.exists(config.mediaportal.storagepath.value):
+			self.session.open(MessageBox, _("Error: No write permission to create cache-folders. Check your Cache-Folder Settings!"), type=MessageBox.TYPE_INFO, timeout=20)
+			return False
+		else:
+			return True
 		
 	def hauptListEntry(self, name, jpg):
 		res = [(name, jpg)]

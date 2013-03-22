@@ -1,5 +1,7 @@
 from imports import *
 #from decrypt import *
+from Components.config import config
+from PlayRtmpMovie import PlayRtmpMovie
 
 def VoxnowGenreListEntry(entry):
 	return [entry,
@@ -170,6 +172,13 @@ class VoxnowFilmeListeScreen(Screen):
 		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.chooseMenuList.l.setItemHeight(25)
 		self['List'] = self.chooseMenuList
+
+		self.useragent = "QuickTime/7.6.2 (qtver=7.6.2;os=Windows NT 5.1Service Pack 3)"
+		config.mediaplayer.useAlternateUserAgent.value = True
+		config.mediaplayer.alternateUserAgent.value = self.useragent
+		config.mediaplayer.useAlternateUserAgent.save()
+		config.mediaplayer.alternateUserAgent.save()
+		config.mediaplayer.save()
 		
 		self.onLayoutFinish.append(self.loadPage)
 		
@@ -217,11 +226,17 @@ class VoxnowFilmeListeScreen(Screen):
 			print rtmpe_data, self.pageurl
 			(host, playpath) = rtmpe_data[0]
 			print host, playpath
-			final = "%s swfUrl=http://www.voxnow.de/includes/vodplayer.swf pageurl=%s playpath=mp4:%s swfVfy=1" % (host, self.pageurl, playpath)
-			print final
-			sref = eServiceReference(0x1001, 0, final)
-			sref.setName(self.streamName)
-			self.session.open(MoviePlayer, sref)
+			if config.mediaportal.useRtmpDump.value:
+				final = "%s' --swfVfy=1 --playpath=mp4:%s --app=voxnow/_definst_ --pageUrl=http://www.voxnow.de/p/ --tcUrl=rtmpe://fms-fra32.rtl.de/voxnow/ --swfUrl=http://www.voxnow.de/includes/vodplayer.swf'" % (host, playpath)
+				print final
+				movieinfo = [final,self.streamName+'.f4v']
+				self.session.open(PlayRtmpMovie, movieinfo, self.streamName, self.useragent)
+			else:
+				final = "%s swfUrl=http://www.voxnow.de/includes/vodplayer.swf pageurl=%s playpath=mp4:%s swfVfy=1" % (host, self.pageurl, playpath)
+				print final
+				sref = eServiceReference(0x1001, 0, final)
+				sref.setName(self.streamName)
+				self.session.open(MoviePlayer, sref)
 	
 	def keyTMDbInfo(self):
 		if TMDbPresent:
