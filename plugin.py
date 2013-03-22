@@ -1083,12 +1083,12 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 				loopcount += 1
 				tmppath = os_path.dirname(tmppath)
 				if tmppath == "/" or tmppath == "" or loopcount > 50:
-					self.session.open(MessageBox, _("Error: Can not create cache-folders inside flash memory. Check your Cache-Folder Settings!"), type=MessageBox.TYPE_INFO, timeout=20)
+					#self.session.open(MessageBox, _("Error: Can not create cache-folders inside flash memory. Check your Cache-Folder Settings!"), type=MessageBox.TYPE_INFO, timeout=20)
 					return False
 
 		os_system("mkdir -p "+config.mediaportal.storagepath.value)
 		if not os_path.exists(config.mediaportal.storagepath.value):
-			self.session.open(MessageBox, _("Error: No write permission to create cache-folders. Check your Cache-Folder Settings!"), type=MessageBox.TYPE_INFO, timeout=20)
+			#self.session.open(MessageBox, _("Error: No write permission to create cache-folders. Check your Cache-Folder Settings!"), type=MessageBox.TYPE_INFO, timeout=20)
 			return False
 		else:
 			return True		
