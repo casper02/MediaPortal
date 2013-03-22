@@ -173,19 +173,6 @@ class VoxnowFilmeListeScreen(Screen):
 		self.chooseMenuList.l.setItemHeight(25)
 		self['List'] = self.chooseMenuList
 
-		self.useragent = "QuickTime/7.6.2 (qtver=7.6.2;os=Windows NT 5.1Service Pack 3)"
-
-		try:
-			config.mediaplayer.useAlternateUserAgent.value = True
-			config.mediaplayer.alternateUserAgent.value = self.useragent
-			config.mediaplayer.useAlternateUserAgent.save()
-			config.mediaplayer.alternateUserAgent.save()
-			config.mediaplayer.save()
-		except Exception, errormsg:
-			config.mediaplayer = ConfigSubsection()
-			config.mediaplayer.useAlternateUserAgent = ConfigYesNo(default=True)
-			config.mediaplayer.alternateUserAgent = ConfigText(default=self.useragent)
-		
 		self.onLayoutFinish.append(self.loadPage)
 		
 	def loadPage(self):
@@ -240,7 +227,7 @@ class VoxnowFilmeListeScreen(Screen):
 					final = "%s' --swfVfy=1 --playpath=mp4:%s --app=voxnow/_definst_ --pageUrl=http://www.voxnow.de/p/ --tcUrl=rtmpe://fms-fra32.rtl.de/voxnow/ --swfUrl=http://www.voxnow.de/includes/vodplayer.swf'" % (host, playpath)
 					print final
 					movieinfo = [final,self.streamName+'.f4v']
-					self.session.open(PlayRtmpMovie, movieinfo, self.streamName, self.useragent)
+					self.session.open(PlayRtmpMovie, movieinfo, self.streamName)
 			else:
 				final = "%s swfUrl=http://www.voxnow.de/includes/vodplayer.swf pageurl=%s playpath=mp4:%s swfVfy=1" % (host, self.pageurl, playpath)
 				print final
@@ -254,14 +241,4 @@ class VoxnowFilmeListeScreen(Screen):
 			self.session.open(TMDbMain, title)
 			
 	def keyCancel(self):
-		try:
-			config.mediaplayer.useAlternateUserAgent.value = False
-			config.mediaplayer.alternateUserAgent.value = ""
-			config.mediaplayer.useAlternateUserAgent.save()
-			config.mediaplayer.alternateUserAgent.save()
-			config.mediaplayer.save()
-		except Exception, errormsg:
-			config.mediaplayer = ConfigSubsection()
-			config.mediaplayer.useAlternateUserAgent = ConfigYesNo(default=False)
-			config.mediaplayer.alternateUserAgent = ConfigText(default="")
 		self.close()

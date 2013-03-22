@@ -21,7 +21,7 @@ class PlayRtmpMovie(Screen):
 			<ePixmap pixmap="/usr/share/enigma2/skin_default/buttons/blue.png" position="300,200" size="140,40" alphatest="on" />
 		</screen>"""
 
-	def __init__(self, session, movieinfo, movietitle, useragent):
+	def __init__(self, session, movieinfo, movietitle):
 		self.skin = PlayRtmpMovie.skin
 		Screen.__init__(self, session)
 
@@ -30,7 +30,6 @@ class PlayRtmpMovie(Screen):
 		self.movietitle = movietitle
 		self.movieinfo = movieinfo
 		self.destination = config.mediaportal.storagepath.value
-		self.useragent = useragent
 
 		self.streamactive = False
 		self.isVisible = True
