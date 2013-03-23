@@ -220,14 +220,10 @@ class VoxnowFilmeListeScreen(Screen):
 			(host, playpath) = rtmpe_data[0]
 			print host, playpath
 			if config.mediaportal.useRtmpDump.value:
-				if not fileExists("/usr/bin/rtmpdump"):
-					message = self.session.open(MessageBox, _("RTMPDump is required for playback of this stream, please install it first."), MessageBox.TYPE_INFO, timeout=10)
-					return
-				else:
-					final = "%s' --swfVfy=1 --playpath=mp4:%s --app=voxnow/_definst_ --pageUrl=http://www.voxnow.de/p/ --tcUrl=rtmpe://fms-fra32.rtl.de/voxnow/ --swfUrl=http://www.voxnow.de/includes/vodplayer.swf'" % (host, playpath)
-					print final
-					movieinfo = [final,self.streamName+'.f4v']
-					self.session.open(PlayRtmpMovie, movieinfo, self.streamName)
+				final = "%s' --swfVfy=1 --playpath=mp4:%s --app=voxnow/_definst_ --pageUrl=http://www.voxnow.de/p/ --tcUrl=rtmpe://fms-fra32.rtl.de/voxnow/ --swfUrl=http://www.voxnow.de/includes/vodplayer.swf'" % (host, playpath)
+				print final
+				movieinfo = [final,self.streamName+'.f4v']
+				self.session.open(PlayRtmpMovie, movieinfo, self.streamName)
 			else:
 				final = "%s swfUrl=http://www.voxnow.de/includes/vodplayer.swf pageurl=%s playpath=mp4:%s swfVfy=1" % (host, self.pageurl, playpath)
 				print final
