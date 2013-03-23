@@ -202,6 +202,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("----- Sport -----", config.mediaportal.fake_entry))
 		self.configlist.append(getConfigListEntry("Zeige NHL:", config.mediaportal.showNhl))		
 		self.configlist.append(getConfigListEntry("Zeige Spobox:", config.mediaportal.showSpobox))
+		self.configlist.append(getConfigListEntry("Zeige Laola1:", config.mediaportal.showLaola1))
 		
 		### Fun
 		self.configlist.append(getConfigListEntry("----- Fun -----", config.mediaportal.fake_entry))
@@ -231,7 +232,6 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige AutoBild:", config.mediaportal.showAutoBild))
 		self.configlist.append(getConfigListEntry("Zeige SportBild:", config.mediaportal.showSportBild))
 		self.configlist.append(getConfigListEntry("Zeige Tivi:", config.mediaportal.showtivi))
-		self.configlist.append(getConfigListEntry("Zeige Laola1:", config.mediaportal.showLaola1))
 		self.configlist.append(getConfigListEntry("Zeige KinderKino:", config.mediaportal.showKinderKino))
 		self.configlist.append(getConfigListEntry("Zeige Vutechtalk:", config.mediaportal.showVutec))
 		self.configlist.append(getConfigListEntry("Zeige Dreamscreencast:", config.mediaportal.showDsc))
@@ -1053,6 +1053,9 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste = []
 			self.plugin_liste = [x for x in dump_liste if config.mediaportal.filter.value == x[2]]
 			self.plugin_liste.sort(key=lambda t : tuple(t[0].lower()))
+			if self.check_empty_list():
+				return
+				
 			for each in self.plugin_liste:
 				print each
 
@@ -1112,9 +1115,13 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		self["frame"].startMoving()
 		
 	def keyOK(self):
+		if self.check_empty_list():
+			return
+		
 		select_nr = self.mainlist[int(self.select_list)][int(self.selektor_index)-1]
 		auswahl = self.plugin_liste[int(select_nr)-1][0]
 		print auswahl
+
 		if auswahl == "Doku.me":
 			self.session.open(dokuScreen)
 		elif auswahl == "Rofl.to":
@@ -1348,6 +1355,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(youpornGenreScreen)
 	
 	def	keyLeft(self):
+		if self.check_empty_list():
+			return
 		if self.selektor_index > 1: 
 			self.selektor_index -= 1
 			self.move_selector()
@@ -1355,6 +1364,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.page_back()
 
 	def	keyRight(self):
+		if self.check_empty_list():
+			return
 		if self.selektor_index < 40 and self.selektor_index != len(self.mainlist[int(self.select_list)]):
 			self.selektor_index += 1
 			self.move_selector()
@@ -1362,6 +1373,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.page_next()
 			
 	def keyUp(self):
+		if self.check_empty_list():
+			return
 		if self.selektor_index-8 > 1:
 			self.selektor_index -=8
 			self.move_selector()
@@ -1370,6 +1383,9 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.move_selector()
 
 	def keyDown(self):
+		if self.check_empty_list():
+			return
+			
 		if self.selektor_index+8 <= len(self.mainlist[int(self.select_list)]):
 			self.selektor_index +=8
 			self.move_selector()
@@ -1378,17 +1394,30 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.move_selector()
 			
 	def page_next(self):
+		if self.check_empty_list():
+			return
+			
 		if self.select_list < len(self.mainlist)-1:
 			self.paint_hide()
 			self.select_list += 1
 			self.paint_new()
 	
 	def page_back(self):
+		if self.check_empty_list():
+			return
+			
 		if self.select_list > 0:
 			self.paint_hide()
 			self.select_list -= 1
 			self.paint_new_last()
-	
+
+	def check_empty_list(self):
+		if len(self.plugin_liste) == 0:
+			self['name'].setText('Keine Plugins der Kategorie %s aktiviert !' % config.mediaportal.filter.value)
+			return True
+		else:
+			return False
+			
 	def paint_hide(self):
 		for x in self.mainlist[int(self.select_list)]:
 			self["zeile"+str(x)].hide()
