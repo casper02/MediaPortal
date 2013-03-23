@@ -1414,6 +1414,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 	def check_empty_list(self):
 		if len(self.plugin_liste) == 0:
 			self['name'].setText('Keine Plugins der Kategorie %s aktiviert !' % config.mediaportal.filter.value)
+			self["frame"].hide()
 			return True
 		else:
 			return False
