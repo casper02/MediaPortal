@@ -1,3 +1,5 @@
+# -*- coding:utf-8 -*-
+
 from imports import *
 from Components.config import config
 from urllib2 import Request, urlopen
@@ -31,7 +33,7 @@ class PlayRtmpMovie(Screen):
 		self.movietitle = movietitle
 		self.movieinfo = movieinfo
 		self.destination = config.mediaportal.storagepath.value
-		self.moviepath = ASCIItranslit.legacyEncode(self.destination + self.filename)
+		self.moviepath = self.destination + ASCIItranslit.legacyEncode(self.filename)
 		
 		self.streamactive = False
 		self.isVisible = True
