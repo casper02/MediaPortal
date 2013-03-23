@@ -3,7 +3,7 @@ from Components.config import config
 from urllib2 import Request, urlopen
 from enigma import eTimer, eConsoleAppContainer, eBackgroundFileEraser
 from Components.Slider import Slider
-from os import path as os_path
+from os import path as os_path, readlink as os_readlink, system as os_system
 
 class PlayRtmpMovie(Screen):
 	skin = """
@@ -79,12 +79,35 @@ class PlayRtmpMovie(Screen):
 
 	def firstExecBegin(self):
 		self.progressperc = 0
+		if not self.checkStoragePath():
+			self.exit()
+			
 		self.copyfile()
 
 	def okbuttonClick(self):
 		if self.isVisible == False:
 			self.visibility()
 
+	def checkStoragePath(self):
+		tmppath = config.mediaportal.storagepath.value
+		if tmppath != "/tmp" and tmppath != "/media/ba":
+			if os_path.islink(tmppath):
+				tmppath = os_readlink(tmppath)
+			loopcount = 0
+			while not os_path.ismount(tmppath):
+				loopcount += 1
+				tmppath = os_path.dirname(tmppath)
+				if tmppath == "/" or tmppath == "" or loopcount > 50:
+					self.session.open(MessageBox, _("Error: Can not create cache-folders inside flash memory. Check your Cache-Folder Settings!"), type=MessageBox.TYPE_INFO, timeout=20)
+					return False
+
+		os_system("mkdir -p "+config.mediaportal.storagepath.value)
+		if not os_path.exists(config.mediaportal.storagepath.value):
+			self.session.open(MessageBox, _("Error: No write permission to create cache-folders. Check your Cache-Folder Settings!"), type=MessageBox.TYPE_INFO, timeout=20)
+			return False
+		else:
+			return True
+		
 	def UpdateStatus(self):
 		print "UpdateStatus:"
 		if fileExists(self.destination + self.filename, 'r'):
