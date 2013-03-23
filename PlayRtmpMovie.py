@@ -85,7 +85,7 @@ class PlayRtmpMovie(Screen):
 		self.progressperc = 0
 		if not fileExists("/usr/bin/rtmpdump"):
 			message = self.session.open(MessageBox, _("RTMPDump is required for playback of this stream, please install it first."), MessageBox.TYPE_INFO, timeout=10)
-			return
+			self.exit()
 			
 		if not self.checkStoragePath():
 			self.exit()
