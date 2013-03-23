@@ -309,7 +309,7 @@ class youpornFilmScreen(Screen):
 		getPage(phLink, headers={'Cookie': 'age_verified=1', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
-		videoPage = re.findall('video src="(.*?)" width', data, re.S)
+		videoPage = re.findall('video.src\s=\s\'(.*?)\';', data, re.S)
 		if videoPage:
 			for (phurl) in videoPage:
 				url = '%s' % (phurl)
