@@ -4,6 +4,7 @@ from urllib2 import Request, urlopen
 from enigma import eTimer, eConsoleAppContainer, eBackgroundFileEraser
 from Components.Slider import Slider
 from os import path as os_path, readlink as os_readlink, system as os_system
+from Tools import ASCIItranslit
 
 class PlayRtmpMovie(Screen):
 	skin = """
@@ -30,7 +31,8 @@ class PlayRtmpMovie(Screen):
 		self.movietitle = movietitle
 		self.movieinfo = movieinfo
 		self.destination = config.mediaportal.storagepath.value
-
+		self.moviepath = ASCIItranslit.legacyEncode(self.destination + self.filename)
+		
 		self.streamactive = False
 		self.isVisible = True
 
@@ -114,9 +116,9 @@ class PlayRtmpMovie(Screen):
 		
 	def UpdateStatus(self):
 		print "UpdateStatus:"
-		if fileExists(self.destination + self.filename, 'r'):
+		if fileExists(self.moviepath, 'r'):
 			print "file exists"
-			self.localsize = os_path.getsize(self.destination + self.filename)
+			self.localsize = os_path.getsize(self.moviepath)
 		else:
 			self.localsize = 0
 
@@ -150,17 +152,17 @@ class PlayRtmpMovie(Screen):
 	def copyfile(self):
 		print "copyfile:"
 		if self.url[0:4] == "rtmp":
-			cmd = "rtmpdump -r '%s' -o '%s%s'" % (self.url, self.destination, self.filename)
+			cmd = "rtmpdump -r '%s' -o '%s'" % (self.url, self.moviepath)
 		else:
 			self.session.openWithCallback(self.exit, MessageBox, _("This stream can not get saved on HDD\nProtocol %s not supported :(") % self.url[0:5], MessageBox.TYPE_ERROR)
 			return
 
-		if fileExists(self.destination + self.filename, 'r'):
-			self.localsize = os_path.getsize(self.destination + self.filename)
+		if fileExists(self.moviepath, 'r'):
+			self.localsize = os_path.getsize(self.moviepath)
 			if self.localsize > 0 and self.localsize >= self.filesize:
 				cmd = "echo File already downloaded! Skipping download ..."
 			elif self.localsize == 0:
-				self.BgFileEraser.erase(self.destination + self.filename)
+				self.BgFileEraser.erase(self.moviepath)
 
 		self.StatusTimer.start(1000, True)
 		self.streamactive = True
@@ -189,7 +191,7 @@ class PlayRtmpMovie(Screen):
 	def playfile(self):
 		if self.lastlocalsize > 0:
 			self.StatusTimer.stop()
-			sref = eServiceReference(0x1001, 0, self.destination + self.filename)
+			sref = eServiceReference(0x1001, 0, self.moviepath)
 			sref.setName(self.movietitle)
 			self.session.openWithCallback(self.MoviePlayerCallback, MoviePlayer, sref)
 		else:
@@ -215,7 +217,7 @@ class PlayRtmpMovie(Screen):
 			return
 
 		self.container.kill()
-		self.BgFileEraser.erase(self.destination + self.filename)
+		self.BgFileEraser.erase(self.moviepath)
 
 		self.StatusTimer.stop()
 		self.session.nav.playService(self.oldService)
