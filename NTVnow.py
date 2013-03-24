@@ -60,7 +60,7 @@ class NTVnowGenreScreen(Screen):
 			genre = []
 			for each in raw:
 				if re.match('.*?FREE.*?Jetzt ansehen', each, re.S|re.I):
-					genre += re.findall('<div class="m03img">.*?<a href="(.*?)" target="_self">\n<img border="0" alt="" src="(.*?)">\n</a></div>.*?<span class="m03date">FREE.*?<br></span>\n<h2>(.*?)</h2>\n(.*?)</div>', each, re.S|re.I)
+					genre += re.findall('class="m03img">.*?<a\shref="(.*?)"\starget="_self">.*?<img\sborder="0".*?src="(.*?)">.*?</a></div>.*?<span\sclass="m03date">FREE.*?<br></span><h2>(.*?)</h2>.*?</div>', each, re.S|re.I)
 			if genre:
 				for (url,image,title,handlung) in genre:
 						print title
