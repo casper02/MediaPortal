@@ -55,7 +55,7 @@ class PlayRtmpMovie(Screen):
 		self.lastcmddata = None
 		self.lastlocalsize = 0
 		self.isplaying = False
-		self.autoplaythreshold = 110.0
+		self.autoplaythreshold = config.mediaportal.autoplayThreshold.value
 
 		self["key_green"] = Button(_("Play"))
 		self["key_red"] = Button(_("Cancel"))
@@ -119,16 +119,16 @@ class PlayRtmpMovie(Screen):
 			return True
 		
 	def UpdateStatus(self):
-		print "UpdateStatus:"
+		#print "UpdateStatus:"
 		if fileExists(self.moviepath, 'r'):
-			print "file exists"
+			#print "file exists"
 			self.localsize = os_path.getsize(self.moviepath)
 		else:
 			self.localsize = 0
 
 		if self.filesize > 0 and not self.dummyfilesize:
 			self.progressperc = int(float(self.localsize) / self.filesize * 100.0 + 0.5)
-			print "psz: ",self.progressperc
+			#print "psz: ",self.progressperc
 
 		if int(self.progressperc) > 0:
 			self["activityslider"].setValue(self.progressperc)
@@ -152,13 +152,13 @@ class PlayRtmpMovie(Screen):
 		self["label_speed"].setText("Speed: " + str(transferspeed) + " KBit/s")
 		self["label_progress"].setText("Progress: " + str(int(float(self.localsize) / 1024.0 / 1024.0 + 0.5)) + "MB of " + str(int(float(self.filesize) / 1024.0 / 1024.0 + 0.5)) + "MB (" + str(self.progressperc) + "%)")
 		self["label_timeleft"].setText("Time left: " + str(timeleft) + " Minutes")
-		print "sz: ",self.localsize," lsz: ", self.lastlocalsize, " dsz: ", self.dummyfilesize, " fsz: ",self.filesize
+		#print "sz: ",self.localsize," lsz: ", self.lastlocalsize, " dsz: ", self.dummyfilesize, " fsz: ",self.filesize
 		self.StatusTimer.start(5000, True)
 		if self.progressperc >= self.autoplaythreshold and not self.isplaying:
 			self.playfile()
 
 	def copyfile(self):
-		print "copyfile:"
+		#print "copyfile:"
 		if self.url[0:4] == "rtmp":
 			cmd = "rtmpdump -r '%s' -o '%s'" % (self.url, self.moviepath)
 		else:
@@ -190,7 +190,7 @@ class PlayRtmpMovie(Screen):
 					self.dummyfilesize = True
 
 	def copyfinished(self,retval):
-		print "copyfinished:"
+		#print "copyfinished:"
 		self.container.kill()
 		self.streamactive = False
 		self.filesize = self.localsize
@@ -212,7 +212,7 @@ class PlayRtmpMovie(Screen):
 			self.session.openWithCallback(self.exit, MessageBox, _("Error downloading file:\n%s") % self.lastcmddata, MessageBox.TYPE_ERROR)
 
 	def MoviePlayerCallback(self, response=None):
-		print "movieplayercallback:"
+		#print "movieplayercallback:"
 		if self.isVisible == False:
 			self.visibility()
 		self.filesize = self.localsize
