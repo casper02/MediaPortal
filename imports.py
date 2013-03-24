@@ -24,6 +24,8 @@ from Screens.InputBox import PinInput
 from Screens.InfoBarGenerics import InfoBarSeek, InfoBarNotifications
 from Screens.InfoBar import MoviePlayer, InfoBar
 from twisted.web.client import downloadPage, getPage, error
+from twisted.internet import reactor
+from twisted.internet import defer
 from Tools.Directories import fileExists, resolveFilename, SCOPE_PLUGINS
 from Tools.LoadPixmap import LoadPixmap
 
