@@ -136,17 +136,48 @@ class RTL2nowFilmeListeScreen(Screen):
 		print error
 		
 	def loadPageData(self, data):
-		free = re.findall('teaser_content_row.*?FREE(.*?)pagesel', data, re.S)
-		if free:
-			folgen = re.findall('id="title_basic_.*?[0-9]"><a\shref="(.*?)"\stitle="(.*?)">.*?kostenlos</a>', free[0])
-			if folgen:
-				self.filmliste = []
-				for (url,title) in folgen:
-					print title
-					url = "http://rtl2now.rtl2.de" + url.replace('amp;','')
-					self.filmliste.append((decodeHtml(title), url))
-				self.chooseMenuList.setList(map(rtl2SerieListEntry, self.filmliste))
-				self.keyLocked = False
+		allData = ""
+		ajax_posts = []
+		self.rtl2SerieListe = []
+		selects = re.compile('<select\s*?onchange.*?xajax_show_top_and_movies.*?\'(.*?)\'.*?\'(.*?)\'.*?\'(.*?)\'.*?\'(.*?)\'.*?\'(.*?)\'.*?>(.*?)</select>',re.DOTALL).search(data)
+		if selects:
+			tabSelects = "&xajaxargs[]="+selects.group(1)+"&xajaxargs[]="+selects.group(2)+"&xajaxargs[]="+selects.group(3)+"&xajaxargs[]="+selects.group(4)+"&xajaxargs[]="+selects.group(5)+"&xajax=show_top_and_movies&xajaxr="+str(time()).replace('.','')
+			tabs = re.compile('<option.*?value=\'(\d)\'.*?>',re.DOTALL).findall(selects.group(6))
+			for tab in tabs:
+				ajax_posts.append(("xajaxargs[]="+tab+tabSelects)) 
+				
+		if len(ajax_posts) != 0:
+			self.count = len(ajax_posts)
+			print "pages:", self.count
+			ds = defer.DeferredSemaphore(tokens=1)
+			downloads = [ds.run(self.download,item).addCallback(self.get_series_more_pages).addErrback(self.dataError) for item in ajax_posts]
+			finished = defer.DeferredList(downloads).addErrback(self.dataError)
+		else:
+			free = re.findall('teaser_content_row.*?FREE(.*?)pagesel', data, re.S)
+			if free:
+				folgen = re.findall('id="title_basic_.*?[0-9]"><a\shref="(.*?)"\stitle="(.*?)">.*?kostenlos</a>', free[0])
+				if folgen:
+					self.filmliste = []
+					for (url,title) in folgen:
+						print title
+						url = "http://rtl2now.rtl2.de" + url.replace('amp;','')
+						self.filmliste.append((decodeHtml(title), url))
+					self.chooseMenuList.setList(map(rtl2SerieListEntry, self.filmliste))
+					self.keyLocked = False			
+
+	def download(self, item):
+		print item
+		return getPage('http://rtl2now.rtl2.de/xajaxuri.php', method='POST', postdata=item, headers={'Content-Type':'application/x-www-form-urlencoded'})
+
+	def get_series_more_pages(self, data):					
+		serien = re.compile('<div class="line (even|odd)"><div onclick="link\(\'(.*?)\'\); return false;".*?<a href=".*?" title=".*?">(.*?)</a>.*?class="time">.*?</div>.*?class="minibutton">(.*?)</a></div></div>', re.DOTALL).findall(data)
+		if serien:
+			for filler, link, title, pay in serien:
+				if pay == "kostenlos":
+					link = "http://rtl2now.rtl2.de" + link.replace('amp;','')
+					self.rtl2SerieListe.append((decodeHtml(title), link))
+			self.chooseMenuList.setList(map(rtl2SerieListEntry, self.rtl2SerieListe))
+			self.keyLocked = False
 
 	def keyOK(self):
 		if self.keyLocked:
