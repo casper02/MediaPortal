@@ -173,7 +173,7 @@ class rtl2SerieScreen(Screen):
 			(host, playpath) = rtmpe_data[0]
 			print host, playpath
 			if config.mediaportal.useRtmpDump.value:
-				final = "%s' --swfVfy=1 --playpath=mp4:%s --app=rtl2now/_definst_ --pageUrl=http://rtl2now.rtl2.de/ --tcUrl=rtmpe://fms-fra17.rtl.de/ --swfUrl=http://rtl2now.rtl2.de/includes/vodplayer.swf'" % (host, playpath)
+				final = "%s' --swfVfy=1 --playpath=mp4:%s --app=rtl2now/_definst_ --pageUrl=http://rtl2now.rtl2.de/ --swfUrl=http://rtl2now.rtl2.de/includes/vodplayer.swf'" % (host, playpath)
 				print final
 				movieinfo = [final,self.sendungName+'.f4v']
 				self.session.open(PlayRtmpMovie, movieinfo, self.sendungName)
