@@ -16,9 +16,9 @@ class rtl2Screen(Screen):
 	
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/rtl2Screen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/RTLnowGenreScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/rtl2Screen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/RTLnowGenreScreen.xml"
 		with open(path, "r") as f:
 			self.skin = f.read()
 			f.close()
@@ -37,12 +37,13 @@ class rtl2Screen(Screen):
 		self['title'] = Label("RTL2Now.de")
 		self['name'] = Label("Sendung Auswahl")
 		self['handlung'] = Label("")
+		self['Pic'] = Pixmap()
 		self.rtl2Liste = []
 		self.keyLocked = True
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.chooseMenuList.l.setItemHeight(25)
-		self['rtl2List'] = self.chooseMenuList
+		self['List'] = self.chooseMenuList
 		
 		self.onLayoutFinish.append(self.loadPage)
 		
@@ -69,29 +70,29 @@ class rtl2Screen(Screen):
 	def keyOK(self):
 		if self.keyLocked:
 			return
-		rtl2SerieUrl = self['rtl2List'].getCurrent()[0][1]
+		rtl2SerieUrl = self['List'].getCurrent()[0][1]
 		print 'serienurl:...', rtl2SerieUrl
 		self.session.open(rtl2SerieScreen, rtl2SerieUrl)
 		
 	def keyLeft(self):
 		if self.keyLocked:
 			return
-		self['rtl2List'].pageUp()
+		self['List'].pageUp()
 		
 	def keyRight(self):
 		if self.keyLocked:
 			return
-		self['rtl2List'].pageDown()
+		self['List'].pageDown()
 		
 	def keyUp(self):
 		if self.keyLocked:
 			return
-		self['rtl2List'].up()
+		self['List'].up()
 
 	def keyDown(self):
 		if self.keyLocked:
 			return
-		self['rtl2List'].down()
+		self['List'].down()
 
 	def keyCancel(self):
 		self.close()
@@ -101,9 +102,9 @@ class rtl2SerieScreen(Screen):
 	def __init__(self, session, rtl2SerieLink):
 		self.session = session
 		self.rtl2SerieLink = rtl2SerieLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/rtl2SerieScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/RTLnowFilmeScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/rtl2SerieScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/RTLnowFilmeScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -124,7 +125,7 @@ class rtl2SerieScreen(Screen):
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.chooseMenuList.l.setItemHeight(25)
-		self['rtl2SerieList'] = self.chooseMenuList
+		self['List'] = self.chooseMenuList
 		self.onLayoutFinish.append(self.loadPage)
 		
 	def loadPage(self):
@@ -151,8 +152,8 @@ class rtl2SerieScreen(Screen):
 	def keyOK(self):
 		if self.keyLocked:
 			return
-		self.sendungName = self['rtl2SerieList'].getCurrent()[0][0]
-		self.sendungUrl = self['rtl2SerieList'].getCurrent()[0][1]
+		self.sendungName = self['List'].getCurrent()[0][0]
+		self.sendungUrl = self['List'].getCurrent()[0][1]
 		print self.sendungUrl
 		getPage(self.sendungUrl, agent=std_headers, cookies=self.keckse, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.get_xml).addErrback(self.dataError)
 
