@@ -1,5 +1,4 @@
 from imports import *
-from decrypt import *
 
 def kinderKinoListEntry(entry):
 	return [entry,
@@ -52,11 +51,14 @@ class kinderKinoScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
 		
 	def loadPageData(self, data):
-		kiVideos = re.findall('<a href="(http://www.kinderkino.de/kostenlos/kinderfilme/.*?)">.*?<figure class="thumbImg"><img.*?src="(.*?)".*?title="(.*?)[-| ].*?"', data, re.S)
+		kiVideos = re.findall('<a\shref="(http://www.kinderkino.de/kostenlos/kinderfilme/.*?)">.*?<figure\sclass="thumbImg"><img.*?src="(.*?)"', data, re.S)
 		if kiVideos:
 			self.kiListe = []
-			for (kiUrl,kiImage,kiTitle) in kiVideos:
-				self.kiListe.append((kiTitle.replace('_',' '),kiUrl,kiImage))
+			for (kiUrl,kiImage) in kiVideos:
+				kiTitle = re.findall('http.*\/(.*)', kiUrl, re.S)
+				kiTitle = kiTitle[0].replace('-',' ')
+				kiTitle = kiTitle.title()
+				self.kiListe.append((kiTitle,kiUrl,kiImage))
 			self.chooseMenuList.setList(map(kinderKinoListEntry, self.kiListe))
 			self.keyLocked = False
 			self.showPic()
@@ -97,7 +99,7 @@ class kinderKinoScreen(Screen):
 		print "PageUP"
 		if self.keyLocked:
 			return
-		if not self.page > 2:
+		if not self.page > 6:
 			self.page += 1
 			self.loadPage()
 		
