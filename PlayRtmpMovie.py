@@ -54,6 +54,7 @@ class PlayRtmpMovie(Screen):
 		self.dummyfilesize = False
 		self.lastcmddata = None
 		self.lastlocalsize = 0
+		self.localsize = 0
 		self.isplaying = False
 		self.autoplaythreshold = config.mediaportal.autoplayThreshold.value
 
