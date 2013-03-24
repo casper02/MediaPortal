@@ -51,6 +51,7 @@ from SzeneStreams import *
 # mediatheken
 from VOXnow import *
 from RTLnow import *
+from NTVnow import *
 from RTLNITROnow import *
 from RTL2now import *
 from SUPERRTLnow import *
@@ -131,6 +132,7 @@ config.mediaportal.showSzeneStreams = ConfigYesNo(default = True)
 # mediatheken
 config.mediaportal.showVoxnow = ConfigYesNo(default = True)
 config.mediaportal.showRTLnow = ConfigYesNo(default = True)
+config.mediaportal.showNTVnow = ConfigYesNo(default = True)
 config.mediaportal.showRTL2now = ConfigYesNo(default = True)
 config.mediaportal.showRTLnitro = ConfigYesNo(default = True)
 config.mediaportal.showSUPERRTLnow = ConfigYesNo(default = True)
@@ -222,6 +224,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("----- Mediatheken -----", config.mediaportal.fake_entry))
 		self.configlist.append(getConfigListEntry("Zeige VOXNOW:", config.mediaportal.showVoxnow))
 		self.configlist.append(getConfigListEntry("Zeige RTLNOW:", config.mediaportal.showRTLnow))
+		self.configlist.append(getConfigListEntry("Zeige N-TVNOW:", config.mediaportal.showNTVnow))
 		self.configlist.append(getConfigListEntry("Zeige RTL2NOW:", config.mediaportal.showRTL2now))
 		self.configlist.append(getConfigListEntry("Zeige RTLNITRONOW:", config.mediaportal.showRTLnitro))
 		self.configlist.append(getConfigListEntry("Zeige SUPERRTLNOW:", config.mediaportal.showSUPERRTLnow))
@@ -409,6 +412,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.movies.append(self.hauptListEntry("VOXNOW", "voxnow"))
 		if config.mediaportal.showRTLnow.value:
 			self.movies.append(self.hauptListEntry("RTLNOW", "rtlnow"))
+		if config.mediaportal.showNTVnow.value:
+			self.movies.append(self.hauptListEntry("N-TVNOW", "ntvnow"))
 		if config.mediaportal.showRTL2now.value:
 			self.movies.append(self.hauptListEntry("RTL2NOW", "rtl2now"))
 		if config.mediaportal.showRTLnitro.value:
@@ -717,6 +722,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(VOXnowGenreScreen)
 		elif auswahl == "RTLNOW":
 			self.session.open(RTLnowGenreScreen)
+		elif auswahl == "N-TVNOW":
+			self.session.open(NTVnowGenreScreen)
 		elif auswahl == "RTL2NOW":
 			self.session.open(RTL2nowGenreScreen)
 		elif auswahl == "RTLNITRONOW":
@@ -966,6 +973,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("VOXNOW", "voxnow", "Mediathek"))
 		if config.mediaportal.showRTLnow.value:
 			self.plugin_liste.append(("RTLNOW", "rtlnow", "Mediathek"))
+		if config.mediaportal.showNTVnow.value:
+			self.plugin_liste.append(("N-TVNOW", "ntvnow", "Mediathek"))
 		if config.mediaportal.showRTL2now.value:
 			self.plugin_liste.append(("RTL2NOW", "rtl2now", "Mediathek"))
 		if config.mediaportal.showRTLnitro.value:
@@ -1234,6 +1243,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(VOXnowGenreScreen)
 		elif auswahl == "RTLNOW":
 			self.session.open(RTLnowGenreScreen)
+		elif auswahl == "N-TVNOW":
+			self.session.open(NTVnowGenreScreen)
 		elif auswahl == "RTL2NOW":
 			self.session.open(RTL2nowGenreScreen)
 		elif auswahl == "RTLNITRONOW":
