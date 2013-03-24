@@ -1088,16 +1088,29 @@ class m2kStreamListeScreen(Screen):
 		if re.match('.*?(http://img.movie2k.to/img/parts/teil1_aktiv.png|http://img.movie2k.to/img/parts/teil1_inaktiv.png)', data, re.S):
 			self.session.open(m2kPartListeScreen, streamLink, self.streamName)
 		else:
+			link_found = False
+		
 			link = re.findall('<a target="_blank" href="(.*?)"', data, re.S)
 			if link:
+				link_found = True
 				print link
 				get_stream_link(self.session).check_link(link[0], self.got_link)
-			else:
-				link = re.findall('<div id="emptydiv"><iframe.*?src=["|\'](.*?)["|\']', data, re.S)
-				if link:
-					print link[0]
-					get_stream_link(self.session).check_link(link[0], self.got_link)
+				
+			link = re.findall('<div id="emptydiv"><iframe.*?src=["|\'](.*?)["|\']', data, re.S)
+			if link:
+				link_found = True
+				print link[0]
+				get_stream_link(self.session).check_link(link[0], self.got_link)
+				
+			link = re.findall('<div id="emptydiv"><script type="text/javascript" src=["|\'](.*?)["|\']>', data, re.S)
+			if link:
+				link_found = True
+				print link[0].replace('?embed','')
+				get_stream_link(self.session).check_link(link[0].replace('?embed',''), self.got_link)
 
+			if not link_found:
+				message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=5)
+			
 	def got_link(self, stream_url):
 		if stream_url == None:
 			message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=3)
@@ -1173,15 +1186,28 @@ class m2kPartListeScreen(Screen):
 		getPage(streamLinkPart, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.get_streamlink).addErrback(self.dataError)
 
 	def get_streamlink(self, data):
+		link_found = False
+
 		link = re.findall('<a target="_blank" href="(.*?)"', data, re.S)
 		if link:
+			link_found = True
 			print link
 			get_stream_link(self.session).check_link(link[0], self.got_link)
-		else:
-			link = re.findall('<div id="emptydiv"><iframe.*?src=["|\'](.*?)["|\']', data, re.S)
-			if link:
-				print link[0]
-				get_stream_link(self.session).check_link(link[0], self.got_link)
+			
+		link = re.findall('<div id="emptydiv"><iframe.*?src=["|\'](.*?)["|\']', data, re.S)
+		if link:
+			link_found = True
+			print link[0]
+			get_stream_link(self.session).check_link(link[0], self.got_link)
+			
+		link = re.findall('<div id="emptydiv"><script type="text/javascript" src=["|\'](.*?)["|\']>', data, re.S)
+		if link:
+			link_found = True
+			print link[0].replace('?embed','')
+			get_stream_link(self.session).check_link(link[0].replace('?embed',''), self.got_link)
+
+		if not link_found:
+			message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=5)
 
 	def got_link(self, stream_url):
 		if stream_url == None:
