@@ -129,7 +129,6 @@ class RTL2nowFilmeListeScreen(Screen):
 		self.onLayoutFinish.append(self.loadPage)
 		
 	def loadPage(self):
-		print self.streamGenreLink
 		getPage(self.streamGenreLink, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
 		
 	def dataError(self, error):
