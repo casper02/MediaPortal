@@ -195,10 +195,10 @@ class RTL2nowFilmeListeScreen(Screen):
 		self.streamName = self['List'].getCurrent()[0][0]
 		self.pageurl = self['List'].getCurrent()[0][1]
 		sperre = self['List'].getCurrent()[0][2]
-		if sperre == "22"
+		if sperre == "22":
 			message = self.session.open(MessageBox, _("Dieses Video ist aus Jugenschutzgruenden momentan gesperrt und ist erst ab ca. 22 Uhr verfügbar."), MessageBox.TYPE_INFO, timeout=5)
 			return
-		if sperre == "23"
+		if sperre == "23":
 			message = self.session.open(MessageBox, _("Dieses Video ist aus Jugenschutzgruenden momentan gesperrt und ist erst ab ca. 23 Uhr verfügbar."), MessageBox.TYPE_INFO, timeout=5)
 			return
 		print self.pageurl
