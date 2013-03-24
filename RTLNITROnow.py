@@ -12,19 +12,13 @@ def RTLnitroFilmListEntry(entry):
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		] 
 
-def RTLnitroHosterListEntry(entry):
-	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
-		] 
-
-class RTLnitroGenreScreen(Screen):
+class RTLNITROnowGenreScreen(Screen):
 	
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/RTLnowGenreScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
 			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/RTLnowGenreScreen.xml"
-		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
 			f.close()
@@ -105,7 +99,7 @@ class RTLnitroGenreScreen(Screen):
 		if self.keyLocked:
 			return
 		streamGenreLink = self['List'].getCurrent()[0][1]
-		self.session.open(RTLnitroFilmeListeScreen, streamGenreLink)
+		self.session.open(RTLNITROnowFilmeListeScreen, streamGenreLink)
 		
 	def keyLeft(self):
 		if self.keyLocked:
@@ -134,7 +128,7 @@ class RTLnitroGenreScreen(Screen):
 	def keyCancel(self):
 		self.close()
 
-class RTLnitroFilmeListeScreen(Screen):
+class RTLNITROnowFilmeListeScreen(Screen):
 	
 	def __init__(self, session, streamGenreLink):
 		self.session = session
@@ -174,7 +168,6 @@ class RTLnitroFilmeListeScreen(Screen):
 		print error
 		
 	def loadPageData(self, data):
-		print "daten bekommen"
 		free = re.findall('teaser_content_row.*?FREE(.*?)pagesel', data, re.S)
 		if free:
 			folgen = re.findall('id="title_basic_.*?[0-9]"><a\shref="(.*?)"\stitle="(.*?)">.*?kostenlos</a>', free[0])
@@ -206,7 +199,6 @@ class RTLnitroFilmeListeScreen(Screen):
 			
 	def get_stream(self, data):
 		print "stream data"
-		#print data
 		rtmpe_data = re.findall('<filename.*?><!\[CDATA\[(rtmpe://.*?nitronow/)(.*?)\]\]></filename>', data, re.S|re.I)
 		if rtmpe_data:
 			print rtmpe_data, self.pageurl

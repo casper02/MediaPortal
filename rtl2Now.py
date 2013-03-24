@@ -12,7 +12,7 @@ def rtl2SerieListEntry(entry):
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		]
 
-class rtl2Screen(Screen):
+class RTL2nowGenreScreen(Screen):
 	
 	def __init__(self, session):
 		self.session = session
@@ -34,11 +34,12 @@ class rtl2Screen(Screen):
 			"left" : self.keyLeft
 		}, -1)
 		
-		self['title'] = Label("RTL2Now.de")
-		self['name'] = Label("Sendung Auswahl")
+		self['title'] = Label("RTL2NOW.de")
+		self['name'] = Label("Genre Auswahl")
 		self['handlung'] = Label("")
 		self['Pic'] = Pixmap()
-		self.rtl2Liste = []
+
+		self.genreliste = []
 		self.keyLocked = True
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
@@ -55,24 +56,21 @@ class rtl2Screen(Screen):
 	def loadPageData(self, data):
 		rtl2FreeVideos = re.findall('<div class="seriennavi_free" style=""><a href="(.*?)".*?>FREE.*?</div>.*?<div style="" class="seriennavi_link">.*?">(.*?)</a>.*?</div>', data, re.S)
 		if rtl2FreeVideos:
-			self.rtl2Liste = []
-			for vidUrl, vidName in rtl2FreeVideos:
-				url = "http://rtl2now.rtl2.de/" + vidUrl
-				self.rtl2Liste.append((vidName, vidUrl))
-			self.chooseMenuList.setList(map(rtl2AuswahlListEntry, self.rtl2Liste))
+			self.genreliste = []
+			for url, title in rtl2FreeVideos:
+				url = "http://rtl2now.rtl2.de" + url
+				self.genreliste.append((title, url))
+			self.chooseMenuList.setList(map(rtl2AuswahlListEntry, self.genreliste))
 			self.keyLocked = False
 		
 	def dataError(self, error):
 		print error
-		self.rtl2Liste.append(('Keine RTL2-Serien gefunden', ''))
-		self.chooseMenuList.setList(map(rtl2AuswahlListEntry, self.rtl2Liste))
 		
 	def keyOK(self):
 		if self.keyLocked:
 			return
-		rtl2SerieUrl = self['List'].getCurrent()[0][1]
-		print 'serienurl:...', rtl2SerieUrl
-		self.session.open(rtl2SerieScreen, rtl2SerieUrl)
+		streamGenreLink = self['List'].getCurrent()[0][1]
+		self.session.open(RTL2nowFilmeListeScreen, streamGenreLink)
 		
 	def keyLeft(self):
 		if self.keyLocked:
@@ -97,11 +95,11 @@ class rtl2Screen(Screen):
 	def keyCancel(self):
 		self.close()
 
-class rtl2SerieScreen(Screen):
+class RTL2nowFilmeListeScreen(Screen):
 	
-	def __init__(self, session, rtl2SerieLink):
+	def __init__(self, session, streamGenreLink):
 		self.session = session
-		self.rtl2SerieLink = rtl2SerieLink
+		self.streamGenreLink = streamGenreLink
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/RTLnowFilmeScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
 			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/RTLnowFilmeScreen.xml"
@@ -117,45 +115,46 @@ class rtl2SerieScreen(Screen):
 			"cancel": self.keyCancel
 		}, -1)
 
-		self['title'] = Label("RTL2Now")
-		self['name'] = Label("Sendung Auswahl")
+		self['title'] = Label("RTL2NOW.de")
+		self['name'] = Label("Film Auswahl")
+
 		self.keyLocked = True
-		self.rtl2SerieListe = []
+		self.filmliste = []
 		self.keckse = {}
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.chooseMenuList.l.setItemHeight(25)
 		self['List'] = self.chooseMenuList
+
 		self.onLayoutFinish.append(self.loadPage)
 		
 	def loadPage(self):
-		url = "http://rtl2now.rtl2.de" + self.rtl2SerieLink
-		getPage(url, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
+		print self.streamGenreLink
+		getPage(self.streamGenreLink, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
 		
 	def dataError(self, error):
 		print error
-		self.rtl2SerieListe.append(('Keine RTL2-Serien gefunden', ''))
-		self.chooseMenuList.setList(map(rtl2SerieListEntry, self.rtl2SerieListe))
 		
 	def loadPageData(self, data):
-		print "daten bekommen"
-		serien = re.compile('<div class="line (even|odd)"><div onclick="link\(\'(.*?)\'\); return false;".*?<a href=".*?" title=".*?">(.*?)</a>.*?class="time">.*?</div>.*?class="minibutton">(.*?)</a></div></div>', re.DOTALL).findall(data)
-		if serien:
-			for filler, link, title, pay in serien:
-				if pay == "kostenlos":
-					link = "http://rtl2now.rtl2.de" + link.replace('amp;','')
-					
-					self.rtl2SerieListe.append((decodeHtml(title), link))
-			self.chooseMenuList.setList(map(rtl2SerieListEntry, self.rtl2SerieListe))
-			self.keyLocked = False
+		free = re.findall('teaser_content_row.*?FREE(.*?)pagesel', data, re.S)
+		if free:
+			folgen = re.findall('id="title_basic_.*?[0-9]"><a\shref="(.*?)"\stitle="(.*?)">.*?kostenlos</a>', free[0])
+			if folgen:
+				self.filmliste = []
+				for (url,title) in folgen:
+					print title
+					url = "http://rtl2now.rtl2.de" + url.replace('amp;','')
+					self.filmliste.append((decodeHtml(title), url))
+				self.chooseMenuList.setList(map(rtl2SerieListEntry, self.filmliste))
+				self.keyLocked = False
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
-		self.sendungName = self['List'].getCurrent()[0][0]
-		self.sendungUrl = self['List'].getCurrent()[0][1]
-		print self.sendungUrl
-		getPage(self.sendungUrl, agent=std_headers, cookies=self.keckse, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.get_xml).addErrback(self.dataError)
+		self.streamName = self['List'].getCurrent()[0][0]
+		self.pageurl = self['List'].getCurrent()[0][1]
+		print self.pageurl
+		getPage(self.pageurl, agent=std_headers, cookies=self.keckse, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.get_xml).addErrback(self.dataError)
 
 	def get_xml(self, data):
 		print "xml data"
@@ -170,19 +169,19 @@ class rtl2SerieScreen(Screen):
 		print "stream data"
 		rtmpe_data = re.findall('<filename.*?><!\[CDATA\[(rtmpe://.*?rtl2now/)(.*?)\]\]></filename>', data, re.S|re.I)
 		if rtmpe_data:
-			print rtmpe_data, self.sendungUrl
+			print rtmpe_data, self.pageurl
 			(host, playpath) = rtmpe_data[0]
 			print host, playpath
 			if config.mediaportal.useRtmpDump.value:
-				final = "%s' --swfVfy=1 --playpath=mp4:%s --app=rtl2now/_definst_ --pageUrl=http://rtl2now.rtl2.de/ --swfUrl=http://rtl2now.rtl2.de/includes/vodplayer.swf'" % (host, playpath)
+				final = "%s' --swfVfy=1 --playpath=mp4:%s --app=rtl2now/_definst_ --pageUrl=http://rtl2now.rtl2.de/ --tcUrl=rtmpe://fms-fra30.rtl.de/rtl2now/ --swfUrl=http://rtl2now.rtl2.de/includes/vodplayer.swf'" % (host, playpath)
 				print final
-				movieinfo = [final,self.sendungName+'.f4v']
-				self.session.open(PlayRtmpMovie, movieinfo, self.sendungName)
+				movieinfo = [final,self.streamName+'.f4v']
+				self.session.open(PlayRtmpMovie, movieinfo, self.streamName)
 			else:
-				final = "%s swfUrl=http://www.rtl2now.rtl2.de/includes/vodplayer.swf pageurl=%s playpath=mp4:%s swfVfy=1" % (host, self.sendungUrl, playpath)
+				final = "%s swfUrl=http://rtl2now.rtl2.de/includes/vodplayer.swf pageurl=%s playpath=mp4:%s swfVfy=1" % (host, self.pageurl, playpath)
 				print final
 				sref = eServiceReference(0x1001, 0, final)
-				sref.setName(self.sendungName)
+				sref.setName(self.streamName)
 				self.session.open(MoviePlayer, sref)
 	
 	def keyTMDbInfo(self):
