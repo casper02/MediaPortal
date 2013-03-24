@@ -62,10 +62,10 @@ class NTVnowGenreScreen(Screen):
 				if re.match('.*?FREE.*?Jetzt ansehen', each, re.S|re.I):
 					genre += re.findall('class="m03img">.*?<a\shref="(.*?)"\starget="_self">.*?<img\sborder="0".*?src="(.*?)">.*?</a></div>.*?<span\sclass="m03date">FREE.*?<br></span><h2>(.*?)</h2>.*?</div>', each, re.S|re.I)
 			if genre:
-				for (url,image,title,handlung) in genre:
+				for (url,image,title) in genre:
 						print title
 						url = "http://www.n-tvnow.de/" + url
-						self.genreliste.append((title,url,image,handlung))
+						self.genreliste.append((title,url,image))
 				self.chooseMenuList.setList(map(NTVnowGenreListEntry, self.genreliste))
 				self.loadPic()
 				self.keyLocked = False
@@ -76,8 +76,6 @@ class NTVnowGenreScreen(Screen):
 	def loadPic(self):
 		streamName = self['List'].getCurrent()[0][0]
 		self['name'].setText(streamName)
-		streamHandlung = self['List'].getCurrent()[0][3]
-		self['handlung'].setText(decodeHtml(streamHandlung))
 		streamPic = self['List'].getCurrent()[0][2]
 		downloadPage(streamPic, "/tmp/Icon.jpg").addCallback(self.ShowCover)
 			
