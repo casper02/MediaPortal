@@ -1,7 +1,6 @@
 # General imports
 from imports import *
 from decrypt import *
-from os import path as os_path, readlink as os_readlink, system as os_system
 	
 # Stream-Sites import
 from forPlayers import *
@@ -50,10 +49,10 @@ from ScienceTV import *
 from SzeneStreams import *
 
 # mediatheken
-from Voxnow import *
+from VOXnow import *
 from RTLnow import *
-from RTLnitro import *
-from rtl2Now import *
+from RTLNITROnow import *
+from RTL2now import *
 
 # porn
 from ahme import *
@@ -710,13 +709,13 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(SzeneStreamsGenreScreen)
 		# mediatheken
 		elif auswahl == "VOXNOW":
-			self.session.open(VoxnowGenreScreen)
+			self.session.open(VOXnowGenreScreen)
 		elif auswahl == "RTLNOW":
 			self.session.open(RTLnowGenreScreen)
 		elif auswahl == "RTL2NOW":
-			self.session.open(rtl2Screen)
+			self.session.open(RTL2nowGenreScreen)
 		elif auswahl == "RTLNITRONOW":
-			self.session.open(RTLnitroGenreScreen)
+			self.session.open(RTLNITROnowGenreScreen)
 		# porn
 		elif auswahl == "4Tube":
 			if config.mediaportal.pornpin.value:
@@ -1223,13 +1222,13 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(SzeneStreamsGenreScreen)
 		# mediatheken
 		elif auswahl == "VOXNOW":
-			self.session.open(VoxnowGenreScreen)
+			self.session.open(VOXnowGenreScreen)
 		elif auswahl == "RTLNOW":
 			self.session.open(RTLnowGenreScreen)
 		elif auswahl == "RTL2NOW":
-			self.session.open(rtl2Screen)
+			self.session.open(RTL2nowGenreScreen)
 		elif auswahl == "RTLNITRONOW":
-			self.session.open(RTLnitroGenreScreen)
+			self.session.open(RTLNITROnowGenreScreen)
 		# porn
 		elif auswahl == "4Tube":
 			if config.mediaportal.pornpin.value:

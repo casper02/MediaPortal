@@ -12,11 +12,6 @@ def RTLnowFilmListEntry(entry):
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		] 
 
-def RTLnowHosterListEntry(entry):
-	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
-		] 
-
 class RTLnowGenreScreen(Screen):
 	
 	def __init__(self, session):
@@ -24,7 +19,6 @@ class RTLnowGenreScreen(Screen):
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/RTLnowGenreScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
 			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/RTLnowGenreScreen.xml"
-		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
 			f.close()
@@ -168,13 +162,13 @@ class RTLnowFilmeListeScreen(Screen):
 		self.onLayoutFinish.append(self.loadPage)
 		
 	def loadPage(self):
+		print self.streamGenreLink
 		getPage(self.streamGenreLink, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
 
 	def dataError(self, error):
 		print error
 		
 	def loadPageData(self, data):
-		print "daten bekommen"
 		free = re.findall('teaser_content_row.*?FREE(.*?)pagesel', data, re.S)
 		if free:
 			folgen = re.findall('id="title_basic_.*?[0-9]"><a\shref="(.*?)"\stitle="(.*?)">.*?kostenlos</a>', free[0])

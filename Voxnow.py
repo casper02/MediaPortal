@@ -1,5 +1,4 @@
 from imports import *
-#from decrypt import *
 from Components.config import config
 from PlayRtmpMovie import PlayRtmpMovie
 
@@ -13,19 +12,13 @@ def VoxnowFilmListEntry(entry):
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		] 
 
-def VoxnowHosterListEntry(entry):
-	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
-		] 
-
-class VoxnowGenreScreen(Screen):
+class VOXnowGenreScreen(Screen):
 	
 	def __init__(self, session):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/RTLnowGenreScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
 			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/RTLnowGenreScreen.xml"
-		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
 			f.close()
@@ -106,7 +99,7 @@ class VoxnowGenreScreen(Screen):
 		if self.keyLocked:
 			return
 		streamGenreLink = self['List'].getCurrent()[0][1]
-		self.session.open(VoxnowFilmeListeScreen, streamGenreLink)
+		self.session.open(VOXnowFilmeListeScreen, streamGenreLink)
 		
 	def keyLeft(self):
 		if self.keyLocked:
@@ -135,7 +128,7 @@ class VoxnowGenreScreen(Screen):
 	def keyCancel(self):
 		self.close()
 
-class VoxnowFilmeListeScreen(Screen):
+class VOXnowFilmeListeScreen(Screen):
 	
 	def __init__(self, session, streamGenreLink):
 		self.session = session
@@ -153,13 +146,6 @@ class VoxnowFilmeListeScreen(Screen):
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions"], {
 			"ok"    : self.keyOK,
 			"cancel": self.keyCancel
-			#"up" : self.keyUp,
-			#"down" : self.keyDown,
-			#"right" : self.keyRight,
-			#"left" : self.keyLeft,
-			#"red" : self.keyTMDbInfo,
-			#"nextBouquet" : self.keyPageUp,
-			#"prevBouquet" : self.keyPageDown
 		}, -1)
 
 		self['title'] = Label("VOXNOW.de")
@@ -182,7 +168,6 @@ class VoxnowFilmeListeScreen(Screen):
 		print error
 		
 	def loadPageData(self, data):
-		print "daten bekommen"
 		free = re.findall('teaser_content_row.*?FREE(.*?)pagesel', data, re.S)
 		if free:
 			folgen = re.findall('id="title_basic_.*?[0-9]"><a\shref="(.*?)"\stitle="(.*?)">.*?kostenlos</a>', free[0])
