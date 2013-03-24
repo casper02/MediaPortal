@@ -54,6 +54,8 @@ class PlayRtmpMovie(Screen):
 		self.dummyfilesize = False
 		self.lastcmddata = None
 		self.lastlocalsize = 0
+		self.isplaying = False
+		self.autoplaythreshold = 110.0
 
 		self["key_green"] = Button(_("Play"))
 		self["key_red"] = Button(_("Cancel"))
@@ -125,17 +127,19 @@ class PlayRtmpMovie(Screen):
 			self.localsize = 0
 
 		if self.filesize > 0 and not self.dummyfilesize:
-			self.progressperc = round((self.localsize / self.filesize) * 100, 2)
+			self.progressperc = int(float(self.localsize) / self.filesize * 100.0 + 0.5)
 			print "psz: ",self.progressperc
 
 		if int(self.progressperc) > 0:
-			self["activityslider"].setValue(int(self.progressperc))
+			self["activityslider"].setValue(self.progressperc)
 
 		if self.lastlocalsize != 0:
-			transferspeed = round(((self.localsize - self.lastlocalsize) / 1024.0) / 5, 0)
-			kbytesleft = round((self.filesize - self.localsize) / 1024.0,0)
+			transferspeed = int(float(self.localsize - self.lastlocalsize) / 1024.0 / 5 + 0.5)
+			kbytesleft = int(float(self.filesize - self.localsize) / 1024.0 + 0.5)
+			if kbytesleft < 0:
+				kbytesleft = 0
 			if transferspeed > 0:
-				timeleft = round((kbytesleft / transferspeed) / 60,2)
+				timeleft = round(float(kbytesleft) / transferspeed / 60.0, 1)
 			else:
 				timeleft = 0
 		else:
@@ -146,10 +150,12 @@ class PlayRtmpMovie(Screen):
 		self.lastlocalsize = self.localsize
 
 		self["label_speed"].setText("Speed: " + str(transferspeed) + " KBit/s")
-		self["label_progress"].setText("Progress: " + str(round(((self.localsize / 1024.0) / 1024.0), 2)) + "MB of " + str(round(((self.filesize / 1024.0) / 1024.0), 2)) + "MB (" + str(self.progressperc) + "%)")
+		self["label_progress"].setText("Progress: " + str(int(float(self.localsize) / 1024.0 / 1024.0 + 0.5)) + "MB of " + str(int(float(self.filesize) / 1024.0 / 1024.0 + 0.5)) + "MB (" + str(self.progressperc) + "%)")
 		self["label_timeleft"].setText("Time left: " + str(timeleft) + " Minutes")
 		print "sz: ",self.localsize," lsz: ", self.lastlocalsize, " dsz: ", self.dummyfilesize, " fsz: ",self.filesize
 		self.StatusTimer.start(5000, True)
+		if self.progressperc >= self.autoplaythreshold and not self.isplaying:
+			self.playfile()
 
 	def copyfile(self):
 		print "copyfile:"
@@ -177,21 +183,27 @@ class PlayRtmpMovie(Screen):
 		if data.endswith('%)'):
 			startpos = data.rfind("sec (")+5
 			if startpos and startpos != -1:
-				self.progressperc = int(float(data[startpos:-4]))
+				self.progressperc = int(float(data[startpos:-4])+0.5)
 
 				if self.lastlocalsize > 0 and self.progressperc > 0:
-					self.filesize = int(float(self.lastlocalsize/self.progressperc)*100)
+					self.filesize = int(float(self.lastlocalsize/self.progressperc)*100+0.5)
 					self.dummyfilesize = True
 
 	def copyfinished(self,retval):
+		print "copyfinished:"
+		self.container.kill()
 		self.streamactive = False
+		self.filesize = self.localsize
+		self.progressperc = 100
 		self.UpdateStatus()
-		self["label_progress"].setText("Progress: 100%")
-		self["activityslider"].setValue(100)
-		#self.playfile()
+		#self["label_progress"].setText("Progress: 100%")
+		#self["activityslider"].setValue(100)
+		if not self.isplaying:
+			self.playfile()
 
 	def playfile(self):
 		if self.lastlocalsize > 0:
+			self.isplaying = True
 			self.StatusTimer.stop()
 			sref = eServiceReference(0x1001, 0, self.moviepath)
 			sref.setName(self.movietitle)
@@ -203,6 +215,7 @@ class PlayRtmpMovie(Screen):
 		print "movieplayercallback:"
 		if self.isVisible == False:
 			self.visibility()
+		self.filesize = self.localsize
 		self.UpdateStatus()
 
 	def visibility(self):
