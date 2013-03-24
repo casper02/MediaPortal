@@ -53,6 +53,7 @@ from VOXnow import *
 from RTLnow import *
 from RTLNITROnow import *
 from RTL2now import *
+from SUPERRTLnow import *
 
 # porn
 from ahme import *
@@ -132,6 +133,7 @@ config.mediaportal.showVoxnow = ConfigYesNo(default = True)
 config.mediaportal.showRTLnow = ConfigYesNo(default = True)
 config.mediaportal.showRTL2now = ConfigYesNo(default = True)
 config.mediaportal.showRTLnitro = ConfigYesNo(default = True)
+config.mediaportal.showSUPERRTLnow = ConfigYesNo(default = True)
 
 # porn
 config.mediaportal.show4tube = ConfigYesNo(default = False)
@@ -222,6 +224,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige RTLNOW:", config.mediaportal.showRTLnow))
 		self.configlist.append(getConfigListEntry("Zeige RTL2NOW:", config.mediaportal.showRTL2now))
 		self.configlist.append(getConfigListEntry("Zeige RTLNITRONOW:", config.mediaportal.showRTLnitro))
+		self.configlist.append(getConfigListEntry("Zeige SUPERRTLNOW:", config.mediaportal.showSUPERRTLnow))
 		self.configlist.append(getConfigListEntry("Zeige ScienceTV:", config.mediaportal.showScienceTV))
 		self.configlist.append(getConfigListEntry("Zeige Doku.me:", config.mediaportal.showDoku))
 		self.configlist.append(getConfigListEntry("Zeige Myvideo:", config.mediaportal.showMyvideo))
@@ -410,6 +413,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.movies.append(self.hauptListEntry("RTL2NOW", "rtl2now"))
 		if config.mediaportal.showRTLnitro.value:
 			self.movies.append(self.hauptListEntry("RTLNITRONOW", "rtlnitro"))
+		if config.mediaportal.showSUPERRTLnow.value:
+			self.movies.append(self.hauptListEntry("SUPERRTLNOW", "superrtlnow"))
 		# info
 		if config.mediaportal.showDoku.value:
 			self.infos.append(self.hauptListEntry("Doku.me", "doku"))		
@@ -716,6 +721,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(RTL2nowGenreScreen)
 		elif auswahl == "RTLNITRONOW":
 			self.session.open(RTLNITROnowGenreScreen)
+		elif auswahl == "SUPERRTLNOW":
+			self.session.open(SUPERRTLnowGenreScreen)
 		# porn
 		elif auswahl == "4Tube":
 			if config.mediaportal.pornpin.value:
@@ -963,6 +970,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("RTL2NOW", "rtl2now", "Mediathek"))
 		if config.mediaportal.showRTLnitro.value:
 			self.plugin_liste.append(("RTLNITRONOW", "rtlnitro", "Mediathek"))
+		if config.mediaportal.showSUPERRTLnow.value:
+			self.plugin_liste.append(("SUPERRTLNOW", "superrtlnow", "Mediathek"))
 			
 		### porn
 		if config.mediaportal.show4tube.value:
@@ -1229,6 +1238,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(RTL2nowGenreScreen)
 		elif auswahl == "RTLNITRONOW":
 			self.session.open(RTLNITROnowGenreScreen)
+		elif auswahl == "SUPERRTLNOW":
+			self.session.open(SUPERRTLnowGenreScreen)
 		# porn
 		elif auswahl == "4Tube":
 			if config.mediaportal.pornpin.value:
