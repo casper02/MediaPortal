@@ -185,17 +185,15 @@ class VOXnowFilmeListeScreen(Screen):
 			downloads = [ds.run(self.download,item).addCallback(self.get_series_more_pages).addErrback(self.dataError) for item in ajax_posts]
 			finished = defer.DeferredList(downloads).addErrback(self.dataError)
 		else:
-			free = re.findall('teaser_content_row.*?FREE(.*?)pagesel', data, re.S)
-			if free:
-				folgen = re.findall('id="title_basic_.*?[0-9]"><a\shref="(.*?)"\stitle="(.*?)">.*?kostenlos</a>', free[0])
-				if folgen:
-					self.filmliste = []
-					for (url,title) in folgen:
-						print title
-						url = "http://www.voxnow.de" + url.replace('amp;','')
-						self.filmliste.append((decodeHtml(title), url))
-					self.chooseMenuList.setList(map(VoxnowFilmListEntry, self.filmliste))
-					self.keyLocked = False			
+			folgen = re.findall('id="title_basic_.*?[0-9]"><a\shref="(.*?)"\stitle="(.*?)">.*?kostenlos</a>', data)
+			if folgen:
+				self.filmliste = []
+				for (url,title) in folgen:
+					print title
+					url = "http://www.voxnow.de" + url.replace('amp;','')
+					self.filmliste.append((decodeHtml(title), url))
+				self.chooseMenuList.setList(map(VoxnowFilmListEntry, self.filmliste))
+				self.keyLocked = False			
 
 	def download(self, item):
 		print item
