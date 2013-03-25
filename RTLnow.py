@@ -168,9 +168,41 @@ class RTLnowFilmeListeScreen(Screen):
 		print error
 		
 	def loadPageData(self, data):
-		allData = ""
-		ajax_posts = []
+		reiter_posts = []
 		self.filmliste = []
+		## suche nach reitern
+		if re.match('.*?var reitercount =', data, re.S):
+			reiter_count = re.findall('var reitercount = (.*?);', data, re.S)
+			print "Reiteranzahl:", reiter_count[0]
+			
+			reiter = re.findall("currentreiter=.*?;show_top_and_movies_wrapper.(.*?),'(.*?)','(.*?)',(.*?),(.*?),(.*?),'','(.*?)'.*?><div class=\"l\"></div><div class=\"m\">(.*?)</div>", data, re.S)
+			if reiter:
+				for each in reiter:
+					post = []
+					reitername = each[7]
+					print reitername
+					post = "xajax=show_top_and_movies&xajaxr="+str(time()).replace('.','')
+					post += "&xajaxargs[]="+each[0]
+					post += "&xajaxargs[]="+each[1]
+					post += "&xajaxargs[]="+each[2]
+					post += "&xajaxargs[]="+each[3]
+					post += "&xajaxargs[]="+each[4]
+					post += "&xajaxargs[]="+each[5]
+					post += "&xajaxargs[]="+each[6]
+					
+					reiter_posts.append((post, reitername))
+					
+				if len(reiter_posts) != 0:
+					count_reiter = len(reiter_posts)
+					print "Reiter gefunden:", count_reiter
+					ds = defer.DeferredSemaphore(tokens=1)
+					downloads = [ds.run(self.download,post).addCallback(self.check_pages,reitername).addErrback(self.dataError) for post,reitername in reiter_posts]
+					finished = defer.DeferredList(downloads).addErrback(self.dataError)
+
+	def check_pages(self, data, reitername):
+		## suche nach pages
+		ajax_posts = []
+		print "Reitername:", reitername
 		selects = re.compile('<select\s*?onchange.*?xajax_show_top_and_movies.*?\'(.*?)\'.*?\'(.*?)\'.*?\'(.*?)\'.*?\'(.*?)\'.*?\'(.*?)\'.*?>(.*?)</select>',re.DOTALL).search(data)
 		if selects:
 			tabSelects = "&xajaxargs[]="+selects.group(1)+"&xajaxargs[]="+selects.group(2)+"&xajaxargs[]="+selects.group(3)+"&xajaxargs[]="+selects.group(4)+"&xajaxargs[]="+selects.group(5)+"&xajax=show_top_and_movies&xajaxr="+str(time()).replace('.','')
@@ -179,24 +211,26 @@ class RTLnowFilmeListeScreen(Screen):
 				ajax_posts.append(("xajaxargs[]="+tab+tabSelects)) 
 				
 		if len(ajax_posts) != 0:
-			self.count = len(ajax_posts)
-			print "pages:", self.count
+			seitenanzahl = len(ajax_posts)
+			print "Seitenanzahl fuer Reiter %s: %s" %  (reitername, seitenanzahl)
 			ds = defer.DeferredSemaphore(tokens=1)
-			downloads = [ds.run(self.download,item).addCallback(self.get_series_more_pages).addErrback(self.dataError) for item in ajax_posts]
+			downloads = [ds.run(self.download,item).addCallback(self.get_series_more_pages, reitername).addErrback(self.dataError) for item in ajax_posts]
 			finished = defer.DeferredList(downloads).addErrback(self.dataError)
 		else:
-			self.get_series_more_pages(data)		
+			## keine pages gefunden
+			self.get_series_more_pages(data, reitername)
+			
+	def download(self, post):
+		#print item
+		return getPage('http://rtl-now.rtl.de/xajaxuri.php', method='POST', postdata=post, headers={'Content-Type':'application/x-www-form-urlencoded'})
 
-	def download(self, item):
-		print item
-		return getPage('http://www.rtlnitronow.de/xajaxuri.php', method='POST', postdata=item, headers={'Content-Type':'application/x-www-form-urlencoded'})
-
-	def get_series_more_pages(self, data):
+	def get_series_more_pages(self, data, reitername):
+		## suche nach folgen
 		folgen = re.findall('id="title_basic_.*?[0-9]"><a\shref="(.*?)"\stitle="(.*?)">.*?(kostenlos|Nur\s22\s-\s6h|Nur\s23\s-\s6h)</a>', data)
 		if folgen:
 			for (url,title, sperre) in folgen:
 				print title
-				url = "http://rtl-now.rtl.de" + url.replace('amp;','')
+				url = "http://www.voxnow.de" + url.replace('amp;','')
 				title = decodeHtml(title)
 				lock = "free"
 				if sperre == "Nur 22 - 6h":
@@ -205,6 +239,7 @@ class RTLnowFilmeListeScreen(Screen):
 				if sperre == "Nur 23 - 6h":
 					title = "gesperrt bis 23 Uhr: " + title
 					lock = "23"
+				title = "%s - %s" % (reitername, title)
 				self.filmliste.append((title, url, lock))
 			self.chooseMenuList.setList(map(RTLnowFilmListEntry, self.filmliste))
 			self.keyLocked = False
