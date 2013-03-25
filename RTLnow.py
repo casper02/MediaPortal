@@ -230,7 +230,7 @@ class RTLnowFilmeListeScreen(Screen):
 		if folgen:
 			for (url,title, sperre) in folgen:
 				print title
-				url = "http://www.voxnow.de" + url.replace('amp;','')
+				url = "http://rtl-now.rtl.de" + url.replace('amp;','')
 				title = decodeHtml(title)
 				lock = "free"
 				if sperre == "Nur 22 - 6h":
