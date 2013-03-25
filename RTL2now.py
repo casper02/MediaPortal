@@ -152,23 +152,7 @@ class RTL2nowFilmeListeScreen(Screen):
 			downloads = [ds.run(self.download,item).addCallback(self.get_series_more_pages).addErrback(self.dataError) for item in ajax_posts]
 			finished = defer.DeferredList(downloads).addErrback(self.dataError)
 		else:
-			folgen = re.findall('id="title_basic_.*?[0-9]"><a\shref="(.*?)"\stitle="(.*?)">.*?(kostenlos|Nur\s22\s-\s6h|Nur\s23\s-\s6h)</a>', data)
-			if folgen:
-				self.filmliste = []
-				for (url, title, sperre) in folgen:
-					print title
-					url = "http://rtl2now.rtl2.de" + url.replace('amp;','')
-					title = decodeHtml(title)
-					lock = "free"
-					if sperre == "Nur 22 - 6h":
-						title = "gesperrt bis 22 Uhr: " + title
-						lock = "22"
-					if sperre == "Nur 23 - 6h":
-						title = "gesperrt bis 23 Uhr: " + title
-						lock = "23"
-					self.filmliste.append((title, url, lock))
-				self.chooseMenuList.setList(map(rtl2SerieListEntry, self.filmliste))
-				self.keyLocked = False			
+			self.get_series_more_pages(data)
 
 	def download(self, item):
 		print item
