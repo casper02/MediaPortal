@@ -34,9 +34,9 @@ def m2kFilmListEntry(entry):
 
 class m2kGenreScreen(Screen):
 	
-	def __init__(self, session, showM2kPorn):
+	def __init__(self, session, mode):
 		self.session = session
-		self.showM2kPorn = showM2kPorn
+		self.showM2kPorn = mode
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/m2kGenreScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
 			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/m2kGenreScreen.xml"
@@ -65,46 +65,46 @@ class m2kGenreScreen(Screen):
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
-		self.genreliste.append(("Kinofilme", "http://www.movie2k.to/index.php?lang=de"))
-		self.genreliste.append(("Videofilme", "http://www.movie2k.to/index.php?lang=de"))
-		self.genreliste.append(("Neue Updates (Filme)", "http://www.movie2k.to/movies-updates-"))
-		self.genreliste.append(("Empfohlene Serien", "http://www.movie2k.to/tvshows_featured.php"))
-		self.genreliste.append(("Letzte Updates (Serien)", "http://www.movie2k.to/tvshows_featured.php"))
-		self.genreliste.append(("Alle Serien A-Z", "http://www.movie2k.to/tvshows_featured.php"))
-		if self.showM2kPorn == True:
+		if self.showM2kPorn == "porn":
 			self.genreliste.append(("Letzte Updates (XXX)", "http://www.movie2k.to/xxx-updates.html"))
-		self.genreliste.append(("Abenteuer", "http://movie2k.to/movies-genre-4-"))
-		self.genreliste.append(("Action", "http://movie2k.to/movies-genre-1-"))
-		self.genreliste.append(('Biografie', 'http://movie2k.to/movies-genre-6-'))
-		self.genreliste.append(('Bollywood', 'http://movie2k.to/movies-genre-27-'))
-		self.genreliste.append(('Dokumentation', 'http://movie2k.to/movies-genre-8-'))
-		self.genreliste.append(('Drama', 'http://movie2k.to/movies-genre-2-'))
-		self.genreliste.append(('Erwachsene', 'http://movie2k.to/movies-genre-58-'))
-		self.genreliste.append(('Familie', 'http://movie2k.to/movies-genre-9-'))
-		self.genreliste.append(('Fantasy', 'http://movie2k.to/movies-genre-10-'))
-		self.genreliste.append(('Film Noir', 'http://movie2k.to/movies-genre-60-'))
-		self.genreliste.append(('Game Show', 'http://movie2k.to/movies-genre-61-'))
-		self.genreliste.append(('History', 'http://movie2k.to/movies-genre-13-'))
-		self.genreliste.append(('Horror', 'http://movie2k.to/movies-genre-14-'))
-		self.genreliste.append(('Comedy', 'http://movie2k.to/movies-genre-3-'))
-		self.genreliste.append(('Kriegsfilme', 'http://movie2k.to/movies-genre-24-'))
-		self.genreliste.append(('Krimi', 'http://movie2k.to/movies-genre-7-'))
-		self.genreliste.append(('Kurzfilme', 'http://movie2k.to/movies-genre-55-'))
-		self.genreliste.append(('Musicals', 'http://movie2k.to/movies-genre-56-'))
-		self.genreliste.append(('Musik', 'http://movie2k.to/movies-genre-15-'))
-		self.genreliste.append(('Mystery', 'http://movie2k.to/movies-genre-17-'))
-		self.genreliste.append(('News', 'http://movie2k.to/movies-genre-62-'))
-		self.genreliste.append(('Reality TV', 'http://movie2k.to/movies-genre-59-'))
-		if self.showM2kPorn == True:
 			self.genreliste.append(('Pornos', 'http://www.movie2k.to/genres-xxx.html'))
-		self.genreliste.append(('Romanzen', 'http://movie2k.to/movies-genre-20-'))
-		self.genreliste.append(('Sci-Fy', 'http://movie2k.to/movies-genre-21-'))
-		self.genreliste.append(('Andere', 'http://movie2k.to/movies-'))
-		self.genreliste.append(('Sport', 'http://movie2k.to/movies-'))
-		self.genreliste.append(('Talk Shows', 'http://movie2k.to/movies-genre-63-'))
-		self.genreliste.append(('Thriller', 'http://movie2k.to/movies-genre-23-'))
-		self.genreliste.append(('Animation', 'http://movie2k.to/movies-genre-5-'))
-		self.genreliste.append(('Western', 'http://movie2k.to/movies-genre-25-'))
+		else:
+			self.genreliste.append(("Kinofilme", "http://www.movie2k.to/index.php?lang=de"))
+			self.genreliste.append(("Videofilme", "http://www.movie2k.to/index.php?lang=de"))
+			self.genreliste.append(("Neue Updates (Filme)", "http://www.movie2k.to/movies-updates-"))
+			self.genreliste.append(("Empfohlene Serien", "http://www.movie2k.to/tvshows_featured.php"))
+			self.genreliste.append(("Letzte Updates (Serien)", "http://www.movie2k.to/tvshows_featured.php"))
+			self.genreliste.append(("Alle Serien A-Z", "http://www.movie2k.to/tvshows_featured.php"))
+			self.genreliste.append(("Abenteuer", "http://movie2k.to/movies-genre-4-"))
+			self.genreliste.append(("Action", "http://movie2k.to/movies-genre-1-"))
+			self.genreliste.append(('Biografie', 'http://movie2k.to/movies-genre-6-'))
+			self.genreliste.append(('Bollywood', 'http://movie2k.to/movies-genre-27-'))
+			self.genreliste.append(('Dokumentation', 'http://movie2k.to/movies-genre-8-'))
+			self.genreliste.append(('Drama', 'http://movie2k.to/movies-genre-2-'))
+			self.genreliste.append(('Erwachsene', 'http://movie2k.to/movies-genre-58-'))
+			self.genreliste.append(('Familie', 'http://movie2k.to/movies-genre-9-'))
+			self.genreliste.append(('Fantasy', 'http://movie2k.to/movies-genre-10-'))
+			self.genreliste.append(('Film Noir', 'http://movie2k.to/movies-genre-60-'))
+			self.genreliste.append(('Game Show', 'http://movie2k.to/movies-genre-61-'))
+			self.genreliste.append(('History', 'http://movie2k.to/movies-genre-13-'))
+			self.genreliste.append(('Horror', 'http://movie2k.to/movies-genre-14-'))
+			self.genreliste.append(('Comedy', 'http://movie2k.to/movies-genre-3-'))
+			self.genreliste.append(('Kriegsfilme', 'http://movie2k.to/movies-genre-24-'))
+			self.genreliste.append(('Krimi', 'http://movie2k.to/movies-genre-7-'))
+			self.genreliste.append(('Kurzfilme', 'http://movie2k.to/movies-genre-55-'))
+			self.genreliste.append(('Musicals', 'http://movie2k.to/movies-genre-56-'))
+			self.genreliste.append(('Musik', 'http://movie2k.to/movies-genre-15-'))
+			self.genreliste.append(('Mystery', 'http://movie2k.to/movies-genre-17-'))
+			self.genreliste.append(('News', 'http://movie2k.to/movies-genre-62-'))
+			self.genreliste.append(('Reality TV', 'http://movie2k.to/movies-genre-59-'))
+			self.genreliste.append(('Romanzen', 'http://movie2k.to/movies-genre-20-'))
+			self.genreliste.append(('Sci-Fy', 'http://movie2k.to/movies-genre-21-'))
+			self.genreliste.append(('Andere', 'http://movie2k.to/movies-'))
+			self.genreliste.append(('Sport', 'http://movie2k.to/movies-'))
+			self.genreliste.append(('Talk Shows', 'http://movie2k.to/movies-genre-63-'))
+			self.genreliste.append(('Thriller', 'http://movie2k.to/movies-genre-23-'))
+			self.genreliste.append(('Animation', 'http://movie2k.to/movies-genre-5-'))
+			self.genreliste.append(('Western', 'http://movie2k.to/movies-genre-25-'))
 		self.chooseMenuList.setList(map(m2kGenreListEntry, self.genreliste))
 
 	def keyOK(self):
@@ -123,30 +123,11 @@ class m2kGenreScreen(Screen):
 		elif streamGenreName == "Alle Serien A-Z":
 			self.session.open(m2kSerienABCAuswahl, streamGenreLink)
 		elif streamGenreName == "Letzte Updates (XXX)":
-			if config.mediaportal.pornpin.value:
-				self.session.openWithCallback(self.xxxupdate, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
-			else:
-				self.session.open(m2kXXXUpdateFilmeListeScreen, streamGenreLink, '')
+			self.session.open(m2kXXXUpdateFilmeListeScreen, streamGenreLink, '')
 		elif streamGenreName == "Pornos":
-			if config.mediaportal.pornpin.value:
-				self.session.openWithCallback(self.xxxpornos, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
-			else:
-				self.session.open(m2kKinoAlleFilmeListeScreen, streamGenreLink)
+			self.session.open(m2kKinoAlleFilmeListeScreen, streamGenreLink)
 		else:
 			self.session.open(m2kKinoAlleFilmeListeScreen, streamGenreLink)
-
-	def getTriesEntry(self):
-		return config.ParentalControl.retries.setuppin
-
-	def xxxpornos(self, pincode):
-		if pincode:
-			streamGenreLink = self['genreList'].getCurrent()[0][1]
-			self.session.open(m2kKinoAlleFilmeListeScreen, streamGenreLink)
-
-	def xxxupdate(self, pincode):
-		if pincode:
-			streamGenreLink = self['genreList'].getCurrent()[0][1]
-			self.session.open(m2kXXXUpdateFilmeListeScreen, streamGenreLink, '')
 
 	def keyCancel(self):
 		self.close()
