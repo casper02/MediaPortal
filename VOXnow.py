@@ -226,7 +226,7 @@ class VOXnowFilmeListeScreen(Screen):
 
 	def get_series_more_pages(self, data, reitername):
 		## suche nach folgen
-		folgen = re.findall('id="title_basic_.*?[0-9]"><a\shref="(.*?)"\stitle="(.*?)">.*?(kostenlos|Nur\s22\s-\s6h|Nur\s23\s-\s6h)</a>', data)
+		folgen = re.findall('id="title_basic_.*?[0-9]"><a\shref="(.*?)"\stitle=".*?\s-\s(.*?)">.*?(kostenlos|Nur\s22\s-\s6h|Nur\s23\s-\s6h)</a>', data)
 		if folgen:
 			for (url,title, sperre) in folgen:
 				print title
