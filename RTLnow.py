@@ -214,6 +214,13 @@ class RTLnowFilmeListeScreen(Screen):
 			return
 		self.streamName = self['List'].getCurrent()[0][0]
 		self.pageurl = self['List'].getCurrent()[0][1]
+		sperre = self['List'].getCurrent()[0][2]
+		if sperre == "22":
+			message = self.session.open(MessageBox, _("Dieses Video ist aus Jugendschutzgruenden momentan gesperrt und ist erst ab ca. 22 Uhr verfuegbar."), MessageBox.TYPE_INFO, timeout=5)
+			return
+		if sperre == "23":
+			message = self.session.open(MessageBox, _("Dieses Video ist aus Jugendschutzgruenden momentan gesperrt und ist erst ab ca. 23 Uhr verfuegbar."), MessageBox.TYPE_INFO, timeout=5)
+			return
 		print self.pageurl
 		getPage(self.pageurl, agent=std_headers, cookies=self.keckse, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.get_xml).addErrback(self.dataError)
 
