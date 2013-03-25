@@ -159,11 +159,14 @@ class RTL2nowFilmeListeScreen(Screen):
 					print title
 					url = "http://rtl2now.rtl2.de" + url.replace('amp;','')
 					title = decodeHtml(title)
+					lock = "free"
 					if sperre == "Nur 22 - 6h":
 						title = "gesperrt bis 22 Uhr: " + title
+						lock = "22"
 					if sperre == "Nur 23 - 6h":
 						title = "gesperrt bis 23 Uhr: " + title
-					self.filmliste.append((title, url))
+						lock = "23"
+					self.filmliste.append((title, url, lock))
 				self.chooseMenuList.setList(map(rtl2SerieListEntry, self.filmliste))
 				self.keyLocked = False			
 
