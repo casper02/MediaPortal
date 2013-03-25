@@ -41,8 +41,9 @@ def IStreamGenreListEntry(entry):
 		] 
 class showIStreamGenre(Screen):
 	
-	def __init__(self, session):
+	def __init__(self, session, mode):
 		self.session = session
+		self.mode = mode
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/defaultGenreScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
 			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/defaultGenreScreen.xml"
@@ -79,39 +80,42 @@ class showIStreamGenre(Screen):
 	def loadPage(self):
 		print "ISteam.ws:"
 		genreListe = []
-		Genre = [("Kino", "http://istream.ws/c/filme/kino/page/"),
-			("Neue Filme", "http://istream.ws/page/"),
-			("Alle Filme", "http://istream.ws/c/filme/page/"),
-			("Abenteuer", "http://istream.ws/c/filme/abenteuer/page/"),
-			("Action", "http://istream.ws/c/filme/action/page/"),
-			("Adventure", "http://istream.ws/c/filme/adventure/page/"),
-			("Animation", "http://istream.ws/c/filme/animation/page/"),
-			("Anime", "http://istream.ws/c/filme/anime/page/"),
-			("Bollywood", "http://istream.ws/c/filme/bollywood/page/"),
-			("Comedy", "http://istream.ws/c/filme/comedy/page/"),
-			("Crime", "http://istream.ws/c/filme/crime/page/"),
-			("Dokumentation", "http://istream.ws/c/filme/dokumentation/page/"),
-			("Drama", "http://istream.ws/c/filme/drama/page/"),
-			("Family", "http://istream.ws/c/filme/family/page/"),
-			("Fantasy", "http://istream.ws/c/filme/fantasy/page/"),
-			("Historienfilm", "http://istream.ws/c/filme/historienfilm/page/"),
-			("History", "http://istream.ws/c/filme/history/page/"),
-			("Horror", "http://istream.ws/c/filme/horror/page/"),
-			("Kinderfilm", "http://istream.ws/c/filme/kinderfilm/page/"),
-			("Komödie", "http://istream.ws/c/filme/komodie/page/"),
-			("Kriegsfilm", "http://istream.ws/c/filme/kriegsfilm/page/"),
-			("Kurzfilm", "http://istream.ws/c/filme/kurzfilm/page/"),
-			("Martial Arts", "http://istream.ws/c/filme/martial-arts/page/"),
-			("Mystery", "http://istream.ws/c/filme/mystery/page/"),
-			("Romance", "http://istream.ws/c/filme/romance/page/"),
-			("Satire", "http://istream.ws/c/filme/satire/page/"),
-			("SciFi", "http://istream.ws/c/filme/science-ficton/page/"),
-			("Sitcom", "http://istream.ws/c/filme/sitcom/page/"),
-			("Sport", "http://istream.ws/c/filme/sport/page/"),
-			("Thriller", "http://istream.ws/c/filme/thriller/page/"),
-			("Trickfilm", "http://istream.ws/c/filme/trickfilm/page/"),
-			("War", "http://istream.ws/c/filme/war/page/"),
-			("Western", "http://istream.ws/c/filme/western/page/")]
+		if self.mode == "porn":
+			Genre = [("Porn", "http://istream.ws/c/porn/page/")]
+		else:
+			Genre = [("Kino", "http://istream.ws/c/filme/kino/page/"),
+				("Neue Filme", "http://istream.ws/page/"),
+				("Alle Filme", "http://istream.ws/c/filme/page/"),
+				("Abenteuer", "http://istream.ws/c/filme/abenteuer/page/"),
+				("Action", "http://istream.ws/c/filme/action/page/"),
+				("Adventure", "http://istream.ws/c/filme/adventure/page/"),
+				("Animation", "http://istream.ws/c/filme/animation/page/"),
+				("Anime", "http://istream.ws/c/filme/anime/page/"),
+				("Bollywood", "http://istream.ws/c/filme/bollywood/page/"),
+				("Comedy", "http://istream.ws/c/filme/comedy/page/"),
+				("Crime", "http://istream.ws/c/filme/crime/page/"),
+				("Dokumentation", "http://istream.ws/c/filme/dokumentation/page/"),
+				("Drama", "http://istream.ws/c/filme/drama/page/"),
+				("Family", "http://istream.ws/c/filme/family/page/"),
+				("Fantasy", "http://istream.ws/c/filme/fantasy/page/"),
+				("Historienfilm", "http://istream.ws/c/filme/historienfilm/page/"),
+				("History", "http://istream.ws/c/filme/history/page/"),
+				("Horror", "http://istream.ws/c/filme/horror/page/"),
+				("Kinderfilm", "http://istream.ws/c/filme/kinderfilm/page/"),
+				("Komödie", "http://istream.ws/c/filme/komodie/page/"),
+				("Kriegsfilm", "http://istream.ws/c/filme/kriegsfilm/page/"),
+				("Kurzfilm", "http://istream.ws/c/filme/kurzfilm/page/"),
+				("Martial Arts", "http://istream.ws/c/filme/martial-arts/page/"),
+				("Mystery", "http://istream.ws/c/filme/mystery/page/"),
+				("Romance", "http://istream.ws/c/filme/romance/page/"),
+				("Satire", "http://istream.ws/c/filme/satire/page/"),
+				("SciFi", "http://istream.ws/c/filme/science-ficton/page/"),
+				("Sitcom", "http://istream.ws/c/filme/sitcom/page/"),
+				("Sport", "http://istream.ws/c/filme/sport/page/"),
+				("Thriller", "http://istream.ws/c/filme/thriller/page/"),
+				("Trickfilm", "http://istream.ws/c/filme/trickfilm/page/"),
+				("War", "http://istream.ws/c/filme/war/page/"),
+				("Western", "http://istream.ws/c/filme/western/page/")]
 					
 		for (Name,Url) in Genre:
 			self.genreListe.append((Name,Url))

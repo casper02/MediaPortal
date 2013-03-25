@@ -144,6 +144,7 @@ config.mediaportal.showamateurporn = ConfigYesNo(default = False)
 config.mediaportal.showbeeg = ConfigYesNo(default = False)
 config.mediaportal.showeporner = ConfigYesNo(default = False)
 config.mediaportal.showhdporn = ConfigYesNo(default = False)
+config.mediaportal.showIStreamPorn = ConfigYesNo(default = True)
 config.mediaportal.showM2kPorn = ConfigYesNo(default = False)
 config.mediaportal.showpinkrod = ConfigYesNo(default = False)
 config.mediaportal.showpornerbros = ConfigYesNo(default = False)
@@ -258,6 +259,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige beeg:", config.mediaportal.showbeeg))
 		self.configlist.append(getConfigListEntry("Zeige Eporner:", config.mediaportal.showeporner))
 		self.configlist.append(getConfigListEntry("Zeige HDPorn:", config.mediaportal.showhdporn))
+		self.configlist.append(getConfigListEntry("Zeige IStream-Porn:", config.mediaportal.showIStreamPorn))
 		self.configlist.append(getConfigListEntry("Zeige Movie2k-Porn:", config.mediaportal.showM2kPorn))
 		self.configlist.append(getConfigListEntry("Zeige Pinkrod:", config.mediaportal.showpinkrod))
 		self.configlist.append(getConfigListEntry("Zeige PornerBros:", config.mediaportal.showpornerbros))
@@ -486,6 +488,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.fun.append(self.hauptListEntry("Eporner", "eporner"))
 		if config.mediaportal.showhdporn.value:
 			self.fun.append(self.hauptListEntry("HDPorn", "hdporn"))
+		if config.mediaportal.showIStreamPorn.value:
+			self.movies.append(self.hauptListEntry("IStream-Porn", "istreamporn"))
 		if config.mediaportal.showM2kPorn.value:
 			self.movies.append(self.hauptListEntry("Movie2k-Porn", "movie2kporn"))
 		if config.mediaportal.showpinkrod.value:
@@ -693,7 +697,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 		elif auswahl == "Movie2k":
 			self.session.open(m2kGenreScreen, "default")
 		elif auswahl == "IStream":
-			self.session.open(showIStreamGenre)
+			self.session.open(showIStreamGenre, "default")
 		elif auswahl == "UltimateStreams":
 			self.session.open(showUSGenre)
 		elif auswahl == "mahlzeit.tv":
@@ -758,6 +762,11 @@ class haupt_Screen(Screen, ConfigListScreen):
 				self.session.openWithCallback(self.pinhdporn, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
 			else:
 				self.session.open(hdpornGenreScreen)
+		elif auswahl == "IStream-Porn":
+			if config.mediaportal.pornpin.value:
+				self.session.openWithCallback(self.pinistreamporn, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
+			else:
+				self.session.open(showIStreamGenre, "porn")
 		elif auswahl == "Movie2k-Porn":
 			if config.mediaportal.pornpin.value:
 				self.session.openWithCallback(self.pinmovie2kporn, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
@@ -836,6 +845,10 @@ class haupt_Screen(Screen, ConfigListScreen):
 	def pinmovie2kporn(self, pincode):
 		if pincode:
 			self.session.open(m2kGenreScreen, "porn")
+
+	def pinistreamporn(self, pincode):
+		if pincode:
+			self.session.open(showIStreamGenre, "porn")
 
 	def pinpinkrod(self, pincode):
 		if pincode:
@@ -997,6 +1010,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("Eporner", "eporner", "Porn"))
 		if config.mediaportal.showhdporn.value:
 			self.plugin_liste.append(("HDPorn", "hdporn", "Porn"))
+		if config.mediaportal.showIStreamPorn.value:
+			self.plugin_liste.append(("IStream-Porn", "istreamporn", "Porn"))
 		if config.mediaportal.showM2kPorn.value:
 			self.plugin_liste.append(("Movie2k-Porn", "movie2kporn", "Porn"))
 		if config.mediaportal.showpinkrod.value:
@@ -1221,7 +1236,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		elif auswahl == "Movie2k":
 			self.session.open(m2kGenreScreen, "default")
 		elif auswahl == "IStream":
-			self.session.open(showIStreamGenre)
+			self.session.open(showIStreamGenre, "default")
 		elif auswahl == "UltimateStreams":
 			self.session.open(showUSGenre)
 		elif auswahl == "mahlzeit.tv":
@@ -1286,6 +1301,11 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 				self.session.openWithCallback(self.pinhdporn, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
 			else:
 				self.session.open(hdpornGenreScreen)
+		elif auswahl == "IStream-Porn":
+			if config.mediaportal.pornpin.value:
+				self.session.openWithCallback(self.pinistreamporn, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
+			else:
+				self.session.open(showIStreamGenre, "porn")
 		elif auswahl == "Movie2k-Porn":
 			if config.mediaportal.pornpin.value:
 				self.session.openWithCallback(self.pinmovie2kporn, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
@@ -1360,6 +1380,10 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 	def pinhdporn(self, pincode):
 		if pincode:
 			self.session.open(hdpornGenreScreen)
+
+	def pinistreamporn(self, pincode):
+		if pincode:
+			self.session.open(showIStreamGenre, "porn")
 
 	def pinmovie2kporn(self, pincode):
 		if pincode:
