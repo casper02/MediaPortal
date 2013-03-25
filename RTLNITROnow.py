@@ -222,7 +222,7 @@ class RTLNITROnowFilmeListeScreen(Screen):
 			
 	def download(self, post):
 		#print item
-		return getPage('http://www.voxnow.de/xajaxuri.php', method='POST', postdata=post, headers={'Content-Type':'application/x-www-form-urlencoded'})
+		return getPage('http://www.rtlnitronow.de/xajaxuri.php', method='POST', postdata=post, headers={'Content-Type':'application/x-www-form-urlencoded'})
 
 	def get_series_more_pages(self, data, reitername):
 		## suche nach folgen
@@ -230,7 +230,7 @@ class RTLNITROnowFilmeListeScreen(Screen):
 		if folgen:
 			for (url,title, sperre) in folgen:
 				print title
-				url = "http://www.voxnow.de" + url.replace('amp;','')
+				url = "http://www.rtlnitronow.de" + url.replace('amp;','')
 				title = decodeHtml(title)
 				lock = "free"
 				if sperre == "Nur 22 - 6h":
