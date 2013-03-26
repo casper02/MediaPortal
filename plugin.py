@@ -55,6 +55,7 @@ from NTVnow import *
 from RTLNITROnow import *
 from RTL2now import *
 from SUPERRTLnow import *
+from zdf import *
 
 # porn
 from ahme import *
@@ -136,6 +137,7 @@ config.mediaportal.showNTVnow = ConfigYesNo(default = True)
 config.mediaportal.showRTL2now = ConfigYesNo(default = True)
 config.mediaportal.showRTLnitro = ConfigYesNo(default = True)
 config.mediaportal.showSUPERRTLnow = ConfigYesNo(default = True)
+config.mediaportal.showZDF = ConfigYesNo(default = True)
 
 # porn
 config.mediaportal.show4tube = ConfigYesNo(default = False)
@@ -229,6 +231,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige RTL2NOW:", config.mediaportal.showRTL2now))
 		self.configlist.append(getConfigListEntry("Zeige RTLNITRONOW:", config.mediaportal.showRTLnitro))
 		self.configlist.append(getConfigListEntry("Zeige SUPERRTLNOW:", config.mediaportal.showSUPERRTLnow))
+		self.configlist.append(getConfigListEntry("Zeige ZDF:", config.mediaportal.showZDF))
 		self.configlist.append(getConfigListEntry("Zeige ScienceTV:", config.mediaportal.showScienceTV))
 		self.configlist.append(getConfigListEntry("Zeige Doku.me:", config.mediaportal.showDoku))
 		self.configlist.append(getConfigListEntry("Zeige Myvideo:", config.mediaportal.showMyvideo))
@@ -417,6 +420,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.movies.append(self.hauptListEntry("RTLNITRONOW", "rtlnitro"))
 		if config.mediaportal.showSUPERRTLnow.value:
 			self.movies.append(self.hauptListEntry("SUPERRTLNOW", "superrtlnow"))
+		if config.mediaportal.showZDF.value:
+			self.movies.append(self.hauptListEntry("ZDF", "zdf"))
 		# info
 		if config.mediaportal.showDoku.value:
 			self.infos.append(self.hauptListEntry("Doku.me", "doku"))		
@@ -522,8 +527,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 		self["fun"].setList(self.fun)
 		self["fun"].l.setItemHeight(42)
 		self.keyRight()
-		
-			
+
 	def hauptListEntry(self, name, jpg):
 		res = [(name, jpg)]
 		icon = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons/%s.png" % jpg
@@ -731,6 +735,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(RTLNITROnowGenreScreen)
 		elif auswahl == "SUPERRTLNOW":
 			self.session.open(SUPERRTLnowGenreScreen)
+		elif auswahl == "ZDF":
+			self.session.open(ZDFGenreScreen)
 		# porn
 		elif auswahl == "4Tube":
 			if config.mediaportal.pornpin.value:
@@ -996,6 +1002,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("RTLNITRONOW", "rtlnitro", "Mediathek"))
 		if config.mediaportal.showSUPERRTLnow.value:
 			self.plugin_liste.append(("SUPERRTLNOW", "superrtlnow", "Mediathek"))
+		if config.mediaportal.showZDF.value:
+			self.plugin_liste.append(("ZDF", "zdf", "Mediathek"))
 			
 		### porn
 		if config.mediaportal.show4tube.value:
@@ -1270,6 +1278,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(RTLNITROnowGenreScreen)
 		elif auswahl == "SUPERRTLNOW":
 			self.session.open(SUPERRTLnowGenreScreen)
+		elif auswahl == "ZDF":
+			self.session.open(ZDFGenreScreen)
 		# porn
 		elif auswahl == "4Tube":
 			if config.mediaportal.pornpin.value:
