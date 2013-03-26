@@ -163,8 +163,9 @@ class amateurpornFilmScreen(Screen):
 				phImage = phImage.replace(' ','%20')
 				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage, phRuntime, phViews))
 			self.chooseMenuList.setList(map(amateurpornFilmListEntry, self.filmliste))
+			self.chooseMenuList.moveToIndex(0)
+			self.keyLocked = False
 			self.showInfos()
-		self.keyLocked = False
 
 	def dataError(self, error):
 		print error

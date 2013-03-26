@@ -66,6 +66,7 @@ class youpornGenreScreen(Screen):
 			self.genreliste.insert(0, ("New", "http://www.youporn.com/?page=", None))
 			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.chooseMenuList.setList(map(youpornGenreListEntry, self.genreliste))
+			self.chooseMenuList.moveToIndex(0)
 			self.keyLocked = False
 			self.showInfos()
 
@@ -218,8 +219,9 @@ class youpornFilmScreen(Screen):
 			for (phUrl, phImage, phTitle, phRuntime, phViews) in phMovies:
 				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage, phRuntime, phViews))
 			self.chooseMenuList.setList(map(youpornFilmListEntry, self.filmliste))
+			self.chooseMenuList.moveToIndex(0)
+			self.keyLocked = False
 			self.showInfos()
-		self.keyLocked = False
 
 	def dataError(self, error):
 		print error

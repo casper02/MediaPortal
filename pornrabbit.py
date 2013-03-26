@@ -61,6 +61,7 @@ class pornrabbitGenreScreen(Screen):
 			self.genreliste.insert(0, ("Most Recent", "/videos/", None))
 			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.chooseMenuList.setList(map(pornrabbitGenreListEntry, self.genreliste))
+			self.chooseMenuList.moveToIndex(0)
 			self.keyLocked = False
 			self.showInfos()
 
@@ -206,8 +207,9 @@ class pornrabbitFilmScreen(Screen):
 			if x == 0:
 				self.filmliste.append(('Keine abspielbaren Videos auf dieser Seite gefunden', None, None, None, None))
 			self.chooseMenuList.setList(map(pornrabbitFilmListEntry, self.filmliste))
+			self.chooseMenuList.moveToIndex(0)
+			self.keyLocked = False
 			self.showInfos()
-		self.keyLocked = False
 
 	def dataError(self, error):
 		print error

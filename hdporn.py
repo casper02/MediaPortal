@@ -62,6 +62,7 @@ class hdpornGenreScreen(Screen):
 			self.genreliste.insert(0, ("Most Popular", "/most-viewed/", None))
 			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.chooseMenuList.setList(map(hdpornGenreListEntry, self.genreliste))
+			self.chooseMenuList.moveToIndex(0)
 			self.keyLocked = False
 			self.showInfos()
 
@@ -202,8 +203,9 @@ class hdpornFilmScreen(Screen):
 			for (phUrl, phTitle, phImage, phRuntime) in phMovies:
 				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage, phRuntime))
 			self.chooseMenuList.setList(map(hdpornFilmListEntry, self.filmliste))
+			self.chooseMenuList.moveToIndex(0)
+			self.keyLocked = False
 			self.showInfos()
-		self.keyLocked = False
 
 	def dataError(self, error):
 		print error

@@ -67,6 +67,7 @@ class epornerGenreScreen(Screen):
 			self.genreliste.insert(0, ("New", "http://www.eporner.com/", None))
 			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.chooseMenuList.setList(map(epornerGenreListEntry, self.genreliste))
+			self.chooseMenuList.moveToIndex(0)
 			self.keyLocked = False
 			self.showInfos()	
 
@@ -217,6 +218,8 @@ class epornerFilmScreen(Screen):
 				for (phUrl, phTitle, phImage, phRuntime) in phMovies:
 					self.filmliste.append((decodeHtml(phTitle), phUrl, phImage, phRuntime, Views))
 				self.chooseMenuList.setList(map(epornerFilmListEntry, self.filmliste))
+				self.chooseMenuList.moveToIndex(0)
+				self.keyLocked = False
 				self.showInfos()
 		else:
 			phMovies = re.findall('<div class="mbtit"><a href="(.*?)" title="(.*?)".*?src="(.*?)".*?<span>TIME:</span> (.*?)</div>.*?<span>VIEWS:</span> (.*?)</div>', data, re.S)
@@ -224,8 +227,9 @@ class epornerFilmScreen(Screen):
 				for (phUrl, phTitle, phImage, phRuntime, phViews) in phMovies:
 					self.filmliste.append((decodeHtml(phTitle), phUrl, phImage, phRuntime, phViews))
 				self.chooseMenuList.setList(map(epornerFilmListEntry, self.filmliste))
+				self.chooseMenuList.moveToIndex(0)
+				self.keyLocked = False
 				self.showInfos()
-		self.keyLocked = False
 
 	def dataError(self, error):
 		print error

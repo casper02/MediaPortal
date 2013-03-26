@@ -64,6 +64,7 @@ class pinkrodGenreScreen(Screen):
 			self.genreliste.insert(0, ("Newest", "http://www.pinkrod.com/", None))
 			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.chooseMenuList.setList(map(pinkrodGenreListEntry, self.genreliste))
+			self.chooseMenuList.moveToIndex(0)
 			self.keyLocked = False
 			self.showInfos()
 
@@ -217,8 +218,9 @@ class pinkrodFilmScreen(Screen):
 			for (phUrl, phTitle, phImage) in phMovies:
 				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage))
 			self.chooseMenuList.setList(map(pinkrodFilmListEntry, self.filmliste))
+			self.chooseMenuList.moveToIndex(0)
+			self.keyLocked = False
 			self.showInfos()
-		self.keyLocked = False
 
 	def dataError(self, error):
 		print error

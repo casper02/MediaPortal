@@ -65,6 +65,7 @@ class redtubeGenreScreen(Screen):
 			self.genreliste.insert(0, ("Newest", "http://www.redtube.com/?page=", None))
 			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.chooseMenuList.setList(map(redtubeGenreListEntry, self.genreliste))
+			self.chooseMenuList.moveToIndex(0)
 			self.keyLocked = False
 			self.showInfos()	
 
@@ -217,8 +218,9 @@ class redtubeFilmScreen(Screen):
 			for (phUrl, phTitle, phImage, phRuntime, phViews) in phMovies:
 				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage, phRuntime, phViews))
 			self.chooseMenuList.setList(map(redtubeFilmListEntry, self.filmliste))
+			self.chooseMenuList.moveToIndex(0)
+			self.keyLocked = False
 			self.showInfos()
-		self.keyLocked = False
 
 	def dataError(self, error):
 		print error

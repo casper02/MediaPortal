@@ -64,6 +64,7 @@ class wetplaceGenreScreen(Screen):
 			self.genreliste.insert(0, ("Newest", "http://www.wetplace.com/", None))
 			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.chooseMenuList.setList(map(wetplaceGenreListEntry, self.genreliste))
+			self.chooseMenuList.moveToIndex(0)
 			self.keyLocked = False
 			self.showInfos()
 
@@ -217,8 +218,9 @@ class wetplaceFilmScreen(Screen):
 			for (phUrl, phTitle, phImage) in phMovies:
 				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage))
 			self.chooseMenuList.setList(map(wetplaceFilmListEntry, self.filmliste))
+			self.chooseMenuList.moveToIndex(0)
+			self.keyLocked = False
 			self.showInfos()
-		self.keyLocked = False
 
 	def dataError(self, error):
 		print error

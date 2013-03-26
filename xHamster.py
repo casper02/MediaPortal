@@ -62,6 +62,7 @@ class xhamsterGenreScreen(Screen):
 			self.genreliste.insert(0, ("Top Rated", "http://www.xhamster.com/channels/new-hits-", None))
 			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.chooseMenuList.setList(map(xhamsterGenreListEntry, self.genreliste))
+			self.chooseMenuList.moveToIndex(0)
 			self.keyLocked = False
 			self.showInfos()
 
@@ -213,8 +214,9 @@ class xhamsterFilmScreen(Screen):
 				xhLink = "http://xhamster.com" + xhLink
 				self.streamList.append((decodeHtml(xhName), xhImage, xhLink, xhxhViews, xhRuntime))
 			self.streamMenuList.setList(map(xhamsterstreamListEntry, self.streamList))
+			self.streamMenuList.moveToIndex(0)
+			self.keyLocked = False
 			self.showInfos()
-		self.keyLocked = False
 
 	def showInfos(self):
 		ptTitle = self['genreList'].getCurrent()[0][0]

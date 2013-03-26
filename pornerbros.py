@@ -66,6 +66,7 @@ class pornerbrosGenreScreen(Screen):
 			self.genreliste.insert(0, ("New", "http://www.pornerbros.com/page", None))
 			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.chooseMenuList.setList(map(pornerbrosGenreListEntry, self.genreliste))
+			self.chooseMenuList.moveToIndex(0)
 			self.keyLocked = False
 			self.showInfos()	
 
@@ -222,8 +223,9 @@ class pornerbrosFilmScreen(Screen):
 			for (xhLink, xhName, xhIdnr, xhImage, xhRuntime, xhViews) in xhListe:
 				self.streamList.append((decodeHtml(xhName), xhLink, xhIdnr, xhImage, xhRuntime, xhViews))
 			self.streamMenuList.setList(map(pornerbrosStreamListEntry, self.streamList))
+			self.streamMenuList.moveToIndex(0)
+			self.keyLocked = False
 			self.showInfos()
-		self.keyLocked = False
 
 	def showInfos(self):
 		ptTitle = self['genreList'].getCurrent()[0][0]

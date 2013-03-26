@@ -190,8 +190,9 @@ class fourtubePornstarsScreen(Screen):
 			for (Url, Image, Title) in Movies:
 				self.filmliste.append((Title,Url,Image))
 			self.chooseMenuList.setList(map(fourtubePornstarsListEntry, self.filmliste))
+			self.chooseMenuList.moveToIndex(0)
+			self.keyLocked = False
 			self.showInfos()
-		self.keyLocked = False
 
 	def dataError(self, error):
 		print error
@@ -344,8 +345,9 @@ class fourtubeSitesScreen(Screen):
 				Url = 'http://www.4tube.com' + Url
 				self.filmliste.append((Title,Url,Image))
 			self.chooseMenuList.setList(map(fourtubeSitesListEntry, self.filmliste))
+			self.chooseMenuList.moveToIndex(0)
+			self.keyLocked = False
 			self.showInfos()
-		self.keyLocked = False
 
 	def dataError(self, error):
 		print error
@@ -499,8 +501,9 @@ class fourtubeFilmScreen(Screen):
 			for (phUrl, phImage, phTitle, phRuntime) in phMovies:
 				self.filmliste.append((phTitle,phUrl,phImage,phRuntime))
 			self.chooseMenuList.setList(map(fourtubeFilmListEntry, self.filmliste))
+			self.chooseMenuList.moveToIndex(0)
+			self.keyLocked = False
 			self.showInfos()
-		self.keyLocked = False
 
 	def dataError(self, error):
 		print error

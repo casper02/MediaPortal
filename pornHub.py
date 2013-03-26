@@ -285,6 +285,7 @@ class pornhubGenreScreen(Screen):
 			self.filmliste.insert(0, ("Most Recent", "http://www.pornhub.com/video?o=mr&page=", None))
 			self.filmliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.chooseMenuList.setList(map(pornhubGenreListEntry, self.filmliste))
+			self.chooseMenuList.moveToIndex(0)
 			self.keyLocked = False
 			self.showInfos()
 
@@ -425,8 +426,9 @@ class pornhubFilmScreen(Screen):
 			for (phUrl,phTitle,phImage,phRuntime,phViews,phAdded) in phMovies:
 				self.filmliste.append((phTitle,phUrl,phImage,phRuntime,phViews,phAdded))
 			self.chooseMenuList.setList(map(pornhubFilmListEntry, self.filmliste))
+			self.chooseMenuList.moveToIndex(0)
+			self.keyLocked = False
 			self.showInfos()
-		self.keyLocked = False
 
 	def dataError(self, error):
 		print error

@@ -65,6 +65,7 @@ class ahmeGenreScreen(Screen):
 			self.genreliste.insert(0, ("Most Recent", "http://www.ah-me.com/", None))
 			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.chooseMenuList.setList(map(ahmeGenreListEntry, self.genreliste))
+			self.chooseMenuList.moveToIndex(0)
 			self.keyLocked = False
 			self.showInfos()
 
@@ -214,8 +215,9 @@ class ahmeFilmScreen(Screen):
 			for (phUrl, phImage, phTitle, phRuntime) in phMovies:
 				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage, phRuntime))
 			self.chooseMenuList.setList(map(ahmeFilmListEntry, self.filmliste))
+			self.chooseMenuList.moveToIndex(0)
+			self.keyLocked = False
 			self.showInfos()
-		self.keyLocked = False
 
 	def dataError(self, error):
 		print error
