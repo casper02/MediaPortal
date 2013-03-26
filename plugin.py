@@ -56,6 +56,7 @@ from RTLNITROnow import *
 from RTL2now import *
 from SUPERRTLnow import *
 from zdf import *
+from orf import *
 
 # porn
 from ahme import *
@@ -138,6 +139,7 @@ config.mediaportal.showRTL2now = ConfigYesNo(default = True)
 config.mediaportal.showRTLnitro = ConfigYesNo(default = True)
 config.mediaportal.showSUPERRTLnow = ConfigYesNo(default = True)
 config.mediaportal.showZDF = ConfigYesNo(default = True)
+config.mediaportal.showORF = ConfigYesNo(default = True)
 
 # porn
 config.mediaportal.show4tube = ConfigYesNo(default = False)
@@ -232,6 +234,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige RTLNITRONOW:", config.mediaportal.showRTLnitro))
 		self.configlist.append(getConfigListEntry("Zeige SUPERRTLNOW:", config.mediaportal.showSUPERRTLnow))
 		self.configlist.append(getConfigListEntry("Zeige ZDF:", config.mediaportal.showZDF))
+		self.configlist.append(getConfigListEntry("Zeige ORF:", config.mediaportal.showORF))
 		self.configlist.append(getConfigListEntry("Zeige ScienceTV:", config.mediaportal.showScienceTV))
 		self.configlist.append(getConfigListEntry("Zeige Doku.me:", config.mediaportal.showDoku))
 		self.configlist.append(getConfigListEntry("Zeige Myvideo:", config.mediaportal.showMyvideo))
@@ -422,6 +425,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.movies.append(self.hauptListEntry("SUPERRTLNOW", "superrtlnow"))
 		if config.mediaportal.showZDF.value:
 			self.movies.append(self.hauptListEntry("ZDF", "zdf"))
+		if config.mediaportal.showZDF.value:
+			self.movies.append(self.hauptListEntry("ORF", "orf"))
 		# info
 		if config.mediaportal.showDoku.value:
 			self.infos.append(self.hauptListEntry("Doku.me", "doku"))		
@@ -737,6 +742,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(SUPERRTLnowGenreScreen)
 		elif auswahl == "ZDF":
 			self.session.open(ZDFGenreScreen)
+		elif auswahl == "ORF":
+			self.session.open(ORFGenreScreen)
 		# porn
 		elif auswahl == "4Tube":
 			if config.mediaportal.pornpin.value:
@@ -1004,6 +1011,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("SUPERRTLNOW", "superrtlnow", "Mediathek"))
 		if config.mediaportal.showZDF.value:
 			self.plugin_liste.append(("ZDF", "zdf", "Mediathek"))
+		if config.mediaportal.showORF.value:
+			self.plugin_liste.append(("ORF", "orf", "Mediathek"))
 			
 		### porn
 		if config.mediaportal.show4tube.value:
@@ -1280,6 +1289,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(SUPERRTLnowGenreScreen)
 		elif auswahl == "ZDF":
 			self.session.open(ZDFGenreScreen)
+		elif auswahl == "ORF":
+			self.session.open(ORFGenreScreen)
 		# porn
 		elif auswahl == "4Tube":
 			if config.mediaportal.pornpin.value:
