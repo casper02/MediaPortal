@@ -196,8 +196,9 @@ class beegFilmScreen(Screen):
 				self.filmliste.append((phTitle, phUrl, phImage))
 				x = x + 1
 			self.chooseMenuList.setList(map(beegFilmListEntry, self.filmliste))
+			self.chooseMenuList.moveToIndex(0)
+			self.keyLocked = False
 			self.showInfos()
-		self.keyLocked = False
 
 	def dataError(self, error):
 		print error
