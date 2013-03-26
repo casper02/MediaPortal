@@ -1,0 +1,33 @@
+<!-- showSongstoAll -->
+  <screen name="Songs.to" position="0,0" size="1280,720" flags="wfNoBorder">
+    <ePixmap position="2,1" size="1280,720" zPosition="-1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/userskin/images/mpback.png" />
+  <ePixmap position="50,39" size="630,60" zPosition="0" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/userskin/images/mediaportal.png" transparent="1" />
+    <widget source="global.CurrentTime" render="Label" position="840,47" size="300,28" font="mediaportal; 26" halign="left" backgroundColor="#26181d20" transparent="1" foregroundColor="#00555555">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="1140,47" size="100,28" font="mediaportal;26" halign="center" backgroundColor="#26181d20" transparent="1" foregroundColor="#00555555">
+      <convert type="ClockToText">Default</convert>
+    </widget>
+    <widget source="session.VideoPicture" render="Pig" position="913,136" size="328,186" zPosition="3" backgroundColor="transparent" />
+    <eLabel position="912,135" size="330,188" backgroundColor="#00ffffff" zPosition="0" name="Videoback" foregroundColor="#00ffffff" />
+    <!-- select screen -->
+    <widget name="streamlist" position="55,175" size="850,400" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/userskin/images/sel.png" foregroundColor="#00555555" zPosition="0" />
+    <widget name="songtitle" position="913,406" size="328,60" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="mediaportal; 22" valign="center" halign="center" />
+    <widget source="session.CurrentService" render="Label" position="1028,646" size="90,25" font="mediaportal; 20" foregroundColor="#00ffffff" backgroundColor="#26181d20" halign="center" transparent="1">
+      <convert type="ServicePosition">Length</convert>
+    </widget>
+    <widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/userskin/images/m_no_coverArt.png" position="998,487" size="160,120" transparent="1" alphatest="blend" />
+    <widget name="artist" position="913,337" size="328,60" backgroundColor="#26181d20" transparent="1" font="mediaportal; 22" valign="center" foregroundColor="#00ffffff" halign="center" />
+    <eLabel text="Album" position="85,625" size="100,25" backgroundColor="#26181d20" transparent="1" foregroundColor="#00ffffff" font="mediaportal;20" valign="top" />
+    <widget name="album" position="185,625" size="580,25" backgroundColor="#26181d20" transparent="1" font="mediaportal;18" valign="top" foregroundColor="#00ffffff" />
+    <widget source="session.CurrentService" render="Progress" position="913,632" size="328,10" backgroundColor="#26181d20" borderWidth="1" borderColor="#00555555" transparent="1">
+      <convert type="ServicePosition">Position</convert>
+    </widget>
+    <widget source="session.CurrentService" render="Label" position="913,645" size="90,25" backgroundColor="#26181d20" transparent="1" font="mediaportal; 20" valign="center" halign="left" foregroundColor="#00ffffff">
+      <convert type="ServicePosition">Position</convert>
+    </widget>
+    <widget source="session.CurrentService" render="Label" position="1151,645" size="90,25" backgroundColor="#26181d20" transparent="1" font="mediaportal; 20" valign="center" halign="right" foregroundColor="#00ffffff">
+      <convert type="ServicePosition">Remaining</convert>
+    </widget>
+    <ePixmap name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/userskin/images/mplayer.png" position="902,614" size="350,55" transparent="1" alphatest="blend" />
+  </screen>

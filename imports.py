@@ -3,7 +3,7 @@ from Components.Label import Label
 from Components.ConfigList import ConfigListScreen
 from Components.Sources.StaticText import StaticText
 from Components.ActionMap import NumberActionMap, ActionMap
-from Components.config import config, ConfigSelection, getConfigListEntry, ConfigText, ConfigDirectory, ConfigYesNo, configfile, ConfigSelection, ConfigSubsection, ConfigPIN
+from Components.config import config, ConfigInteger, ConfigSelection, getConfigListEntry, ConfigText, ConfigDirectory, ConfigYesNo, configfile, ConfigSelection, ConfigSubsection, ConfigPIN, NoSave, ConfigNothing
 from Components.FileList import FileList, FileEntryComponent
 from Components.GUIComponent import GUIComponent
 from Components.MenuList import MenuList
@@ -24,6 +24,8 @@ from Screens.InputBox import PinInput
 from Screens.InfoBarGenerics import InfoBarSeek, InfoBarNotifications
 from Screens.InfoBar import MoviePlayer, InfoBar
 from twisted.web.client import downloadPage, getPage, error
+from twisted.internet import reactor
+from twisted.internet import defer
 from Tools.Directories import fileExists, resolveFilename, SCOPE_PLUGINS
 from Tools.LoadPixmap import LoadPixmap
 
