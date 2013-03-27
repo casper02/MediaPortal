@@ -1,79 +1,76 @@
 # General imports
-from imports import *
-from decrypt import *
+from resources.imports import *
+from resources.decrypt import *
 	
 # Stream-Sites import
-from forPlayers import *
-from dokuMe import *
-from roflVideos import *
-#from streamJunkies import *
-from focus import *
-#from yourFreeTV import *
-from tvKino import *
-from filmOn import *
-from netzKino import *
-from kinoKiste import *
-from failTo import *
-from sportBild import *
-from kinderKino import *
-from myVideo import *
-from laOla import *
-from burningSeries import *
-from filmTrailer import *
-from firstChannel import *
-from radio import *
-from ccZwei import *
-from basKino import *
-from kinoxTo import *
-from vuTechTalk import *
-from dreamScreenCast import *
-from konzertOase import *
-from streamOase import *
-from autoBild import *
-from nhl import *
-from spox import *
-from tivi import *
-from songsTo import *
-from myEntertainment import *
-from movie2k import *
-from iStreamWS import *
-#from UltimateStreams import *
-from mahlzeitTV import *
-from appletrailers import *
-from DOKUh import *
-from DokuHouse import *
-from AllMusicHouse import *
-from LiveLeak import *
-from DokuStream import *
-from ScienceTV import *
-from SzeneStreams import *
+from additions.forplayers import *
+from additions.dokume import *
+from additions.roflvideos import *
+from additions.focus import *
+from additions.tvkino import *
+from additions.filmon import *
+from additions.netzkino import *
+from additions.kinokiste import *
+from additions.failto import *
+from additions.sportbild import *
+from additions.kinderkino import *
+from additions.myvideo import *
+from additions.laola import *
+from additions.burningseries import *
+from additions.filmtrailer import *
+from additions.firstchannel import *
+from additions.radio import *
+from additions.cczwei import *
+from additions.baskino import *
+from additions.kinoxto import *
+from additions.vutechtalk import *
+from additions.dreamscreencast import *
+from additions.konzertoase import *
+from additions.streamoase import *
+from additions.autobild import *
+from additions.nhl import *
+from additions.spox import *
+from additions.tivi import *
+from additions.songsto import *
+from additions.myentertainment import *
+from additions.movie2k import *
+from additions.iStreamws import *
+from additions.mahlzeittv import *
+from additions.appletrailers import *
+from additions.dokuh import *
+from additions.dokuhouse import *
+from additions.allmusichouse import *
+from additions.liveleak import *
+from additions.dokustream import *
+from additions.sciencetv import *
+from additions.szenestreams import *
 
 # mediatheken
-from VOXnow import *
-from RTLnow import *
-from NTVnow import *
-from RTLNITROnow import *
-from RTL2now import *
-from SUPERRTLnow import *
-from zdf import *
-from orf import *
+from additions.voxnow import *
+from additions.rtlnow import *
+from additions.ntvnow import *
+from additions.rtlnitronow import *
+from additions.rtl2now import *
+from additions.superrtlnow import *
+from additions.zdf import *
+from additions.orf import *
 
 # porn
-from ahme import *
-from amateurporn import *
-from beeg import *
-from eporner import *
-from hdporn import *
-from pinkrod import *
-from pornerbros import *
-from pornHub import *
-from pornrabbit import *
-from redtube import *
-from thenewporn import *
-from wetplace import *
-from xHamster import *
-from x4tube import *
-from youporn import *
+from additions.ahme import *
+from additions.amateurporn import *
+from additions.beeg import *
+from additions.eporner import *
+from additions.hdporn import *
+from additions.pinkrod import *
+from additions.pornerbros import *
+from additions.pornhub import *
+from additions.pornrabbit import *
+from additions.redtube import *
+from additions.thenewporn import *
+from additions.wetplace import *
+from additions.xhamster import *
+from additions.x4tube import *
+from additions.youporn import *
 
 config.mediaportal = ConfigSubsection()
 config.mediaportal.pincode = ConfigPIN(default = 0000)
@@ -88,12 +85,10 @@ config.mediaportal.pornpin = ConfigYesNo(default = True)
 config.mediaportal.showDoku = ConfigYesNo(default = True)
 config.mediaportal.showRofl = ConfigYesNo(default = True)
 config.mediaportal.showFail = ConfigYesNo(default = True)
-#config.mediaportal.showStream = ConfigYesNo(default = True)
 config.mediaportal.showKinoKiste = ConfigYesNo(default = True)
 config.mediaportal.showStreamOase = ConfigYesNo(default = True)
 config.mediaportal.showMyvideo = ConfigYesNo(default = True)
 config.mediaportal.showFocus = ConfigYesNo(default = True)
-#config.mediaportal.showYourfree = ConfigYesNo(default = True)
 config.mediaportal.showFilmOn = ConfigYesNo(default = True)
 config.mediaportal.showTvkino = ConfigYesNo(default = True)
 config.mediaportal.showSpobox = ConfigYesNo(default = True)
@@ -208,7 +203,6 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige Movie2k:", config.mediaportal.showM2k))
 		self.configlist.append(getConfigListEntry("Zeige Konzert Oase:", config.mediaportal.showKoase))
 		self.configlist.append(getConfigListEntry("Zeige 1channel:", config.mediaportal.show1channel))
-		#self.configlist.append(getConfigListEntry("Zeige UltimateStreams:", config.mediaportal.showUstreams))
 		
 		### Sport
 		self.configlist.append(getConfigListEntry("----- Sport -----", config.mediaportal.fake_entry))
@@ -344,7 +338,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			
 		Screen.__init__(self, session)
 
-		registerFont("/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/mediaportal.ttf", "mediaportal", 100, False)
+		registerFont("/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/resources/mediaportal.ttf", "mediaportal", 100, False)
 		
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "HelpActions"], {
 			"ok"    : self.keyOK,
@@ -403,8 +397,6 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.movies.append(self.hauptListEntry("Tivi", "tivi"))
 		if config.mediaportal.showMEHD.value:
 			self.movies.append(self.hauptListEntry("My-Entertainment", "mehd"))
-		if config.mediaportal.showUstreams.value:
-			self.movies.append(self.hauptListEntry("UltimateStreams", "ustreams"))
 		if config.mediaportal.showM2k.value:
 			self.movies.append(self.hauptListEntry("Movie2k", "movie2k"))
 		if config.mediaportal.showIStream.value:
@@ -471,8 +463,6 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.fun.append(self.hauptListEntry("Fail.to", "fail"))
 		if config.mediaportal.showLiveLeak.value:
 			self.fun.append(self.hauptListEntry("LiveLeak", "liveleak"))
-		#if config.mediaportal.showYourfree.value:
-		#	self.fun.append(self.hauptListEntry("YourfreeTv", "yourfreetv"))
 		if config.mediaportal.showFilmOn.value:
 			self.fun.append(self.hauptListEntry("FilmOn", "filmon"))
 		if config.mediaportal.showTvkino.value:
@@ -653,8 +643,6 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(sportBildScreen)
 		elif auswahl == "Laola1 Live":
 			self.session.open(laolaScreen)
-		#elif auswahl == "Streamjunkies":
-		#	self.session.open(streamGenreScreen)
 		elif auswahl == "KinoKiste":
 			self.session.open(kinokisteGenreScreen)
 		elif auswahl == "Burning-Series":
@@ -663,8 +651,6 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(chMain)
 		elif auswahl == "Focus":
 			self.session.open(focusGenre)
-		#elif auswahl == "YourfreeTv":
-		#	self.session.open(yourFreeTv)
 		elif auswahl == "FilmOn":
 			self.session.open(filmON)
 		elif auswahl == "NetzKino":
@@ -707,8 +693,6 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(m2kGenreScreen, "default")
 		elif auswahl == "IStream":
 			self.session.open(showIStreamGenre, "default")
-		elif auswahl == "UltimateStreams":
-			self.session.open(showUSGenre)
 		elif auswahl == "mahlzeit.tv":
 			self.session.open(mahlzeitMainScreen)
 		elif auswahl == "AppleTrailer":
@@ -933,8 +917,6 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("Tivi", "tivi", "Mediathek"))
 		if config.mediaportal.showMEHD.value:
 			self.plugin_liste.append(("My-Entertainment", "mehd", "Grauzone"))
-		if config.mediaportal.showUstreams.value:
-			self.plugin_liste.append(("UltimateStreams", "ustreams", "Grauzone"))
 		if config.mediaportal.showM2k.value:
 			self.plugin_liste.append(("Movie2k", "movie2k", "Grauzone"))
 		if config.mediaportal.showIStream.value:
@@ -1080,7 +1062,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		
 		Screen.__init__(self, session)
 
-		registerFont("/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/mediaportal.ttf", "mediaportal", 100, False)
+		registerFont("/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/resources/mediaportal.ttf", "mediaportal", 100, False)
 		
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions", "HelpActions"], {
 			"ok"    : self.keyOK,
@@ -1200,8 +1182,6 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(sportBildScreen)
 		elif auswahl == "Laola1 Live":
 			self.session.open(laolaScreen)
-		#elif auswahl == "Streamjunkies":
-		#	self.session.open(streamGenreScreen)
 		elif auswahl == "KinoKiste":
 			self.session.open(kinokisteGenreScreen)
 		elif auswahl == "Burning-Series":
@@ -1210,8 +1190,6 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(chMain)
 		elif auswahl == "Focus":
 			self.session.open(focusGenre)
-		#elif auswahl == "YourfreeTv":
-		#	self.session.open(yourFreeTv)
 		elif auswahl == "FilmOn":
 			self.session.open(filmON)
 		elif auswahl == "NetzKino":
@@ -1254,8 +1232,6 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(m2kGenreScreen, "default")
 		elif auswahl == "IStream":
 			self.session.open(showIStreamGenre, "default")
-		elif auswahl == "UltimateStreams":
-			self.session.open(showUSGenre)
 		elif auswahl == "mahlzeit.tv":
 			self.session.open(mahlzeitMainScreen)
 		elif auswahl == "AppleTrailer":
