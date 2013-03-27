@@ -204,7 +204,7 @@ class bsWatchlist(Screen, ConfigListScreen):
 			return
 		
 		selectedName = self['streamlist'].getCurrent()[0][0]
-		pathTmp = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/resources/resources/bs_watchlist.tmp"
+		pathTmp = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/resources/bs_watchlist.tmp"
 		writeTmp = open(pathTmp,"w")	
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/resources/bs_watchlist"
 		if fileExists(path):
@@ -262,21 +262,24 @@ class bsStaffeln(Screen, ConfigListScreen):
 		getPage(self.serienUrl, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 		
 	def parseData(self, data):
-		staffeln = re.findall('<li class=".*?"><a href="(serie/.*?)">(.*?)</a></li>', data, re.S)
-		details = re.findall('<strong>Beschreibung</strong>.*?<p>(.*?)</p>.*?<img src="(.*?)" alt="Cover"/>', data, re.S)
-		if staffeln:
-			for (bsUrl,bsStaffel) in staffeln:
-				bsUrl = "http://www.burning-seri.es/" + bsUrl
-				bsStaffel = "Staffel %s" % bsStaffel
-				self.streamList.append((bsStaffel,bsUrl))
-			self.streamMenuList.setList(map(bsListEntry, self.streamList))
-			self.keyLocked = False
-		if details:
-			(handlung,cover) = details[0]
-			self['handlung'].setText(decodeHtml(handlung))
-			coverUrl = "http://www.burning-seri.es/" + cover
-			print coverUrl
-			downloadPage(coverUrl, "/tmp/bsIcon.jpg").addCallback(self.ShowCover)
+		details = re.findall('<strong>Beschreibung</strong>.*?<p>(.*?)</p>.*?<img\ssrc="(.*?)"\salt="Cover"\s{0,2}/>', data, re.S)
+		staffeln_raw = re.findall('<ul class="pages">(.*?)</ul>', data, re.S)
+		if staffeln_raw:
+			staffeln = re.findall('<li class=".*?"><a.*?href="(serie/.*?)">(.*?)</a></li>', staffeln_raw[0], re.S)		
+			if staffeln:
+				for (bsUrl,bsStaffel) in staffeln:
+					bsUrl = "http://www.burning-seri.es/" + bsUrl
+					bsStaffel = "Staffel %s" % bsStaffel
+					bsStaffel = bsStaffel.replace('Staffel Film(e)','Film(e)')
+					self.streamList.append((bsStaffel,bsUrl))
+				self.streamMenuList.setList(map(bsListEntry, self.streamList))
+				self.keyLocked = False
+			if details:
+				(handlung,cover) = details[0]
+				self['handlung'].setText(decodeHtml(handlung))
+				coverUrl = "http://www.burning-seri.es/" + cover
+				print coverUrl
+				downloadPage(coverUrl, "/tmp/bsIcon.jpg").addCallback(self.ShowCover)
 		
 	def ShowCover(self, picData):
 		if fileExists("/tmp/bsIcon.jpg"):
@@ -302,6 +305,7 @@ class bsStaffeln(Screen, ConfigListScreen):
 
 		staffel = self['streamlist'].getCurrent()[0][0]
 		staffel = staffel.replace('Staffel ','')
+		staffel = staffel.replace('Film(e)','0')		
 		auswahl = self['streamlist'].getCurrent()[0][1]
 		print auswahl, staffel
 		self.session.open(bsEpisoden, auswahl, staffel)
