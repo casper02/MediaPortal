@@ -366,7 +366,7 @@ class bsEpisoden(Screen, ConfigListScreen):
 		
 	def parseData(self, data):
 		episoden = re.findall('<tr>.*?<td>(\d+)</td>.*?<td><a href="(serie/.*?)">', data, re.S)
-		details = re.findall('<strong>Beschreibung</strong>.*?<p>(.*?)</p>.*?<img src="(.*?)" alt="Cover"/>', data, re.S)
+		details = re.findall('<strong>Beschreibung</strong>.*?<p>(.*?)</p>.*?<img\ssrc="(.*?)"\salt="Cover"\s{0,2}/>', data, re.S)
 		if episoden:
 			for (bsEpisode,bsUrl) in episoden:
 				bsTitle = re.findall('/\d+/\d+-(.*[0-9a-z]+)', bsUrl, re.S|re.I)
@@ -405,15 +405,16 @@ class bsEpisoden(Screen, ConfigListScreen):
 			return
 
 		auswahl = self['streamlist'].getCurrent()[0][1]
+		title = self['streamlist'].getCurrent()[0][0]
 		print auswahl
-		self.session.open(bsStreams, auswahl)
+		self.session.open(bsStreams, auswahl, title)
 				
 	def keyCancel(self):
 		self.close()
 		
 class bsStreams(Screen, ConfigListScreen):
 	
-	def __init__(self, session, serienUrl):
+	def __init__(self, session, serienUrl, title):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/bsStreams.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
@@ -424,6 +425,7 @@ class bsStreams(Screen, ConfigListScreen):
 			f.close()
 			
 		self.serienUrl = serienUrl
+		self.streamname = title
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
@@ -450,7 +452,7 @@ class bsStreams(Screen, ConfigListScreen):
 		
 	def parseData(self, data):
 		streams = re.findall('<li><a href="(serie/.*?)"><span\n            class="icon.(.*?)"></span>', data)
-		details = re.findall('<strong>Beschreibung</strong>.*?<p>(.*?)</p>.*?<img src="(.*?)" alt="Cover"/>', data, re.S)
+		details = re.findall('id="desc_spoiler">\s{0,10}(.*?)</div>.*?<img\ssrc="(.*?)"\salt="Cover"\s{0,2}/>', data, re.S)
 		if streams:
 			for (bsUrl,bsStream) in streams:
 				bsUrl = "http://www.burning-seri.es/" + bsUrl
@@ -494,7 +496,7 @@ class bsStreams(Screen, ConfigListScreen):
 	def playfile(self, link):
 		print link
 		sref = eServiceReference(0x1001, 0, link)
-		#sref.setName(self.filmname)
+		sref.setName(self.streamname)
 		self.session.open(MoviePlayer, sref)
 		
 	def findStream(self, data):
