@@ -151,8 +151,10 @@ class get_stream_link:
 				print link
 				hash = re.findall('http://flashx.tv/video/(.*?)/', link)
 				if hash:
-					url = "http://play.flashx.tv/nuevo/player/cst.php?hash=%s" % hash[0]
-					getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.flashx_tv).addErrback(self.errorload)
+					#url = "http://play.flashx.tv/nuevo/player/cst.php?hash=%s" % hash[0]
+					#getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.flashx_tv3b).addErrback(self.errorload)
+					#print "flashx_tv3b: ",link
+					getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.flashx_tv3b).addErrback(self.errorload)
 				
 				hash2 = re.findall('embed.php.vid=(.*?)&', link, re.S)
 				if hash2:
@@ -328,18 +330,27 @@ class get_stream_link:
 		hash = re.findall('http://play.flashx.tv/player/fxtv.php.hash=(.*?)&', data, re.S)
 		if hash:
 			url = "http://play.flashx.tv/nuevo/player/cst.php?hash=%s" % hash[0]
-			print url
+			#print url
 			getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.flashx_tv).addErrback(self.errorload)
 		else:
 			self.stream_not_found()			
 
 	def flashx_tv3(self, link):
+		#print "flashx_tv3: ",link
 		fx = Flashx()
 		stream_url = fx.getVidUrl(link)
 		if stream_url:
 			self._callback(stream_url)
 		else:
 			self.stream_not_found()
+		
+	def flashx_tv3b(self, data):
+		stream_url = re.findall('id="normal_player_cont">.*?src="(.*?)"', data, re.S)
+		if stream_url:
+			self.flashx_tv3(stream_url[0])
+		else:
+			self.flashx_tv3("")
+			
 		
 	def vidstream_in(self, data, url):
 		id = re.findall('type="hidden" name="id".*?value="(.*?)"', data, re.S)
