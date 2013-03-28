@@ -93,7 +93,7 @@ class mahlzeitMainScreen(Screen):
 		self["kuchen"].setList(self.kuchen)
 		
 		self.weiteres.append(self.hauptListEntry("Tipps & Tricks"))
-		self.weiteres.append(self.hauptListEntry("Suchen.."))	
+		#self.weiteres.append(self.hauptListEntry("Suchen.."))	
 		self["weiteres"].setList(self.weiteres)
 		
 		self.keyRight()
