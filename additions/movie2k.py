@@ -1075,19 +1075,19 @@ class m2kStreamListeScreen(Screen):
 			if link:
 				link_found = True
 				print link
-				get_stream_link(self.session).check_link(link[0], self.got_link)
+				get_stream_link(self.session).check_link(link[0], self.got_link, False)
 				
 			link = re.findall('<div id="emptydiv"><iframe.*?src=["|\'](.*?)["|\']', data, re.S)
 			if link:
 				link_found = True
 				print link[0]
-				get_stream_link(self.session).check_link(link[0], self.got_link)
+				get_stream_link(self.session).check_link(link[0], self.got_link, False)
 				
 			link = re.findall('<div id="emptydiv"><script type="text/javascript" src=["|\'](.*?)["|\']>', data, re.S)
 			if link:
 				link_found = True
 				print link[0].replace('?embed','')
-				get_stream_link(self.session).check_link(link[0].replace('?embed',''), self.got_link)
+				get_stream_link(self.session).check_link(link[0].replace('?embed',''), self.got_link, False)
 
 			if not link_found:
 				message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=5)
@@ -1173,19 +1173,19 @@ class m2kPartListeScreen(Screen):
 		if link:
 			link_found = True
 			print link
-			get_stream_link(self.session).check_link(link[0], self.got_link)
+			get_stream_link(self.session).check_link(link[0], self.got_link, False)
 			
 		link = re.findall('<div id="emptydiv"><iframe.*?src=["|\'](.*?)["|\']', data, re.S)
 		if link:
 			link_found = True
 			print link[0]
-			get_stream_link(self.session).check_link(link[0], self.got_link)
+			get_stream_link(self.session).check_link(link[0], self.got_link, False)
 			
 		link = re.findall('<div id="emptydiv"><script type="text/javascript" src=["|\'](.*?)["|\']>', data, re.S)
 		if link:
 			link_found = True
 			print link[0].replace('?embed','')
-			get_stream_link(self.session).check_link(link[0].replace('?embed',''), self.got_link)
+			get_stream_link(self.session).check_link(link[0].replace('?embed',''), self.got_link, False)
 
 		if not link_found:
 			message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=5)

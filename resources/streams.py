@@ -17,9 +17,11 @@ class get_stream_link:
 	def __init__(self, session):
 		self._callback = None
 		self.session = session
+		self.showmsgbox = True
 
-	def check_link(self, data, got_link):
+	def check_link(self, data, got_link, showmsgbox=True):
 		self._callback = got_link
+		self.showmsgbox = showmsgbox
 		print data
 		if data:		
 			if re.match(".*?http://www.putlocker.com/(file|embed)/", data, re.S):
@@ -194,11 +196,13 @@ class get_stream_link:
 			else:
 				message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=3)
 		else:
-			message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=3)
+			if self.showmsgbox:
+				message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=3)
 				
 	def stream_not_found(self):
 		#self._callback(None)
-		message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=3)
+		if self.showmsgbox:
+			message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=3)
 
 	def zooupload(self, data):
 		get_packedjava = re.findall("<script type=.text.javascript.>eval.function(.*?)</script>", data, re.S|re.DOTALL)
