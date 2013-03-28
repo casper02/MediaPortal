@@ -158,7 +158,7 @@ class get_stream_link:
 				if hash2:
 					getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.flashx_tv2).addErrback(self.errorload)
 					
-				if re.match('.*?embed.php\?hash=', link):
+				if re.match('.*?embed.php\?hash=', link) or re.match('.*?embed_player.php\?vid=', link):
 					self.flashx_tv3(link)
 				
 				else:
