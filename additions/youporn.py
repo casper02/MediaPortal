@@ -255,8 +255,12 @@ class youpornFilmScreen(Screen):
 
 	def callbackkeyPageNumber(self, answer):
 		if answer is not None:
-			if int(answer) < self.lastpage + 1:
-				self.page = int(answer)
+			answer = re.findall('\d+', answer)
+		else:
+			return
+		if answer:
+			if int(answer[0]) < self.lastpage + 1:
+				self.page = int(answer[0])
 				self.loadpage()
 			else:
 				self.page = self.lastpage

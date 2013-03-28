@@ -263,8 +263,12 @@ class epornerFilmScreen(Screen):
 
 	def callbackkeyPageNumber(self, answer):
 		if answer is not None:
-			if int(answer)-1 < self.lastpage:
-				self.page = int(answer)-1
+			answer = re.findall('\d+', answer)
+		else:
+			return
+		if answer:
+			if int(answer[0])-1 < self.lastpage:
+				self.page = int(answer[0])-1
 				self.loadpage()
 			else:
 				self.page = self.lastpage-1

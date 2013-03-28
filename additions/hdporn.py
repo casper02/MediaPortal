@@ -237,7 +237,11 @@ class hdpornFilmScreen(Screen):
 
 	def callbackkeyPageNumber(self, answer):
 		if answer is not None:
-			self.page = int(answer)
+			answer = re.findall('\d+', answer)
+		else:
+			return
+		if answer:
+			self.page = int(answer[0])
 			self.loadpage()
 
 	def keyPageDown(self):
