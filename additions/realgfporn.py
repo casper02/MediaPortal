@@ -179,15 +179,21 @@ class realgfpornFilmScreen(Screen):
 				phViews = phViews.replace('\n','')
 				phViews = phViews.replace('\t','')
 				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage, phRuntime, phViews))
-			self.chooseMenuList.setList(map(realgfpornFilmListEntry, self.filmliste))
-			self.chooseMenuList.moveToIndex(0)
-			self.keyLocked = False
-			self.showInfos()
+		else:
+			if re.search('no\sresults\swere\sfound', data):
+				self.filmliste.append(('Keine Suchergebnisse gefunden.', None, None, None, None))
+		self.chooseMenuList.setList(map(realgfpornFilmListEntry, self.filmliste))
+		self.chooseMenuList.moveToIndex(0)
+		self.keyLocked = False
+		self.showInfos()
 
 	def dataError(self, error):
 		print error
 
 	def showInfos(self):
+		phUrl = self['genreList'].getCurrent()[0][1]
+		if phUrl == None:
+			return
 		phTitle = self['genreList'].getCurrent()[0][0]
 		phImage = self['genreList'].getCurrent()[0][2]
 		phRuntime = self['genreList'].getCurrent()[0][3]
@@ -217,8 +223,12 @@ class realgfpornFilmScreen(Screen):
 
 	def callbackkeyPageNumber(self, answer):
 		if answer is not None:
-			if int(answer) < self.lastpage + 1:
-				self.page = int(answer)
+			answer = re.findall('\d+', answer)
+		else:
+			return
+		if answer:
+			if int(answer[0]) < self.lastpage + 1:
+				self.page = int(answer[0])
 				self.loadpage()
 			else:
 				self.page = self.lastpage
@@ -269,7 +279,8 @@ class realgfpornFilmScreen(Screen):
 			return
 		phTitle = self['genreList'].getCurrent()[0][0]
 		phLink = self['genreList'].getCurrent()[0][1]
-		print phLink
+		if phLink == None:
+			return
 		self.keyLocked = True
 		getPage(phLink, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVideoPage).addErrback(self.dataError)
 
@@ -278,7 +289,6 @@ class realgfpornFilmScreen(Screen):
 		if videoPage:
 			for phurl in videoPage:
 				url = phurl
-				print url
 				self.keyLocked = False
 				self.play(url)
 		
