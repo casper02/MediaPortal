@@ -6,6 +6,7 @@ from twisted.internet import defer
 from urllib import quote, urlencode
 import re, urllib2, urllib, cookielib
 from jsunpacker import cJsUnpacker
+from flashx import Flashx
 
 # cookies
 ck = {}
@@ -157,6 +158,9 @@ class get_stream_link:
 				if hash2:
 					getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.flashx_tv2).addErrback(self.errorload)
 					
+				if re.match('.*?embed.php\?hash=', link):
+					self.flashx_tv3(link)
+				
 				else:
 					self.stream_not_found()
 					
@@ -329,7 +333,14 @@ class get_stream_link:
 		else:
 			self.stream_not_found()			
 
-					
+	def flashx_tv3(self, link):
+		fx = Flashx()
+		stream_url = fx.getVidUrl(link)
+		if stream_url:
+			self._callback(stream_url)
+		else:
+			self.stream_not_found()
+		
 	def vidstream_in(self, data, url):
 		id = re.findall('type="hidden" name="id".*?value="(.*?)"', data, re.S)
 		fname = re.findall('type="hidden" name="fname".*?value="(.*?)"', data, re.S)
