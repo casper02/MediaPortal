@@ -247,17 +247,16 @@ class ORFStreamListeScreen(Screen):
 			return
 		title = self['List'].getCurrent()[0][0]
 		url = self['List'].getCurrent()[0][1]
-		
 		# wird das hier benoetigt?
 		#if config.mediaportal.useRtmpDump.value:
-		#	movieinfo = [url,title+".mp4"]
+		#	movieinfo = [url,title]
 		#	self.session.open(PlayRtmpMovie, movieinfo, title)
 		#else:
-			final = "%s" % url
-			print final
-			sref = eServiceReference(0x1001, 0, final)
-			sref.setName(title)
-			self.session.open(MoviePlayer, sref)
+		final = "%s" % url
+		print final
+		sref = eServiceReference(0x1001, 0, final)
+		sref.setName(title)
+		self.session.open(MoviePlayer, sref)
 		
 	def keyCancel(self):
 		self.close()
