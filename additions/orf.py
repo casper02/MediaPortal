@@ -34,7 +34,7 @@ class ORFGenreScreen(Screen):
 			"left" : self.keyLeft
 		}, -1)
 		
-		self['title'] = Label("ORF.de")
+		self['title'] = Label("ORF TVthek")
 		self['name'] = Label("Auswahl der Sendung")
 		self['handlung'] = Label("")
 		self['Pic'] = Pixmap()
@@ -127,7 +127,7 @@ class ORFFilmeListeScreen(Screen):
 			"cancel": self.keyCancel
 		}, -1)
 
-		self['title'] = Label("ORF.de")
+		self['title'] = Label("ORF TVthek")
 		self['name'] = Label("Folgen Auswahl")
 		
 		self.keyLocked = True
@@ -192,7 +192,7 @@ class ORFStreamListeScreen(Screen):
 			"cancel": self.keyCancel
 		}, -1)
 
-		self['title'] = Label("ORF.de")
+		self['title'] = Label("ORF TVthek")
 		self['name'] = Label("Folgen Auswahl")
 		
 		self.keyLocked = True
