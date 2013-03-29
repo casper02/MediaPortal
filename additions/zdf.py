@@ -48,7 +48,9 @@ class ZDFGenreScreen(Screen):
 		
 	def loadPage(self):
 		self.genreliste = []
-		self.genreliste += map(chr, xrange(ord('A'), ord('Z') + 1))
+		for c in xrange(26):
+			self.genreliste.append((chr(ord('A') + c), None))
+		self.genreliste.insert(0, ('0-9', None))
 		self.chooseMenuList.setList(map(ZDFGenreListEntry, self.genreliste))
 		self.keyLocked = False
 
