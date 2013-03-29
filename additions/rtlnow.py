@@ -278,7 +278,7 @@ class RTLnowFilmeListeScreen(Screen):
 			if config.mediaportal.useRtmpDump.value:
 				final = "%s' --swfVfy=1 --playpath=mp4:%s --app=rtlnow/_definst_ --pageUrl=http://rtl-now.rtl.de/ --tcUrl=rtmpe://fms-fra24.rtl.de/rtlnow/ --swfUrl=http://rtl-now.rtl.de/includes/vodplayer.swf'" % (host, playpath)
 				print final
-				movieinfo = [final,self.streamName+'.f4v']
+				movieinfo = [final,self.streamName]
 				self.session.open(PlayRtmpMovie, movieinfo, self.streamName)
 			else:
 				final = "%s swfUrl=http://rtl-now.rtl.de/includes/vodplayer.swf pageurl=%s playpath=mp4:%s swfVfy=1" % (host, self.pageurl, playpath)
