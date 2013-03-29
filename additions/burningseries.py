@@ -75,7 +75,7 @@ class bsSerien(Screen, ConfigListScreen):
 		with open(path, "r") as f:
 			self.skin = f.read()
 			f.close()
-			
+		
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
@@ -304,8 +304,8 @@ class bsStaffeln(Screen, ConfigListScreen):
 			return
 
 		staffel = self['streamlist'].getCurrent()[0][0]
-		staffel = staffel.replace('Staffel ','')
-		staffel = staffel.replace('Film(e)','0')		
+		staffel = staffel.replace('Staffel ','').replace('Film(e)','0')
+#		staffel = staffel.replace('Film(e)','0')		
 		auswahl = self['streamlist'].getCurrent()[0][1]
 		print auswahl, staffel
 		self.session.open(bsEpisoden, auswahl, staffel)
@@ -367,11 +367,20 @@ class bsEpisoden(Screen, ConfigListScreen):
 	def parseData(self, data):
 		episoden = re.findall('<tr>.*?<td>(\d+)</td>.*?<td><a href="(serie/.*?)">', data, re.S)
 		details = re.findall('<strong>Beschreibung</strong>.*?<p>(.*?)</p>.*?<img\ssrc="(.*?)"\salt="Cover"\s{0,2}/>', data, re.S)
+		bsStaffel2 = self.bsStaffel
+		if int(bsStaffel2) < 10:
+			bsStaffel3 = "S0"+str(bsStaffel2)
+		else:
+			bsStaffel3 = "S"+str(bsStaffel2)
 		if episoden:
 			for (bsEpisode,bsUrl) in episoden:
 				bsTitle = re.findall('/\d+/\d+-(.*[0-9a-z]+)', bsUrl, re.S|re.I)
 				bsUrl = "http://www.burning-seri.es/" + bsUrl
-				bsEpisode = "S%sE%s - %s" % (self.bsStaffel, bsEpisode, decodeHtml(bsTitle[0].replace('_',' ').replace('-',' ')))
+				if int(bsEpisode) < 10:
+					bsEpisode2 = "E0"+str(bsEpisode)
+				else:
+					bsEpisode2 = "E"+str(bsEpisode)
+				bsEpisode = "%s%s - %s" % (bsStaffel3, bsEpisode2, decodeHtml(bsTitle[0].replace('_',' ').replace('-',' ')))
 				self.streamList.append((bsEpisode,bsUrl))
 			self.streamMenuList.setList(map(bsListEntry, self.streamList))
 			self.keyLocked = False
