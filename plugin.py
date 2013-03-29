@@ -56,22 +56,22 @@ from additions.zdf import *
 from additions.orf import *
 
 # porn
-from additions.ahme import *
-from additions.amateurporn import *
-from additions.beeg import *
-from additions.eporner import *
-from additions.hdporn import *
-from additions.pinkrod import *
-from additions.pornerbros import *
-from additions.pornhub import *
-from additions.pornrabbit import *
-from additions.realgfporn import *
-from additions.redtube import *
-from additions.thenewporn import *
-from additions.wetplace import *
-from additions.xhamster import *
-from additions.x4tube import *
-from additions.youporn import *
+from additions.porn.ahme import *
+from additions.porn.amateurporn import *
+from additions.porn.beeg import *
+from additions.porn.eporner import *
+from additions.porn.hdporn import *
+from additions.porn.pinkrod import *
+from additions.porn.pornerbros import *
+from additions.porn.pornhub import *
+from additions.porn.pornrabbit import *
+from additions.porn.realgfporn import *
+from additions.porn.redtube import *
+from additions.porn.thenewporn import *
+from additions.porn.wetplace import *
+from additions.porn.xhamster import *
+from additions.porn.x4tube import *
+from additions.porn.youporn import *
 
 config.mediaportal = ConfigSubsection()
 config.mediaportal.pincode = ConfigPIN(default = 0000)
