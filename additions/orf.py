@@ -59,7 +59,7 @@ class ORFGenreScreen(Screen):
 			self.genreliste = []
 			for (url,title,image) in sendungen:
 				url = "http://tvthek.orf.at%s" % url
-				self.genreliste.append((title,url,image))
+				self.genreliste.append((decodeHtml(title),url,image))
 			self.chooseMenuList.setList(map(ORFGenreListEntry, self.genreliste))
 			self.loadPic()
 			self.keyLocked = False
@@ -179,7 +179,7 @@ class ORFFilmeListeScreen(Screen):
 			for (datum,url,title) in folgen:
 				url = "http://tvthek.orf.at%s" % url
 				title = "%s - %s" % (datum, title)
-				self.filmliste.append((title,url))
+				self.filmliste.append((decodeHtml(title),url))
 			self.chooseMenuList.setList(map(ORFFilmListEntry, self.filmliste))
 			self.keyLocked = False
 
@@ -238,7 +238,7 @@ class ORFStreamListeScreen(Screen):
 			self.streamliste = []
 			for (title,rtmp_link) in folgen:
 					print title
-					self.streamliste.append((title,rtmp_link))
+					self.streamliste.append((decodeHtml(title),rtmp_link))
 			self.chooseMenuList.setList(map(ORFFilmListEntry, self.streamliste))
 			self.keyLocked = False
 
