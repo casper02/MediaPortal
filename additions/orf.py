@@ -35,7 +35,7 @@ class ORFGenreScreen(Screen):
 		}, -1)
 		
 		self['title'] = Label("ORF.de")
-		self['name'] = Label("Auswahl der Sendungen.")
+		self['name'] = Label("Auswahl der Sendung")
 		self['handlung'] = Label("")
 		self['Pic'] = Pixmap()
 		
@@ -54,38 +54,19 @@ class ORFGenreScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
 		
 	def loadPageData(self, data):
-		sendungen = re.findall('<a href="(/programs/.*?)" title="(.*?)">.*?<img src="(http://tvthek.orf.at/assets.*?)"', data, re.S)
+		parse = re.search('<form\sid="programs"\saction="/programs/az"(.*)</form>', data, re.S)
+		sendungen = re.findall('<option\svalue=".*?(/programs/.*?)">(.*?)</option>', parse.group(1), re.S)
 		if sendungen:
 			self.genreliste = []
-			for (url,title,image) in sendungen:
+			for (url,title) in sendungen:
 				url = "http://tvthek.orf.at%s" % url
-				self.genreliste.append((decodeHtml(title),url,image))
+				self.genreliste.append((decodeHtml(title),url))
+			self.genreliste.sort()
 			self.chooseMenuList.setList(map(ORFGenreListEntry, self.genreliste))
-			self.loadPic()
 			self.keyLocked = False
 
 	def dataError(self, error):
 		print error
-
-	def loadPic(self):
-		streamName = self['List'].getCurrent()[0][0]
-		self['name'].setText(streamName)
-		streamPic = self['List'].getCurrent()[0][2]
-		downloadPage(streamPic, "/tmp/Icon.jpg").addCallback(self.ShowCover)
-			
-	def ShowCover(self, picData):
-		if fileExists("/tmp/Icon.jpg"):
-			self['Pic'].instance.setPixmap(None)
-			self.scale = AVSwitch().getFramebufferScale()
-			self.picload = ePicLoad()
-			size = self['Pic'].instance.size()
-			self.picload.setPara((size.width(), size.height(), self.scale[0], self.scale[1], False, 1, "#FF000000"))
-			if self.picload.startDecode("/tmp/Icon.jpg", 0, 0, False) == 0:
-				ptr = self.picload.getData()
-				if ptr != None:
-					self['Pic'].instance.setPixmap(ptr.__deref__())
-					self['Pic'].show()
-					del self.picload
 
 	def keyOK(self):
 		if self.keyLocked:
@@ -98,38 +79,30 @@ class ORFGenreScreen(Screen):
 		
 	def check_xml(self,data):
 		if re.match('.*?<span>Weitere Folgen</span>', data, re.S):
-			print "mehr folgen.."
+			print "mehrere Folgen"
 			self.session.open(ORFFilmeListeScreen, self.streamGenreLink)
+		elif re.search('Keine\saktuellen\sSendungen\svorhanden', data, re.S):
+			print "keine Folge"
+			message = self.session.open(MessageBox, _("Aus der von Ihnen gewaehlten Kategorie kann derzeit leider keine Sendung in der TVthek angeboten werden."), MessageBox.TYPE_INFO, timeout=5)
+			return
 		else:
-			print "eine fole."
-			xml = re.findall("ORF.flashXML = '(.*?)'", data, re.S)
+			print "eine Folge"
+			xml = re.findall("ORF.flashXML = '.*?Items(.*?)'", data, re.S)
 			if xml:
 				data = urllib.unquote(xml[0])
 				self.session.open(ORFStreamListeScreen, data)
 		
 	def keyLeft(self):
-		if self.keyLocked:
-			return
 		self['List'].pageUp()
-		self.loadPic()
 		
 	def keyRight(self):
-		if self.keyLocked:
-			return
 		self['List'].pageDown()
-		self.loadPic()
 		
 	def keyUp(self):
-		if self.keyLocked:
-			return
 		self['List'].up()
-		self.loadPic()
 
 	def keyDown(self):
-		if self.keyLocked:
-			return
 		self['List'].down()
-		self.loadPic()
 
 	def keyCancel(self):
 		self.close()
@@ -191,7 +164,7 @@ class ORFFilmeListeScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.get_xml).addErrback(self.dataError)
 
 	def get_xml(self, data):
-			xml = re.findall("ORF.flashXML = '(.*?)'", data, re.S)
+			xml = re.findall("ORF.flashXML = '.*?Items(.*?)'", data, re.S)
 			if xml:
 				data = urllib.unquote(xml[0])
 				self.session.open(ORFStreamListeScreen, data)
@@ -247,16 +220,15 @@ class ORFStreamListeScreen(Screen):
 			return
 		title = self['List'].getCurrent()[0][0]
 		url = self['List'].getCurrent()[0][1]
-		# wird das hier benoetigt?
-		#if config.mediaportal.useRtmpDump.value:
-		#	movieinfo = [url,title]
-		#	self.session.open(PlayRtmpMovie, movieinfo, title)
-		#else:
-		final = "%s" % url
-		print final
-		sref = eServiceReference(0x1001, 0, final)
-		sref.setName(title)
-		self.session.open(MoviePlayer, sref)
+		if config.mediaportal.useRtmpDump.value:
+			movieinfo = [url,title]
+			self.session.open(PlayRtmpMovie, movieinfo, title)
+		else:
+			final = "%s" % url
+			print final
+			sref = eServiceReference(0x1001, 0, final)
+			sref.setName(title)
+			self.session.open(MoviePlayer, sref)
 		
 	def keyCancel(self):
 		self.close()
