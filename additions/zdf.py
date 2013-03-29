@@ -119,12 +119,12 @@ class ZDFSubGenreScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
 		
 	def loadPageData(self, data):
-		sendungen = re.findall(' <teaserimage alt=".*?" key="236x133">(.*?)</teaserimage>.*?<title>(.*?)</title>.*?<detail>(.*?)</detail>.*?<assetId>(.*?)</assetId>', data, re.S)
+		sendungen = re.findall('<teaserimage alt=".*?" key="298x168">(.*?)</teaserimage>.*?<title>(.*?)</title>.*?<detail>(.*?)</detail>.*?<assetId>(.*?)</assetId>', data, re.S)
 		if sendungen:
 			for (image,title,handlung,id) in sendungen:
 				self.genreliste.append((decodeHtml(title),id,image,handlung))
 		else:
-			self.genreliste.append(('Keine Senungen mit diesem Buchstaben vorhanden.', None, None, None))
+			self.genreliste.append(('Keine Sendungen mit diesem Buchstaben vorhanden.', None, None, None))
 		self.chooseMenuList.setList(map(ZDFGenreListEntry, self.genreliste))
 		self.keyLocked = False
 		self.loadPic()
@@ -196,9 +196,9 @@ class ZDFFilmeListeScreen(Screen):
 	def __init__(self, session, streamGenreLink):
 		self.session = session
 		self.streamGenreLink = streamGenreLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/RTLnowFilmeScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/RTLnowGenreScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/RTLnowFilmeScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/RTLnowGenreScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -208,11 +208,17 @@ class ZDFFilmeListeScreen(Screen):
 		
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions"], {
 			"ok"    : self.keyOK,
-			"cancel": self.keyCancel
+			"cancel": self.keyCancel,
+			"up" : self.keyUp,
+			"down" : self.keyDown,
+			"right" : self.keyRight,
+			"left" : self.keyLeft
 		}, -1)
 
 		self['title'] = Label("ZDF Mediathek")
 		self['name'] = Label("Folgen Auswahl")
+		self['handlung'] = Label("")
+		self['Pic'] = Pixmap()
 		
 		self.keyLocked = True
 		self.filmliste = []
@@ -233,14 +239,39 @@ class ZDFFilmeListeScreen(Screen):
 		
 	def loadPageData(self, data):
 		self.filmliste = []
-		folgen = re.findall('<type>video</type>.*?<title>(.*?)</title>.*?<assetId>(.*?)</assetId>.*?<length>(.*?)</length>.*?<airtime>(.*?)</airtime>', data, re.S)
+		folgen = re.findall('<type>video</type>.*?<teaserimage alt=".*?" key="298x168">(.*?)</teaserimage>.*?<title>(.*?)</title>.*?<detail>(.*?)</detail>.*?<assetId>(.*?)</assetId>', data, re.S)
 		if folgen:
-			for (title,id,runtime,datum) in folgen:
-				self.filmliste.append((decodeHtml(title), id))
+			for (image,title,handlung,id) in folgen:
+				self.filmliste.append((decodeHtml(title),id,image,handlung))
 		else:
-				self.filmliste.append(('Keine Folgen gefunden.', None))
+			self.filmliste.append(('Keine Folgen gefunden.', None, None, None))
 		self.chooseMenuList.setList(map(ZDFFilmListEntry, self.filmliste))
 		self.keyLocked = False
+		self.loadPic()
+
+	def loadPic(self):
+		streamPic = self['List'].getCurrent()[0][2]
+		if streamPic == None:
+			return
+		streamName = self['List'].getCurrent()[0][0]
+		self['name'].setText(streamName)
+		streamHandlung = self['List'].getCurrent()[0][3]
+		self['handlung'].setText(decodeHtml(streamHandlung))
+		downloadPage(streamPic, "/tmp/Icon.jpg").addCallback(self.ShowCover)
+			
+	def ShowCover(self, picData):
+		if fileExists("/tmp/Icon.jpg"):
+			self['Pic'].instance.setPixmap(None)
+			self.scale = AVSwitch().getFramebufferScale()
+			self.picload = ePicLoad()
+			size = self['Pic'].instance.size()
+			self.picload.setPara((size.width(), size.height(), self.scale[0], self.scale[1], False, 1, "#FF000000"))
+			if self.picload.startDecode("/tmp/Icon.jpg", 0, 0, False) == 0:
+				ptr = self.picload.getData()
+				if ptr != None:
+					self['Pic'].instance.setPixmap(ptr.__deref__())
+					self['Pic'].show()
+					del self.picload
 
 	def keyOK(self):
 		if self.keyLocked:
@@ -261,5 +292,29 @@ class ZDFFilmeListeScreen(Screen):
 			sref.setName(self.streamName)
 			self.session.open(MoviePlayer, sref)
 			
+	def keyLeft(self):
+		if self.keyLocked:
+			return
+		self['List'].pageUp()
+		self.loadPic()
+		
+	def keyRight(self):
+		if self.keyLocked:
+			return
+		self['List'].pageDown()
+		self.loadPic()
+		
+	def keyUp(self):
+		if self.keyLocked:
+			return
+		self['List'].up()
+		self.loadPic()
+
+	def keyDown(self):
+		if self.keyLocked:
+			return
+		self['List'].down()
+		self.loadPic()
+
 	def keyCancel(self):
 		self.close()
