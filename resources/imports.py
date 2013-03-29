@@ -106,6 +106,7 @@ def decodeHtml(text):
 	text = text.replace('&rsquo;','\'')
 	text = text.replace('&#038;','&')
 	text = text.replace('&#039;','\'')
+	text = text.replace('&#160;',' ')
 	text = text.replace('&#174;','')
 	text = text.replace('&#233;','e')
 	text = text.replace('&#8211;',"-")
