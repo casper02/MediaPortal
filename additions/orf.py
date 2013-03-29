@@ -206,7 +206,7 @@ class ORFStreamListeScreen(Screen):
 
 	def loadPage(self):
 		print "hole daten"
-		folgen = re.findall('<Title><!\[CDATA\[(.*?)\]\]></Title>.*?<VideoUrl><!\[CDATA\[(.*?mp4)\]\]></VideoUrl>', self.data_raw, re.S)
+		folgen = re.findall('<Title><!\[CDATA\[(.*?)\]\]></Title>.*<VideoUrl\squality=".*?><!\[CDATA\[(.*?mp4)\]\]>', self.data_raw, re.S)
 		if folgen:
 			self.streamliste = []
 			for (title,rtmp_link) in folgen:
