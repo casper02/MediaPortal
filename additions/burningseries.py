@@ -75,7 +75,7 @@ class bsSerien(Screen, ConfigListScreen):
 		with open(path, "r") as f:
 			self.skin = f.read()
 			f.close()
-		
+
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
@@ -305,7 +305,6 @@ class bsStaffeln(Screen, ConfigListScreen):
 
 		staffel = self['streamlist'].getCurrent()[0][0]
 		staffel = staffel.replace('Staffel ','').replace('Film(e)','0')
-#		staffel = staffel.replace('Film(e)','0')		
 		auswahl = self['streamlist'].getCurrent()[0][1]
 		print auswahl, staffel
 		self.session.open(bsEpisoden, auswahl, staffel)
