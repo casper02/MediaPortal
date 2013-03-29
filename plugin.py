@@ -46,14 +46,14 @@ from additions.sciencetv import *
 from additions.szenestreams import *
 
 # mediatheken
-from additions.voxnow import *
-from additions.rtlnow import *
-from additions.ntvnow import *
-from additions.rtlnitronow import *
-from additions.rtl2now import *
-from additions.superrtlnow import *
-from additions.zdf import *
-from additions.orf import *
+from additions.mediatheken.voxnow import *
+from additions.mediatheken.rtlnow import *
+from additions.mediatheken.ntvnow import *
+from additions.mediatheken.rtlnitronow import *
+from additions.mediatheken.rtl2now import *
+from additions.mediatheken.superrtlnow import *
+from additions.mediatheken.zdf import *
+from additions.mediatheken.orf import *
 
 # porn
 from additions.porn.ahme import *
