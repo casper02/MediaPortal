@@ -32,8 +32,75 @@ class ZDFGenreScreen(Screen):
 			"left" : self.keyLeft
 		}, -1)
 		
-		self['title'] = Label("ZDF.de")
-		self['name'] = Label("Auswahl der Sendungen.")
+		self['title'] = Label("ZDF Mediathek")
+		self['name'] = Label("Auswahl der Sendung")
+		self['handlung'] = Label("")
+		self['Pic'] = Pixmap()
+		
+		self.genreliste = []
+		self.keyLocked = True
+		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
+		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
+		self.chooseMenuList.l.setItemHeight(25)
+		self['List'] = self.chooseMenuList
+		
+		self.onLayoutFinish.append(self.loadPage)
+		
+	def loadPage(self):
+		self.genreliste = []
+		self.genreliste += map(chr, xrange(ord('A'), ord('Z') + 1))
+		self.chooseMenuList.setList(map(ZDFGenreListEntry, self.genreliste))
+		self.keyLocked = False
+
+	def dataError(self, error):
+		print error
+
+	def keyOK(self):
+		if self.keyLocked:
+			return
+		streamGenreLink = self['List'].getCurrent()[0][0]
+		self.session.open(ZDFSubGenreScreen, streamGenreLink)
+		
+	def keyLeft(self):
+		self['List'].pageUp()
+		
+	def keyRight(self):
+		self['List'].pageDown()
+		
+	def keyUp(self):
+		self['List'].up()
+
+	def keyDown(self):
+		self['List'].down()
+
+	def keyCancel(self):
+		self.close()
+		
+class ZDFSubGenreScreen(Screen):
+	
+	def __init__(self, session, streamGenreLink):
+		self.session = session
+		self.streamGenreLink = streamGenreLink
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/RTLnowGenreScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/RTLnowGenreScreen.xml"
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
+		Screen.__init__(self, session)
+		
+		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions"], {
+			"ok"    : self.keyOK,
+			"cancel": self.keyCancel,
+			"up" : self.keyUp,
+			"down" : self.keyDown,
+			"right" : self.keyRight,
+			"left" : self.keyLeft
+		}, -1)
+		
+		self['title'] = Label("ZDF Mediathek")
+		self['name'] = Label("Auswahl der Sendung")
 		self['handlung'] = Label("")
 		self['Pic'] = Pixmap()
 		
@@ -48,29 +115,31 @@ class ZDFGenreScreen(Screen):
 		
 	def loadPage(self):
 		self.keyLocked = True
-		url = "http://www.zdf.de/ZDFmediathek/xmlservice/web/sendungenAbisZ?detailLevel=2&characterRangeStart=A&characterRangeEnd=Z"
+		url = "http://www.zdf.de/ZDFmediathek/xmlservice/web/sendungenAbisZ?detailLevel=2&characterRangeStart=%s&characterRangeEnd=%s" % (self.streamGenreLink, self.streamGenreLink)
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
 		
 	def loadPageData(self, data):
 		sendungen = re.findall(' <teaserimage alt=".*?" key="236x133">(.*?)</teaserimage>.*?<title>(.*?)</title>.*?<detail>(.*?)</detail>.*?<assetId>(.*?)</assetId>', data, re.S)
 		if sendungen:
-			self.genreliste = []
-			genre = []
 			for (image,title,handlung,id) in sendungen:
-				self.genreliste.append((title,id,image,handlung))
-			self.chooseMenuList.setList(map(ZDFGenreListEntry, self.genreliste))
-			self.loadPic()
-			self.keyLocked = False
+				self.genreliste.append((decodeHtml(title),id,image,handlung))
+		else:
+			self.genreliste.append(('Keine Senungen mit diesem Buchstaben vorhanden.', None, None, None))
+		self.chooseMenuList.setList(map(ZDFGenreListEntry, self.genreliste))
+		self.keyLocked = False
+		self.loadPic()
 
 	def dataError(self, error):
 		print error
 
 	def loadPic(self):
+		streamPic = self['List'].getCurrent()[0][2]
+		if streamPic == None:
+			return
 		streamName = self['List'].getCurrent()[0][0]
 		self['name'].setText(streamName)
 		streamHandlung = self['List'].getCurrent()[0][3]
 		self['handlung'].setText(decodeHtml(streamHandlung))
-		streamPic = self['List'].getCurrent()[0][2]
 		downloadPage(streamPic, "/tmp/Icon.jpg").addCallback(self.ShowCover)
 			
 	def ShowCover(self, picData):
@@ -91,6 +160,8 @@ class ZDFGenreScreen(Screen):
 		if self.keyLocked:
 			return
 		streamGenreLink = self['List'].getCurrent()[0][1]
+		if streamGenreLink == None:
+			return
 		self.session.open(ZDFFilmeListeScreen, streamGenreLink)
 		
 	def keyLeft(self):
@@ -140,7 +211,7 @@ class ZDFFilmeListeScreen(Screen):
 			"cancel": self.keyCancel
 		}, -1)
 
-		self['title'] = Label("ZDF.de")
+		self['title'] = Label("ZDF Mediathek")
 		self['name'] = Label("Folgen Auswahl")
 		
 		self.keyLocked = True
@@ -162,18 +233,22 @@ class ZDFFilmeListeScreen(Screen):
 		
 	def loadPageData(self, data):
 		self.filmliste = []
-		folgen = re.findall('<title>(.*?)</title>.*?<assetId>(.*?)</assetId>.*?<length>(.*?)</length>.*?<airtime>(.*?)</airtime>', data, re.S)
+		folgen = re.findall('<type>video</type>.*?<title>(.*?)</title>.*?<assetId>(.*?)</assetId>.*?<length>(.*?)</length>.*?<airtime>(.*?)</airtime>', data, re.S)
 		if folgen:
 			for (title,id,runtime,datum) in folgen:
-				self.filmliste.append((title,id))
-			self.chooseMenuList.setList(map(ZDFFilmListEntry, self.filmliste))
-			self.keyLocked = False
+				self.filmliste.append((decodeHtml(title), id))
+		else:
+				self.filmliste.append(('Keine Folgen gefunden.', None))
+		self.chooseMenuList.setList(map(ZDFFilmListEntry, self.filmliste))
+		self.keyLocked = False
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
 		self.streamName = self['List'].getCurrent()[0][0]
 		id = self['List'].getCurrent()[0][1]
+		if id == None:
+			return
 		url = "http://www.zdf.de/ZDFmediathek/xmlservice/web/beitragsDetails?ak=web&id="+id
 		print url
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.get_xml).addErrback(self.dataError)
