@@ -342,7 +342,7 @@ class playpornStreamListeScreen(Screen):
 		
 	def got_link(self, stream_url):
 		if stream_url == None:
-			message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=3)
+			return
 		else:
 			sref = eServiceReference(0x1001, 0, stream_url)
 			sref.setName(self.streamName)
