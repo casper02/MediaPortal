@@ -66,6 +66,7 @@ class porncityGenreScreen(Screen):
 				phUrl = phUrl + "page/"
 				self.genreliste.append((phTitle, phUrl))
 			self.genreliste.sort()
+			self.genreliste.insert(0, ("Newest", "http://porncity.to/page/"))
 			#self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.chooseMenuList.setList(map(porncityGenreListEntry, self.genreliste))
 			self.keyLocked = False
