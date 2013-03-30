@@ -331,9 +331,6 @@ class porncityStreamListeScreen(Screen):
 		url = streamLink
 		url = url.replace('&amp;','&')
 		url = url.replace('&#038;','&')
-		self.get_stream(url)
-		
-	def get_stream(self,url):
 		get_stream_link(self.session).check_link(url, self.got_link)
 		
 	def got_link(self, stream_url):
