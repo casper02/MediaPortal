@@ -312,12 +312,18 @@ class porncityStreamListeScreen(Screen):
 	def loadPageData(self, data):
 		print "daten bekommen"
 		parse = re.search('role="main">(.*)id="comments', data, re.S)
-		streams = re.findall('.*?"(http://.*?(streamcloud|flashx|jpg).*?)".*?', parse.group(1), re.S)
+		streams = re.findall('.*?"(http://.*?(streamcloud.eu|flashx|jpg).*?)".*?', parse.group(1), re.S)
 		if streams:
 			for (stream, hostername) in streams:
-				if re.match('.*?(streamcloud|flashx)', hostername.strip(' '), re.S|re.I):
-					print hostername.strip(' '), stream.strip('\n')
-					self.filmliste.append((hostername.strip(' '), stream.strip('\n')))
+				if re.match('.*?(streamcloud.eu|flashx)', hostername, re.S|re.I):
+					print hostername, stream
+					hostername = hostername.replace('.eu','')
+					hostername = hostername.title()
+					disc = re.search('.*?(CD-1|CD1|CD-2|CD2|_a.avi|_b.avi).*?', stream, re.S)
+					if disc:
+						discno = disc.group(1).replace('CD1','Teil 1').replace('CD2','Teil 2').replace('CD-1','Teil 1').replace('CD-2','Teil 2').replace('_a.avi','Teil 1').replace('_b.avi','Teil 2')
+						hostername = hostername + ' (' + discno + ')'
+					self.filmliste.append((hostername, stream))
 			self.chooseMenuList.setList(map(porncityHosterListEntry, self.filmliste))
 			self.keyLocked = False
 
