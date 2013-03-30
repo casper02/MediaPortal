@@ -63,6 +63,7 @@ from additions.porn.dreiin import *
 from additions.porn.eporner import *
 from additions.porn.hdporn import *
 from additions.porn.pinkrod import *
+from additions.porn.playporn import *
 from additions.porn.pornerbros import *
 from additions.porn.pornhub import *
 from additions.porn.pornrabbit import *
@@ -147,6 +148,7 @@ config.mediaportal.showhdporn = ConfigYesNo(default = False)
 config.mediaportal.showIStreamPorn = ConfigYesNo(default = False)
 config.mediaportal.showM2kPorn = ConfigYesNo(default = False)
 config.mediaportal.showpinkrod = ConfigYesNo(default = False)
+config.mediaportal.showplayporn = ConfigYesNo(default = False)
 config.mediaportal.showpornerbros = ConfigYesNo(default = False)
 config.mediaportal.showPornhub = ConfigYesNo(default = False)
 config.mediaportal.showpornrabbit = ConfigYesNo(default = False)
@@ -265,6 +267,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige IStream-XXX:", config.mediaportal.showIStreamPorn))
 		self.configlist.append(getConfigListEntry("Zeige Movie2k-XXX:", config.mediaportal.showM2kPorn))
 		self.configlist.append(getConfigListEntry("Zeige Pinkrod:", config.mediaportal.showpinkrod))
+		self.configlist.append(getConfigListEntry("Zeige PlayPorn:", config.mediaportal.showplayporn))
 		self.configlist.append(getConfigListEntry("Zeige PornerBros:", config.mediaportal.showpornerbros))
 		self.configlist.append(getConfigListEntry("Zeige Pornhub:", config.mediaportal.showPornhub))
 		self.configlist.append(getConfigListEntry("Zeige PornRabbit:", config.mediaportal.showpornrabbit))
@@ -497,6 +500,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.movies.append(self.hauptListEntry("Movie2k-XXX", "movie2kporn"))
 		if config.mediaportal.showpinkrod.value:
 			self.fun.append(self.hauptListEntry("Pinkrod", "pinkrod"))
+		if config.mediaportal.showplayporn.value:
+			self.fun.append(self.hauptListEntry("PlayPorn", "playporn"))
 		if config.mediaportal.showpornerbros.value:
 			self.fun.append(self.hauptListEntry("PornerBros", "pornerbros"))
 		if config.mediaportal.showPornhub.value:
@@ -784,6 +789,11 @@ class haupt_Screen(Screen, ConfigListScreen):
 				self.session.openWithCallback(self.pinpinkrod, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
 			else:
 				self.session.open(pinkrodGenreScreen)
+		elif auswahl == "PlayPorn":
+			if config.mediaportal.pornpin.value:
+				self.session.openWithCallback(self.pinplayporn, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
+			else:
+				self.session.open(playpornGenreScreen)
 		elif auswahl == "PornerBros":
 			if config.mediaportal.pornpin.value:
 				self.session.openWithCallback(self.pinpornerbros, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
@@ -869,6 +879,10 @@ class haupt_Screen(Screen, ConfigListScreen):
 	def pinpinkrod(self, pincode):
 		if pincode:
 			self.session.open(pinkrodGenreScreen)
+
+	def pinplayporn(self, pincode):
+		if pincode:
+			self.session.open(playpornGenreScreen)
 
 	def pinpornerbros(self, pincode):
 		if pincode:
@@ -1040,6 +1054,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("Movie2k-XXX", "movie2kporn", "Porn"))
 		if config.mediaportal.showpinkrod.value:
 			self.plugin_liste.append(("Pinkrod", "pinkrod", "Porn"))
+		if config.mediaportal.showplayporn.value:
+			self.plugin_liste.append(("PlayPorn", "playporn", "Porn"))
 		if config.mediaportal.showpornerbros.value:
 			self.plugin_liste.append(("PornerBros", "pornerbros", "Porn"))
 		if config.mediaportal.showPornhub.value:
@@ -1345,6 +1361,11 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 				self.session.openWithCallback(self.pinpinkrod, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
 			else:
 				self.session.open(pinkrodGenreScreen)
+		elif auswahl == "PlayPorn":
+			if config.mediaportal.pornpin.value:
+				self.session.openWithCallback(self.pinplayporn, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
+			else:
+				self.session.open(playpornGenreScreen)
 		elif auswahl == "PornerBros":
 			if config.mediaportal.pornpin.value:
 				self.session.openWithCallback(self.pinpornerbros, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
@@ -1430,6 +1451,10 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 	def pinpinkrod(self, pincode):
 		if pincode:
 			self.session.open(pinkrodGenreScreen)
+
+	def pinplayporn(self, pincode):
+		if pincode:
+			self.session.open(playpornGenreScreen)
 
 	def pinpornerbros(self, pincode):
 		if pincode:
