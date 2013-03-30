@@ -154,21 +154,13 @@ class get_stream_link:
 				hash = re.findall('http://flashx.tv/video/(.*?)/', link)
 				if hash:
 					getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.flashx_tv3b).addErrback(self.errorload)
-<<<<<<< HEAD
 				
 				if re.match('.*?embed.php\?hash=', link) or re.match('.*?embed_player.php\?hash=', link) or re.match('.*?embed_player.php\?vid=', link) or re.match('.*?embed.php\?vid=', link):
 					self.flashx_tv3(link)
-=======
->>>>>>> streams.py mods
+
 				else:
-					hash = re.findall('embed.php.vid=(.*?)&', link, re.S)
-					if hash:
-						getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.flashx_tv2).addErrback(self.errorload)
-					elif re.match('.*?embed.php\?hash=', link) or re.match('.*?embed_player.php\?vid=', link):
-						self.flashx_tv3(link)
-					else:
-						print "flashx_tv link not found: ",link
-						self.stream_not_found()
+					print "flashx_tv link not found: ",link
+					self.stream_not_found()
 					
 			elif re.match('.*?putme.org', data, re.S):
 				link = data
