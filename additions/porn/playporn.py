@@ -55,7 +55,7 @@ class playpornGenreScreen(Screen):
 	def layoutFinished(self):
 		self.keyLocked = True
 		url = "http://playporn.to"
-		getPage(url, headers={'Cookie': 'sitechrx=52298d95ff7ece2953bd024939fa3a80', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
+		getPage(url, headers={'Cookie': 'sitechrx=43b5077fa32cbbfe4c737b96a4b5ba0f', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		parse = re.search('Category\sMenu\s-->(.*)<!--\sRSS', data, re.S)
@@ -159,7 +159,7 @@ class playpornFilmScreen(Screen):
 		self.filmliste = []
 		url = "%s%s" % (self.phCatLink, str(self.page))
 		print url
-		getPage(url, headers={'Cookie': 'sitechrx=52298d95ff7ece2953bd024939fa3a80', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
+		getPage(url, headers={'Cookie': 'sitechrx=43b5077fa32cbbfe4c737b96a4b5ba0f', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
 	def loadData(self, data):
 		lastp = re.findall('class=\'pages\'>.*?of (.*?)</span>', data, re.S)
@@ -308,7 +308,7 @@ class playpornStreamListeScreen(Screen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		getPage(self.streamFilmLink, headers={'Cookie': 'sitechrx=52298d95ff7ece2953bd024939fa3a80', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
+		getPage(self.streamFilmLink, headers={'Cookie': 'sitechrx=43b5077fa32cbbfe4c737b96a4b5ba0f', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
 		
 	def dataError(self, error):
 		print error
@@ -328,7 +328,7 @@ class playpornStreamListeScreen(Screen):
 		if self.keyLocked:
 			return
 		streamLink = self['genreList'].getCurrent()[0][1]
-		getPage(streamLink, headers={'Cookie': 'sitechrx=52298d95ff7ece2953bd024939fa3a80', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVideoPage).addErrback(self.dataError)
+		getPage(streamLink, headers={'Cookie': 'sitechrx=43b5077fa32cbbfe4c737b96a4b5ba0f', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
 		videoPage = re.findall('iframe\ssrc="(.*?)"', data, re.S)

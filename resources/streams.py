@@ -153,14 +153,10 @@ class get_stream_link:
 				print link
 				hash = re.findall('http://flashx.tv/video/(.*?)/', link)
 				if hash:
-					#url = "http://play.flashx.tv/nuevo/player/cst.php?hash=%s" % hash[0]
-					#getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.flashx_tv3b).addErrback(self.errorload)
-					#print "flashx_tv3b: ",link
 					getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.flashx_tv3b).addErrback(self.errorload)
 				
-				if re.match('.*?embed.php\?hash=', link) or re.match('.*?embed_player.php\?vid=', link) or re.match('.*?embed.php\?vid=', link):
+				if re.match('.*?embed.php\?hash=', link) or re.match('.*?embed_player.php\?hash=', link) or re.match('.*?embed_player.php\?vid=', link) or re.match('.*?embed.php\?vid=', link):
 					self.flashx_tv3(link)
-				
 				else:
 					self.stream_not_found()
 					
