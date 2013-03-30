@@ -67,7 +67,7 @@ class porncityGenreScreen(Screen):
 				self.genreliste.append((phTitle, phUrl))
 			self.genreliste.sort()
 			self.genreliste.insert(0, ("Newest", "http://porncity.to/page/"))
-			#self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
+			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.chooseMenuList.setList(map(porncityGenreListEntry, self.genreliste))
 			self.keyLocked = False
 
@@ -89,8 +89,9 @@ class porncityGenreScreen(Screen):
 	def SuchenCallback(self, callback = None, entry = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '+')
-			streamGenreLink = 'http://porncity.to/?s=%s&submit=+' % (self.suchString)
-			self.session.open(porncityFilmScreen, streamGenreLink)
+			streamGenreLink = '%s' % (self.suchString)
+			streamGenreName = "--- Search ---"
+			self.session.open(porncityFilmScreen, streamGenreLink, streamGenreName)
 
 	def keyLeft(self):
 		self['genreList'].pageUp()
@@ -109,9 +110,10 @@ class porncityGenreScreen(Screen):
 
 class porncityFilmScreen(Screen):
 	
-	def __init__(self, session, phCatLink):
+	def __init__(self, session, phCatLink, phCatName):
 		self.session = session
 		self.phCatLink = phCatLink
+		self.phCatName = phCatName
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/XXXFilmScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
 			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/XXXFilmScreen.xml"
@@ -156,7 +158,10 @@ class porncityFilmScreen(Screen):
 		self.keyLocked = True
 		self['name'].setText('Bitte warten...')
 		self.filmliste = []
-		url = "%s%s" % (self.phCatLink, str(self.page))
+		if self.phCatName == "--- Search ---":
+			url = "http://porncity.to/page/%s/?s=%s&submit=+" % (str(self.page), self.phCatLink)
+		else:
+			url = "%s%s" % (self.phCatLink, str(self.page))
 		print url
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	

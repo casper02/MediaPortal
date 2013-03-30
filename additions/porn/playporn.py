@@ -68,7 +68,7 @@ class playpornGenreScreen(Screen):
 						self.genreliste.append((phTitle, phUrl))
 			self.genreliste.sort()
 			self.genreliste.insert(0, ("Newest", "http://playporn.to/category/xxx-movie-stream/page/"))
-			#self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
+			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.chooseMenuList.setList(map(playpornGenreListEntry, self.genreliste))
 			self.keyLocked = False
 
@@ -90,8 +90,9 @@ class playpornGenreScreen(Screen):
 	def SuchenCallback(self, callback = None, entry = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '+')
-			streamGenreLink = 'http://playporn.to/?s=%s&submit=Search' % (self.suchString)
-			self.session.open(playpornFilmScreen, streamGenreLink)
+			streamGenreLink = '%s' % (self.suchString)
+			streamGenreName = "--- Search ---"
+			self.session.open(playpornFilmScreen, streamGenreLink, streamGenreName)
 
 	def keyLeft(self):
 		self['genreList'].pageUp()
@@ -110,9 +111,10 @@ class playpornGenreScreen(Screen):
 
 class playpornFilmScreen(Screen):
 	
-	def __init__(self, session, phCatLink):
+	def __init__(self, session, phCatLink, phCatName):
 		self.session = session
 		self.phCatLink = phCatLink
+		self.phCatName = phCatName
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/XXXFilmScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
 			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/XXXFilmScreen.xml"
@@ -157,7 +159,10 @@ class playpornFilmScreen(Screen):
 		self.keyLocked = True
 		self['name'].setText('Bitte warten...')
 		self.filmliste = []
-		url = "%s%s" % (self.phCatLink, str(self.page))
+		if self.phCatName == "--- Search ---":
+			url = "http://playporn.to/page/%s/?s=%s&submit=Search" % (str(self.page), self.phCatLink)
+		else:
+			url = "%s%s" % (self.phCatLink, str(self.page))
 		print url
 		getPage(url, headers={'Cookie': 'sitechrx=43b5077fa32cbbfe4c737b96a4b5ba0f', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
