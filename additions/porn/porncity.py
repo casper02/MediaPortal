@@ -292,9 +292,6 @@ class porncityStreamListeScreen(Screen):
 
 		self['title'] = Label("PornCity.to")
 		self['name'] = Label(self.streamName)
-		self['views'] = Label("")
-		self['runtime'] = Label("")
-		self['page'] = Label("")
 		self['coverArt'] = Pixmap()
 		
 		self.keyLocked = True

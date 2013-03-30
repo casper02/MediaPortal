@@ -293,9 +293,6 @@ class playpornStreamListeScreen(Screen):
 
 		self['title'] = Label("PlayPorn.to")
 		self['name'] = Label(self.streamName)
-		self['views'] = Label("")
-		self['runtime'] = Label("")
-		self['page'] = Label("")
 		self['coverArt'] = Pixmap()
 		
 		self.keyLocked = True
