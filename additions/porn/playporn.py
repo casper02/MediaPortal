@@ -82,7 +82,7 @@ class playpornGenreScreen(Screen):
 
 		else:
 			streamGenreLink = self['genreList'].getCurrent()[0][1]
-			self.session.open(playpornFilmScreen, streamGenreLink)
+			self.session.open(playpornFilmScreen, streamGenreLink, streamGenreName)
 		
 	def suchen(self):
 		self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoard, title = (_("Suchkriterium eingeben")), text = self.suchString)
