@@ -421,10 +421,10 @@ class pornhubFilmScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
 	
 	def genreData(self, data):
-		phMovies = re.findall('<div class="wrap">.*?<a href="(.*?)" target="" title="(.*?)".*?data-mediumthumb="(.*?)".*?<var class="duration">(.*?)</var>.*?<span class="views"><var>(.*?)<.*?<var class="added">(.*?)<', data, re.S)
+		phMovies = re.findall('<div\sclass="wrap">.*?<a\shref="(.*?)"\starget=""\stitle="(.*?)".*?data-mediumthumb="(.*?)".*?<var\sclass="duration">(.*?)</var>.*?<span\sclass="views"><var>(.*?)<.*?<var\sclass="added">(.*?)<', data, re.S)
 		if phMovies:
-			for (phUrl,phTitle,phImage,phRuntime,phViews,phAdded) in phMovies:
-				self.filmliste.append((phTitle,phUrl,phImage,phRuntime,phViews,phAdded))
+			for (phUrl, phTitle, phImage, phRuntime, phViews, phAdded) in phMovies:
+				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage, phRuntime, phViews, phAdded))
 			self.chooseMenuList.setList(map(pornhubFilmListEntry, self.filmliste))
 			self.chooseMenuList.moveToIndex(0)
 			self.keyLocked = False
@@ -519,7 +519,12 @@ class pornhubFilmScreen(Screen):
 
 	def parseData(self, data):
 		phTitle = self['genreList'].getCurrent()[0][0]
-		match = re.compile('"video_url":"([^"]+)"').findall(data)
+		match = re.compile('"quality_720p":"([^"]+)"').findall(data)
+		if not match:
+			match = re.compile('"quality_480p":"([^"]+)"').findall(data)
+		if not match:
+			match = re.compile('"quality_240p":"([^"]+)"').findall(data)
+		fetchurl = match
 		fetchurl = urllib2.unquote(match[0])
 		match = re.compile('"video_title":"([^"]+)"').findall(data)
 		title = urllib.unquote_plus(match[0])
