@@ -1,21 +1,21 @@
 from Plugins.Extensions.mediaportal.resources.imports import *
 
-def playpornGenreListEntry(entry):
+def porncityGenreListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		] 
 
-def playpornFilmListEntry(entry):
+def porncityFilmListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		] 
 		
-def playpornHosterListEntry(entry):
+def porncityHosterListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		] 
 		
-class playpornGenreScreen(Screen):
+class porncityGenreScreen(Screen):
 	
 	def __init__(self, session):
 		self.session = session
@@ -38,7 +38,7 @@ class playpornGenreScreen(Screen):
 			"left" : self.keyLeft
 		}, -1)
 
-		self['title'] = Label("PlayPorn.to")
+		self['title'] = Label("PornCity.to")
 		self['name'] = Label("Genre Auswahl")
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
@@ -54,22 +54,21 @@ class playpornGenreScreen(Screen):
 		
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "http://playporn.to"
-		getPage(url, headers={'Cookie': 'sitechrx=43b5077fa32cbbfe4c737b96a4b5ba0f', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
+		url = "http://porncity.to"
+		getPage(url, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		parse = re.search('Category\sMenu\s-->(.*)<!--\sRSS', data, re.S)
-		phCat = re.findall('class="cat-item\scat-item-.*?"><a\shref="(.*?)"\stitle=".*?">(.*?)</a>', parse.group(1), re.S)
+		parse = re.search('Kategorien</h2>(.*)class="main-cat-bottom', data, re.S)
+		print "Parse OK"
+		phCat = re.findall('<a\shref="(.*?)".*?main-cat-name">(.*?)</div>', parse.group(1), re.S)
 		if phCat:
 			for (phUrl, phTitle) in phCat:
 				phUrl = phUrl + "page/"
-				if not phTitle == "z-":
-					if not phTitle == "XXX Movie Stream":
-						self.genreliste.append((phTitle, phUrl))
+				self.genreliste.append((phTitle, phUrl))
 			self.genreliste.sort()
-			self.genreliste.insert(0, ("All", "http://playporn.to/category/xxx-movie-stream/page/"))
+			self.genreliste.insert(0, ("Newest", "http://porncity.to/page/"))
 			#self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
-			self.chooseMenuList.setList(map(playpornGenreListEntry, self.genreliste))
+			self.chooseMenuList.setList(map(porncityGenreListEntry, self.genreliste))
 			self.keyLocked = False
 
 	def dataError(self, error):
@@ -82,7 +81,7 @@ class playpornGenreScreen(Screen):
 
 		else:
 			streamGenreLink = self['genreList'].getCurrent()[0][1]
-			self.session.open(playpornFilmScreen, streamGenreLink)
+			self.session.open(porncityFilmScreen, streamGenreLink)
 		
 	def suchen(self):
 		self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoard, title = (_("Suchkriterium eingeben")), text = self.suchString)
@@ -90,8 +89,8 @@ class playpornGenreScreen(Screen):
 	def SuchenCallback(self, callback = None, entry = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '+')
-			streamGenreLink = 'http://playporn.to/?s=%s&submit=Search' % (self.suchString)
-			self.session.open(playpornFilmScreen, streamGenreLink)
+			streamGenreLink = 'http://porncity.to/?s=%s&submit=+' % (self.suchString)
+			self.session.open(porncityFilmScreen, streamGenreLink)
 
 	def keyLeft(self):
 		self['genreList'].pageUp()
@@ -108,7 +107,7 @@ class playpornGenreScreen(Screen):
 	def keyCancel(self):
 		self.close()
 
-class playpornFilmScreen(Screen):
+class porncityFilmScreen(Screen):
 	
 	def __init__(self, session, phCatLink):
 		self.session = session
@@ -135,7 +134,7 @@ class playpornFilmScreen(Screen):
 			"green" : self.keyPageNumber
 		}, -1)
 
-		self['title'] = Label("PlayPorn.to")
+		self['title'] = Label("PornCity.to")
 		self['name'] = Label("Film Auswahl")
 		self['views'] = Label("")
 		self['runtime'] = Label("")
@@ -159,10 +158,10 @@ class playpornFilmScreen(Screen):
 		self.filmliste = []
 		url = "%s%s" % (self.phCatLink, str(self.page))
 		print url
-		getPage(url, headers={'Cookie': 'sitechrx=43b5077fa32cbbfe4c737b96a4b5ba0f', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
+		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
 	def loadData(self, data):
-		lastp = re.findall('class=\'pages\'>.*?of (.*?)</span>', data, re.S)
+		lastp = re.findall('class=\'pages\'>.*?von (.*?)</span>', data, re.S)
 		if lastp:
 			lastp = lastp[0]
 			print lastp
@@ -170,11 +169,11 @@ class playpornFilmScreen(Screen):
 		else:
 			self.lastpage = 1
 		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))	
-		phMovies = re.findall('class="photo-thumb">.*?<a\shref="(.*?)"\stitle="(.*?)".*?thumbindex"\ssrc="(.*?)"', data, re.S)
+		phMovies = re.findall('class="main-stream".*?class="cover-image">.*?<a\shref="(.*?)"\stitle="(.*?)".*?<img\ssrc="(.*?)"', data, re.S)
 		if phMovies:
 			for (phUrl, phTitle, phImage) in phMovies:
 				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage))
-			self.chooseMenuList.setList(map(playpornFilmListEntry, self.filmliste))
+			self.chooseMenuList.setList(map(porncityFilmListEntry, self.filmliste))
 			self.chooseMenuList.moveToIndex(0)
 			self.keyLocked = False
 			self.showInfos()
@@ -264,12 +263,12 @@ class playpornFilmScreen(Screen):
 			return
 		phTitle = self['genreList'].getCurrent()[0][0]
 		phLink = self['genreList'].getCurrent()[0][1]
-		self.session.open(playpornStreamListeScreen, phLink, phTitle)
+		self.session.open(porncityStreamListeScreen, phLink, phTitle)
 
 	def keyCancel(self):
 		self.close()
 
-class playpornStreamListeScreen(Screen):
+class porncityStreamListeScreen(Screen):
 	
 	def __init__(self, session, streamFilmLink, streamName):
 		self.session = session
@@ -291,7 +290,7 @@ class playpornStreamListeScreen(Screen):
 			"cancel": self.keyCancel
 		}, -1)
 
-		self['title'] = Label("PlayPorn.to")
+		self['title'] = Label("PornCity.to")
 		self['name'] = Label(self.streamName)
 		self['views'] = Label("")
 		self['runtime'] = Label("")
@@ -308,39 +307,30 @@ class playpornStreamListeScreen(Screen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		getPage(self.streamFilmLink, headers={'Cookie': 'sitechrx=43b5077fa32cbbfe4c737b96a4b5ba0f', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
+		getPage(self.streamFilmLink, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
 		
 	def dataError(self, error):
 		print error
 		
 	def loadPageData(self, data):
 		print "daten bekommen"
-		streams = re.findall('<a\sid=.*?\shref="(.*?)"\srel.*?class="ico"\s/>\s(.*?)</a>', data, re.S)
+		parse = re.search('role="main">(.*)id="comments', data, re.S)
+		streams = re.findall('.*?"(http://.*?(streamcloud|flashx|jpg).*?)".*?', parse.group(1), re.S)
 		if streams:
 			for (stream, hostername) in streams:
-				if re.match('.*?(putlocker|sockshare|streamclou|xvidstage|filenuke|movreel|nowvideo|xvidstream|uploadc|vreer|MonsterUploads|Novamov|Videoweed|Divxstage|Ginbig|Flashstrea|Movshare|yesload|faststream|Vidstream|PrimeShare|flashx|Divxmov|Putme|Zooupload|Wupfile)', hostername.strip(' '), re.S|re.I):
+				if re.match('.*?(streamcloud|flashx)', hostername.strip(' '), re.S|re.I):
 					print hostername.strip(' '), stream.strip('\n')
 					self.filmliste.append((hostername.strip(' '), stream.strip('\n')))
-			self.chooseMenuList.setList(map(playpornHosterListEntry, self.filmliste))
+			self.chooseMenuList.setList(map(porncityHosterListEntry, self.filmliste))
 			self.keyLocked = False
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
 		streamLink = self['genreList'].getCurrent()[0][1]
-		getPage(streamLink, headers={'Cookie': 'sitechrx=43b5077fa32cbbfe4c737b96a4b5ba0f', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVideoPage).addErrback(self.dataError)
-
-	def getVideoPage(self, data):
-		videoPage = re.findall('iframe\ssrc="(.*?)"', data, re.S)
-		if not videoPage:
-			videoPage = re.findall('iframe.*?src="http://playporn.to/stream/all/\?file=(.*?)"', data, re.S)
-		if videoPage:
-			for phurl in videoPage:
-				url = phurl
-				url = url.replace('&amp;','&')
-				self.get_stream(url)
-		
-	def get_stream(self,url):
+		url = streamLink
+		url = url.replace('&amp;','&')
+		url = url.replace('&#038;','&')
 		get_stream_link(self.session).check_link(url, self.got_link)
 		
 	def got_link(self, stream_url):
