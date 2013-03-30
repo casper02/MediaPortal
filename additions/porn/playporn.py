@@ -324,13 +324,17 @@ class playpornStreamListeScreen(Screen):
 					print hostername, stream
 					hostername = hostername.replace('streamcloud1','Streamcloud (Teil 1)').replace('streamcloud2','Streamcloud (Teil 2)')
 					self.filmliste.append((hostername, stream))
-			self.chooseMenuList.setList(map(playpornHosterListEntry, self.filmliste))
-			self.keyLocked = False
+		else:
+			self.filmliste.append(('Keine Streams gefunden.', None))
+		self.chooseMenuList.setList(map(playpornHosterListEntry, self.filmliste))
+		self.keyLocked = False
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
 		streamLink = self['genreList'].getCurrent()[0][1]
+		if streamLink == None:
+			return
 		getPage(streamLink, headers={'Cookie': 'sitechrx=43b5077fa32cbbfe4c737b96a4b5ba0f', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):

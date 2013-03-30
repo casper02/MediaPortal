@@ -329,13 +329,17 @@ class porncityStreamListeScreen(Screen):
 						discno = disc.group(1).replace('CD1','Teil 1').replace('CD2','Teil 2').replace('CD-1','Teil 1').replace('CD-2','Teil 2').replace('_a.avi','Teil 1').replace('_b.avi','Teil 2')
 						hostername = hostername + ' (' + discno + ')'
 					self.filmliste.append((hostername, stream))
-			self.chooseMenuList.setList(map(porncityHosterListEntry, self.filmliste))
-			self.keyLocked = False
+		else:
+			self.filmliste.append(('Keine Streams gefunden.', None))
+		self.chooseMenuList.setList(map(porncityHosterListEntry, self.filmliste))
+		self.keyLocked = False
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
 		streamLink = self['genreList'].getCurrent()[0][1]
+		if streamLink == None:
+			return
 		url = streamLink
 		url = url.replace('&amp;','&')
 		url = url.replace('&#038;','&')
