@@ -154,10 +154,8 @@ class get_stream_link:
 				hash = re.findall('http://flashx.tv/video/(.*?)/', link)
 				if hash:
 					getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.flashx_tv3b).addErrback(self.errorload)
-				
-				if re.match('.*?embed.php\?hash=', link) or re.match('.*?embed_player.php\?hash=', link) or re.match('.*?embed_player.php\?vid=', link) or re.match('.*?embed.php\?vid=', link):
+				elif re.match('.*?embed.php\?hash=', link) or re.match('.*?embed_player.php\?hash=', link) or re.match('.*?embed_player.php\?vid=', link) or re.match('.*?embed.php\?vid=', link):
 					self.flashx_tv3(link)
-
 				else:
 					print "flashx_tv link not found: ",link
 					self.stream_not_found()
