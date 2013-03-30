@@ -273,12 +273,13 @@ class pornhubGenreScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
 	
 	def genreData(self, data):
-		phCats = re.findall('<div class="category-wrapper">.*?<a href="(/video\?c=.*?)"><img src="(.*?)".*?alt="(.*?)"', data, re.S)
+		phCats = re.findall('<div\sclass="category-wrapper">.*?<a\shref="(/video\?c=.*?)"><img\ssrc="(.*?)".*?alt="(.*?)"', data, re.S)
 		if phCats:
 			for (phUrl, phImage, phTitle) in phCats:
 				phUrl = "http://www.pornhub.com" + phUrl + "&page="
 				self.filmliste.append((phTitle, phUrl, phImage))
 			self.filmliste.sort()
+			self.filmliste.insert(0, ("HD", "http://www.pornhub.com/video?c=38&page=", 'http://cdn1a.static.pornhub.phncdn.com/images/categories/38.jpg'))
 			self.filmliste.insert(0, ("Longest", "http://www.pornhub.com/video?o=lg&page=", None))
 			self.filmliste.insert(0, ("Top Rated", "http://www.pornhub.com/video?o=tr&page=", None))
 			self.filmliste.insert(0, ("Most Viewed", "http://www.pornhub.com/video?o=mv&page=", None))
