@@ -67,7 +67,7 @@ class playpornGenreScreen(Screen):
 					if not phTitle == "XXX Movie Stream":
 						self.genreliste.append((phTitle, phUrl))
 			self.genreliste.sort()
-			self.genreliste.insert(0, ("All", "http://playporn.to/category/xxx-movie-stream/page/"))
+			self.genreliste.insert(0, ("Newest", "http://playporn.to/category/xxx-movie-stream/page/"))
 			#self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.chooseMenuList.setList(map(playpornGenreListEntry, self.genreliste))
 			self.keyLocked = False
@@ -312,12 +312,13 @@ class playpornStreamListeScreen(Screen):
 		
 	def loadPageData(self, data):
 		print "daten bekommen"
-		streams = re.findall('<a\sid=.*?\shref="(.*?)"\srel.*?class="ico"\s/>\s(.*?)</a>', data, re.S)
+		streams = re.findall('<a\s{0,3}id="(.*?)".*?href="(.*?)".*?</a>', data, re.S)
 		if streams:
-			for (stream, hostername) in streams:
+			for (hostername, stream) in streams:
 				if re.match('.*?(putlocker|sockshare|streamclou|xvidstage|filenuke|movreel|nowvideo|xvidstream|uploadc|vreer|MonsterUploads|Novamov|Videoweed|Divxstage|Ginbig|Flashstrea|Movshare|yesload|faststream|Vidstream|PrimeShare|flashx|Divxmov|Putme|Zooupload|Wupfile)', hostername.strip(' '), re.S|re.I):
-					print hostername.strip(' '), stream.strip('\n')
-					self.filmliste.append((hostername.strip(' '), stream.strip('\n')))
+					print hostername, stream
+					hostername = hostername.replace('streamcloud1','Streamcloud (Teil 1)').replace('streamcloud2','Streamcloud (Teil 2)')
+					self.filmliste.append((hostername, stream))
 			self.chooseMenuList.setList(map(playpornHosterListEntry, self.filmliste))
 			self.keyLocked = False
 
