@@ -65,7 +65,7 @@ class get_stream_link:
 				link = data
 				#print link
 				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.nowvideo).addErrback(self.errorload)
-				
+
 			elif re.match('.*?http://www.uploadc.com', data, re.S):
 				link = data
 				#print link
@@ -75,7 +75,7 @@ class get_stream_link:
 				link = data
 				#print link
 				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.vreer, link).addErrback(self.errorload)
-				
+
 			elif re.match('.*?http://www.monsteruploads.eu', data, re.S):
 				link = data
 				#print link
@@ -95,7 +95,7 @@ class get_stream_link:
 				link = data
 				#print link
 				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.videoweed).addErrback(self.errorload)
-			
+
 			elif re.match('.*?novamov.com', data, re.S):
 				link = data
 				#print link
@@ -110,7 +110,7 @@ class get_stream_link:
 				link = data
 				#print link
 				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.divxstage).addErrback(self.errorload)				
-				
+
 			elif re.match('.*?yesload.net', data, re.S):
 				link = data
 				#print link
@@ -147,7 +147,7 @@ class get_stream_link:
 				link = data
 				#print link
 				getPage(link, cookies=cj, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.check_istream_link).addErrback(self.errorload)
-				
+
 			elif re.match('.*?http:/.*?flashx.tv', data, re.S):
 				link = data
 				#print link
@@ -159,7 +159,7 @@ class get_stream_link:
 				else:
 					print "flashx_tv link not found: ",link
 					self.stream_not_found()
-					
+
 			elif re.match('.*?putme.org', data, re.S):
 				link = data
 				#print link
@@ -174,17 +174,23 @@ class get_stream_link:
 				link = data
 				#print link
 				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.sharesix).addErrback(self.errorload)
-				
+
 			elif re.match('.*?zooupload.com/', data, re.S):
 				link = data
 				#print link
 				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.zooupload).addErrback(self.errorload)
-				
+
 			elif re.match('.*?http://wupfile.com', data, re.S):
 				link = data
 				#print link
 				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.zooupload).addErrback(self.errorload)
-				
+
+			elif re.match('.*?http://senseless.tv', data, re.S):
+				print "Senseless LINK"
+				link = data
+				print link
+				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.senseless).addErrback(self.errorload)
+
 			else:
 				message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=3)
 		else:
@@ -916,6 +922,31 @@ class get_stream_link:
 		else:
 			self.stream_not_found()
 
+	def senseless(self, data):
+		print "Senseless LINK"
+		if re.match('.*?eval\(function\(p\,a\,c\,k\,e\,d', data, re.S):
+			print "senseless packed gefunden"
+			get_packedjava = re.findall("<script type=.text.javascript.>eval.function(.*?)</script>", data, re.S|re.DOTALL)
+			if get_packedjava:
+				print "senseless funktion packed gefunden"
+				sJavascript = get_packedjava[0]
+				sUnpacked = cJsUnpacker().unpackByString(sJavascript)
+				if sUnpacked:
+					print "sUnpacked", sUnpacked
+					if re.match('.*?\'file\',\'http://', sUnpacked):
+						print "sUnpackedfind "
+						stream_url = re.findall('\'file\',\'(http:.*?)\'\);', sUnpacked)
+						if stream_url:
+							print stream_url[0]
+							self._callback(stream_url[0])
+						else:
+							self.stream_not_found()
+				else:
+					self.stream_not_found()
+			else:
+				self.stream_not_found()
+		else:
+			self.stream_not_found()
+
 	def check_istream_link(self, data):
 		self.check_link(data, self._callback)
-				
