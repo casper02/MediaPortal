@@ -177,6 +177,10 @@ class porncityFilmScreen(Screen):
 		phMovies = re.findall('class="main-stream".*?class="cover-image">.*?<a\shref="(.*?)"\stitle="(.*?)".*?<img\ssrc="(.*?)"', data, re.S)
 		if phMovies:
 			for (phUrl, phTitle, phImage) in phMovies:
+				if re.search('images-box.com', str(phImage), re.S):
+					phImage = None
+				if re.search('rapidimg.org', str(phImage), re.S):
+					phImage = None
 				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage))
 			self.chooseMenuList.setList(map(porncityFilmListEntry, self.filmliste))
 			self.chooseMenuList.moveToIndex(0)
@@ -191,16 +195,27 @@ class porncityFilmScreen(Screen):
 		phImage = self['genreList'].getCurrent()[0][2]
 		self['name'].setText(phTitle)
 		print phImage
-		downloadPage(phImage, "/tmp/Icon.jpg").addCallback(self.ShowCover)
+		if not phImage == None:
+			downloadPage(phImage, "/tmp/Icon.jpg").addCallback(self.ShowCover)
+		else:
+			self.ShowCoverNone()			
 		
 	def ShowCover(self, picData):
-		if fileExists("/tmp/Icon.jpg"):
+		picPath = "/tmp/Icon.jpg"
+		self.ShowCoverFile(picPath)
+
+	def ShowCoverNone(self):
+		picPath = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/images/no_coverArt.png" % config.mediaportal.skin.value
+		self.ShowCoverFile(picPath)
+
+	def ShowCoverFile(self, picPath):
+		if fileExists(picPath):
 			self['coverArt'].instance.setPixmap(None)
 			self.scale = AVSwitch().getFramebufferScale()
 			self.picload = ePicLoad()
 			size = self['coverArt'].instance.size()
 			self.picload.setPara((size.width(), size.height(), self.scale[0], self.scale[1], False, 1, "#FF000000"))
-			if self.picload.startDecode("/tmp/Icon.jpg", 0, 0, False) == 0:
+			if self.picload.startDecode(picPath, 0, 0, False) == 0:
 				ptr = self.picload.getData()
 				if ptr != None:
 					self['coverArt'].instance.setPixmap(ptr.__deref__())
