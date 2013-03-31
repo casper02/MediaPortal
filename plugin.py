@@ -1057,7 +1057,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		if config.mediaportal.showbeeg.value:
 			self.plugin_liste.append(("beeg", "beeg", "Porn"))
 		if config.mediaportal.showdreiin.value:
-			self.plugin_liste.append(("Drei.in", "drein", "Porn"))
+			self.plugin_liste.append(("Drei.in", "dreiin", "Porn"))
 		if config.mediaportal.showeporner.value:
 			self.plugin_liste.append(("Eporner", "eporner", "Porn"))
 		if config.mediaportal.showhdporn.value:
