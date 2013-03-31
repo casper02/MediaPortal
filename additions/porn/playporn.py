@@ -81,23 +81,24 @@ class playpornGenreScreen(Screen):
 		self.layoutFinished()
 
 	def layoutFinished(self):
-		url = "http://playporn.to"
-		getPage(url, agent=special_headers, headers={'Cookie': 'sitechrx='+sitechrx}).addCallback(self.genreData).addErrback(self.dataError)
-
-	def genreData(self, data):
-		parse = re.search('Category\sMenu\s-->(.*)<!--\sRSS', data, re.S)
-		phCat = re.findall('class="cat-item\scat-item-.*?"><a\shref="(.*?)"\stitle=".*?">(.*?)</a>', parse.group(1), re.S)
-		if phCat:
-			for (phUrl, phTitle) in phCat:
-				phUrl = phUrl + "page/"
-				if not phTitle == "z-":
-					if not phTitle == "XXX Movie Stream":
-						self.genreliste.append((phTitle, phUrl))
-			self.genreliste.sort()
-			self.genreliste.insert(0, ("Newest", "http://playporn.to/category/xxx-movie-stream/page/"))
-			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
-			self.chooseMenuList.setList(map(playpornGenreListEntry, self.genreliste))
-			self.keyLocked = False
+		self.genreliste.append(("--- Search ---", "callSuchen"))
+		self.genreliste.append(("Newest", "http://playporn.to/category/xxx-movie-stream/page/"))
+		self.genreliste.append(("Amateur", "http://playporn.to/category/xxx-movie-stream/amateure/page/"))
+		self.genreliste.append(("Anal", "http://playporn.to/category/xxx-movie-stream/anal/page/"))
+		self.genreliste.append(("Asian", "http://playporn.to/category/xxx-movie-stream/asia/page/"))
+		self.genreliste.append(("Big Tits", "http://playporn.to/category/xxx-movie-stream/grose-bruste/page/"))
+		self.genreliste.append(("Black", "http://playporn.to/category/xxx-movie-stream/black/page/"))
+		self.genreliste.append(("Blowjob", "http://playporn.to/category/xxx-movie-stream/blowjob/page/"))
+		self.genreliste.append(("German", "http://playporn.to/category/xxx-movie-stream/deutsch/page/"))
+		self.genreliste.append(("Fetish", "http://playporn.to/category/xxx-movie-stream/fetish/page/"))
+		self.genreliste.append(("Group Sex", "http://playporn.to/category/xxx-movie-stream/gangbang-gruppensex/page/"))
+		self.genreliste.append(("Hardcore", "http://playporn.to/category/xxx-movie-stream/harcore/page/"))
+		self.genreliste.append(("Lesbian", "http://playporn.to/category/xxx-movie-stream/lesben/page/"))
+		self.genreliste.append(("Masturbation", "http://playporn.to/category/xxx-movie-stream/masturbation/page/"))
+		self.genreliste.append(("Pornstars", "http://playporn.to/category/xxx-movie-stream/pornstars/page/"))
+		self.genreliste.append(("Teens", "http://playporn.to/category/xxx-movie-stream/teens-xxx-movie-stream/page/"))
+		self.chooseMenuList.setList(map(playpornGenreListEntry, self.genreliste))
+		self.keyLocked = False
 
 	def dataError(self, error):
 		print error
