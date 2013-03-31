@@ -15,6 +15,8 @@ def playpornHosterListEntry(entry):
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		] 
 		
+cookie = ''
+
 class playpornGenreScreen(Screen):
 	
 	def __init__(self, session):
@@ -50,14 +52,33 @@ class playpornGenreScreen(Screen):
 		self.chooseMenuList.l.setItemHeight(25)
 		self['genreList'] = self.chooseMenuList
 		
-		self.onLayoutFinish.append(self.layoutFinished)
+		#self.onLayoutFinish.append(self.layoutFinished)
+		self.onLayoutFinish.append(self.get_site_cookie1)
 		
-	def layoutFinished(self):
+	def get_site_cookie1(self):
 		self.keyLocked = True
 		url = "http://playporn.to"
-		getPage(url, headers={'Cookie': 'sitechrx=43b5077fa32cbbfe4c737b96a4b5ba0f', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
+		getPage(url, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.get_site_cookie2).addErrback(self.dataError)
+		
+	def get_site_cookie2(self, data):
+		self.keyLocked = True
+		raw = re.findall('javascript"\ssrc="(.*?)">.*?scf\(\'(.*?)\'\+\'(.*?)\'.*?', data, re.S)
+		url = "http://playporn.to" + str(raw[0][0])
+		getPage(url, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.get_site_cookie3, raw[0][1], raw[0][2]).addErrback(self.dataError)
+		
+	def get_site_cookie3(self, data, cookie1, cookie2):
+		raw = re.findall('escape\(hsh.*?"(.*?)"\)', data, re.S)
+		global cookie
+		cookie = str(cookie1) + str(cookie2) + str(raw[0])
+		print cookie
+		self.layoutFinished()
+
+	def layoutFinished(self):
+		url = "http://playporn.to"
+		getPage(url, agent=std_headers, headers={'Cookie':'sitechrx='+cookie, 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
+		print data
 		parse = re.search('Category\sMenu\s-->(.*)<!--\sRSS', data, re.S)
 		phCat = re.findall('class="cat-item\scat-item-.*?"><a\shref="(.*?)"\stitle=".*?">(.*?)</a>', parse.group(1), re.S)
 		if phCat:
@@ -164,7 +185,7 @@ class playpornFilmScreen(Screen):
 		else:
 			url = "%s%s" % (self.phCatLink, str(self.page))
 		print url
-		getPage(url, headers={'Cookie': 'sitechrx=43b5077fa32cbbfe4c737b96a4b5ba0f', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
+		getPage(url, headers={'Cookie':'sitechrx='+cookie, 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
 	def loadData(self, data):
 		lastp = re.findall('class=\'pages\'>.*?of (.*?)</span>', data, re.S)
@@ -178,6 +199,8 @@ class playpornFilmScreen(Screen):
 		phMovies = re.findall('class="photo-thumb">.*?<a\shref="(.*?)"\stitle="(.*?)".*?thumbindex"\ssrc="(.*?)"', data, re.S)
 		if phMovies:
 			for (phUrl, phTitle, phImage) in phMovies:
+				if re.search('images-box.com|rapidimg.org', str(phImage), re.S):
+					phImage = None
 				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage))
 			self.chooseMenuList.setList(map(playpornFilmListEntry, self.filmliste))
 			self.chooseMenuList.moveToIndex(0)
@@ -192,16 +215,27 @@ class playpornFilmScreen(Screen):
 		phImage = self['genreList'].getCurrent()[0][2]
 		self['name'].setText(phTitle)
 		print phImage
-		downloadPage(phImage, "/tmp/Icon.jpg").addCallback(self.ShowCover)
-		
+		if not phImage == None:
+			downloadPage(phImage, "/tmp/Icon.jpg").addCallback(self.ShowCover)
+		else:
+			self.ShowCoverNone()		
+
 	def ShowCover(self, picData):
-		if fileExists("/tmp/Icon.jpg"):
+		picPath = "/tmp/Icon.jpg"
+		self.ShowCoverFile(picPath)
+
+	def ShowCoverNone(self):
+		picPath = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/images/no_coverArt.png" % config.mediaportal.skin.value
+		self.ShowCoverFile(picPath)
+
+	def ShowCoverFile(self, picPath):
+		if fileExists(picPath):
 			self['coverArt'].instance.setPixmap(None)
 			self.scale = AVSwitch().getFramebufferScale()
 			self.picload = ePicLoad()
 			size = self['coverArt'].instance.size()
 			self.picload.setPara((size.width(), size.height(), self.scale[0], self.scale[1], False, 1, "#FF000000"))
-			if self.picload.startDecode("/tmp/Icon.jpg", 0, 0, False) == 0:
+			if self.picload.startDecode(picPath, 0, 0, False) == 0:
 				ptr = self.picload.getData()
 				if ptr != None:
 					self['coverArt'].instance.setPixmap(ptr.__deref__())
@@ -310,7 +344,7 @@ class playpornStreamListeScreen(Screen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		getPage(self.streamFilmLink, headers={'Cookie': 'sitechrx=43b5077fa32cbbfe4c737b96a4b5ba0f', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
+		getPage(self.streamFilmLink, headers={'Cookie':'sitechrx='+cookie, 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
 		
 	def dataError(self, error):
 		print error
@@ -335,7 +369,7 @@ class playpornStreamListeScreen(Screen):
 		streamLink = self['genreList'].getCurrent()[0][1]
 		if streamLink == None:
 			return
-		getPage(streamLink, headers={'Cookie': 'sitechrx=43b5077fa32cbbfe4c737b96a4b5ba0f', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVideoPage).addErrback(self.dataError)
+		getPage(streamLink, headers={'Cookie':'sitechrx='+cookie, 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
 		videoPage = re.findall('iframe\ssrc="(.*?)"', data, re.S)
