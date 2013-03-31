@@ -177,9 +177,7 @@ class porncityFilmScreen(Screen):
 		phMovies = re.findall('class="main-stream".*?class="cover-image">.*?<a\shref="(.*?)"\stitle="(.*?)".*?<img\ssrc="(.*?)"', data, re.S)
 		if phMovies:
 			for (phUrl, phTitle, phImage) in phMovies:
-				if re.search('images-box.com', str(phImage), re.S):
-					phImage = None
-				if re.search('rapidimg.org', str(phImage), re.S):
+				if re.search('images-box.com|rapidimg.org', str(phImage), re.S):
 					phImage = None
 				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage))
 			self.chooseMenuList.setList(map(porncityFilmListEntry, self.filmliste))
