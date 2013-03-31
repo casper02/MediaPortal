@@ -22,6 +22,7 @@ special_headers = {
 	'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
 	'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
 	'Accept-Language': 'de-DE,de;q=0.8,en-US;q=0.6,en;q=0.4',
+	'Referer': 'http://playporn.to/'
 }
 
 class playpornGenreScreen(Screen):
@@ -59,7 +60,6 @@ class playpornGenreScreen(Screen):
 		self.chooseMenuList.l.setItemHeight(25)
 		self['genreList'] = self.chooseMenuList
 		
-		#self.onLayoutFinish.append(self.layoutFinished)
 		self.onLayoutFinish.append(self.get_site_cookie1)
 		
 	def get_site_cookie1(self):
@@ -77,7 +77,7 @@ class playpornGenreScreen(Screen):
 		raw = re.findall('escape\(hsh.*?"(.*?)"\)', data, re.S)
 		global sitechrx
 		sitechrx = str(cookie1) + str(cookie2) + str(raw[0])
-		print sitechrx
+		print 'sitechrx='+sitechrx
 		self.layoutFinished()
 
 	def layoutFinished(self):
@@ -85,7 +85,6 @@ class playpornGenreScreen(Screen):
 		getPage(url, agent=special_headers, headers={'Cookie': 'sitechrx='+sitechrx}).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		print data
 		parse = re.search('Category\sMenu\s-->(.*)<!--\sRSS', data, re.S)
 		phCat = re.findall('class="cat-item\scat-item-.*?"><a\shref="(.*?)"\stitle=".*?">(.*?)</a>', parse.group(1), re.S)
 		if phCat:
