@@ -81,20 +81,24 @@ class gstreaminxxxGenreScreen(Screen):
 		self.layoutFinished()
 
 	def layoutFinished(self):
-		url = "http://g-stream.in/forumdisplay.php?f=661"
-		getPage(url, agent=special_headers, headers={'Cookie': 'sitechrx='+sitechrx}).addCallback(self.genreData).addErrback(self.dataError)
-
-	def genreData(self, data):
-		parse = re.search('>XXX\sTAGS:\s</a>(.*?)</div></div>', data, re.S)
-		phCat = re.findall('<a\shref="(.*?)\#xxxtags".*?>(.*?)</a>', parse.group(1), re.S)
-		if phCat:
-			for (phUrl, phTitle) in phCat:
-				phUrl = phUrl.replace('&amp;','&')
-				phUrl = 'http://g-stream.in/' + phUrl + '&page='
-				self.genreliste.append((phTitle, phUrl))
-			self.genreliste.sort()
-			self.chooseMenuList.setList(map(gstreaminxxxGenreListEntry, self.genreliste))
-			self.keyLocked = False
+		self.genreliste.append(("Newest", "http://g-stream.in/forumdisplay.php?f=661&page="))
+		self.genreliste.append(("Amateur", "http://g-stream.in/forumdisplay.php?s=&f=661&page=1&pp=20&sort=lastpost&order=desc&daysprune=-1&prefixid=Amateure1&page="))
+		self.genreliste.append(("Anal", "http://g-stream.in/forumdisplay.php?s=&f=661&page=1&pp=20&sort=lastpost&order=desc&daysprune=-1&prefixid=Anal&page="))
+		self.genreliste.append(("Asian", "http://g-stream.in/forumdisplay.php?s=&f=661&page=1&pp=20&sort=lastpost&order=desc&daysprune=-1&prefixid=Asia&page="))
+		self.genreliste.append(("Big Tits", "http://g-stream.in/forumdisplay.php?s=&f=661&page=1&pp=20&sort=lastpost&order=desc&daysprune=-1&prefixid=GrosseBrueste&page="))
+		self.genreliste.append(("Black", "http://g-stream.in/forumdisplay.php?s=&f=661&page=1&pp=20&sort=lastpost&order=desc&daysprune=-1&prefixid=Ebony&page="))
+		self.genreliste.append(("Blowjob", "http://g-stream.in/forumdisplay.php?s=&f=661&page=1&pp=20&sort=lastpost&order=desc&daysprune=-1&prefixid=Blowjob&page="))
+		self.genreliste.append(("Fetish", "http://g-stream.in/forumdisplay.php?s=&f=661&page=1&pp=20&sort=lastpost&order=desc&daysprune=-1&prefixid=Fetish&page="))
+		self.genreliste.append(("Gay", "http://g-stream.in/forumdisplay.php?s=&f=661&page=1&pp=20&sort=lastpost&order=desc&daysprune=-1&prefixid=Gay&page="))
+		self.genreliste.append(("German", "http://g-stream.in/forumdisplay.php?s=&f=661&page=1&pp=20&sort=lastpost&order=desc&daysprune=-1&prefixid=Deutsch&page="))
+		self.genreliste.append(("Group Sex", "http://g-stream.in/forumdisplay.php?s=&f=661&page=1&pp=20&sort=lastpost&order=desc&daysprune=-1&prefixid=Gruppensex&page="))
+		self.genreliste.append(("Hardcore", "http://g-stream.in/forumdisplay.php?s=&f=661&page=1&pp=20&sort=lastpost&order=desc&daysprune=-1&prefixid=Hardcore&page="))
+		self.genreliste.append(("Interracial", "http://g-stream.in/forumdisplay.php?s=&f=661&page=1&pp=20&sort=lastpost&order=desc&daysprune=-1&prefixid=International&page="))
+		self.genreliste.append(("Lesbian", "http://g-stream.in/forumdisplay.php?s=&f=661&page=1&pp=20&sort=lastpost&order=desc&daysprune=-1&prefixid=Lesben&page="))
+		self.genreliste.append(("Masturbation", "http://g-stream.in/forumdisplay.php?s=&f=661&page=1&pp=20&sort=lastpost&order=desc&daysprune=-1&prefixid=Masturbation&page="))
+		self.genreliste.append(("Teens", "http://g-stream.in/forumdisplay.php?s=&f=661&page=1&pp=20&sort=lastpost&order=desc&daysprune=-1&prefixid=Teens&page="))
+		self.chooseMenuList.setList(map(gstreaminxxxGenreListEntry, self.genreliste))
+		self.keyLocked = False
 
 	def dataError(self, error):
 		print error
@@ -338,17 +342,20 @@ class gstreaminxxxStreamListeScreen(Screen):
 	def loadPageData(self, data):
 		print "daten bekommen"
 		raw = re.findall('<table\sid="post[0-9]+"(.*?)</table>', data, re.S)
-		streams = re.findall('"(http://.*?(g-stream.in\/secure\/.*?\/|flashx|g-stream.in|.[a-z]+).*?)"', raw[0], re.S)
+		streams = re.findall('"(http://.*?(g-stream.in\/secure\/.*?\/|flashx|[w]+.putlocker|.).*?)"', raw[0], re.S)
 		if streams:
 			for (stream, hostername) in streams:
 				if re.match('.*?(putlocker|sockshare|streamclou|xvidstage|filenuke|movreel|nowvideo|xvidstream|uploadc|vreer|MonsterUploads|Novamov|Videoweed|Divxstage|Ginbig|Flashstrea|Movshare|yesload|faststream|Vidstream|PrimeShare|flashx|Divxmov|Putme|Zooupload|Wupfile)', hostername.strip(' '), re.S|re.I):
 					print hostername, stream
 					if hostername == 'flashx':
-						hostername = hostername.title()
+						hostername = 'Flashx'
+					if hostername == 'www.putlocker':
+						hostername = 'Putlocker'
 					hostername = hostername.replace('g-stream.in/secure/streamcloud.eu/', 'Streamcloud (Secure)')
 					hostername = hostername.replace('g-stream.in/secure/flashx.tv/', 'Flashx (Secure)')
+					hostername = hostername.replace('g-stream.in/secure/www.putlocker.com/', 'Putlocker (Secure)')
 					self.filmliste.append((hostername, stream))
-		else:
+		if len(self.filmliste) < 1:
 			self.filmliste.append(('Keine Streams gefunden.', None))
 		self.chooseMenuList.setList(map(gstreaminxxxHosterListEntry, self.filmliste))
 		self['name'].setText(self.streamName)
@@ -363,11 +370,17 @@ class gstreaminxxxStreamListeScreen(Screen):
 			return
 		url = streamLink
 		url = url.replace('&amp;','&')
-		print url
+		print 'Hoster: ' + streamHoster
+		print 'URL: ' + url
 		self['name'].setText('Bitte warten...')
-		if streamHoster.lower() == 'flashx':
-			self.get_stream(streamLink)
+		if streamHoster == 'Flashx':
+			print 'Direct Play'
+			self.get_stream(url)
+		elif streamHoster == 'Putlocker':
+			print 'Direct Play'
+			self.get_stream(url)
 		else:
+			print 'Secured Play'
 			getPage(streamLink, agent=special_headers, headers={'Cookie': 'sitechrx='+sitechrx}).addCallback(self.getVideoPage).addErrback(self.dataError)
 
 	def getVideoPage(self, data):
@@ -376,6 +389,9 @@ class gstreaminxxxStreamListeScreen(Screen):
 		if not videoPage:
 			# secured flashx url
 			videoPage = re.findall('<meta\sproperty="og:video"\scontent=\'(.*?)\'>', data, re.S)
+		if not videoPage:
+			# secured putlocker url
+			videoPage = re.findall('src=".*?smarterdownloads.*file=(.*?)\&subid', data, re.S)
 		if videoPage:
 			for phurl in videoPage:
 				url = unquote(phurl)
