@@ -41,7 +41,7 @@ class spoboxGenreScreen(Screen):
 		self.genreliste.append(("Volleyball", "http://www.spobox.tv/volleyball"))
 		self.genreliste.append(("Sport-Mix", "http://www.spobox.tv/sport-mix"))
 		self.genreliste.append(("Tennis", "http://www.spobox.tv/tennis"))
-		self.genreliste.append(("Juda", "http://www.spobox.tv/judo"))
+		self.genreliste.append(("Judo", "http://www.spobox.tv/judo"))
 		self.genreliste.append(("Beachvolleyball", "http://www.spobox.tv/beachvolleyball"))
 		self.genreliste.append(("Hockey", "http://www.spobox.tv/hockey"))
 		self.genreliste.append(("Motocross", "http://www.spobox.tv/motocross"))
@@ -96,7 +96,7 @@ class spoboxSubGenreScreen(Screen):
 		print error
 
 	def loadPageData(self, data):
-		genre = re.findall('<li><a href="(/'+self.streamGenreName+'/.*?)">(.*?)</a></li>', data, re.I)
+		genre = re.findall('<li><a href="(/'+self.streamGenreName+'.*?/.*?)">(.*?)</a></li>', data, re.I)
 		if genre:
 			for (url,name) in genre:
 				url = "http://www.spobox.tv%s" % url
