@@ -503,9 +503,9 @@ class haupt_Screen(Screen, ConfigListScreen):
 		if config.mediaportal.showhdporn.value:
 			self.fun.append(self.hauptListEntry("HDPorn", "hdporn"))
 		if config.mediaportal.showIStreamPorn.value:
-			self.movies.append(self.hauptListEntry("IStream-XXX", "istreamporn"))
+			self.fun.append(self.hauptListEntry("IStream-XXX", "istreamporn"))
 		if config.mediaportal.showM2kPorn.value:
-			self.movies.append(self.hauptListEntry("Movie2k-XXX", "movie2kporn"))
+			self.fun.append(self.hauptListEntry("Movie2k-XXX", "movie2kporn"))
 		if config.mediaportal.showpinkrod.value:
 			self.fun.append(self.hauptListEntry("Pinkrod", "pinkrod"))
 		if config.mediaportal.showplayporn.value:
