@@ -464,7 +464,7 @@ class bsStreams(Screen, ConfigListScreen):
 		if streams:
 			for (bsUrl,bsStream) in streams:
 				bsUrl = "http://www.burning-seri.es/" + bsUrl
-				if re.match('.*?(Ecostream|Sockshare|Streamcloud|Putlocker|Filenuke|Ecostream)',bsStream,re.I):
+				if re.match('.*?(Ecostream|Sockshare|Streamcloud|Putlocker|Filenuke|MovShare|Novamov|DivxStage|UploadC|NowVideo|VideoWeed|Flashx|FileNuke)',bsStream,re.I):
 					self.streamList.append((bsStream,bsUrl))
 			self.streamMenuList.setList(map(bsListEntry, self.streamList))
 			self.keyLocked = False
@@ -508,149 +508,24 @@ class bsStreams(Screen, ConfigListScreen):
 		self.session.open(MoviePlayer, sref)
 		
 	def findStream(self, data):
-		if re.match(".*?http://www.sockshare.com/", data, re.S):
-			link = re.findall("(http://www.sockshare.com/.*?)'", data, re.S)
-		elif re.match(".*?http://www.putlocker.com/", data, re.S):
-			link = re.findall("(http://www.putlocker.com/.*?)'", data, re.S)	
-		elif re.match(".*?http://streamcloud.eu/", data, re.S):
-			link = re.findall("(http://streamcloud.eu/.*?)'", data, re.S)
-		elif re.match(".*?http://www.uploadc.com/", data, re.S):
-			link = re.findall("(http://www.uploadc.com/.*?)'", data, re.S)
-		elif re.match(".*?http://www.filenuke.com", data, re.S):
-			link = re.findall("(http://www.filenuke.com/.*?)'", data, re.S)
-		elif re.match(".*?http://www.ecostream.tv", data, re.S):
-			link = re.findall("(http://www.ecostream.tv/.*?)'", data, re.S)			
-			
-		if link:
-			link = link[0]
-			print link
-			if re.match(".*?putlocker.com/(file|embed)/", link, re.S):
-				link = link.replace('file','embed')
-				print "url:", link
-				if link:
-					getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.streamPutlockerSockshare, link, "putlocker").addErrback(self.dataError)
-
-			elif re.match(".*?sockshare.com/(file|embed)/", link, re.S):
-				link = link.replace('file','embed')
-				print "url:", link
-				if link:
-					getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.streamPutlockerSockshare, link, "sockshare").addErrback(self.dataError)
-	
-			elif re.match(".*?streamcloud.eu/", link, re.S):
-				if link:
-					print "url", link
-					getPage(link, cookies=ck, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.streamcloud).addErrback(self.dataError)
-
-			elif re.match('.*?filenuke.com', link, re.S):
-				if link:
-					print "url:", link
-					getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.filenuke, link).addErrback(self.dataError)
-					
-			elif re.match('.*?ecostream.tv', link, re.S):
-				if link:
-					print "url:", link
-					getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.eco_read).addErrback(self.dataError)
-
-	def filenuke(self, data, url):
-		id = re.findall('<input type="hidden" name="id".*?value="(.*?)">', data)
-		fname = re.findall('<input type="hidden" name="fname".*?alue="(.*?)">', data)
-		post_data = urllib.urlencode({'op': 'download1', 'usr_login': '', 'id': id[0], 'fname': fname[0], 'referer': '', 'method_free': 'Free'})
-		print post_data
-		getPage(url, method='POST', postdata=post_data, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.filenuke_data).addErrback(self.dataError)
-
-	def filenuke_data(self, data):
-		print "drin"
-		get_packedjava = re.findall("<script type=.text.javascript.>eval.function(.*?)</script>", data, re.S|re.DOTALL)
-		if get_packedjava:
-			#print get_packedjava
-			sJavascript = get_packedjava[1]
-			sUnpacked = cJsUnpacker().unpackByString(sJavascript)
-			if sUnpacked:
-				stream_url = re.findall("'file','(.*?)'", sUnpacked)
-				if stream_url:
-					print stream_url[0]
-					self.playfile(stream_url[0])		
-				else:
-					self.stream_not_found()
-			else:
-				self.stream_not_found()
+		#print data
+		
+		#test = re.findall('<a href="(.*?)" target="_blank">', data, re.S)
+		
+		if re.match(".*?<iframe.*?src=",data, re.S|re.I):
+			test = re.findall('<iframe.*?src=["|\'](http://.*?)["|\']', data, re.S|re.I)
 		else:
-			self.stream_not_found()
-
-	def streamPutlockerSockshare(self, data, url, provider):
-		if re.match('.*?File Does not Exist', data, re.S):
-			message = self.session.open(MessageBox, "File Does not Exist, or Has Been Removed", MessageBox.TYPE_INFO, timeout=5)
-		elif re.match('.*?Encoding to enable streaming is in progresss', data, re.S):
-			message = self.session.open(MessageBox, "Encoding to enable streaming is in progresss. Try again soon.", MessageBox.TYPE_INFO, timeout=5)			
+			test = re.findall('<a target=["|\']_blank["|\'] href=["|\'](http://.*?)["|\']', data, re.S|re.I)
+		print test
+		
+		get_stream_link(self.session).check_link(test[0], self.got_link, False)
+		
+	def got_link(self, stream_url):
+		if stream_url == None:
+			message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=3)
 		else:
-			print "provider:", provider
-			enter = re.findall('<input type="hidden" value="(.*?)" name="fuck_you">', data)
-			print "enter:", enter
-			values = {'fuck_you': enter[0], 'confirm': 'Close+Ad+and+Watch+as+Free+User'}
-			user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
-			headers = { 'User-Agent' : user_agent}
-			cookiejar = cookielib.LWPCookieJar()
-			cookiejar = urllib2.HTTPCookieProcessor(cookiejar)
-			opener = urllib2.build_opener(cookiejar)
-			urllib2.install_opener(opener)
-			data = urlencode(values)
-			req = urllib2.Request(url, data, headers)
-			try:
-				response = urllib2.urlopen(req)
-			except urllib2.HTTPError, e:
-				print e.code
-				self.stream_not_found()
-			except urllib2.URLError, e:
-				print e.args
-				self.stream_not_found()
-			else:
-				link = response.read()
-				if link:
-					print "found embed data"
-					embed = re.findall("get_file.php.stream=(.*?)'\,", link, re.S)
-					if embed:
-						req = urllib2.Request('http://www.%s.com/get_file.php?stream=%s' %(provider, embed[0]))
-						req.add_header('User-Agent', user_agent)
-						try:
-							response = urllib2.urlopen(req)
-						except urllib2.HTTPError, e:
-							print e.code
-							self.stream_not_found()
-						except urllib2.URLError, e:
-							print e.args
-							self.stream_not_found()
-						else:
-							link = response.read()
-							if link:
-								stream_url = re.findall('<media:content url="(.*?)"', link, re.S)
-								print stream_url[1].replace('&amp;','&')
-								self.playfile(stream_url[1].replace('&amp;','&'))
-							else:
-								self.stream_not_found()
-					else:
-						self.stream_not_found()
-				else:
-					self.stream_not_found()
+			self.playfile(stream_url.replace('&amp;','&'))
 
-	def streamcloud(self, data):
-		id = re.findall('<input type="hidden" name="id".*?value="(.*?)">', data)
-		fname = re.findall('<input type="hidden" name="fname".*?alue="(.*?)">', data)
-		hash = re.findall('<input type="hidden" name="hash" value="(.*?)">', data)
-		if id and fname and hash:
-			url = "http://streamcloud.eu/%s" % id[0]
-			post_data = urllib.urlencode({'op': 'download2', 'usr_login': '', 'id': id[0], 'fname': fname[0], 'referer': '', 'hash': hash[0], 'imhuman':'Weiter+zum+Video'})
-			getPage(url, method='POST', cookies=ck, postdata=post_data, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.streamcloud_data).addErrback(self.dataError)
-		else:
-			self.stream_not_found()
-
-	def streamcloud_data(self, data):
-		stream_url = re.findall('file: "(.*?)"', data)
-		if stream_url:
-			print stream_url
-			self.playfile(stream_url[0])
-		else:
-			self.stream_not_found()
-			
 	def eco_read(self, data):
 		post_url = re.findall('<form name="setss" method="post" action="(.*?)">', data, re.S)
 		if post_url:
