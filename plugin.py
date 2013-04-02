@@ -200,7 +200,6 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		### Grauzone
 		self.configlist.append(getConfigListEntry("----- Grauzone -----", config.mediaportal.fake_entry))
 		self.configlist.append(getConfigListEntry("Zeige SzeneStreams:", config.mediaportal.showSzeneStreams))
-		self.configlist.append(getConfigListEntry("Zeige Songs.to:", config.mediaportal.showSongsto))
 		self.configlist.append(getConfigListEntry("Zeige My-Entertainment:", config.mediaportal.showMEHD))
 		self.configlist.append(getConfigListEntry("Zeige IStream:", config.mediaportal.showIStream))
 		self.configlist.append(getConfigListEntry("Zeige Baskino:", config.mediaportal.showBaskino))
@@ -222,10 +221,13 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("----- Fun -----", config.mediaportal.fake_entry))
 		self.configlist.append(getConfigListEntry("Zeige Rofl.to:", config.mediaportal.showRofl))
 		self.configlist.append(getConfigListEntry("Zeige Fail.to:", config.mediaportal.showFail))
+		self.configlist.append(getConfigListEntry("Zeige LiveLeak:", config.mediaportal.showLiveLeak))
 		self.configlist.append(getConfigListEntry("Zeige Radio.de:", config.mediaportal.showRadio))		
 		self.configlist.append(getConfigListEntry("Zeige TvKino:", config.mediaportal.showTvkino))
 		self.configlist.append(getConfigListEntry("Zeige FilmOn:", config.mediaportal.showFilmOn))
 		self.configlist.append(getConfigListEntry("Zeige Focus:", config.mediaportal.showFocus))
+		self.configlist.append(getConfigListEntry("Zeige Songs.to:", config.mediaportal.showSongsto))
+		self.configlist.append(getConfigListEntry("Zeige AllMusicHouse:", config.mediaportal.showAllMusicHouse))
 
 		### mediatheken
 		self.configlist.append(getConfigListEntry("----- Mediatheken -----", config.mediaportal.fake_entry))
@@ -241,13 +243,11 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige Doku.me:", config.mediaportal.showDoku))
 		self.configlist.append(getConfigListEntry("Zeige Myvideo:", config.mediaportal.showMyvideo))
 		self.configlist.append(getConfigListEntry("Zeige DokuStream:", config.mediaportal.showDokuStream))
-		self.configlist.append(getConfigListEntry("Zeige LiveLeak:", config.mediaportal.showLiveLeak))
 		self.configlist.append(getConfigListEntry("Zeige 4Players:", config.mediaportal.show4Players))
 		self.configlist.append(getConfigListEntry("Zeige mahlzeit.tv:", config.mediaportal.showMahlzeitTV))
 		self.configlist.append(getConfigListEntry("Zeige Apple Movie Trailers:", config.mediaportal.showappletrailers))
 		self.configlist.append(getConfigListEntry("Zeige DOKUh:", config.mediaportal.showDOKUh))
 		self.configlist.append(getConfigListEntry("Zeige DokuHouse:", config.mediaportal.showDokuHouse))
-		self.configlist.append(getConfigListEntry("Zeige AllMusicHouse:", config.mediaportal.showAllMusicHouse))
 		self.configlist.append(getConfigListEntry("Zeige AutoBild:", config.mediaportal.showAutoBild))
 		self.configlist.append(getConfigListEntry("Zeige SportBild:", config.mediaportal.showSportBild))
 		self.configlist.append(getConfigListEntry("Zeige Tivi:", config.mediaportal.showtivi))
@@ -367,180 +367,193 @@ class haupt_Screen(Screen, ConfigListScreen):
 		
 		self['name'] = Label("Plugin Auswahl")
 		
-		self['infos'] = chooseMenuList([])
-		self['Infos'] = Label("Info / More")
+		self['funsport'] = chooseMenuList([])
+		self['Funsport'] = Label("Fun/Sport")
 		
-		self['fun'] = chooseMenuList([])
-		self['Fun'] = Label("Fun / TV")
+		self['grauzone'] = chooseMenuList([])
+		self['Grauzone'] = Label("Grauzone")
 		
-		self['movies'] = chooseMenuList([])
-		self['Movies'] = Label("Filme / Serien")
+		self['mediatheken'] = chooseMenuList([])
+		self['Mediatheken'] = Label("Mediatheken")
 	
-		self.currenlist = "movies"
+		self['porn'] = chooseMenuList([])
+		self['Porn'] = Label("Porn")
+
+		self.currenlist = "mediatheken"
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
-		self.movies = []
-		self.infos = []
-		self.fun = []	
+		self.mediatheken = []
+		self.grauzone = []
+		self.funsport = []	
+		self.porn = []	
 		
-		# movies
+		# Mediatheken
 		if config.mediaportal.showMyvideo.value:
-			self.movies.append(self.hauptListEntry("MyVideo", "myvideo"))
+			self.mediatheken.append(self.hauptListEntry("MyVideo", "myvideo"))
 		if config.mediaportal.showKinderKino.value:
-			self.movies.append(self.hauptListEntry("KinderKino", "kinderkino"))
-		if config.mediaportal.showKinoKiste.value:
-			self.movies.append(self.hauptListEntry("KinoKiste", "kinokiste"))
-		if config.mediaportal.showBs.value:
-			self.movies.append(self.hauptListEntry("Burning-Series", "burningseries"))
-		if config.mediaportal.show1channel.value:
-			self.movies.append(self.hauptListEntry("1channel", "1channel"))
+			self.mediatheken.append(self.hauptListEntry("KinderKino", "kinderkino"))
 		if config.mediaportal.showNetzKino.value:
-			self.movies.append(self.hauptListEntry("NetzKino", "netzkino"))
-		if config.mediaportal.showBaskino.value:
-			self.movies.append(self.hauptListEntry("Baskino", "baskino"))
-		if config.mediaportal.showKinox.value:
-			self.movies.append(self.hauptListEntry("Kinox", "kinox"))
-		if config.mediaportal.showStreamOase.value:
-			self.movies.append(self.hauptListEntry("StreamOase", "streamoase"))
+			self.mediatheken.append(self.hauptListEntry("NetzKino", "netzkino"))
 		if config.mediaportal.showtivi.value:
-			self.movies.append(self.hauptListEntry("Tivi", "tivi"))
-		if config.mediaportal.showMEHD.value:
-			self.movies.append(self.hauptListEntry("My-Entertainment", "mehd"))
-		if config.mediaportal.showM2k.value:
-			self.movies.append(self.hauptListEntry("Movie2k", "movie2k"))
-		if config.mediaportal.showIStream.value:
-			self.movies.append(self.hauptListEntry("IStream", "istream"))
-		if config.mediaportal.showSzeneStreams.value:
-			self.movies.append(self.hauptListEntry("SzeneStreams", "szenestreams"))
+			self.mediatheken.append(self.hauptListEntry("Tivi", "tivi"))
 		if config.mediaportal.showVoxnow.value:
-			self.movies.append(self.hauptListEntry("VOXNOW", "voxnow"))
+			self.mediatheken.append(self.hauptListEntry("VOXNOW", "voxnow"))
 		if config.mediaportal.showRTLnow.value:
-			self.movies.append(self.hauptListEntry("RTLNOW", "rtlnow"))
+			self.mediatheken.append(self.hauptListEntry("RTLNOW", "rtlnow"))
 		if config.mediaportal.showNTVnow.value:
-			self.movies.append(self.hauptListEntry("N-TVNOW", "ntvnow"))
+			self.mediatheken.append(self.hauptListEntry("N-TVNOW", "ntvnow"))
 		if config.mediaportal.showRTL2now.value:
-			self.movies.append(self.hauptListEntry("RTL2NOW", "rtl2now"))
+			self.mediatheken.append(self.hauptListEntry("RTL2NOW", "rtl2now"))
 		if config.mediaportal.showRTLnitro.value:
-			self.movies.append(self.hauptListEntry("RTLNITRONOW", "rtlnitro"))
+			self.mediatheken.append(self.hauptListEntry("RTLNITRONOW", "rtlnitro"))
 		if config.mediaportal.showSUPERRTLnow.value:
-			self.movies.append(self.hauptListEntry("SUPERRTLNOW", "superrtlnow"))
+			self.mediatheken.append(self.hauptListEntry("SUPERRTLNOW", "superrtlnow"))
 		if config.mediaportal.showZDF.value:
-			self.movies.append(self.hauptListEntry("ZDF Mediathek", "zdf"))
+			self.mediatheken.append(self.hauptListEntry("ZDF Mediathek", "zdf"))
 		if config.mediaportal.showZDF.value:
-			self.movies.append(self.hauptListEntry("ORF TVthek", "orf"))
-		# info
-		if config.mediaportal.showDoku.value:
-			self.infos.append(self.hauptListEntry("Doku.me", "doku"))		
-		if config.mediaportal.showSportBild.value:
-			self.infos.append(self.hauptListEntry("SportBild", "sportbild"))
-		if config.mediaportal.showAutoBild.value:
-			self.infos.append(self.hauptListEntry("AutoBild", "autobild"))
-		if config.mediaportal.showLaola1.value:
-			self.infos.append(self.hauptListEntry("Laola1 Live", "laola1"))
-		if config.mediaportal.showFocus.value:
-			self.infos.append(self.hauptListEntry("Focus", "focus"))
-		if config.mediaportal.showCczwei.value:
-			self.infos.append(self.hauptListEntry("CCZwei", "cczwei"))
-		if config.mediaportal.showTrailer.value:
-			self.infos.append(self.hauptListEntry("Filmtrailer", "trailer"))
-		if config.mediaportal.showVutec.value:
-			self.infos.append(self.hauptListEntry("Vutechtalk", "vutechtalk"))
-		if config.mediaportal.showDsc.value:
-			self.infos.append(self.hauptListEntry("Dreamscreencast", "dreamscreencast"))
-		if config.mediaportal.showKoase.value:
-			self.infos.append(self.hauptListEntry("Konzert Oase", "koase"))
-		if config.mediaportal.showNhl.value:
-			self.infos.append(self.hauptListEntry("NHL", "nhl"))
+			self.mediatheken.append(self.hauptListEntry("ORF TVthek", "orf"))
 		if config.mediaportal.show4Players.value:
-			self.infos.append(self.hauptListEntry("4Players", "4players"))
-		if config.mediaportal.showMahlzeitTV.value:
-			self.infos.append(self.hauptListEntry("mahlzeit.tv", "mahlzeit"))
+			self.mediatheken.append(self.hauptListEntry("4Players", "4players"))
 		if config.mediaportal.showappletrailers.value:
-			self.infos.append(self.hauptListEntry("AppleTrailer", "appletrailers"))
+			self.mediatheken.append(self.hauptListEntry("AppleTrailer", "appletrailers"))
+		if config.mediaportal.showAutoBild.value:
+			self.mediatheken.append(self.hauptListEntry("AutoBild", "autobild"))
+		if config.mediaportal.showCczwei.value:
+			self.mediatheken.append(self.hauptListEntry("CCZwei", "cczwei"))
+		if config.mediaportal.showDoku.value:
+			self.mediatheken.append(self.hauptListEntry("Doku.me", "doku"))		
 		if config.mediaportal.showDOKUh.value:
-			self.infos.append(self.hauptListEntry("DOKUh", "dokuh"))
+			self.mediatheken.append(self.hauptListEntry("DOKUh", "dokuh"))
 		if config.mediaportal.showDokuHouse.value:
-			self.infos.append(self.hauptListEntry("DokuHouse", "dokuhouse"))
-		if config.mediaportal.showAllMusicHouse.value:
-			self.infos.append(self.hauptListEntry("AllMusicHouse", "allmusichouse"))
+			self.mediatheken.append(self.hauptListEntry("DokuHouse", "dokuhouse"))
 		if config.mediaportal.showDokuStream.value:
-			self.infos.append(self.hauptListEntry("DokuStream", "dokustream"))
-		# fun & TV
-		if config.mediaportal.showRofl.value:
-			self.fun.append(self.hauptListEntry("Rofl.to", "rofl"))
-		if config.mediaportal.showFail.value:
-			self.fun.append(self.hauptListEntry("Fail.to", "fail"))
-		if config.mediaportal.showLiveLeak.value:
-			self.fun.append(self.hauptListEntry("LiveLeak", "liveleak"))
-		if config.mediaportal.showFilmOn.value:
-			self.fun.append(self.hauptListEntry("FilmOn", "filmon"))
-		if config.mediaportal.showTvkino.value:
-			self.fun.append(self.hauptListEntry("TV-Kino", "tvkino"))
-		if config.mediaportal.showRadio.value:
-			self.fun.append(self.hauptListEntry("Radio.de", "radiode"))
-		if config.mediaportal.showSpobox.value:
-			self.fun.append(self.hauptListEntry("Spobox", "spobox"))
-		if config.mediaportal.showSongsto.value:
-			self.fun.append(self.hauptListEntry("Songs.to", "songsto"))
+			self.mediatheken.append(self.hauptListEntry("DokuStream", "dokustream"))
+		if config.mediaportal.showDsc.value:
+			self.mediatheken.append(self.hauptListEntry("Dreamscreencast", "dreamscreencast"))
+		if config.mediaportal.showTrailer.value:
+			self.mediatheken.append(self.hauptListEntry("Filmtrailer", "trailer"))
+		if config.mediaportal.showFocus.value:
+			self.mediatheken.append(self.hauptListEntry("Focus", "focus"))
+		if config.mediaportal.showMahlzeitTV.value:
+			self.mediatheken.append(self.hauptListEntry("mahlzeit.tv", "mahlzeit"))
 		if config.mediaportal.showScienceTV.value:
-			self.fun.append(self.hauptListEntry("ScienceTV", "sciencetv"))
+			self.mediatheken.append(self.hauptListEntry("ScienceTV", "sciencetv"))
+		if config.mediaportal.showSportBild.value:
+			self.mediatheken.append(self.hauptListEntry("SportBild", "sportbild"))
+		if config.mediaportal.showVutec.value:
+			self.mediatheken.append(self.hauptListEntry("Vutechtalk", "vutechtalk"))
+
+		# Grauzone
+		if config.mediaportal.showSzeneStreams.value:
+			self.grauzone.append(self.hauptListEntry("SzeneStreams", "szenestreams"))
+		if config.mediaportal.showStreamOase.value:
+			self.grauzone.append(self.hauptListEntry("StreamOase", "streamoase"))
+		if config.mediaportal.showMEHD.value:
+			self.grauzone.append(self.hauptListEntry("My-Entertainment", "mehd"))
+		if config.mediaportal.showM2k.value:
+			self.grauzone.append(self.hauptListEntry("Movie2k", "movie2k"))
+		if config.mediaportal.showKinox.value:
+			self.grauzone.append(self.hauptListEntry("Kinox", "kinox"))
+		if config.mediaportal.showKinoKiste.value:
+			self.grauzone.append(self.hauptListEntry("KinoKiste", "kinokiste"))
+		if config.mediaportal.showIStream.value:
+			self.grauzone.append(self.hauptListEntry("IStream", "istream"))
+		if config.mediaportal.showBs.value:
+			self.grauzone.append(self.hauptListEntry("Burning-Series", "burningseries"))
+		if config.mediaportal.showBaskino.value:
+			self.grauzone.append(self.hauptListEntry("Baskino", "baskino"))
+		if config.mediaportal.showKoase.value:
+			self.grauzone.append(self.hauptListEntry("Konzert Oase", "koase"))
+		if config.mediaportal.show1channel.value:
+			self.grauzone.append(self.hauptListEntry("1channel", "1channel"))
+
+		# Fun / Sport
+		if config.mediaportal.showAllMusicHouse.value:
+			self.funsport.append(self.hauptListEntry("AllMusicHouse", "allmusichouse"))
+		if config.mediaportal.showLaola1.value:
+			self.funsport.append(self.hauptListEntry("Laola1 Live", "laola1"))
+		if config.mediaportal.showNhl.value:
+			self.funsport.append(self.hauptListEntry("NHL", "nhl"))
+		if config.mediaportal.showRofl.value:
+			self.funsport.append(self.hauptListEntry("Rofl.to", "rofl"))
+		if config.mediaportal.showFail.value:
+			self.funsport.append(self.hauptListEntry("Fail.to", "fail"))
+		if config.mediaportal.showLiveLeak.value:
+			self.funsport.append(self.hauptListEntry("LiveLeak", "liveleak"))
+		if config.mediaportal.showFilmOn.value:
+			self.funsport.append(self.hauptListEntry("FilmOn", "filmon"))
+		if config.mediaportal.showTvkino.value:
+			self.funsport.append(self.hauptListEntry("TV-Kino", "tvkino"))
+		if config.mediaportal.showRadio.value:
+			self.funsport.append(self.hauptListEntry("Radio.de", "radiode"))
+		if config.mediaportal.showSpobox.value:
+			self.funsport.append(self.hauptListEntry("Spobox", "spobox"))
+		if config.mediaportal.showSongsto.value:
+			self.funsport.append(self.hauptListEntry("Songs.to", "songsto"))
+
 		# porn
 		if config.mediaportal.show4tube.value:
-			self.fun.append(self.hauptListEntry("4Tube", "4tube"))
+			self.porn.append(self.hauptListEntry("4Tube", "4tube"))
 		if config.mediaportal.showahme.value:
-			self.fun.append(self.hauptListEntry("Ah-Me", "ahme"))
+			self.porn.append(self.hauptListEntry("Ah-Me", "ahme"))
 		if config.mediaportal.showamateurporn.value:
-			self.fun.append(self.hauptListEntry("AmateurPorn", "amateurporn"))
+			self.porn.append(self.hauptListEntry("AmateurPorn", "amateurporn"))
 		if config.mediaportal.showbeeg.value:
-			self.fun.append(self.hauptListEntry("beeg", "beeg"))
+			self.porn.append(self.hauptListEntry("beeg", "beeg"))
 		if config.mediaportal.showdreiin.value:
-			self.fun.append(self.hauptListEntry("Drei.in", "dreiin"))
+			self.porn.append(self.hauptListEntry("Drei.in", "dreiin"))
 		if config.mediaportal.showeporner.value:
-			self.fun.append(self.hauptListEntry("Eporner", "eporner"))
+			self.porn.append(self.hauptListEntry("Eporner", "eporner"))
 		if config.mediaportal.showgstreaminxxx.value:
-			self.fun.append(self.hauptListEntry("G-Stream-XXX", "gstreaminxxx"))
+			self.porn.append(self.hauptListEntry("G-Stream-XXX", "gstreaminxxx"))
 		if config.mediaportal.showhdporn.value:
-			self.fun.append(self.hauptListEntry("HDPorn", "hdporn"))
+			self.porn.append(self.hauptListEntry("HDPorn", "hdporn"))
 		if config.mediaportal.showIStreamPorn.value:
-			self.fun.append(self.hauptListEntry("IStream-XXX", "istreamporn"))
+			self.porn.append(self.hauptListEntry("IStream-XXX", "istreamporn"))
 		if config.mediaportal.showM2kPorn.value:
-			self.fun.append(self.hauptListEntry("Movie2k-XXX", "movie2kporn"))
+			self.porn.append(self.hauptListEntry("Movie2k-XXX", "movie2kporn"))
 		if config.mediaportal.showpinkrod.value:
-			self.fun.append(self.hauptListEntry("Pinkrod", "pinkrod"))
+			self.porn.append(self.hauptListEntry("Pinkrod", "pinkrod"))
 		if config.mediaportal.showplayporn.value:
-			self.fun.append(self.hauptListEntry("PlayPorn", "playporn"))
+			self.porn.append(self.hauptListEntry("PlayPorn", "playporn"))
 		if config.mediaportal.showporncity.value:
-			self.fun.append(self.hauptListEntry("PornCity", "porncity"))
+			self.porn.append(self.hauptListEntry("PornCity", "porncity"))
 		if config.mediaportal.showpornerbros.value:
-			self.fun.append(self.hauptListEntry("PornerBros", "pornerbros"))
+			self.porn.append(self.hauptListEntry("PornerBros", "pornerbros"))
 		if config.mediaportal.showPornhub.value:
-			self.fun.append(self.hauptListEntry("Pornhub", "pornhub"))
+			self.porn.append(self.hauptListEntry("Pornhub", "pornhub"))
 		if config.mediaportal.showpornrabbit.value:
-			self.fun.append(self.hauptListEntry("PornRabbit", "pornrabbit"))
+			self.porn.append(self.hauptListEntry("PornRabbit", "pornrabbit"))
 		if config.mediaportal.showrealgfporn.value:
-			self.fun.append(self.hauptListEntry("RealGFPorn", "realgfporn"))
+			self.porn.append(self.hauptListEntry("RealGFPorn", "realgfporn"))
 		if config.mediaportal.showredtube.value:
-			self.fun.append(self.hauptListEntry("RedTube", "redtube"))
+			self.porn.append(self.hauptListEntry("RedTube", "redtube"))
 		if config.mediaportal.showthenewporn.value:
-			self.fun.append(self.hauptListEntry("TheNewPorn", "thenewporn"))
+			self.porn.append(self.hauptListEntry("TheNewPorn", "thenewporn"))
 		if config.mediaportal.showwetplace.value:
-			self.fun.append(self.hauptListEntry("WetPlace", "wetplace"))
+			self.porn.append(self.hauptListEntry("WetPlace", "wetplace"))
 		if config.mediaportal.showXhamster.value:
-			self.fun.append(self.hauptListEntry("xHamster", "xhamster"))
+			self.porn.append(self.hauptListEntry("xHamster", "xhamster"))
 		if config.mediaportal.showyouporn.value:
-			self.fun.append(self.hauptListEntry("YouPorn", "youporn"))
+			self.porn.append(self.hauptListEntry("YouPorn", "youporn"))
+		
+		if len(self.porn) < 1:
+			self['Porn'] = Label("")
 
-		self.movies.sort(key=lambda t : tuple(t[0][0].lower()))
-		self.infos.sort(key=lambda t : tuple(t[0][0].lower()))
-		self.fun.sort(key=lambda t : tuple(t[0][0].lower()))		
+		self.mediatheken.sort(key=lambda t : tuple(t[0][0].lower()))
+		self.grauzone.sort(key=lambda t : tuple(t[0][0].lower()))
+		self.funsport.sort(key=lambda t : tuple(t[0][0].lower()))		
+		self.porn.sort(key=lambda t : tuple(t[0][0].lower()))		
 
-		self["movies"].setList(self.movies)
-		self["movies"].l.setItemHeight(44)
-		self["infos"].setList(self.infos)
-		self["infos"].l.setItemHeight(44)
-		self["fun"].setList(self.fun)
-		self["fun"].l.setItemHeight(44)
+		self["mediatheken"].setList(self.mediatheken)
+		self["mediatheken"].l.setItemHeight(44)
+		self["grauzone"].setList(self.grauzone)
+		self["grauzone"].l.setItemHeight(44)
+		self["funsport"].setList(self.funsport)
+		self["funsport"].l.setItemHeight(44)
+		self["porn"].setList(self.porn)
+		self["porn"].l.setItemHeight(44)
 		self.keyRight()
 
 	def hauptListEntry(self, name, jpg):
@@ -549,7 +562,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 		if not fileExists(icon):
 			icon = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons/no_icon.png"
 		res.append(MultiContentEntryPixmapAlphaTest(pos=(0, 1), size=(75, 40), png=loadPNG(icon)))	
-		res.append(MultiContentEntryText(pos=(85, 10), size=(160, 40), font=0, text=name, flags=RT_HALIGN_LEFT))
+		res.append(MultiContentEntryText(pos=(80, 10), size=(160, 40), font=0, text=name, flags=RT_HALIGN_LEFT))
 		return res
 	
 	def keySetup(self):
@@ -586,21 +599,26 @@ class haupt_Screen(Screen, ConfigListScreen):
 
 	def keyRight(self):
 		self.cur_idx = self[self.currenlist].getSelectedIndex()
-		self["infos"].selectionEnabled(0)
-		self["fun"].selectionEnabled(0)
-		self["movies"].selectionEnabled(0)
-		if self.currenlist == "infos":
-			self["fun"].selectionEnabled(1)
-			self.currenlist = "fun"
-			cnt_tmp_ls = len(self.fun)
-		elif self.currenlist == "fun":
-			self["movies"].selectionEnabled(1)
-			self.currenlist = "movies"
-			cnt_tmp_ls = len(self.movies)
-		elif self.currenlist == "movies":
-			self["infos"].selectionEnabled(1)
-			self.currenlist = "infos"
-			cnt_tmp_ls = len(self.infos)
+		self["mediatheken"].selectionEnabled(0)
+		self["grauzone"].selectionEnabled(0)
+		self["funsport"].selectionEnabled(0)
+		self["porn"].selectionEnabled(0)
+		if self.currenlist == "mediatheken":
+			self["grauzone"].selectionEnabled(1)
+			self.currenlist = "grauzone"
+			cnt_tmp_ls = len(self.grauzone)
+		elif self.currenlist == "grauzone":
+			self["funsport"].selectionEnabled(1)
+			self.currenlist = "funsport"
+			cnt_tmp_ls = len(self.funsport)
+		elif self.currenlist == "funsport":
+			self["porn"].selectionEnabled(1)
+			self.currenlist = "porn"
+			cnt_tmp_ls = len(self.porn)
+		elif self.currenlist == "porn":
+			self["mediatheken"].selectionEnabled(1)
+			self.currenlist = "mediatheken"
+			cnt_tmp_ls = len(self.mediatheken)
 			
 		cnt_tmp_ls = int(cnt_tmp_ls)
 		if int(self.cur_idx) < int(cnt_tmp_ls):
@@ -609,27 +627,33 @@ class haupt_Screen(Screen, ConfigListScreen):
 			idx = int(cnt_tmp_ls) -1
 			self[self.currenlist].moveToIndex(int(idx))
 			
-		auswahl = self[self.currenlist].getCurrent()[0][0]
-		self.title = auswahl
-		self['name'].setText(auswahl)
+		if len(self.currenlist) < 1:
+			auswahl = self[self.currenlist].getCurrent()[0][0]
+			self.title = auswahl
+			self['name'].setText(auswahl)
 		
 	def keyLeft(self):
 		self.cur_idx = self[self.currenlist].getSelectedIndex()
-		self["infos"].selectionEnabled(0)
-		self["fun"].selectionEnabled(0)
-		self["movies"].selectionEnabled(0)
-		if self.currenlist == "movies":
-			self["fun"].selectionEnabled(1)
-			self.currenlist = "fun"
-			cnt_tmp_ls = len(self.fun)
-		elif self.currenlist == "fun":
-			self["infos"].selectionEnabled(1)
-			self.currenlist = "infos"
-			cnt_tmp_ls = len(self.infos)
-		elif self.currenlist == "infos":
-			self["movies"].selectionEnabled(1)
-			self.currenlist = "movies"
-			cnt_tmp_ls = len(self.movies)
+		self["mediatheken"].selectionEnabled(0)
+		self["grauzone"].selectionEnabled(0)
+		self["funsport"].selectionEnabled(0)
+		self["porn"].selectionEnabled(0)
+		if self.currenlist == "porn":
+			self["funsport"].selectionEnabled(1)
+			self.currenlist = "funsport"
+			cnt_tmp_ls = len(self.funsport)
+		elif self.currenlist == "funsport":
+			self["grauzone"].selectionEnabled(1)
+			self.currenlist = "grauzone"
+			cnt_tmp_ls = len(self.grauzone)
+		elif self.currenlist == "grauzone":
+			self["mediatheken"].selectionEnabled(1)
+			self.currenlist = "mediatheken"
+			cnt_tmp_ls = len(self.mediatheken)
+		elif self.currenlist == "mediatheken":
+			self["porn"].selectionEnabled(1)
+			self.currenlist = "porn"
+			cnt_tmp_ls = len(self.porn)
 	
 		cnt_tmp_ls = int(cnt_tmp_ls)
 		print self.cur_idx, cnt_tmp_ls
@@ -639,9 +663,10 @@ class haupt_Screen(Screen, ConfigListScreen):
 			idx = int(cnt_tmp_ls) -1
 			self[self.currenlist].moveToIndex(int(idx))
 
-		auswahl = self[self.currenlist].getCurrent()[0][0]
-		self.title = auswahl
-		self['name'].setText(auswahl)
+		if len(self.currenlist) < 1:
+			auswahl = self[self.currenlist].getCurrent()[0][0]
+			self.title = auswahl
+			self['name'].setText(auswahl)
 		
 	def keyOK(self):
 		exist = self[self.currenlist].getCurrent()
