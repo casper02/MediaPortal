@@ -334,7 +334,7 @@ class chooseMenuList(MenuList):
 	def __init__(self, list):
 		MenuList.__init__(self, list, True, eListboxPythonMultiContent)
 		self.l.setFont(0, gFont("mediaportal", 20))
-		self.l.setItemHeight(40)
+		self.l.setItemHeight(44)
 
 class haupt_Screen(Screen, ConfigListScreen):
 	def __init__(self, session):
@@ -536,19 +536,20 @@ class haupt_Screen(Screen, ConfigListScreen):
 		self.fun.sort(key=lambda t : tuple(t[0][0].lower()))		
 
 		self["movies"].setList(self.movies)
-		self["movies"].l.setItemHeight(42)
+		self["movies"].l.setItemHeight(44)
 		self["infos"].setList(self.infos)
-		self["infos"].l.setItemHeight(42)
+		self["infos"].l.setItemHeight(44)
 		self["fun"].setList(self.fun)
-		self["fun"].l.setItemHeight(42)
+		self["fun"].l.setItemHeight(44)
 		self.keyRight()
 
 	def hauptListEntry(self, name, jpg):
 		res = [(name, jpg)]
 		icon = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons/%s.png" % jpg
-		if fileExists(icon):
-			res.append(MultiContentEntryPixmapAlphaTest(pos=(0, 1), size=(100, 40), png=loadPNG(icon)))	
-		res.append(MultiContentEntryText(pos=(110, 1), size=(160, 40), font=0, text=name, flags=RT_HALIGN_LEFT))
+		if not fileExists(icon):
+			icon = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons/no_icon.png"
+		res.append(MultiContentEntryPixmapAlphaTest(pos=(0, 1), size=(75, 40), png=loadPNG(icon)))	
+		res.append(MultiContentEntryText(pos=(85, 10), size=(160, 40), font=0, text=name, flags=RT_HALIGN_LEFT))
 		return res
 	
 	def keySetup(self):
