@@ -525,46 +525,6 @@ class bsStreams(Screen, ConfigListScreen):
 			message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=3)
 		else:
 			self.playfile(stream_url.replace('&amp;','&'))
-
-	def eco_read(self, data):
-		post_url = re.findall('<form name="setss" method="post" action="(.*?)">', data, re.S)
-		if post_url:
-			info = urlencode({'': '1', 'sss': '1'})
-			print info
-			getPage(post_url[0], method='POST', postdata=info, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.eco_post).addErrback(self.dataError)
-			
-	def eco_post(self, data):
-		url = "http://www.ecostream.tv/assets/js/common.js"
-		data2 = urllib.urlopen(url).read()
-		post_url = re.findall("url: '(http://www.ecostream.tv/.*?)\?s=", data2, re.S)
-		if post_url:
-			print post_url
-			sPattern = "var t=setTimeout\(\"lc\('([^']+)','([^']+)','([^']+)','([^']+)'\)"
-			r = re.findall(sPattern, data)
-			if r:
-				for aEntry in r:
-					sS = str(aEntry[0])
-					sK = str(aEntry[1])
-					sT = str(aEntry[2])
-					sKey = str(aEntry[3])
-
-				print "current keys:", sS, sK, sT, sKey
-				sNextUrl = post_url[0]+"?s="+sS+'&k='+sK+'&t='+sT+'&key='+sKey
-				print sNextUrl
-				info = urlencode({'s': sS, 'k': sK, 't': sT, 'key': sKey})
-				print info
-				getPage(sNextUrl, method='POST', postdata = info, headers={'Referer':'http://www.ecostream.tv', 'X-Requested-With':'XMLHttpRequest'}).addCallback(self.eco_final).addErrback(self.dataError)
-				
-	def eco_final(self, data):
-		print data
-		stream_url = re.findall('flashvars="file=(.*?)&', data)
-		if stream_url:
-			kkStreamUrl = "http://www.ecostream.tv"+stream_url[0]
-			print kkStreamUrl
-			self.playfile(kkStreamUrl)
-			
-	def stream_not_found(self):
-		message = self.session.open(MessageBox, _("Stream wurde nicht gefunden."), MessageBox.TYPE_INFO, timeout=3)
-		
+	
 	def keyCancel(self):
 		self.close()
