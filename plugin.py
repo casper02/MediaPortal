@@ -627,7 +627,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			idx = int(cnt_tmp_ls) -1
 			self[self.currenlist].moveToIndex(int(idx))
 			
-		if len(self.currenlist) < 1:
+		if len(self.currenlist) > 1:
 			auswahl = self[self.currenlist].getCurrent()[0][0]
 			self.title = auswahl
 			self['name'].setText(auswahl)
@@ -663,7 +663,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			idx = int(cnt_tmp_ls) -1
 			self[self.currenlist].moveToIndex(int(idx))
 
-		if len(self.currenlist) < 1:
+		if len(self.currenlist) > 1:
 			auswahl = self[self.currenlist].getCurrent()[0][0]
 			self.title = auswahl
 			self['name'].setText(auswahl)
