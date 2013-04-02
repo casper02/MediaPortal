@@ -1,3 +1,5 @@
+﻿#	-*-	coding:	utf-8	-*-
+
 # General imports
 from resources.imports import *
 from resources.decrypt import *
@@ -44,6 +46,7 @@ from additions.liveleak import *
 from additions.dokustream import *
 from additions.sciencetv import *
 from additions.szenestreams import *
+from additions.hoerspielhouse import *
 
 # mediatheken
 from additions.mediatheken.voxnow import *
@@ -128,6 +131,7 @@ config.mediaportal.showLiveLeak = ConfigYesNo(default = True)
 config.mediaportal.showDokuStream = ConfigYesNo(default = True)
 config.mediaportal.showScienceTV = ConfigYesNo(default = True)
 config.mediaportal.showSzeneStreams = ConfigYesNo(default = True)
+config.mediaportal.showHoerspielHouse = ConfigYesNo(default = True)
 
 # mediatheken
 config.mediaportal.showVoxnow = ConfigYesNo(default = True)
@@ -228,6 +232,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige Focus:", config.mediaportal.showFocus))
 		self.configlist.append(getConfigListEntry("Zeige Songs.to:", config.mediaportal.showSongsto))
 		self.configlist.append(getConfigListEntry("Zeige AllMusicHouse:", config.mediaportal.showAllMusicHouse))
+		self.configlist.append(getConfigListEntry("Zeige HörspielHouse:", config.mediaportal.showHoerspielHouse))
 
 		### mediatheken
 		self.configlist.append(getConfigListEntry("----- Mediatheken -----", config.mediaportal.fake_entry))
@@ -491,7 +496,9 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.funsport.append(self.hauptListEntry("Spobox", "spobox"))
 		if config.mediaportal.showSongsto.value:
 			self.funsport.append(self.hauptListEntry("Songs.to", "songsto"))
-
+		if config.mediaportal.showHoerspielHouse.value:
+			self.funsport.append(self.hauptListEntry("HörspielHouse", "hoerspielhouse"))
+		
 		# porn
 		if config.mediaportal.show4tube.value:
 			self.porn.append(self.hauptListEntry("4Tube", "4tube"))
@@ -757,6 +764,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(scienceTvGenreScreen)
 		elif auswahl == "SzeneStreams":
 			self.session.open(SzeneStreamsGenreScreen)
+		elif auswahl == "HörspielHouse":
+			self.session.open(show_HSH_Genre)
 		# mediatheken
 		elif auswahl == "VOXNOW":
 			self.session.open(VOXnowGenreScreen)
@@ -1068,6 +1077,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("DokuStream", "dokustream", "Mediathek"))
 		if config.mediaportal.showScienceTV.value:
 			self.plugin_liste.append(("ScienceTV", "sciencetv", "Mediathek"))
+		if config.mediaportal.showHoerspielHouse.value:
+			self.plugin_liste.append(("HörspielHouse", "hoerspielhouse", "Fun"))
 			
 		### mediatheken	
 		if config.mediaportal.showVoxnow.value:
@@ -1351,6 +1362,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(scienceTvGenreScreen)
 		elif auswahl == "SzeneStreams":
 			self.session.open(SzeneStreamsGenreScreen)
+		elif auswahl == "HörspielHouse":
+			self.session.open(show_HSH_Genre)
 		# mediatheken
 		elif auswahl == "VOXNOW":
 			self.session.open(VOXnowGenreScreen)
