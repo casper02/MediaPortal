@@ -379,7 +379,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 		self['porn'] = chooseMenuList([])
 		self['Porn'] = Label("Porn")
 
-		self.currenlist = "mediatheken"
+		self.currenlist = "porn"
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
@@ -627,7 +627,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			idx = int(cnt_tmp_ls) -1
 			self[self.currenlist].moveToIndex(int(idx))
 			
-		if len(self.currenlist) > 1:
+		if cnt_tmp_ls > 1:
 			auswahl = self[self.currenlist].getCurrent()[0][0]
 			self.title = auswahl
 			self['name'].setText(auswahl)
@@ -663,7 +663,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			idx = int(cnt_tmp_ls) -1
 			self[self.currenlist].moveToIndex(int(idx))
 
-		if len(self.currenlist) > 1:
+		if cnt_tmp_ls > 1:
 			auswahl = self[self.currenlist].getCurrent()[0][0]
 			self.title = auswahl
 			self['name'].setText(auswahl)
