@@ -464,7 +464,7 @@ class bsStreams(Screen, ConfigListScreen):
 		if streams:
 			for (bsUrl,bsStream) in streams:
 				bsUrl = "http://www.burning-seri.es/" + bsUrl
-				if re.match('.*?(Ecostream|Sockshare|Streamcloud|Putlocker|Filenuke|MovShare|Novamov|DivxStage|UploadC|NowVideo|VideoWeed|Flashx|FileNuke)',bsStream,re.I):
+				if re.match('.*?(Ecostream|Sockshare|Streamcloud|Putlocker|Filenuke|MovShare|Novamov|DivxStage|UploadC|NowVideo|VideoWeed|Flashx|FileNuke|BitShare)',bsStream,re.I):
 					self.streamList.append((bsStream,bsUrl))
 			self.streamMenuList.setList(map(bsListEntry, self.streamList))
 			self.keyLocked = False

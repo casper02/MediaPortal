@@ -185,6 +185,11 @@ class get_stream_link:
 				#print link
 				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.zooupload).addErrback(self.errorload)
 				
+			elif re.match('.*?http://bitshare.com', data, re.S):
+				link = data
+				#print link
+				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.bitshare).addErrback(self.errorload)
+				
 			else:
 				message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=3)
 		else:
@@ -915,6 +920,17 @@ class get_stream_link:
 				self.stream_not_found()
 		else:
 			self.stream_not_found()
+			
+	def bitshare(self, data):
+		stream_url = re.findall('(url: |src=)\'(.*?.avi|.*?.mp4)\'', data)
+		if stream_url:
+			link = stream_url[0][1]
+			reactor.callLater(6, self.bitshare_start, link)
+			self.session.open(MessageBox, _("Stream startet in 6 sec."), MessageBox.TYPE_INFO, timeout=6)
+			
+	def bitshare_start(self, link):
+		#print "bs_start: ",link
+		self._callback(link)
 
 	def check_istream_link(self, data):
 		self.check_link(data, self._callback)
