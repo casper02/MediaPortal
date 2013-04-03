@@ -927,6 +927,8 @@ class get_stream_link:
 			link = stream_url[0][1]
 			reactor.callLater(6, self.bitshare_start, link)
 			self.session.open(MessageBox, _("Stream startet in 6 sec."), MessageBox.TYPE_INFO, timeout=6)
+		else:
+			self.stream_not_found()
 			
 	def bitshare_start(self, link):
 		#print "bs_start: ",link
