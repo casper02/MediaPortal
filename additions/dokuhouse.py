@@ -7,7 +7,7 @@ import Queue
 import threading
 from Components.ScrollLabel import ScrollLabel
 
-DH_Version = "DokuHouse.de v0.93"
+DH_Version = "DokuHouse.de v0.94"
 
 DH_siteEncoding = 'utf-8'
 
@@ -381,8 +381,8 @@ class DH_FilmListeScreen(Screen):
 			"6" : self.key_6,
 			"7" : self.key_7,
 			"9" : self.key_9,
-			"blue" :  self.keyTxtPageUp,
-			"red" :  self.keyTxtPageDown
+			"blue" :  self.keyTxtPageDown,
+			"red" :  self.keyTxtPageUp
 			#"seekBackManual" :  self.keyPageDownMan,
 			#"seekFwdManual" :  self.keyPageUpMan,
 			#"seekFwd" :  self.keyPageUp,

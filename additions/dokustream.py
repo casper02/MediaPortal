@@ -7,7 +7,7 @@ import Queue
 import threading
 from Components.ScrollLabel import ScrollLabel
 
-DS_Version = "Doku-Stream.org v0.91"
+DS_Version = "Doku-Stream.org v0.92"
 
 DS_siteEncoding = 'utf-8'
 
@@ -357,8 +357,8 @@ class DS_FilmListeScreen(Screen):
 			"6" : self.key_6,
 			"7" : self.key_7,
 			"9" : self.key_9,
-			"blue" :  self.keyTxtPageUp,
-			"red" :  self.keyTxtPageDown
+			"blue" :  self.keyTxtPageDown,
+			"red" :  self.keyTxtPageUp
 			#"seekBackManual" :  self.keyPageDownMan,
 			#"seekFwdManual" :  self.keyPageUpMan,
 			#"seekFwd" :  self.keyPageUp,

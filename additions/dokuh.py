@@ -7,7 +7,7 @@ import Queue
 import threading
 from Components.ScrollLabel import ScrollLabel
 
-DOKUH_Version = "DOKUh.de v0.95"
+DOKUH_Version = "DOKUh.de v0.96"
 
 DOKUH_siteEncoding = 'utf-8'
 
@@ -478,8 +478,8 @@ class DOKUHFilmListeScreen(Screen):
 			"6" : self.key_6,
 			"7" : self.key_7,
 			"9" : self.key_9,
-			"blue" :  self.keyTxtPageUp,
-			"red" :  self.keyTxtPageDown
+			"blue" :  self.keyTxtPageDown,
+			"red" :  self.keyTxtPageUp
 		}, -1)
 
 		self.sortOrder = 0

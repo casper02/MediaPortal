@@ -7,7 +7,7 @@ import Queue
 import threading
 from Components.ScrollLabel import ScrollLabel
 
-AMH_Version = "AllMusicHouse.de v0.95"
+AMH_Version = "AllMusicHouse.de v0.96"
 
 AMH_siteEncoding = 'utf-8'
 
@@ -284,8 +284,8 @@ class AMH_FilmListeScreen(Screen):
 			"6" : self.key_6,
 			"7" : self.key_7,
 			"9" : self.key_9,
-			"blue" :  self.keyTxtPageUp,
-			"red" :  self.keyTxtPageDown
+			"blue" :  self.keyTxtPageDown,
+			"red" :  self.keyTxtPageUp
 		}, -1)
 
 		self.sortOrder = 0
@@ -590,8 +590,8 @@ class AMH_Streams(Screen, ConfigListScreen):
 			"down" 		: self.keyDown,
 			"right" 	: self.keyRight,
 			"left" 		: self.keyLeft,
-			"blue" 		: self.keyTxtPageUp,
-			"red" 		: self.keyTxtPageDown,
+			"blue" 		: self.keyTxtPageDown,
+			"red" 		: self.keyTxtPageUp,
 			"yellow"	: self.keyYellow
 		}, -1)
 		
@@ -629,7 +629,6 @@ class AMH_Streams(Screen, ConfigListScreen):
 		
 	def parseData(self, data):
 		print "parseData:"
-		#http://www.youtube.com/(embed|v)/3NDBxP2MEHw?
 		m = re.search('"http://www.youtube.com/(embed|v)/(.*?)("|\?).*?data-text="(.*?)"', data, re.S)
 		parts = re.search('<p>Part 1 von (.*?)<br', data)
 		mdesc = re.search('</iframe></p>.*?>(.*?)</p>', data, re.S)
@@ -639,10 +638,9 @@ class AMH_Streams(Screen, ConfigListScreen):
 			print "Streams found"
 			if mdesc:
 				print "Descr. found"
-				desc = mdesc.group(1)
+				desc = mdesc.group(1).replace('<br />','')
 			else:
 				desc = ""
-			#for (videoTag,title) in streams:
 			if parts:
 				self.nParts = int(parts.group(1))
 				pstr = " [1/%d]" % self.nParts

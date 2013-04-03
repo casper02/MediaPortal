@@ -719,7 +719,7 @@ class HSH_Streams(Screen, ConfigListScreen):
 		print "keyOK:"
 		if self.keyLocked:
 			return
-		dhTitle = self.dokuName + ' ' + self['liste'].getCurrent()[0][0]
+		dhTitle = self.dokuName + ' - ' + self['liste'].getCurrent()[0][0]
 		dhVideoId = self['liste'].getCurrent()[0][1]
 		print "Title: ",dhTitle
 		#print "VideoId: ",dhVideoId
