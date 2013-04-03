@@ -49,55 +49,24 @@ class xhamsterGenreScreen(Screen):
 		
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "http://www.xhamster.com/channels.php"
+		url = "http://xhamster.com/channels.php"
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		phCats = re.findall('<td>.*?<a href="(.*?)1.html">.*?<div align="center">.*?<img src="(.*?)".*?align="center">(.*?) \(.*?\)</div>', data, re.S)
+		parse = re.search('title">Straight</div>(.*?)iconTrans"></div>', data, re.S)
+		phCats = re.findall('<a\sclass="btnBig"\shref="(.*?)1.html">.*?\n\s\s+([a-z].*?)</a>', parse.group(1), re.S|re.I)
 		if phCats:
-			for (phUrl, phImage, phTitle) in phCats:
-				phUrl = "http://www.xhamster.com" + phUrl
-				self.genreliste.append((phTitle, phUrl, phImage))
+			for (phUrl, phTitle) in phCats:
+				phTitle = phTitle.strip(' ')
+				self.genreliste.append((phTitle, phUrl))
 			self.genreliste.sort()
-			self.genreliste.insert(0, ("Top Rated", "http://www.xhamster.com/channels/new-hits-", None))
-			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
+			self.genreliste.insert(0, ("--- Search ---", "callSuchen"))
 			self.chooseMenuList.setList(map(xhamsterGenreListEntry, self.genreliste))
 			self.chooseMenuList.moveToIndex(0)
 			self.keyLocked = False
-			self.showInfos()
 
 	def dataError(self, error):
 		print error
-
-	def showInfos(self):
-		phImage = self['genreList'].getCurrent()[0][2]
-		print phImage
-		if not phImage == None:
-			downloadPage(phImage, "/tmp/xhIcon.jpg").addCallback(self.ShowCover)
-		else:
-			self.ShowCoverNone()
-
-	def ShowCover(self, picData):
-		picPath = "/tmp/xhIcon.jpg"
-		self.ShowCoverFile(picPath)
-		
-	def ShowCoverNone(self):
-		picPath = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/images/no_coverArt.png" % config.mediaportal.skin.value
-		self.ShowCoverFile(picPath)
-		
-	def ShowCoverFile(self, picPath):
-		if fileExists(picPath):
-			self['coverArt'].instance.setPixmap(None)
-			self.scale = AVSwitch().getFramebufferScale()
-			self.picload = ePicLoad()
-			size = self['coverArt'].instance.size()
-			self.picload.setPara((size.width(), size.height(), self.scale[0], self.scale[1], False, 1, "#FF000000"))
-			if self.picload.startDecode(picPath, 0, 0, False) == 0:
-				ptr = self.picload.getData()
-				if ptr != None:
-					self['coverArt'].instance.setPixmap(ptr.__deref__())
-					self['coverArt'].show()
-					del self.picload
 
 	def keyOK(self):
 		streamGenreName = self['genreList'].getCurrent()[0][0]
@@ -114,32 +83,28 @@ class xhamsterGenreScreen(Screen):
 	def SuchenCallback(self, callback = None, entry = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '+')
-			streamGenreLink = 'http://www.xhamster.com/search.php?q=%s&page=' % (self.suchString)
+			streamGenreLink = 'http://www.xhamster.com/search.php?q=%s&qcat=video&page=' % (self.suchString)
 			self.session.open(xhamsterFilmScreen, streamGenreLink)
 
 	def keyLeft(self):
 		if self.keyLocked:
 			return
 		self['genreList'].pageUp()
-		self.showInfos()
 		
 	def keyRight(self):
 		if self.keyLocked:
 			return
 		self['genreList'].pageDown()
-		self.showInfos()
 		
 	def keyUp(self):
 		if self.keyLocked:
 			return
 		self['genreList'].up()
-		self.showInfos()
 		
 	def keyDown(self):
 		if self.keyLocked:
 			return
 		self['genreList'].down()
-		self.showInfos()
 
 	def keyCancel(self):
 		self.close()
@@ -198,7 +163,7 @@ class xhamsterFilmScreen(Screen):
 		getPage(ptUrl, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.pageData).addErrback(self.dataError)
 		
 	def pageData(self, data):
-		lastpparse = re.search('class="pager">(.*)</div>', data, re.S)
+		lastpparse = re.search('class=\'pager\'>(.*)</div>', data, re.S)
 		lastp = re.findall('href=.*html.*>(.*[0-9])<.*?', lastpparse.group(1), re.S)
 		if lastp:
 			lastp = lastp[0]
@@ -207,12 +172,11 @@ class xhamsterFilmScreen(Screen):
 		else:
 			self.lastpage = 1
 		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
-		parse = re.search('<h2>.*</h2>(.*?)</table>', data, re.S)
-		xhListe = re.findall('<a href="(/movies/.*?)" class=\'hRotator\' >.*?<img src=\'(.*?)\'.*?alt="(.*?)"/>.*?<div class="moduleFeaturedDetails">Runtime: (.*?)<BR>Views: (.*?)</div>', parse.group(1), re.S)
+		parse = re.search('<div\sclass=\'vDate(.*)</html>', data, re.S)
+		xhListe = re.findall('class=\'video\'><a\shref=\'(.*?/movies/.*?)\'.*?class=\'hRotator\'\s><img\ssrc=\'(.*?)\'.*?alt="(.*?)".*?start2.*?<b>(.*?)</b>', parse.group(1), re.S)
 		if xhListe:
-			for (xhLink, xhImage, xhName, xhRuntime, xhxhViews) in xhListe:
-				xhLink = "http://xhamster.com" + xhLink
-				self.streamList.append((decodeHtml(xhName), xhImage, xhLink, xhxhViews, xhRuntime))
+			for (xhLink, xhImage, xhName, xhRuntime) in xhListe:
+				self.streamList.append((decodeHtml(xhName), xhImage, xhLink, xhRuntime))
 			self.streamMenuList.setList(map(xhamsterstreamListEntry, self.streamList))
 			self.streamMenuList.moveToIndex(0)
 			self.keyLocked = False
@@ -221,11 +185,9 @@ class xhamsterFilmScreen(Screen):
 	def showInfos(self):
 		ptTitle = self['genreList'].getCurrent()[0][0]
 		ptImage = self['genreList'].getCurrent()[0][1]
-		ptViews  = self['genreList'].getCurrent()[0][3]
-		ptRuntime = self['genreList'].getCurrent()[0][4]
+		ptRuntime = self['genreList'].getCurrent()[0][3]
 		self.ptRead(ptImage)
 		self['name'].setText(ptTitle)
-		self['views'].setText(ptViews)
 		self['runtime'].setText(ptRuntime)
 
 	def ptRead(self, stationIconLink):
