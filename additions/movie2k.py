@@ -1007,7 +1007,7 @@ class m2kStreamListeScreen(Screen):
 				for url,datum,hostername,quali in hoster:
 					url = "%s%s" % ("http://www.movie2k.to/", url)
 					print hostername, url
-					if re.match('.*?(putlocker|sockshare|streamclou|xvidstage|filenuke|movreel|nowvideo|xvidstream|uploadc|vreer|MonsterUploads|Novamov|Videoweed|Divxstage|Ginbig|Flashstrea|Movshare|yesload|faststream|Vidstream|PrimeShare|flashx|Divxmov|Putme|Zooupload|Wupfile)', hostername, re.S|re.I):
+					if re.match('.*?(putlocker|sockshare|streamclou|xvidstage|filenuke|movreel|nowvideo|xvidstream|uploadc|vreer|MonsterUploads|Novamov|Videoweed|Divxstage|Ginbig|Flashstrea|Movshare|yesload|faststream|Vidstream|PrimeShare|flashx|Divxmov|Putme|Zooupload|Wupfile|BitShare)', hostername, re.S|re.I):
 						self.filmliste.append((url, datum, hostername, quali.replace('Movie quality ','').replace('\\','')))
 				self.chooseMenuList.setList(map(self.m2kStreamListEntry, self.filmliste))
 				self.keyLocked = False
@@ -1018,7 +1018,7 @@ class m2kStreamListeScreen(Screen):
 				for url,hostername in hoster:
 					url = "%s%s" % ("http://www.movie2k.to/", url)		
 					print hostername, url
-					if re.match('.*?(putlocker|sockshare|streamclou|xvidstage|filenuke|movreel|nowvideo|xvidstream|uploadc|vreer|MonsterUploads|Novamov|Videoweed|Divxstage|Ginbig|Flashstrea|Movshare|yesload|faststream|Vidstream|PrimeShare|flashx|Divxmov|Putme|Zooupload|Wupfile)', hostername, re.S|re.I):
+					if re.match('.*?(putlocker|sockshare|streamclou|xvidstage|filenuke|movreel|nowvideo|xvidstream|uploadc|vreer|MonsterUploads|Novamov|Videoweed|Divxstage|Ginbig|Flashstrea|Movshare|yesload|faststream|Vidstream|PrimeShare|flashx|Divxmov|Putme|Zooupload|Wupfile|BitShare)', hostername, re.S|re.I):
 						self.filmliste.append((url, hostername))
 				self.chooseMenuList.setList(map(self.m2kStream2ListEntry, self.filmliste))
 				self.keyLocked = False
