@@ -13,10 +13,10 @@
   <eLabel text="Menu" position="65,130" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
 	    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/buttonglas.png" position="65,130" size="90,36" alphatest="blend" zPosition="2" />
   <ePixmap position="65,180" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />
-  <eLabel text="Help" position="65,180" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
+  <eLabel text=" Help " position="65,180" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
 	    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/buttonglas.png" position="65,180" size="90,36" alphatest="blend" zPosition="2" />
   <ePixmap position="65,230" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />
-  <eLabel text="Exit" position="65,230" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
+  <eLabel text=" Exit " position="65,230" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
 	    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/buttonglas.png" position="65,230" size="90,36" alphatest="blend" zPosition="2" />
   <ePixmap position="65,280" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />
   <eLabel text="CH+" position="65,280" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
