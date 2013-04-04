@@ -14,9 +14,14 @@ class scienceTvGenreScreen(Screen):
 	
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/defaultGenreScreen.xml" % config.mediaportal.skin.value
+		
+		self.plugin_path = mp_globals.pluginPath
+		self.skin_path =  mp_globals.pluginPath + "/skins"
+		
+		path = "%s/%s/defaultGenreScreen.xml" % (self.skin_path, config.mediaportal.skin.value)
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/defaultGenreScreen.xml"
+			path = self.skin_path + "/original/defaultGenreScreen.xml"
+
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -89,9 +94,14 @@ class scienceTvListScreen(Screen):
 		self.genreID = genreID
 		self.stvLink = stvLink
 		self.genreName = stvGenre
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/scienceTvListScreen.xml" % config.mediaportal.skin.value
+		
+		self.plugin_path = mp_globals.pluginPath
+		self.skin_path =  mp_globals.pluginPath + "/skins"
+		
+		path = "%s/%s/scienceTvListScreen.xml" % (self.skin_path, config.mediaportal.skin.value)
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/scienceTvListScreen.xml"
+			path = self.skin_path + "/original/scienceTvListScreen.xml"
+
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

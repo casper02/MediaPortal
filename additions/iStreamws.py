@@ -44,9 +44,12 @@ class showIStreamGenre(Screen):
 	def __init__(self, session, mode):
 		self.session = session
 		self.mode = mode
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/defaultGenreScreen.xml" % config.mediaportal.skin.value
+		self.plugin_path = mp_globals.pluginPath
+		self.skin_path =  mp_globals.pluginPath + "/skins"
+
+		path = "%s/%s/defaultGenreScreen.xml" % (self.skin_path, config.mediaportal.skin.value)
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/defaultGenreScreen.xml"
+			path = self.skin_path + "/original/defaultGenreScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -143,9 +146,14 @@ class IStreamFilmListeScreen(Screen):
 		self.session = session
 		self.genreLink = genreLink
 		self.genreName = genreName
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/defaultListScreen.xml" % config.mediaportal.skin.value
+		
+		self.plugin_path = mp_globals.pluginPath
+		self.skin_path =  mp_globals.pluginPath + "/skins"
+		
+		path = "%s/%s/defaultListScreen.xml" % (self.skin_path, config.mediaportal.skin.value)
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/defaultListScreen.xml"
+			path = self.skin_path + "/original/defaultListScreen.xml"
+
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -608,9 +616,14 @@ class IStreamStreams(Screen, ConfigListScreen):
 		self.filmUrl = filmUrl
 		self.filmName = filmName
 		self.imageUrl = imageLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/defaultListScreen.xml" % config.mediaportal.skin.value
+		
+		self.plugin_path = mp_globals.pluginPath
+		self.skin_path =  mp_globals.pluginPath + "/skins"
+		
+		path = "%s/%s/defaultListScreen.xml" % (self.skin_path, config.mediaportal.skin.value)
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/defaultListScreen.xml"
+			path = self.skin_path + "/original/defaultListScreen.xml"
+
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

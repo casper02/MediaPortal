@@ -51,6 +51,8 @@ from time import *
 
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 
+from Plugins.Extensions.mediaportal.resources import mp_globals
+
 std_headers = {
 	'User-Agent': 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.2.6) Gecko/20100627 Firefox/3.6.6',
 	'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.7',

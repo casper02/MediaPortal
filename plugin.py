@@ -1722,5 +1722,7 @@ def main(session, **kwargs):
 	else:
 		session.openWithCallback(exit, haupt_Screen_Wall, config.mediaportal.filter.value)
 	
-def Plugins(**kwargs):
+def Plugins(path, **kwargs):
+	mp_globals.pluginPath = path
+
 	return PluginDescriptor(name=_("MediaPortal"), description="MediaPortal", where = [PluginDescriptor.WHERE_PLUGINMENU, PluginDescriptor.WHERE_EXTENSIONSMENU], icon="plugin.png", fnc=main)

@@ -10,10 +10,10 @@
     <widget name="ContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="mediaportal;22" halign="center" />
     <widget name="genreList" position="0,135" size="900,450" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" />
     <widget name="name" position="20,95" size="860,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="mediaportal;26" valign="top" />
-    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/red.png" position="20,597" size="35,27" alphatest="blend" />
-    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/green.png" position="165,597" size="35,27" alphatest="blend" />
-    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/yellow.png" position="310,597" size="35,27" alphatest="blend" />
-    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/blue.png" position="455,597" size="35,27" alphatest="blend" />
+    <ePixmap pixmap="~/original/images/red.png" position="20,597" size="35,27" alphatest="blend" />
+    <ePixmap pixmap="~/original/images/green.png" position="165,597" size="35,27" alphatest="blend" />
+    <ePixmap pixmap="~/original/images/yellow.png" position="310,597" size="35,27" alphatest="blend" />
+    <ePixmap pixmap="~/original/images/blue.png" position="455,597" size="35,27" alphatest="blend" />
     <widget name="F1" position="60,600" size="100,30" transparent="1" font="mediaportal; 20" backgroundColor="#00101214" valign="bottom" />
     <widget name="F2" position="205,600" size="100,30" transparent="1" backgroundColor="#00101214" font="mediaportal; 20" valign="bottom" />
     <widget name="F3" position="350,600" size="100,30" transparent="1" font="mediaportal; 20" backgroundColor="#00101214" valign="bottom" />

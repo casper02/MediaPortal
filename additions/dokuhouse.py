@@ -38,9 +38,14 @@ class show_DH_Genre(Screen):
 
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/defaultGenreScreen.xml" % config.mediaportal.skin.value
+		
+		self.plugin_path = mp_globals.pluginPath
+		self.skin_path =  mp_globals.pluginPath + "/skins"
+		
+		path = "%s/%s/defaultGenreScreen.xml" % (self.skin_path, config.mediaportal.skin.value)
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/defaultGenreScreen.xml"
+			path = self.skin_path + "/original/defaultGenreScreen.xml"
+
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -348,9 +353,14 @@ class DH_FilmListeScreen(Screen):
 		self.session = session
 		self.genreLink = genreLink
 		self.genreName = genreName
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/dokuListScreen.xml" % config.mediaportal.skin.value
+		
+		self.plugin_path = mp_globals.pluginPath
+		self.skin_path =  mp_globals.pluginPath + "/skins"
+		
+		path = "%s/%s/dokuListScreen.xml" % (self.skin_path, config.mediaportal.skin.value)
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/dokuListScreen.xml"
+			path = self.skin_path + "/original/dokuListScreen.xml"
+
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -749,9 +759,14 @@ class DH_Streams(Screen, ConfigListScreen):
 		self.session = session
 		self.dokuUrl = dokuUrl
 		self.dokuName = dokuName
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/dokuListScreen.xml" % config.mediaportal.skin.value
+		
+		self.plugin_path = mp_globals.pluginPath
+		self.skin_path =  mp_globals.pluginPath + "/skins"
+		
+		path = "%s/%s/dokuListScreen.xml" % (self.skin_path, config.mediaportal.skin.value)
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/dokuListScreen.xml"
+			path = self.skin_path + "/original/dokuListScreen.xml"
+
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
