@@ -50,7 +50,7 @@ class xhamsterGenreScreen(Screen):
 	def layoutFinished(self):
 		self.keyLocked = True
 		url = "http://xhamster.com/channels.php"
-		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
+		getPage(url, headers={'Cookie': 'videoFilters=%7B%22channels%22%3A%22%3B0%22%7D', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
 		parse = re.search('title">Straight</div>(.*?)iconTrans"></div>', data, re.S)
@@ -75,7 +75,7 @@ class xhamsterGenreScreen(Screen):
 
 		else:
 			streamGenreLink = self['genreList'].getCurrent()[0][1]
-			self.session.open(xhamsterFilmScreen, streamGenreLink)
+			self.session.open(xhamsterFilmScreen, streamGenreLink, streamGenreName)
 		
 	def suchen(self):
 		self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoard, title = (_("Suchkriterium eingeben")), text = self.suchString)
@@ -83,8 +83,9 @@ class xhamsterGenreScreen(Screen):
 	def SuchenCallback(self, callback = None, entry = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '+')
-			streamGenreLink = 'http://www.xhamster.com/search.php?q=%s&qcat=video&page=' % (self.suchString)
-			self.session.open(xhamsterFilmScreen, streamGenreLink)
+			streamGenreLink = '%s' % (self.suchString)
+			streamGenreName = "--- Search ---"
+			self.session.open(xhamsterFilmScreen, streamGenreLink, streamGenreName)
 
 	def keyLeft(self):
 		if self.keyLocked:
@@ -111,9 +112,10 @@ class xhamsterGenreScreen(Screen):
 
 class xhamsterFilmScreen(Screen):
 	
-	def __init__(self, session, genreLink):
+	def __init__(self, session, genreLink, phCatName):
 		self.session = session
 		self.genreLink = genreLink
+		self.phCatName = phCatName
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/XXXFilmScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
 			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/XXXFilmScreen.xml"
@@ -158,13 +160,16 @@ class xhamsterFilmScreen(Screen):
 		self.keyLocked = True
 		self['name'].setText('Bitte warten...')
 		self.streamList = []
-		ptUrl = "%s%s.html" % (self.genreLink, str(self.page))
-		print ptUrl
-		getPage(ptUrl, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.pageData).addErrback(self.dataError)
+		if self.phCatName == "--- Search ---":
+			url = "http://www.xhamster.com/search.php?q=%s&qcat=video&page=%s" % (self.genreLink, str(self.page))
+		else:
+			url = "%s%s.html" % (self.genreLink, str(self.page))
+		print url
+		getPage(url, headers={'Cookie': 'videoFilters=%7B%22channels%22%3A%22%3B0%22%7D', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.pageData).addErrback(self.dataError)
 		
 	def pageData(self, data):
 		lastpparse = re.search('class=\'pager\'>(.*)</div>', data, re.S)
-		lastp = re.findall('href=.*html.*>(.*[0-9])<.*?', lastpparse.group(1), re.S)
+		lastp = re.findall('href=.*>(.*[0-9])<.*?', lastpparse.group(1), re.S)
 		if lastp:
 			lastp = lastp[0]
 			print lastp
@@ -172,7 +177,10 @@ class xhamsterFilmScreen(Screen):
 		else:
 			self.lastpage = 1
 		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
-		parse = re.search('<div\sclass=\'vDate(.*)</html>', data, re.S)
+		if re.search('vDate', data, re.S):
+			parse = re.search('<div\sclass=\'vDate(.*)</html>', data, re.S)
+		else:
+			parse = re.search('<html>(.*)</html>', data, re.S)
 		xhListe = re.findall('class=\'video\'><a\shref=\'(.*?/movies/.*?)\'.*?class=\'hRotator\'\s><img\ssrc=\'(.*?)\'.*?alt="(.*?)".*?start2.*?<b>(.*?)</b>', parse.group(1), re.S)
 		if xhListe:
 			for (xhLink, xhImage, xhName, xhRuntime) in xhListe:
@@ -215,7 +223,7 @@ class xhamsterFilmScreen(Screen):
 			return
 		xhLink = self['genreList'].getCurrent()[0][2]
 		print xhLink
-		getPage(xhLink, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.playData).addErrback(self.dataError)
+		getPage(xhLink, headers={'Cookie': 'videoFilters=%7B%22channels%22%3A%22%3B0%22%7D', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.playData).addErrback(self.dataError)
 		
 	def playData(self, data):
 		xhTitle = self['genreList'].getCurrent()[0][0]
