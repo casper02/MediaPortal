@@ -384,7 +384,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 		self['porn'] = chooseMenuList([])
 		self['Porn'] = Label("Porn")
 
-		self.currenlist = "porn"
+		self.currentlist = "porn"
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
@@ -587,100 +587,204 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.openWithCallback(self.restart, hauptScreenSetup)
 
 	def keyUp(self):
-		exist = self[self.currenlist].getCurrent()
+		exist = self[self.currentlist].getCurrent()
 		if exist == None:
 			return
-		self[self.currenlist].up()
-		auswahl = self[self.currenlist].getCurrent()[0][0]
+		self[self.currentlist].up()
+		auswahl = self[self.currentlist].getCurrent()[0][0]
 		self.title = auswahl
 		self['name'].setText(auswahl)
 		
 	def keyDown(self):
-		exist = self[self.currenlist].getCurrent()
+		exist = self[self.currentlist].getCurrent()
 		if exist == None:
 			return
-		self[self.currenlist].down()
-		auswahl = self[self.currenlist].getCurrent()[0][0]
+		self[self.currentlist].down()
+		auswahl = self[self.currentlist].getCurrent()[0][0]
 		self.title = auswahl
 		self['name'].setText(auswahl)
 
 	def keyRight(self):
-		self.cur_idx = self[self.currenlist].getSelectedIndex()
+		self.cur_idx = self[self.currentlist].getSelectedIndex()
 		self["mediatheken"].selectionEnabled(0)
 		self["grauzone"].selectionEnabled(0)
 		self["funsport"].selectionEnabled(0)
 		self["porn"].selectionEnabled(0)
-		if self.currenlist == "mediatheken":
-			self["grauzone"].selectionEnabled(1)
-			self.currenlist = "grauzone"
-			cnt_tmp_ls = len(self.grauzone)
-		elif self.currenlist == "grauzone":
-			self["funsport"].selectionEnabled(1)
-			self.currenlist = "funsport"
-			cnt_tmp_ls = len(self.funsport)
-		elif self.currenlist == "funsport":
-			self["porn"].selectionEnabled(1)
-			self.currenlist = "porn"
-			cnt_tmp_ls = len(self.porn)
-		elif self.currenlist == "porn":
-			self["mediatheken"].selectionEnabled(1)
-			self.currenlist = "mediatheken"
-			cnt_tmp_ls = len(self.mediatheken)
+		if self.currentlist == "mediatheken":
+			if len(self.grauzone) > 0:
+				self["grauzone"].selectionEnabled(1)
+				self.currentlist = "grauzone"
+				cnt_tmp_ls = len(self.grauzone)
+			elif len(self.funsport) > 0:
+				self["funsport"].selectionEnabled(1)
+				self.currentlist = "funsport"
+				cnt_tmp_ls = len(self.funsport)
+			elif len(self.porn) > 0:
+				self["porn"].selectionEnabled(1)
+				self.currentlist = "porn"
+				cnt_tmp_ls = len(self.porn)
+			else:
+				self["mediatheken"].selectionEnabled(1)
+				self.currentlist = "mediatheken"
+				cnt_tmp_ls = len(self.mediatheken)
+		elif self.currentlist == "grauzone":
+			if len(self.funsport) > 0:
+				self["funsport"].selectionEnabled(1)
+				self.currentlist = "funsport"
+				cnt_tmp_ls = len(self.funsport)
+			elif len(self.porn) > 0:
+				self["porn"].selectionEnabled(1)
+				self.currentlist = "porn"
+				cnt_tmp_ls = len(self.porn)
+			elif len(self.mediatheken) > 0:
+				self["mediatheken"].selectionEnabled(1)
+				self.currentlist = "mediatheken"
+				cnt_tmp_ls = len(self.mediatheken)
+			else:
+				self["grauzone"].selectionEnabled(1)
+				self.currentlist = "grauzone"
+				cnt_tmp_ls = len(self.grauzone)
+		elif self.currentlist == "funsport":
+			if len(self.porn) > 0:
+				self["porn"].selectionEnabled(1)
+				self.currentlist = "porn"
+				cnt_tmp_ls = len(self.porn)
+			elif len(self.mediatheken) > 0:
+				self["mediatheken"].selectionEnabled(1)
+				self.currentlist = "mediatheken"
+				cnt_tmp_ls = len(self.mediatheken)
+			elif len(self.grauzone) > 0:
+				self["grauzone"].selectionEnabled(1)
+				self.currentlist = "grauzone"
+				cnt_tmp_ls = len(self.grauzone)
+			else:
+				self["funsport"].selectionEnabled(1)
+				self.currentlist = "funsport"
+				cnt_tmp_ls = len(self.funsport)
+		elif self.currentlist == "porn":
+			if len(self.mediatheken) > 0:
+				self["mediatheken"].selectionEnabled(1)
+				self.currentlist = "mediatheken"
+				cnt_tmp_ls = len(self.mediatheken)
+			elif len(self.grauzone) > 0:
+				self["grauzone"].selectionEnabled(1)
+				self.currentlist = "grauzone"
+				cnt_tmp_ls = len(self.grauzone)
+			elif len(self.funsport) > 0:
+				self["funsport"].selectionEnabled(1)
+				self.currentlist = "funsport"
+				cnt_tmp_ls = len(self.funsport)
+			else:
+				self["porn"].selectionEnabled(1)
+				self.currentlist = "porn"
+				cnt_tmp_ls = len(self.porn)
 			
 		cnt_tmp_ls = int(cnt_tmp_ls)
 		if int(self.cur_idx) < int(cnt_tmp_ls):
-			self[self.currenlist].moveToIndex(int(self.cur_idx))
+			self[self.currentlist].moveToIndex(int(self.cur_idx))
 		else:
 			idx = int(cnt_tmp_ls) -1
-			self[self.currenlist].moveToIndex(int(idx))
+			self[self.currentlist].moveToIndex(int(idx))
 			
-		if cnt_tmp_ls > 1:
-			auswahl = self[self.currenlist].getCurrent()[0][0]
+		if cnt_tmp_ls > 0:
+			auswahl = self[self.currentlist].getCurrent()[0][0]
 			self.title = auswahl
 			self['name'].setText(auswahl)
 		
 	def keyLeft(self):
-		self.cur_idx = self[self.currenlist].getSelectedIndex()
+		self.cur_idx = self[self.currentlist].getSelectedIndex()
 		self["mediatheken"].selectionEnabled(0)
 		self["grauzone"].selectionEnabled(0)
 		self["funsport"].selectionEnabled(0)
 		self["porn"].selectionEnabled(0)
-		if self.currenlist == "porn":
-			self["funsport"].selectionEnabled(1)
-			self.currenlist = "funsport"
-			cnt_tmp_ls = len(self.funsport)
-		elif self.currenlist == "funsport":
-			self["grauzone"].selectionEnabled(1)
-			self.currenlist = "grauzone"
-			cnt_tmp_ls = len(self.grauzone)
-		elif self.currenlist == "grauzone":
-			self["mediatheken"].selectionEnabled(1)
-			self.currenlist = "mediatheken"
-			cnt_tmp_ls = len(self.mediatheken)
-		elif self.currenlist == "mediatheken":
-			self["porn"].selectionEnabled(1)
-			self.currenlist = "porn"
-			cnt_tmp_ls = len(self.porn)
+		if self.currentlist == "porn":
+			if len(self.funsport) > 0:
+				self["funsport"].selectionEnabled(1)
+				self.currentlist = "funsport"
+				cnt_tmp_ls = len(self.funsport)
+			elif len(self.grauzone) > 0:
+				self["grauzone"].selectionEnabled(1)
+				self.currentlist = "grauzone"
+				cnt_tmp_ls = len(self.grauzone)
+			elif len(self.mediatheken) > 0:
+				self["mediatheken"].selectionEnabled(1)
+				self.currentlist = "mediatheken"
+				cnt_tmp_ls = len(self.mediatheken)
+			else:
+				self["porn"].selectionEnabled(1)
+				self.currentlist = "porn"
+				cnt_tmp_ls = len(self.porn)
+		elif self.currentlist == "funsport":
+			if len(self.grauzone) > 0:
+				self["grauzone"].selectionEnabled(1)
+				self.currentlist = "grauzone"
+				cnt_tmp_ls = len(self.grauzone)
+			elif len(self.mediatheken) > 0:
+				self["mediatheken"].selectionEnabled(1)
+				self.currentlist = "mediatheken"
+				cnt_tmp_ls = len(self.mediatheken)
+			elif len(self.porn) > 0:
+				self["porn"].selectionEnabled(1)
+				self.currentlist = "porn"
+				cnt_tmp_ls = len(self.porn)
+			else:
+				self["funsport"].selectionEnabled(1)
+				self.currentlist = "funsport"
+				cnt_tmp_ls = len(self.funsport)
+		elif self.currentlist == "grauzone":
+			if len(self.mediatheken) > 0:
+				self["mediatheken"].selectionEnabled(1)
+				self.currentlist = "mediatheken"
+				cnt_tmp_ls = len(self.mediatheken)
+			elif len(self.porn) > 0:
+				self["porn"].selectionEnabled(1)
+				self.currentlist = "porn"
+				cnt_tmp_ls = len(self.porn)
+			elif len(self.funsport) > 0:
+				self["funsport"].selectionEnabled(1)
+				self.currentlist = "funsport"
+				cnt_tmp_ls = len(self.funsport)
+			else:
+				self["grauzone"].selectionEnabled(1)
+				self.currentlist = "grauzone"
+				cnt_tmp_ls = len(self.grauzone)
+		elif self.currentlist == "mediatheken":
+			if len(self.porn) > 0:
+				self["porn"].selectionEnabled(1)
+				self.currentlist = "porn"
+				cnt_tmp_ls = len(self.porn)
+			elif len(self.funsport) > 0:
+				self["funsport"].selectionEnabled(1)
+				self.currentlist = "funsport"
+				cnt_tmp_ls = len(self.funsport)
+			elif len(self.grauzone) > 0:
+				self["grauzone"].selectionEnabled(1)
+				self.currentlist = "grauzone"
+				cnt_tmp_ls = len(self.grauzone)
+			else:
+				self["mediatheken"].selectionEnabled(1)
+				self.currentlist = "mediatheken"
+				cnt_tmp_ls = len(self.mediatheken)
 	
 		cnt_tmp_ls = int(cnt_tmp_ls)
 		print self.cur_idx, cnt_tmp_ls
 		if int(self.cur_idx) < int(cnt_tmp_ls):
-			self[self.currenlist].moveToIndex(int(self.cur_idx))
+			self[self.currentlist].moveToIndex(int(self.cur_idx))
 		else:
 			idx = int(cnt_tmp_ls) -1
-			self[self.currenlist].moveToIndex(int(idx))
+			self[self.currentlist].moveToIndex(int(idx))
 
-		if cnt_tmp_ls > 1:
-			auswahl = self[self.currenlist].getCurrent()[0][0]
+		if cnt_tmp_ls > 0:
+			auswahl = self[self.currentlist].getCurrent()[0][0]
 			self.title = auswahl
 			self['name'].setText(auswahl)
 		
 	def keyOK(self):
-		exist = self[self.currenlist].getCurrent()
+		exist = self[self.currentlist].getCurrent()
 		if exist == None:
 			return
-		print self.currenlist
-		auswahl = self[self.currenlist].getCurrent()[0][0]
+		print self.currentlist
+		auswahl = self[self.currentlist].getCurrent()[0][0]
 		print auswahl
 		if auswahl == "Doku.me":
 			self.session.open(dokuScreen)
