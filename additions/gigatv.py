@@ -168,7 +168,7 @@ class gigatvFilmScreen(Screen):
 		self.keyLocked = True
 		self.page = 1
 		self.lastpage = 1
-		self.videoPrio = 2
+		self.videoPrio = 1
 		self.videoPrioS = ['Low','Medium','High','Very High']
 		self.keyVideoQuality()
 		
