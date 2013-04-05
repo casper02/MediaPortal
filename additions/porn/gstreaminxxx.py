@@ -357,6 +357,8 @@ class gstreaminxxxStreamListeScreen(Screen):
 					self.filmliste.append((hostername, stream))
 		if len(self.filmliste) < 1:
 			self.filmliste.append(('Keine Streams gefunden.', None))
+		self.filmliste = list(set(self.filmliste))
+		self.filmliste.sort()
 		self.chooseMenuList.setList(map(gstreaminxxxHosterListEntry, self.filmliste))
 		self['name'].setText(self.streamName)
 		self.keyLocked = False
@@ -396,10 +398,10 @@ class gstreaminxxxStreamListeScreen(Screen):
 			for phurl in videoPage:
 				url = unquote(phurl)
 				self.get_stream(url)
-		
+
 	def get_stream(self,url):
 		get_stream_link(self.session).check_link(url, self.got_link)
-		
+
 	def got_link(self, stream_url):
 		self['name'].setText(self.streamName)
 		if stream_url == None:
