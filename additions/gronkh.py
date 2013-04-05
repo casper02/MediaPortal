@@ -59,6 +59,8 @@ class gronkhGenreScreen(Screen):
 			for (phTitle, phUrl, phImage) in phCats:
 				phUrl = "http://gronkh.de" + phUrl + '/page/'
 				self.genreliste.append((phTitle, phUrl, phImage))
+			self.genreliste.insert(0, ("Angezockt", "http://gronkh.de/testet/page/", None))
+			self.genreliste.insert(0, ("Aktuelle Folgen", "http://gronkh.de/page/", None))
 		self.chooseMenuList.setList(map(gronkhGenreListEntry, self.genreliste))
 		self.chooseMenuList.moveToIndex(0)
 		self.keyLocked = False
@@ -196,15 +198,21 @@ class gronkhFilmScreen(Screen):
 		else:
 			self.lastpage = 1
 		self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
-		phMovies = re.findall('letsplay.*?id=".*?">.*?thumb"\shref="(.*?)".*?img\ssrc="(.*?)".*?<h1>.*?title="(.*?)".*?<h2>.*?title=".*?".*?>(.*?)</a>', data, re.S)
-		if phMovies:
-			for (phUrl, phImage, phTitle1, phTitle2) in phMovies:
-				phTitle = phTitle1 + ' - ' + phTitle2
-				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage))
-			self.chooseMenuList.setList(map(gronkhFilmListEntry, self.filmliste))
-			self.chooseMenuList.moveToIndex(0)
-			self.keyLocked = False
-			self.showInfos()
+		if re.search('http://gronkh.de/testet/page/', self.phCatLink):
+			phMovies = re.findall('letsplay.*?id=".*?">.*?thumb"\shref="(.*?)".*?img\ssrc="(.*?)".*?title="(.*?)"', data, re.S)
+			if phMovies:
+				for (phUrl, phImage, phTitle) in phMovies:
+					self.filmliste.append((decodeHtml(phTitle), phUrl, phImage))
+		else:
+			phMovies = re.findall('letsplay.*?id=".*?">.*?thumb"\shref="(.*?)".*?img\ssrc="(.*?)".*?<h1>.*?title="(.*?)".*?<h2>.*?title=".*?".*?>(.*?)</a>', data, re.S)
+			if phMovies:
+				for (phUrl, phImage, phTitle1, phTitle2) in phMovies:
+					phTitle = phTitle1 + ' - ' + phTitle2
+					self.filmliste.append((decodeHtml(phTitle), phUrl, phImage))
+		self.chooseMenuList.setList(map(gronkhFilmListEntry, self.filmliste))
+		self.chooseMenuList.moveToIndex(0)
+		self.keyLocked = False
+		self.showInfos()
 
 	def dataError(self, error):
 		print error
