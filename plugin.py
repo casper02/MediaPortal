@@ -47,6 +47,7 @@ from additions.dokustream import *
 from additions.sciencetv import *
 from additions.szenestreams import *
 from additions.hoerspielhouse import *
+from additions.gigatv import *
 
 # mediatheken
 from additions.mediatheken.voxnow import *
@@ -122,6 +123,7 @@ config.mediaportal.showMEHD = ConfigYesNo(default = True)
 config.mediaportal.showIStream = ConfigYesNo(default = True)
 config.mediaportal.showM2k = ConfigYesNo(default = True)
 config.mediaportal.show4Players = ConfigYesNo(default = True)
+config.mediaportal.showGIGA = ConfigYesNo(default = True)
 config.mediaportal.showMahlzeitTV = ConfigYesNo(default = True)
 config.mediaportal.showappletrailers = ConfigYesNo(default = True)
 config.mediaportal.showDOKUh = ConfigYesNo(default = True)
@@ -249,6 +251,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige Myvideo:", config.mediaportal.showMyvideo))
 		self.configlist.append(getConfigListEntry("Zeige DokuStream:", config.mediaportal.showDokuStream))
 		self.configlist.append(getConfigListEntry("Zeige 4Players:", config.mediaportal.show4Players))
+		self.configlist.append(getConfigListEntry("Zeige GIGA.de:", config.mediaportal.showGIGA))
 		self.configlist.append(getConfigListEntry("Zeige mahlzeit.tv:", config.mediaportal.showMahlzeitTV))
 		self.configlist.append(getConfigListEntry("Zeige Apple Movie Trailers:", config.mediaportal.showappletrailers))
 		self.configlist.append(getConfigListEntry("Zeige DOKUh:", config.mediaportal.showDOKUh))
@@ -420,6 +423,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.mediatheken.append(self.hauptListEntry("ORF TVthek", "orf"))
 		if config.mediaportal.show4Players.value:
 			self.mediatheken.append(self.hauptListEntry("4Players", "4players"))
+		if config.mediaportal.showGIGA.value:
+			self.mediatheken.append(self.hauptListEntry("GIGA.de", "gigatv"))
 		if config.mediaportal.showappletrailers.value:
 			self.mediatheken.append(self.hauptListEntry("AppleTrailer", "appletrailers"))
 		if config.mediaportal.showAutoBild.value:
@@ -840,6 +845,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(nhlGenreScreen)
 		elif auswahl == "4Players":
 			self.session.open(forPlayersGenreScreen)
+		elif auswahl == "GIGA.de":
+			self.session.open(gigatvGenreScreen)
 		elif auswahl == "Tivi":
 			self.session.open(tiviGenreListeScreen)
 		elif auswahl == "My-Entertainment":
@@ -1151,6 +1158,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("NHL", "nhl", "Sport"))
 		if config.mediaportal.show4Players.value:
 			self.plugin_liste.append(("4Players", "4players", "Mediathek"))
+		if config.mediaportal.showGIGA.value:
+			self.plugin_liste.append(("GIGA.de", "gigatv", "Mediathek"))
 		if config.mediaportal.showMahlzeitTV.value:
 			self.plugin_liste.append(("mahlzeit.tv", "mahlzeit", "Mediathek"))
 		if config.mediaportal.showappletrailers.value:
@@ -1438,6 +1447,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(nhlGenreScreen)
 		elif auswahl == "4Players":
 			self.session.open(forPlayersGenreScreen)
+		elif auswahl == "GIGA.de":
+			self.session.open(gigatvGenreScreen)
 		elif auswahl == "Tivi":
 			self.session.open(tiviGenreListeScreen)
 		elif auswahl == "My-Entertainment":
