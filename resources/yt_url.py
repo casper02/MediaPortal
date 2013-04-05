@@ -46,6 +46,15 @@ class youtubeUrl:
 			'35' : 1, #FLV 480p
 			'34' : 2, #FLV 360p
 		}
+	elif videoPrio == 2:
+		VIDEO_FMT_PRIORITY_MAP = {
+			'38' : 2, #MP4 Original (HD)
+			'37' : 3, #MP4 1080p (HD)
+			'22' : 1, #MP4 720p (HD)
+			'18' : 4, #MP4 360p
+			'35' : 5, #FLV 480p
+			'34' : 6, #FLV 360p
+		}
 	else:
 		VIDEO_FMT_PRIORITY_MAP = {
 			'38' : 1, #MP4 Original (HD)
