@@ -169,7 +169,7 @@ class gigatvFilmScreen(Screen):
 		self.page = 1
 		self.lastpage = 1
 		self.videoPrio = 2
-		self.videoPrioS = ['Low','Medium','High', 'Very High']
+		self.videoPrioS = ['Low','Medium','High','Very High']
 		self.keyVideoQuality()
 		
 		self.filmliste = []
