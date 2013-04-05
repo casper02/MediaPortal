@@ -155,6 +155,7 @@ class gigatvFilmScreen(Screen):
 			"left" : self.keyLeft,
 			"nextBouquet" : self.keyPageUp,
 			"prevBouquet" : self.keyPageDown,
+			"yellow" : self.keyVideoQuality,
 			"green" : self.keyPageNumber
 		}, -1)
 
@@ -167,6 +168,9 @@ class gigatvFilmScreen(Screen):
 		self.keyLocked = True
 		self.page = 1
 		self.lastpage = 1
+		self.videoPrio = 2
+		self.videoPrioS = ['Low','Medium','High', 'Very High']
+		self.keyVideoQuality()
 		
 		self.filmliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -230,6 +234,13 @@ class gigatvFilmScreen(Screen):
 					self['coverArt'].instance.setPixmap(ptr.__deref__())
 					self['coverArt'].show()
 					del self.picload
+
+	def keyVideoQuality(self):
+		if self.videoPrio+1 > 3:
+			self.videoPrio = 0
+		else:
+			self.videoPrio += 1
+		self['title'].setText('GIGA.de (Video Quality: ' + self.videoPrioS[self.videoPrio] + ')')
 
 	def keyPageNumber(self):
 		self.session.openWithCallback(self.callbackkeyPageNumber, VirtualKeyBoard, title = (_("Seitennummer eingeben")), text = str(self.page))
@@ -301,7 +312,10 @@ class gigatvFilmScreen(Screen):
 		if videoPage:
 			for phurl in videoPage:
 				print phurl
-				url = phurl + '-hd.mp4'
+				if self.videoPrio > 1:
+					url = phurl + '-hd.mp4'
+				else:
+					url = phurl + '-normal.mp4'
 				print url
 				self.keyLocked = False
 				self.play(url)
@@ -309,7 +323,7 @@ class gigatvFilmScreen(Screen):
 			videoPage = re.findall('"http://www.youtube.com/(v|embed)/(.*?)\?.*?"', data, re.S)
 			if videoPage:
 				print videoPage
-				url = youtubeUrl(self.session).getVideoUrl(videoPage[0][1], 2)
+				url = youtubeUrl(self.session).getVideoUrl(videoPage[0][1], self.videoPrio)
 				if url:
 					self.play(url)
 			else:
