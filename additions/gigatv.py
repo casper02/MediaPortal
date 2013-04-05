@@ -50,6 +50,7 @@ class gigatvGenreScreen(Screen):
 	def layoutFinished(self):
 		self.genreliste.append(("Alle Videos", "http://www.giga.de/tv/alle-videos/", None))
 		self.genreliste.append(("G-Log","http://www.giga.de/games/videos/g-log/", "http://media2.giga.de/2012/12/g-log2-150x95.jpg"))
+		self.genreliste.append(("GIGA Android/Apple","http://www.giga.de/android/videos-podcasts/", None))
 		self.genreliste.append(("GIGA Failplays","http://www.giga.de/games/channel/giga-failplays/", "http://media2.giga.de/2013/04/failplay-teaser-150x95.jpg"))
 		self.genreliste.append(("GIGA Gameplay","http://www.giga.de/games/videos/giga-gameplay/", "http://media2.giga.de/2012/12/gameplay2-150x95.jpg"))
 		self.genreliste.append(("GIGA Live","http://www.giga.de/games/videos/giga-live/", "http://media2.giga.de/2012/12/gigatvlive-teaser-150x95.jpg"))
@@ -168,8 +169,8 @@ class gigatvFilmScreen(Screen):
 		self.keyLocked = True
 		self.page = 1
 		self.lastpage = 1
-		self.videoPrio = 1
-		self.videoPrioS = ['Low','Medium','High','Very High']
+		self.videoPrio = 0
+		self.videoPrioS = ['SD','HD']
 		self.keyVideoQuality()
 		
 		self.filmliste = []
@@ -236,10 +237,10 @@ class gigatvFilmScreen(Screen):
 					del self.picload
 
 	def keyVideoQuality(self):
-		if self.videoPrio+1 > 3:
+		if self.videoPrio == 1:
 			self.videoPrio = 0
 		else:
-			self.videoPrio += 1
+			self.videoPrio = 1
 		self['title'].setText('GIGA.de (Video Quality: ' + self.videoPrioS[self.videoPrio] + ')')
 
 	def keyPageNumber(self):
@@ -312,7 +313,7 @@ class gigatvFilmScreen(Screen):
 		if videoPage:
 			for phurl in videoPage:
 				print phurl
-				if self.videoPrio > 1:
+				if self.videoPrio > 0:
 					url = phurl + '-hd.mp4'
 				else:
 					url = phurl + '-normal.mp4'

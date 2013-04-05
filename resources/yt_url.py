@@ -30,38 +30,29 @@ class youtubeUrl:
 	print "got url:", url
 	if videoPrio == 0:
 		VIDEO_FMT_PRIORITY_MAP = {
-			'38' : 5, #MP4 Original (HD)
-			'37' : 6, #MP4 1080p (HD)
+			'38' : 6, #MP4 Original (HD)
+			'37' : 5, #MP4 1080p (HD)
 			'22' : 4, #MP4 720p (HD)
-			'18' : 3, #MP4 360p
 			'35' : 2, #FLV 480p
-			'34' : 1, #FLV 360p
+			'18' : 1, #MP4 360p
+			'34' : 3, #FLV 360p
 		}
 	elif videoPrio == 1:
 		VIDEO_FMT_PRIORITY_MAP = {
-			'38' : 4, #MP4 Original (HD)
+			'38' : 6, #MP4 Original (HD)
 			'37' : 5, #MP4 1080p (HD)
-			'22' : 2, #MP4 720p (HD)
-			'18' : 3, #MP4 360p
-			'35' : 1, #FLV 480p
-			'34' : 2, #FLV 360p
-		}
-	elif videoPrio == 2:
-		VIDEO_FMT_PRIORITY_MAP = {
-			'38' : 2, #MP4 Original (HD)
-			'37' : 3, #MP4 1080p (HD)
 			'22' : 1, #MP4 720p (HD)
-			'18' : 4, #MP4 360p
-			'35' : 5, #FLV 480p
-			'34' : 6, #FLV 360p
+			'35' : 3, #FLV 480p
+			'18' : 2, #MP4 360p
+			'34' : 4, #FLV 360p
 		}
 	else:
 		VIDEO_FMT_PRIORITY_MAP = {
-			'38' : 1, #MP4 Original (HD)
-			'37' : 2, #MP4 1080p (HD)
-			'22' : 3, #MP4 720p (HD)
-			'18' : 4, #MP4 360p
+			'38' : 3, #MP4 Original (HD)
+			'37' : 1, #MP4 1080p (HD)
+			'22' : 2, #MP4 720p (HD)
 			'35' : 5, #FLV 480p
+			'18' : 4, #MP4 360p
 			'34' : 6, #FLV 360p
 		}
 		
