@@ -1,21 +1,21 @@
 from Plugins.Extensions.mediaportal.resources.imports import *
 
-def porncityGenreListEntry(entry):
+def pornostreamsGenreListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		] 
 
-def porncityFilmListEntry(entry):
+def pornostreamsFilmListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		] 
 		
-def porncityHosterListEntry(entry):
+def pornostreamsHosterListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		] 
 		
-class porncityGenreScreen(Screen):
+class pornostreamsGenreScreen(Screen):
 	
 	def __init__(self, session):
 		self.session = session
@@ -38,7 +38,7 @@ class porncityGenreScreen(Screen):
 			"left" : self.keyLeft
 		}, -1)
 
-		self['title'] = Label("PornCity.to")
+		self['title'] = Label("Porno-Streams.com")
 		self['name'] = Label("Genre Auswahl")
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
@@ -54,7 +54,7 @@ class porncityGenreScreen(Screen):
 		
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "http://porncity.to"
+		url = "http://www.porno-streams.com"
 		getPage(url, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
@@ -66,9 +66,9 @@ class porncityGenreScreen(Screen):
 				phUrl = phUrl + "page/"
 				self.genreliste.append((phTitle, phUrl))
 			self.genreliste.sort()
-			self.genreliste.insert(0, ("Newest", "http://porncity.to/page/"))
+			self.genreliste.insert(0, ("Newest", "http://www.porno-streams.com/page/"))
 			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
-			self.chooseMenuList.setList(map(porncityGenreListEntry, self.genreliste))
+			self.chooseMenuList.setList(map(pornostreamsGenreListEntry, self.genreliste))
 			self.keyLocked = False
 
 	def dataError(self, error):
@@ -81,7 +81,7 @@ class porncityGenreScreen(Screen):
 
 		else:
 			streamGenreLink = self['genreList'].getCurrent()[0][1]
-			self.session.open(porncityFilmScreen, streamGenreLink, streamGenreName)
+			self.session.open(pornostreamsFilmScreen, streamGenreLink, streamGenreName)
 		
 	def suchen(self):
 		self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoard, title = (_("Suchkriterium eingeben")), text = self.suchString)
@@ -91,7 +91,7 @@ class porncityGenreScreen(Screen):
 			self.suchString = callback.replace(' ', '+')
 			streamGenreLink = '%s' % (self.suchString)
 			streamGenreName = "--- Search ---"
-			self.session.open(porncityFilmScreen, streamGenreLink, streamGenreName)
+			self.session.open(pornostreamsFilmScreen, streamGenreLink, streamGenreName)
 
 	def keyLeft(self):
 		self['genreList'].pageUp()
@@ -108,7 +108,7 @@ class porncityGenreScreen(Screen):
 	def keyCancel(self):
 		self.close()
 
-class porncityFilmScreen(Screen):
+class pornostreamsFilmScreen(Screen):
 	
 	def __init__(self, session, phCatLink, phCatName):
 		self.session = session
@@ -136,7 +136,7 @@ class porncityFilmScreen(Screen):
 			"green" : self.keyPageNumber
 		}, -1)
 
-		self['title'] = Label("PornCity.to")
+		self['title'] = Label("Porno-Streams.com")
 		self['name'] = Label("Film Auswahl")
 		self['views'] = Label("")
 		self['runtime'] = Label("")
@@ -159,7 +159,7 @@ class porncityFilmScreen(Screen):
 		self['name'].setText('Bitte warten...')
 		self.filmliste = []
 		if self.phCatName == "--- Search ---":
-			url = "http://porncity.to/page/%s/?s=%s&submit=+" % (str(self.page), self.phCatLink)
+			url = "http://www.porno-streams.com/page/%s/?s=%s&submit=+" % (str(self.page), self.phCatLink)
 		else:
 			url = "%s%s" % (self.phCatLink, str(self.page))
 		print url
@@ -180,7 +180,7 @@ class porncityFilmScreen(Screen):
 				if re.search('images-box.com|rapidimg.org', str(phImage), re.S):
 					phImage = None
 				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage))
-			self.chooseMenuList.setList(map(porncityFilmListEntry, self.filmliste))
+			self.chooseMenuList.setList(map(pornostreamsFilmListEntry, self.filmliste))
 			self.chooseMenuList.moveToIndex(0)
 			self.keyLocked = False
 			self.showInfos()
@@ -281,12 +281,12 @@ class porncityFilmScreen(Screen):
 			return
 		phTitle = self['genreList'].getCurrent()[0][0]
 		phLink = self['genreList'].getCurrent()[0][1]
-		self.session.open(porncityStreamListeScreen, phLink, phTitle)
+		self.session.open(pornostreamsStreamListeScreen, phLink, phTitle)
 
 	def keyCancel(self):
 		self.close()
 
-class porncityStreamListeScreen(Screen):
+class pornostreamsStreamListeScreen(Screen):
 	
 	def __init__(self, session, streamFilmLink, streamName):
 		self.session = session
@@ -308,7 +308,7 @@ class porncityStreamListeScreen(Screen):
 			"cancel": self.keyCancel
 		}, -1)
 
-		self['title'] = Label("PornCity.to")
+		self['title'] = Label("Porno-Streams.com")
 		self['name'] = Label(self.streamName)
 		self['coverArt'] = Pixmap()
 		
@@ -344,7 +344,7 @@ class porncityStreamListeScreen(Screen):
 					self.filmliste.append((hostername, stream))
 		else:
 			self.filmliste.append(('Keine Streams gefunden.', None))
-		self.chooseMenuList.setList(map(porncityHosterListEntry, self.filmliste))
+		self.chooseMenuList.setList(map(pornostreamsHosterListEntry, self.filmliste))
 		self.keyLocked = False
 
 	def keyOK(self):
