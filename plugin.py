@@ -1,7 +1,7 @@
 ﻿#	-*-	coding:	utf-8	-*-
 
 # General imports
-from Plugins.Extensions.mediaportal.resources.imports import *
+from resources.imports import *
 from resources.decrypt import *
 	
 # Stream-Sites import
