@@ -200,7 +200,8 @@ class putpattvFilmScreen(Screen):
 			for (phUrl, phTitle, phArtist) in phMovies:
 				phTitle = phArtist + ' - ' + phTitle
 				phUrl = phUrl.replace('&amp;','&')
-				self.filmliste.append((phTitle, phUrl))
+				if not (re.search('pop10_trenner.*?', phTitle, re.S) or re.search('Pop10 Trenner', phTitle, re.S) or re.search('pop10_pspot', phTitle, re.S)):
+					self.filmliste.append((decodeHtml(phTitle), phUrl))
 			self.chooseMenuList.setList(map(putpattvFilmListEntry, self.filmliste))
 			self.chooseMenuList.moveToIndex(0)
 			self.keyLocked = False
