@@ -1525,8 +1525,12 @@ class m2kSerienABCAuswahl(Screen):
 		if auswahl == '#':
 			auswahl = '1'
 		print auswahl
-		streamGenreLink = "http://www.movie2k.to/tvshows-all-%s.html" % auswahl
-		self.session.open(m2kSerienABCListe, streamGenreLink)
+		if self.m2kGotLink == 'SerienAZ':
+			streamGenreLink = "http://www.movie2k.to/tvshows-all-%s.html" % auswahl
+			self.session.open(m2kSerienABCListe, streamGenreLink)
+		elif self.m2kGotLink == 'FilmeAZ':
+			streamGenreLink = 'http://www.movie2k.to/movies-all-%s-' % auswahl
+			self.session.open(m2kKinoAlleFilmeListeScreen, streamGenreLink)
 		
 	def keyCancel(self):
 		self.close()
