@@ -68,7 +68,7 @@ class putpattvGenreScreen(Screen):
 		self.genreliste.append(("Rockalarm", "35"))
 		self.genreliste.append(("Introducing", "36"))
 		self.genreliste.append(("20 Jahre Intro", "38"))
-		self.genreliste.append(("Pop10 Studioshow", "39"))
+		self.genreliste.append(("Pop10", "39"))
 		self.genreliste.append(("Rock Hard", "41"))
 		self.chooseMenuList.setList(map(putpattvGenreListEntry, self.genreliste))
 		self.chooseMenuList.moveToIndex(0)
