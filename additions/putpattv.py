@@ -55,7 +55,7 @@ class putpattvGenreScreen(Screen):
 		self.genreliste.append(("Vibes", "6"))
 		self.genreliste.append(("Hooray!", "7"))
 		self.genreliste.append(("INTRO TV", "9"))
-		self.genreliste.append(("This is JAZZthing.TV", "11"))
+		self.genreliste.append(("JAZZthing.TV", "11"))
 		self.genreliste.append(("Festival Guide", "12"))
 		self.genreliste.append(("SchuelerVZ", "14"))
 		self.genreliste.append(("StudiVZ", "15"))
@@ -115,7 +115,8 @@ class putpattvGenreScreen(Screen):
 
 	def keyOK(self):
 		streamGenreLink = self['genreList'].getCurrent()[0][1]
-		self.session.open(putpattvFilmScreen, streamGenreLink)
+		catName = self['genreList'].getCurrent()[0][0]
+		self.session.open(putpattvFilmScreen, streamGenreLink, catName)
 		
 	def keyLeft(self):
 		if self.keyLocked:
@@ -146,9 +147,10 @@ class putpattvGenreScreen(Screen):
 
 class putpattvFilmScreen(Screen):
 	
-	def __init__(self, session, phCatLink):
+	def __init__(self, session, phCatLink, catName):
 		self.session = session
 		self.phCatLink = phCatLink
+		self.catName = catName
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/XXXFilmScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
 			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/XXXFilmScreen.xml"
@@ -168,8 +170,8 @@ class putpattvFilmScreen(Screen):
 			"left" : self.keyLeft
 		}, -1)
 
-		self['title'] = Label("putpat.tv")
-		self['name'] = Label("Titel Auswahl")
+		self['title'] = Label("Titel Auswahl")
+		self['name'] = Label("")
 		self['views'] = Label("")
 		self['runtime'] = Label("")
 		self['page'] = Label("")
@@ -187,14 +189,13 @@ class putpattvFilmScreen(Screen):
 		
 	def loadpage(self):
 		self.keyLocked = True
-		self['name'].setText('Bitte warten...')
+		self['name'].setText(self.catName)
 		self.filmliste = []
 		url = "http://www.putpat.tv/ws.xml?method=Channel.clips&partnerId=1&client=putpatplayer&maxClips=500&channelId=%s&streamingId=tvrl&streamingMethod=http" % (self.phCatLink)
 		print url
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
 	def loadData(self, data):
-		print data
 		phMovies = re.findall('<clip>.*?<medium>(.*?)</medium>.*?<title>(.*?)</title>.*?<display-artist-title>(.*?)</display-artist-title>', data, re.S)
 		if phMovies:
 			for (phUrl, phTitle, phArtist) in phMovies:
