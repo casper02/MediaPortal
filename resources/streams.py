@@ -942,10 +942,8 @@ class get_stream_link:
 
 	def userporn_tv(self, link):
 		#print "userporn: ",link
-		print 'Input: ' + link
 		fx = Userporn()
 		stream_url = fx.get_media_url(link)
-		print 'StreamURL: ' + str(stream_url)
 		if stream_url:
 			self._callback(stream_url)
 		else:
