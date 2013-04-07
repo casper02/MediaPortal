@@ -1201,7 +1201,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		if config.mediaportal.showAllMusicHouse.value:
 			self.plugin_liste.append(("AllMusicHouse", "allmusichouse", "Fun"))
 		if config.mediaportal.showputpattv.value:
-			self.plugin_liste.append(("putpat.tv", "putpat.tv", "Fun"))
+			self.plugin_liste.append(("putpat.tv", "putpattv", "Fun"))
 		if config.mediaportal.showRofl.value:
 			self.plugin_liste.append(("Rofl.to", "rofl", "Fun"))
 		if config.mediaportal.showFail.value:
