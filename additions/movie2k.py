@@ -132,7 +132,6 @@ class m2kGenreScreen(Screen):
 	def keyCancel(self):
 		self.close()
 
-
 class m2kKinoAlleFilmeListeScreen(Screen):
 	
 	def __init__(self, session, streamGenreLink):
@@ -1364,12 +1363,7 @@ class m2kXXXUpdateFilmeListeScreen(Screen):
 			print url
 		else:
 			url = str(self.streamXXXLink)
-		opener = urllib2.build_opener()
-		opener.addheaders.append(('Cookie', 'xxx2=ok'))
-		resp = opener.open(url)
-		pageData = resp.read()
-		self.loadPageData(pageData)
-		#getPage(self.streamGenreLink, agent=std_headers, cookies=self.keckse, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
+		getPage(url, agent=std_headers, headers={'Cookie': 'xxx2=ok', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
 		
 	def dataError(self, error):
 		print error
@@ -1381,7 +1375,6 @@ class m2kXXXUpdateFilmeListeScreen(Screen):
 			serien = re.findall('<TD id="tdmovies" width="380">.*?<a href="(.*?)">(.*?)</a>', data, re.S)
 		else:
 			serien = re.findall('<TD width="550" id="tdmovies">.*?<a href="(.*?)">(.*?)</a>', data, re.S)
-		#serien = re.findall('<td id="tdmovies"> <img style="vertical-align:top;".*?<a href="(.*?)">.*?<font color="#000000">(.*?)</font></a>', data, re.S)
 		if serien:
 			for url,title in serien:
 				url = "%s%s" % ("http://www.movie2k.to/", url)
@@ -1481,7 +1474,6 @@ class m2kXXXUpdateFilmeListeScreen(Screen):
 	def keyCancel(self):
 		self.close()
 
-
 class m2kSerienABCAuswahl(Screen):
 	
 	def __init__(self, session, m2kGotLink):
@@ -1538,7 +1530,6 @@ class m2kSerienABCAuswahl(Screen):
 		
 	def keyCancel(self):
 		self.close()
-
 
 class m2kSerienABCListe(Screen):
 	
@@ -1619,7 +1610,6 @@ class m2kSerienABCListe(Screen):
 					self['coverArt'].show()
 					del self.picload
 
-
 	def keyOK(self):
 		if self.keyLocked:
 			return
@@ -1651,10 +1641,8 @@ class m2kSerienABCListe(Screen):
 		self['filmList'].down()
 		self.loadPic()
 
-			
 	def keyCancel(self):
 		self.close()
-
 
 class m2kSerienABCListeStaffeln(Screen):
 	
@@ -1715,7 +1703,6 @@ class m2kSerienABCListeStaffeln(Screen):
 		else:
 			print "parsen - Keine Daten gefunden"
 
-
 	def keyOK(self):
 		if self.keyLocked:
 			return
@@ -1743,13 +1730,11 @@ class m2kSerienABCListeStaffeln(Screen):
 			return
 		self['filmList'].down()
 
-			
 	def keyCancel(self):
 		self.close()
 
-
 class m2kSerienABCListeStaffelnFilme(Screen):
-	
+
 	def __init__(self, session, streamGenreLink):
 		self.session = session
 		self.streamGenreLink = streamGenreLink
@@ -1760,7 +1745,7 @@ class m2kSerienABCListeStaffelnFilme(Screen):
 		with open(path, "r") as f:
 			self.skin = f.read()
 			f.close()
-			
+
 		Screen.__init__(self, session)
 		
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions"], {
@@ -1808,7 +1793,6 @@ class m2kSerienABCListeStaffelnFilme(Screen):
 		else:
 			print "parsen - Keine Daten gefunden"
 
-
 	def keyOK(self):
 		if self.keyLocked:
 			return
@@ -1820,12 +1804,12 @@ class m2kSerienABCListeStaffelnFilme(Screen):
 		if self.keyLocked:
 			return
 		self['filmList'].pageUp()
-		
+
 	def keyRight(self):
 		if self.keyLocked:
 			return
 		self['filmList'].pageDown()
-		
+
 	def keyUp(self):
 		if self.keyLocked:
 			return
@@ -1836,7 +1820,5 @@ class m2kSerienABCListeStaffelnFilme(Screen):
 			return
 		self['filmList'].down()
 
-			
 	def keyCancel(self):
 		self.close()
-
