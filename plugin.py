@@ -42,6 +42,7 @@ from additions.appletrailers import *
 from additions.dokuh import *
 from additions.dokuhouse import *
 from additions.allmusichouse import *
+from additions.putpattv import *
 from additions.liveleak import *
 from additions.dokustream import *
 from additions.sciencetv import *
@@ -132,6 +133,7 @@ config.mediaportal.showappletrailers = ConfigYesNo(default = True)
 config.mediaportal.showDOKUh = ConfigYesNo(default = True)
 config.mediaportal.showDokuHouse = ConfigYesNo(default = True)
 config.mediaportal.showAllMusicHouse = ConfigYesNo(default = True)
+config.mediaportal.showputpattv = ConfigYesNo(default = True)
 config.mediaportal.showLiveLeak = ConfigYesNo(default = True)
 config.mediaportal.showDokuStream = ConfigYesNo(default = True)
 config.mediaportal.showScienceTV = ConfigYesNo(default = True)
@@ -238,6 +240,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige Focus:", config.mediaportal.showFocus))
 		self.configlist.append(getConfigListEntry("Zeige Songs.to:", config.mediaportal.showSongsto))
 		self.configlist.append(getConfigListEntry("Zeige AllMusicHouse:", config.mediaportal.showAllMusicHouse))
+		self.configlist.append(getConfigListEntry("Zeige putpat.tv:", config.mediaportal.showputpattv))
 		self.configlist.append(getConfigListEntry("Zeige HörspielHouse:", config.mediaportal.showHoerspielHouse))
 
 		### mediatheken
@@ -489,6 +492,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 		# Fun / Sport
 		if config.mediaportal.showAllMusicHouse.value:
 			self.funsport.append(self.hauptListEntry("AllMusicHouse", "allmusichouse"))
+		if config.mediaportal.showputpattv.value:
+			self.funsport.append(self.hauptListEntry("putpat.tv", "putpattv"))
 		if config.mediaportal.showLaola1.value:
 			self.funsport.append(self.hauptListEntry("Laola1 Live", "laola1"))
 		if config.mediaportal.showNhl.value:
@@ -879,6 +884,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(show_DH_Genre)
 		elif auswahl == "AllMusicHouse":
 			self.session.open(show_AMH_Genre)
+		elif auswahl == "putpat.tv":
+			self.session.open(putpattvGenreScreen)
 		elif auswahl == "LiveLeak":
 			self.session.open(LiveLeakScreen)
 		elif auswahl == "DokuStream":
@@ -1193,6 +1200,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("DokuHouse", "dokuhouse", "Mediathek"))
 		if config.mediaportal.showAllMusicHouse.value:
 			self.plugin_liste.append(("AllMusicHouse", "allmusichouse", "Fun"))
+		if config.mediaportal.showputpattv.value:
+			self.plugin_liste.append(("putpat.tv", "putpat.tv", "Fun"))
 		if config.mediaportal.showRofl.value:
 			self.plugin_liste.append(("Rofl.to", "rofl", "Fun"))
 		if config.mediaportal.showFail.value:
@@ -1496,6 +1505,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(show_DH_Genre)
 		elif auswahl == "AllMusicHouse":
 			self.session.open(show_AMH_Genre)
+		elif auswahl == "putpat.tv":
+			self.session.open(putpattvGenreScreen)
 		elif auswahl == "LiveLeak":
 			self.session.open(LiveLeakScreen)
 		elif auswahl == "DokuStream":
