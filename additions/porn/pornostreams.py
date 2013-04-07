@@ -344,6 +344,8 @@ class pornostreamsStreamListeScreen(Screen):
 					self.filmliste.append((hostername, stream))
 		else:
 			self.filmliste.append(('Keine Streams gefunden.', None))
+		self.filmliste = list(set(self.filmliste))
+		self.filmliste.sort()
 		self.chooseMenuList.setList(map(pornostreamsHosterListEntry, self.filmliste))
 		self.keyLocked = False
 
