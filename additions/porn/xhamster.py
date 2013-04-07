@@ -60,6 +60,7 @@ class xhamsterGenreScreen(Screen):
 				phTitle = phTitle.strip(' ')
 				self.genreliste.append((phTitle, phUrl))
 			self.genreliste.sort()
+			self.genreliste.insert(0, ("Newest", 'http://xhamster.com/new/'))
 			self.genreliste.insert(0, ("--- Search ---", "callSuchen"))
 			self.chooseMenuList.setList(map(xhamsterGenreListEntry, self.genreliste))
 			self.chooseMenuList.moveToIndex(0)
