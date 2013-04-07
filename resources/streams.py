@@ -7,6 +7,7 @@ from urllib import quote, urlencode
 import re, urllib2, urllib, cookielib
 from jsunpacker import cJsUnpacker
 from flashx import Flashx
+from userporn import Userporn
 
 # cookies
 ck = {}
@@ -50,12 +51,12 @@ class get_stream_link:
 			elif re.match('.*?http://filenuke.com', data, re.S):
 				link = data
 				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.filenuke, link).addErrback(self.errorload)
-				
+
 			elif re.match('.*?http://movreel.com/', data, re.S):
 				link = data
 				#print link
 				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.movreel_data, link).addErrback(self.errorload)
-	
+
 			elif re.match('.*?http://xvidstream.net/', data, re.S):
 				link = data
 				#print link
@@ -65,7 +66,7 @@ class get_stream_link:
 				link = data
 				#print link
 				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.nowvideo).addErrback(self.errorload)
-				
+
 			elif re.match('.*?http://www.uploadc.com', data, re.S):
 				link = data
 				#print link
@@ -75,7 +76,7 @@ class get_stream_link:
 				link = data
 				#print link
 				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.vreer, link).addErrback(self.errorload)
-				
+
 			elif re.match('.*?http://www.monsteruploads.eu', data, re.S):
 				link = data
 				#print link
@@ -95,7 +96,7 @@ class get_stream_link:
 				link = data
 				#print link
 				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.videoweed).addErrback(self.errorload)
-			
+
 			elif re.match('.*?novamov.com', data, re.S):
 				link = data
 				#print link
@@ -110,7 +111,7 @@ class get_stream_link:
 				link = data
 				#print link
 				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.divxstage).addErrback(self.errorload)				
-				
+
 			elif re.match('.*?yesload.net', data, re.S):
 				link = data
 				#print link
@@ -147,7 +148,7 @@ class get_stream_link:
 				link = data
 				#print link
 				getPage(link, cookies=cj, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.check_istream_link).addErrback(self.errorload)
-				
+
 			elif re.match('.*?http:/.*?flashx.tv', data, re.S):
 				link = data
 				#print link
@@ -159,7 +160,7 @@ class get_stream_link:
 				else:
 					print "flashx_tv link not found: ",link
 					self.stream_not_found()
-					
+
 			elif re.match('.*?putme.org', data, re.S):
 				link = data
 				#print link
@@ -174,22 +175,27 @@ class get_stream_link:
 				link = data
 				#print link
 				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.sharesix).addErrback(self.errorload)
-				
+
 			elif re.match('.*?zooupload.com/', data, re.S):
 				link = data
 				#print link
 				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.zooupload).addErrback(self.errorload)
-				
+
 			elif re.match('.*?http://wupfile.com', data, re.S):
 				link = data
 				#print link
 				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.zooupload).addErrback(self.errorload)
-				
+
 			elif re.match('.*?http://bitshare.com', data, re.S):
 				link = data
 				#print link
 				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.bitshare).addErrback(self.errorload)
-				
+
+			elif re.match('.*?userporn.com', data, re.S):
+				link = data
+				#print link 
+				self.userporn_tv(link)
+
 			else:
 				message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=3)
 		else:
@@ -933,6 +939,17 @@ class get_stream_link:
 	def bitshare_start(self, link):
 		#print "bs_start: ",link
 		self._callback(link)
+
+	def userporn_tv(self, link):
+		#print "userporn: ",link
+		print 'Input: ' + link
+		fx = Userporn()
+		stream_url = fx.get_media_url(link)
+		print 'StreamURL: ' + str(stream_url)
+		if stream_url:
+			self._callback(stream_url)
+		else:
+			self.stream_not_found()
 
 	def check_istream_link(self, data):
 		self.check_link(data, self._callback)
