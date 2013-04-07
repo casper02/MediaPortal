@@ -123,6 +123,8 @@ class m2kGenreScreen(Screen):
 			self.session.open(m2kSerienUpdateFilmeListeScreen, streamGenreLink)
 		elif streamGenreName == "Alle Serien A-Z":
 			self.session.open(m2kSerienABCAuswahl, streamGenreLink)
+		elif streamGenreName == "Alle Filme A-Z":
+			self.session.open(m2kSerienABCAuswahl, streamGenreLink)
 		elif streamGenreName == "Letzte Updates (XXX)":
 			self.session.open(m2kXXXUpdateFilmeListeScreen, streamGenreLink, '')
 		elif streamGenreName == "Pornos":
