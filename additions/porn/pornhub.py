@@ -422,7 +422,7 @@ class pornhubFilmScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
 	
 	def genreData(self, data):
-		phMovies = re.findall('<div\sclass="wrap">.*?<a\shref="(.*?)"\starget=""\stitle="(.*?)".*?data-mediumthumb="(.*?)".*?<var\sclass="duration">(.*?)</var>.*?<span\sclass="views"><var>(.*?)<.*?<var\sclass="added">(.*?)<', data, re.S)
+		phMovies = re.findall('<div\sclass="wrap">.*?<a\shref="(.*?)".*?\stitle="(.*?)".*?data-mediumthumb="(.*?)".*?<var\sclass="duration">(.*?)</var>.*?<span\sclass="views"><var>(.*?)<.*?<var\sclass="added">(.*?)<', data, re.S)
 		if phMovies:
 			for (phUrl, phTitle, phImage, phRuntime, phViews, phAdded) in phMovies:
 				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage, phRuntime, phViews, phAdded))
@@ -520,7 +520,9 @@ class pornhubFilmScreen(Screen):
 
 	def parseData(self, data):
 		phTitle = self['genreList'].getCurrent()[0][0]
-		match = re.compile('"quality_720p":"([^"]+)"').findall(data)
+		match = re.compile('"video_url":"([^"]+)"').findall(data)
+		if not match:
+			match = re.compile('"quality_720p":"([^"]+)"').findall(data)
 		if not match:
 			match = re.compile('"quality_480p":"([^"]+)"').findall(data)
 		if not match:
