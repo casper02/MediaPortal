@@ -1028,7 +1028,7 @@ class m2kStreamListeScreen(Screen):
 				for url,datum,hostername,quali in hoster:
 					url = "%s%s" % ("http://www.movie2k.to/", url)
 					print hostername, url
-					if re.match('.*?(putlocker|sockshare|streamclou|xvidstage|filenuke|movreel|nowvideo|xvidstream|uploadc|vreer|MonsterUploads|Novamov|Videoweed|Divxstage|Ginbig|Flashstrea|Movshare|yesload|faststream|Vidstream|PrimeShare|flashx|Divxmov|Putme|Zooupload|Wupfile|BitShare)', hostername, re.S|re.I):
+					if re.match('.*?(putlocker|sockshare|streamclou|xvidstage|filenuke|movreel|nowvideo|xvidstream|uploadc|vreer|MonsterUploads|Novamov|Videoweed|Divxstage|Ginbig|Flashstrea|Movshare|yesload|faststream|Vidstream|PrimeShare|flashx|Divxmov|Putme|Zooupload|Wupfile|BitShare|Userporn)', hostername, re.S|re.I):
 						self.filmliste.append((url, datum, hostername, quali.replace('Movie quality ','').replace('\\','')))
 				self.chooseMenuList.setList(map(self.m2kStreamListEntry, self.filmliste))
 				self.keyLocked = False
@@ -1039,7 +1039,7 @@ class m2kStreamListeScreen(Screen):
 				for url,hostername in hoster:
 					url = "%s%s" % ("http://www.movie2k.to/", url)		
 					print hostername, url
-					if re.match('.*?(putlocker|sockshare|streamclou|xvidstage|filenuke|movreel|nowvideo|xvidstream|uploadc|vreer|MonsterUploads|Novamov|Videoweed|Divxstage|Ginbig|Flashstrea|Movshare|yesload|faststream|Vidstream|PrimeShare|flashx|Divxmov|Putme|Zooupload|Wupfile|BitShare)', hostername, re.S|re.I):
+					if re.match('.*?(putlocker|sockshare|streamclou|xvidstage|filenuke|movreel|nowvideo|xvidstream|uploadc|vreer|MonsterUploads|Novamov|Videoweed|Divxstage|Ginbig|Flashstrea|Movshare|yesload|faststream|Vidstream|PrimeShare|flashx|Divxmov|Putme|Zooupload|Wupfile|BitShare|Userporn)', hostername, re.S|re.I):
 						self.filmliste.append((url, hostername))
 				self.chooseMenuList.setList(map(self.m2kStream2ListEntry, self.filmliste))
 				self.keyLocked = False
@@ -1110,6 +1110,12 @@ class m2kStreamListeScreen(Screen):
 				print link[0].replace('?embed','')
 				get_stream_link(self.session).check_link(link[0].replace('?embed',''), self.got_link, False)
 
+			link = re.findall('<object\sid="vbbplayer".*?src=["|\'](.*?)["|\']', data, re.S)
+			if link:
+				link_found = True
+				print link[0]
+				get_stream_link(self.session).check_link(link[0], self.got_link, False)
+				
 			if not link_found:
 				message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=5)
 			
@@ -1208,6 +1214,12 @@ class m2kPartListeScreen(Screen):
 			print link[0].replace('?embed','')
 			get_stream_link(self.session).check_link(link[0].replace('?embed',''), self.got_link, False)
 
+		link = re.findall('<object\sid="vbbplayer".*?src=["|\'](.*?)["|\']', data, re.S)
+		if link:
+			link_found = True
+			print link[0].replace('?embed','')
+			get_stream_link(self.session).check_link(link[0].replace('?embed',''), self.got_link, False)
+			
 		if not link_found:
 			message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=5)
 
