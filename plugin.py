@@ -277,7 +277,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		# Kinder
 		self.configlist.append(getConfigListEntry("Zeige Tivi:", config.mediaportal.showtivi))
 		self.configlist.append(getConfigListEntry("Zeige KinderKino:", config.mediaportal.showKinderKino))
-		self.configlist.append(getConfigListEntry("Zeige Kika Plus:", config.mediaportal.showkika))
+		self.configlist.append(getConfigListEntry("Zeige KIKA+:", config.mediaportal.showkika))
 		
 		self.configlist.append(getConfigListEntry("Zeige Vutechtalk:", config.mediaportal.showVutec))
 		self.configlist.append(getConfigListEntry("Zeige Dreamscreencast:", config.mediaportal.showDsc))
@@ -426,7 +426,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 		if config.mediaportal.showtivi.value:
 			self.mediatheken.append(self.hauptListEntry("Tivi", "tivi"))
 		if config.mediaportal.showkika.value:
-			self.mediatheken.append(self.hauptListEntry("Kika", "kika"))
+			self.mediatheken.append(self.hauptListEntry("KIKA+", "kika"))
 		if config.mediaportal.showVoxnow.value:
 			self.mediatheken.append(self.hauptListEntry("VOXNOW", "voxnow"))
 		if config.mediaportal.showRTLnow.value:
@@ -911,7 +911,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(SzeneStreamsGenreScreen)
 		elif auswahl == "HörspielHouse":
 			self.session.open(show_HSH_Genre)
-		elif auswahl == "Kika":
+		elif auswahl == "KIKA+":
 			self.session.open(kikaGenreScreen)
 		elif auswahl == "Hörspiel-Channels":
 			self.session.open(show_HSC_Genre)
@@ -1175,7 +1175,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		if config.mediaportal.showtivi.value:
 			self.plugin_liste.append(("Tivi", "tivi", "Mediathek"))
 		if config.mediaportal.showkika.value:
-			self.plugin_liste.append(("Kika", "kika", "Mediathek"))
+			self.plugin_liste.append(("KIKA+", "kika", "Mediathek"))
 		if config.mediaportal.showMEHD.value:
 			self.plugin_liste.append(("My-Entertainment", "mehd", "Grauzone"))
 		if config.mediaportal.showM2k.value:
@@ -1560,7 +1560,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(ZDFGenreScreen)
 		elif auswahl == "ORF TVthek":
 			self.session.open(ORFGenreScreen)
-		elif auswahl == "Kika":
+		elif auswahl == "KIKA+":
 			self.session.open(kikaGenreScreen)
 		# porn
 		elif auswahl == "4Tube":
