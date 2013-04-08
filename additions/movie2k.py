@@ -1498,7 +1498,10 @@ class m2kSerienABCAuswahl(Screen):
 		}, -1)
 		
 		self['title'] = Label("Movie2k.to")
-		self['leftContentTitle'] = Label("Serien A-Z")
+		if self.m2kGotLink == 'FilmeAZ':
+			self['leftContentTitle'] = Label("Filme A-Z")
+		else:
+			self['leftContentTitle'] = Label("Serien A-Z")
 		self['stationIcon'] = Pixmap()
 		self['name'] = Label("")
 		self['handlung'] = Label("")
