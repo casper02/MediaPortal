@@ -48,6 +48,7 @@ from additions.szenestreams import *
 from additions.hoerspielhouse import *
 from additions.gigatv import *
 from additions.gronkh import *
+from additions.hoerspielchannels import *
 
 # kids
 from additions.kinderkino import *
@@ -144,6 +145,7 @@ config.mediaportal.showDokuStream = ConfigYesNo(default = True)
 config.mediaportal.showScienceTV = ConfigYesNo(default = True)
 config.mediaportal.showSzeneStreams = ConfigYesNo(default = True)
 config.mediaportal.showHoerspielHouse = ConfigYesNo(default = True)
+config.mediaportal.showHoerspielChannels = ConfigYesNo(default = True)
 
 # mediatheken
 config.mediaportal.showVoxnow = ConfigYesNo(default = True)
@@ -247,6 +249,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige AllMusicHouse:", config.mediaportal.showAllMusicHouse))
 		self.configlist.append(getConfigListEntry("Zeige putpat.tv:", config.mediaportal.showputpattv))
 		self.configlist.append(getConfigListEntry("Zeige HörspielHouse:", config.mediaportal.showHoerspielHouse))
+		self.configlist.append(getConfigListEntry("Zeige Hörspiel-Channels:", config.mediaportal.showHoerspielChannels))
 
 		### mediatheken
 		self.configlist.append(getConfigListEntry("----- Mediatheken -----", config.mediaportal.fake_entry))
@@ -526,6 +529,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.funsport.append(self.hauptListEntry("Songs.to", "songsto"))
 		if config.mediaportal.showHoerspielHouse.value:
 			self.funsport.append(self.hauptListEntry("HörspielHouse", "hoerspielhouse"))
+		if config.mediaportal.showHoerspielChannels.value:
+			self.funsport.append(self.hauptListEntry("Hörspiel-Channels", "hoerspielchannels"))
 		
 		# porn
 		if config.mediaportal.show4tube.value:
@@ -908,6 +913,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(show_HSH_Genre)
 		elif auswahl == "Kika":
 			self.session.open(kikaGenreScreen)
+		elif auswahl == "Hörspiel-Channels":
+			self.session.open(show_HSC_Genre)
 		# mediatheken
 		elif auswahl == "VOXNOW":
 			self.session.open(VOXnowGenreScreen)
@@ -1239,6 +1246,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("ScienceTV", "sciencetv", "Mediathek"))
 		if config.mediaportal.showHoerspielHouse.value:
 			self.plugin_liste.append(("HörspielHouse", "hoerspielhouse", "Fun"))
+		if config.mediaportal.showHoerspielChannels.value:
+			self.plugin_liste.append(("Hörspiel-Channels", "hoerspielchannels", "Fun"))
 			
 		### mediatheken	
 		if config.mediaportal.showVoxnow.value:
@@ -1532,6 +1541,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(SzeneStreamsGenreScreen)
 		elif auswahl == "HörspielHouse":
 			self.session.open(show_HSH_Genre)
+		elif auswahl == "Hörspiel-Channels":
+			self.session.open(show_HSC_Genre)
 		# mediatheken
 		elif auswahl == "VOXNOW":
 			self.session.open(VOXnowGenreScreen)
