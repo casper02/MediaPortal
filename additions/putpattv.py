@@ -219,6 +219,8 @@ class putpattvFilmScreen(Screen):
 			phSearch = re.findall('<video-file-id\stype="integer">(.*?)</video-file-id>.*?<token>(.*?)</token>.*?<description>(.*?)</description>', data, re.S)
 			if phSearch:			
 				for (phImage, phToken, phTitle) in phSearch:
+					if len(phImage) == 4:
+						phImage = '0' + phImage
 					phImage = 'http://files.putpat.tv/artwork/posterframes/00%s/00%s/v00%s_posterframe_putpat_small.jpg' % (phImage[0:3], phImage, phImage)
 					self.filmliste.append((decodeHtml(phTitle), None, phToken, phImage))
 		else:
@@ -227,6 +229,8 @@ class putpattvFilmScreen(Screen):
 				for (phUrl, phTitle, phArtist, phImage) in phMovies:
 					phTitle = phArtist + ' - ' + phTitle
 					phUrl = phUrl.replace('&amp;','&')
+					if len(phImage) == 4:
+						phImage = '0' + phImage
 					phImage = 'http://files.putpat.tv/artwork/posterframes/00%s/00%s/v00%s_posterframe_putpat_small.jpg' % (phImage[0:3], phImage, phImage)
 					if not (re.search('pop10_trenner.*?', phTitle, re.S) or re.search('Pop10 Trenner', phTitle, re.S) or re.search('pop10_pspot', phTitle, re.S)):
 						self.filmliste.append((decodeHtml(phTitle), phUrl, None, phImage))
