@@ -38,6 +38,7 @@ class putpattvGenreScreen(Screen):
 		self['name'] = Label("Kanal Auswahl")
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
+		self.suchString = ''
 		
 		self.genreliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -48,6 +49,7 @@ class putpattvGenreScreen(Screen):
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
+		self.genreliste.append(("--- Search ---", "callSuchen"))
 		self.genreliste.append(("Charts", "2"))
 		self.genreliste.append(("Heimat", "3"))
 		self.genreliste.append(("Retro", "4"))
@@ -114,10 +116,24 @@ class putpattvGenreScreen(Screen):
 					del self.picload
 
 	def keyOK(self):
-		streamGenreLink = self['genreList'].getCurrent()[0][1]
-		catName = self['genreList'].getCurrent()[0][0]
-		self.session.open(putpattvFilmScreen, streamGenreLink, catName)
-		
+		streamGenreName = self['genreList'].getCurrent()[0][0]
+		if streamGenreName == "--- Search ---":
+			self.suchen()
+
+		else:
+			streamGenreLink = self['genreList'].getCurrent()[0][1]		
+			self.session.open(putpattvFilmScreen, streamGenreLink, streamGenreName)
+			
+	def suchen(self):
+		self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoard, title = (_("Suchkriterium eingeben")), text = self.suchString)
+
+	def SuchenCallback(self, callback = None, entry = None):
+		if callback is not None and len(callback):
+			self.suchString = callback.replace(' ', '%20')
+			streamGenreLink = '%s' % (self.suchString)
+			selfGenreName = "--- Search ---"
+			self.session.open(putpattvFilmScreen, streamGenreLink, selfGenreName)
+
 	def keyLeft(self):
 		if self.keyLocked:
 			return
@@ -191,52 +207,111 @@ class putpattvFilmScreen(Screen):
 		self.keyLocked = True
 		self['name'].setText(self.catName)
 		self.filmliste = []
-		url = "http://www.putpat.tv/ws.xml?method=Channel.clips&partnerId=1&client=putpatplayer&maxClips=500&channelId=%s&streamingId=tvrl&streamingMethod=http" % (self.phCatLink)
+		if self.catName == '--- Search ---':
+			url = "http://www.putpat.tv/ws.xml?limit=100&client=putpatplayer&partnerId=1&searchterm=%s&method=Asset.quickbarSearch" % (self.phCatLink)
+		else:
+			url = "http://www.putpat.tv/ws.xml?method=Channel.clips&partnerId=1&client=putpatplayer&maxClips=500&channelId=%s&streamingId=tvrl&streamingMethod=http" % (self.phCatLink)
 		print url
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
 	def loadData(self, data):
-		phMovies = re.findall('<clip>.*?<medium>(.*?)</medium>.*?<title>(.*?)</title>.*?<display-artist-title>(.*?)</display-artist-title>', data, re.S)
-		if phMovies:
-			for (phUrl, phTitle, phArtist) in phMovies:
-				phTitle = phArtist + ' - ' + phTitle
-				phUrl = phUrl.replace('&amp;','&')
-				if not (re.search('pop10_trenner.*?', phTitle, re.S) or re.search('Pop10 Trenner', phTitle, re.S) or re.search('pop10_pspot', phTitle, re.S)):
-					self.filmliste.append((decodeHtml(phTitle), phUrl))
-			self.chooseMenuList.setList(map(putpattvFilmListEntry, self.filmliste))
-			self.chooseMenuList.moveToIndex(0)
-			self.keyLocked = False
+		if self.catName == '--- Search ---':
+			phSearch = re.findall('<video-file-id\stype="integer">(.*?)</video-file-id>.*?<token>(.*?)</token>.*?<description>(.*?)</description>', data, re.S)
+			if phSearch:			
+				for (phImage, phToken, phTitle) in phSearch:
+					phImage = 'http://files.putpat.tv/artwork/posterframes/00%s/00%s/v00%s_posterframe_putpat_small.jpg' % (phImage[0:3], phImage, phImage)
+					self.filmliste.append((decodeHtml(phTitle), None, phToken, phImage))
+		else:
+			phMovies = re.findall('<clip>.*?<medium>(.*?)</medium>.*?<title>(.*?)</title>.*?<display-artist-title>(.*?)</display-artist-title>.*?<video-file-id\stype="integer">(.*?)</video-file-id>', data, re.S)
+			if phMovies:
+				for (phUrl, phTitle, phArtist, phImage) in phMovies:
+					phTitle = phArtist + ' - ' + phTitle
+					phUrl = phUrl.replace('&amp;','&')
+					phImage = 'http://files.putpat.tv/artwork/posterframes/00%s/00%s/v00%s_posterframe_putpat_small.jpg' % (phImage[0:3], phImage, phImage)
+					if not (re.search('pop10_trenner.*?', phTitle, re.S) or re.search('Pop10 Trenner', phTitle, re.S) or re.search('pop10_pspot', phTitle, re.S)):
+						self.filmliste.append((decodeHtml(phTitle), phUrl, None, phImage))
+		self.chooseMenuList.setList(map(putpattvFilmListEntry, self.filmliste))
+		self.chooseMenuList.moveToIndex(0)
+		self.keyLocked = False
+		self.showInfos()
 
 	def dataError(self, error):
 		print error
+
+	def showInfos(self):
+		phImage = self['genreList'].getCurrent()[0][3]
+		print phImage
+		if not phImage == None:
+			downloadPage(phImage, "/tmp/phIcon.jpg").addCallback(self.ShowCover)
+		else:
+			self.ShowCoverNone()
+
+	def ShowCover(self, picData):
+		picPath = "/tmp/phIcon.jpg"
+		self.ShowCoverFile(picPath)
+		
+	def ShowCoverNone(self):
+		picPath = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/images/no_coverArt.png" % config.mediaportal.skin.value
+		self.ShowCoverFile(picPath)
+		
+	def ShowCoverFile(self, picPath):
+		if fileExists(picPath):
+			self['coverArt'].instance.setPixmap(None)
+			self.scale = AVSwitch().getFramebufferScale()
+			self.picload = ePicLoad()
+			size = self['coverArt'].instance.size()
+			self.picload.setPara((size.width(), size.height(), self.scale[0], self.scale[1], False, 1, "#FF000000"))
+			if self.picload.startDecode(picPath, 0, 0, False) == 0:
+				ptr = self.picload.getData()
+				if ptr != None:
+					self['coverArt'].instance.setPixmap(ptr.__deref__())
+					self['coverArt'].show()
+					del self.picload
 
 	def keyLeft(self):
 		if self.keyLocked:
 			return
 		self['genreList'].pageUp()
+		self.showInfos()
 		
 	def keyRight(self):
 		if self.keyLocked:
 			return
 		self['genreList'].pageDown()
+		self.showInfos()
 		
 	def keyUp(self):
 		if self.keyLocked:
 			return
 		self['genreList'].up()
+		self.showInfos()
 		
 	def keyDown(self):
 		if self.keyLocked:
 			return
 		self['genreList'].down()
+		self.showInfos()
 		
 	def keyOK(self):
 		if self.keyLocked:
 			return
 		url = self['genreList'].getCurrent()[0][1]
-		self.keyLocked = False
-		self.play(url)
+		if url != None:
+			self.keyLocked = False
+			self.play(url)
+		else:
+			token = self['genreList'].getCurrent()[0][2]
+			url = 'http://www.putpat.tv/ws.xml?client=putpatplayer&partnerId=1&token=%s=&streamingMethod=http&method=Asset.getClipForToken' % token
+			getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getToken).addErrback(self.dataError)
 					
+	def getToken(self, data):
+		phClip = re.findall('<medium>(.*?)</medium>', data, re.S)
+		if phClip:
+			for phUrl in phClip:
+				url = phUrl.replace('&amp;','&')
+				self.keyLocked = False
+				self.play(url)
+
 	def play(self,file):
 		xxxtitle = self['genreList'].getCurrent()[0][0]
 		sref = eServiceReference(0x1001, 0, file)
