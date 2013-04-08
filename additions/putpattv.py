@@ -83,11 +83,7 @@ class putpattvGenreScreen(Screen):
 	def showInfos(self):
 		phTitle = self['genreList'].getCurrent()[0][0]
 		phImage = self['genreList'].getCurrent()[0][1]
-		if phTitle == "Flux TV" or phTitle == "Rock Hard" or phTitle == "20 Jahre Intro" or phTitle == "INTRO TV":
-			phImage = 'http://files.putpat.tv/artwork/channelgraphics/%s/channellogo_invert_500.png' % phImage
-		else:
-			phImage = 'http://files.putpat.tv/artwork/channelgraphics/%s/channellogo_500.png' % phImage
-		print phImage
+		phImage = 'http://files.putpat.tv/artwork/channelgraphics/%s/channelteaser_500.png' % phImage
 		if not phImage == None:
 			downloadPage(phImage, "/tmp/phIcon.jpg").addCallback(self.ShowCover)
 		else:
