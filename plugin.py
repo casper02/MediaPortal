@@ -15,7 +15,6 @@ from additions.netzkino import *
 from additions.kinokiste import *
 from additions.failto import *
 from additions.sportbild import *
-from additions.kinderkino import *
 from additions.myvideo import *
 from additions.laola import *
 from additions.burningseries import *
@@ -32,7 +31,6 @@ from additions.streamoase import *
 from additions.autobild import *
 from additions.nhl import *
 from additions.spox import *
-from additions.tivi import *
 from additions.songsto import *
 from additions.myentertainment import *
 from additions.movie2k import *
@@ -50,6 +48,11 @@ from additions.szenestreams import *
 from additions.hoerspielhouse import *
 from additions.gigatv import *
 from additions.gronkh import *
+
+# kids
+from additions.kinderkino import *
+from additions.tivi import *
+from additions.kika import *
 
 # mediatheken
 from additions.mediatheken.voxnow import *
@@ -105,7 +108,10 @@ config.mediaportal.showFilmOn = ConfigYesNo(default = True)
 config.mediaportal.showTvkino = ConfigYesNo(default = True)
 config.mediaportal.showSpobox = ConfigYesNo(default = True)
 config.mediaportal.showNetzKino = ConfigYesNo(default = True)
+# Kinder
 config.mediaportal.showKinderKino = ConfigYesNo(default = True)
+config.mediaportal.showtivi = ConfigYesNo(default = True)
+config.mediaportal.showkika = ConfigYesNo(default = True)
 config.mediaportal.showSportBild = ConfigYesNo(default = True)
 config.mediaportal.showLaola1 = ConfigYesNo(default = True)
 config.mediaportal.showBs = ConfigYesNo(default = True)
@@ -120,7 +126,6 @@ config.mediaportal.showDsc = ConfigYesNo(default = True)
 config.mediaportal.showKoase = ConfigYesNo(default = True)
 config.mediaportal.showAutoBild = ConfigYesNo(default = True)
 config.mediaportal.showNhl = ConfigYesNo(default = True)
-config.mediaportal.showtivi = ConfigYesNo(default = True)
 config.mediaportal.showSongsto = ConfigYesNo(default = True)
 config.mediaportal.showMEHD = ConfigYesNo(default = True)
 config.mediaportal.showIStream = ConfigYesNo(default = True)
@@ -266,8 +271,11 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige DokuHouse:", config.mediaportal.showDokuHouse))
 		self.configlist.append(getConfigListEntry("Zeige AutoBild:", config.mediaportal.showAutoBild))
 		self.configlist.append(getConfigListEntry("Zeige SportBild:", config.mediaportal.showSportBild))
+		# Kinder
 		self.configlist.append(getConfigListEntry("Zeige Tivi:", config.mediaportal.showtivi))
 		self.configlist.append(getConfigListEntry("Zeige KinderKino:", config.mediaportal.showKinderKino))
+		self.configlist.append(getConfigListEntry("Zeige Kika Plus:", config.mediaportal.showkika))
+		
 		self.configlist.append(getConfigListEntry("Zeige Vutechtalk:", config.mediaportal.showVutec))
 		self.configlist.append(getConfigListEntry("Zeige Dreamscreencast:", config.mediaportal.showDsc))
 		self.configlist.append(getConfigListEntry("Zeige Focus:", config.mediaportal.showFocus))
@@ -414,6 +422,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.mediatheken.append(self.hauptListEntry("NetzKino", "netzkino"))
 		if config.mediaportal.showtivi.value:
 			self.mediatheken.append(self.hauptListEntry("Tivi", "tivi"))
+		if config.mediaportal.showkika.value:
+			self.mediatheken.append(self.hauptListEntry("Kika", "kika"))
 		if config.mediaportal.showVoxnow.value:
 			self.mediatheken.append(self.hauptListEntry("VOXNOW", "voxnow"))
 		if config.mediaportal.showRTLnow.value:
@@ -896,6 +906,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(SzeneStreamsGenreScreen)
 		elif auswahl == "HörspielHouse":
 			self.session.open(show_HSH_Genre)
+		elif auswahl == "Kika":
+			self.session.open(kikaGenreScreen)
 		# mediatheken
 		elif auswahl == "VOXNOW":
 			self.session.open(VOXnowGenreScreen)
@@ -1136,8 +1148,6 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		self.plugin_liste = []
 		if config.mediaportal.showMyvideo.value:
 			self.plugin_liste.append(("MyVideo", "myvideo", "Mediathek"))
-		if config.mediaportal.showKinderKino.value:
-			self.plugin_liste.append(("KinderKino", "kinderkino", "Mediathek"))
 		if config.mediaportal.showKinoKiste.value:
 			self.plugin_liste.append(("KinoKiste", "kinokiste", "Grauzone"))
 		if config.mediaportal.showBs.value:
@@ -1152,8 +1162,13 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("Kinox", "kinox", "Grauzone"))
 		if config.mediaportal.showStreamOase.value:
 			self.plugin_liste.append(("StreamOase", "streamoase", "Grauzone"))
+		# kinder
+		if config.mediaportal.showKinderKino.value:
+			self.plugin_liste.append(("KinderKino", "kinderkino", "Mediathek"))
 		if config.mediaportal.showtivi.value:
 			self.plugin_liste.append(("Tivi", "tivi", "Mediathek"))
+		if config.mediaportal.showkika.value:
+			self.plugin_liste.append(("Kika", "kika", "Mediathek"))
 		if config.mediaportal.showMEHD.value:
 			self.plugin_liste.append(("My-Entertainment", "mehd", "Grauzone"))
 		if config.mediaportal.showM2k.value:
@@ -1534,6 +1549,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(ZDFGenreScreen)
 		elif auswahl == "ORF TVthek":
 			self.session.open(ORFGenreScreen)
+		elif auswahl == "Kika":
+			self.session.open(kikaGenreScreen)
 		# porn
 		elif auswahl == "4Tube":
 			if config.mediaportal.pornpin.value:
