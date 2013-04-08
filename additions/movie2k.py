@@ -1087,7 +1087,7 @@ class m2kStreamListeScreen(Screen):
 		getPage(streamLink, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.get_streamlink, streamLink).addErrback(self.dataError)
 		
 	def get_streamlink(self, data, streamLink):
-		if re.match('.*?(http://img.movie2k.to/img/parts/teil1_aktiv.png|http://img.movie2k.to/img/parts/teil1_inaktiv.png)', data, re.S):
+		if re.match('.*?(http://img.movie2k.to/img/parts/teil1_aktiv.png|http://img.movie2k.to/img/parts/teil1_inaktiv.png|http://img.movie2k.to/img/parts/part1_active.png|http://img.movie2k.to/img/parts/part1_inactive.png)', data, re.S):
 			self.session.open(m2kPartListeScreen, streamLink, self.streamName)
 		else:
 			link_found = False
