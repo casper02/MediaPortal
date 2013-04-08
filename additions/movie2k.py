@@ -18,9 +18,24 @@ def m2kLetterEntry(entry):
 		]
 
 def m2kSerienABCEntry(entry):
-	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
-		] 
+	flag_name = False
+
+	if entry[2] == "http://img.movie2k.to/img/us_flag_small.png":
+		flag_name = "2.png"
+	elif entry[2] == "http://img.movie2k.to/img/us_ger_small.png":
+		flag_name = "1.png"
+
+	if flag_name:
+		png = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/%s" % flag_name
+		flag = LoadPixmap(png)
+		return [entry,
+			(eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 20, 5, 16, 11, flag),
+			(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
+			]
+	else:
+		return [entry,
+			(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
+			]
 
 def m2kSerienABCStaffelnEntry(entry):
 	return [entry,
@@ -215,10 +230,14 @@ class m2kKinoAlleFilmeListeScreen(Screen):
 			self.chooseMenuList.setList(map(m2kFilmListEntry, self.filmliste))
 			self.keyLocked = False
 			self['page'].setText(str(self.page))
+			if self.XXX == False:
+				self.loadPic()
 
 	def loadPic(self):
 		url = self['filmList'].getCurrent()[0][1]
-		data = urllib.urlopen(url).read()
+		getPage(url, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPicData).addErrback(self.dataError)
+		
+	def loadPicData(self, data):
 		filmdaten = re.findall('<div style="float:left">.*?<img src="(.*?)".*?<div class="moviedescription">(.*?)</div>', data, re.S)
 		if filmdaten:
 			streamPic, handlung = filmdaten[0]
@@ -1501,7 +1520,7 @@ class m2kSerienABCAuswahl(Screen):
 		if self.m2kGotLink == 'FilmeAZ':
 			self['leftContentTitle'] = Label("Filme A-Z")
 		else:
-			self['leftContentTitle'] = Label("Serien A-Z")
+			self['leftContentTitle'] = Label("Serien A-Z") 
 		self['stationIcon'] = Pixmap()
 		self['name'] = Label("")
 		self['handlung'] = Label("")
@@ -1595,7 +1614,7 @@ class m2kSerienABCListe(Screen):
 				self.filmliste.append((decodeHtml(title), url, landImage))
 			self.chooseMenuList.setList(map(m2kSerienABCEntry, self.filmliste))
 			self.keyLocked = False
-			self.loadPic()
+			#self.loadPic()
 		else:
 			print "parsen - Keine Daten gefunden"
 
@@ -1631,25 +1650,25 @@ class m2kSerienABCListe(Screen):
 		if self.keyLocked:
 			return
 		self['filmList'].pageUp()
-		self.loadPic()
+		#self.loadPic()
 		
 	def keyRight(self):
 		if self.keyLocked:
 			return
 		self['filmList'].pageDown()
-		self.loadPic()
+		#self.loadPic()
 		
 	def keyUp(self):
 		if self.keyLocked:
 			return
 		self['filmList'].up()
-		self.loadPic()
+		#self.loadPic()
 
 	def keyDown(self):
 		if self.keyLocked:
 			return
 		self['filmList'].down()
-		self.loadPic()
+		#self.loadPic()
 
 	def keyCancel(self):
 		self.close()
