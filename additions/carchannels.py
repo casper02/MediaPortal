@@ -77,11 +77,19 @@ class show_CAR_Genre(Screen):
 		self.genreliste.append((18,'Porsche Channel', '/Porsche'))
 		self.genreliste.append((19,'SEAT Deutschland', '/SEATde'))
 		self.genreliste.append((20,'ŠKODA AUTO Deutschland', '/skodade'))
-		self.genreliste.append((21,'WAYOFLIFE SUZUKI', '/WAYOFLIFE SUZUKI'))
+		self.genreliste.append((21,'WAYOFLIFE SUZUKI', '/GlobalSuzukiChannel'))
 		self.genreliste.append((22,'Toyota Deutschland', '/toyota'))
 		self.genreliste.append((23,'Official Triumph Motorcycles', '/OfficialTriumph'))
 		self.genreliste.append((24,'Volkswagen', '/myvolkswagen'))
 		self.genreliste.append((25,'Yamaha Motor Europe', '/YamahaMotorEurope'))
+		self.genreliste.append((26,'AUTO BILD TV', '/Autobild'))
+		self.genreliste.append((27,'autotouring-TV', '/autotouring'))
+		self.genreliste.append((28,'ADAC e.V.', '/adac'))
+		self.genreliste.append((29,'MOTORVISION BIKE', '/motorvisionbike'))
+		self.genreliste.append((30,'www.MOTORRADonline.de', '/motorrad'))
+		self.genreliste.append((31,'TOURENFAHRER', '/Tourenfahrer'))
+		
+		self.genreliste.sort(key=lambda t : t[1].lower())
 		self.chooseMenuList.setList(map(show_CAR_GenreListEntry, self.genreliste))
 	
 	def keyOK(self):
