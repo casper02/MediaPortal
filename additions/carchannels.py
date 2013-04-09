@@ -1,9 +1,11 @@
-﻿from Plugins.Extensions.mediaportal.resources.imports import *
+﻿#	-*-	coding:	utf-8	-*-
+
+from Plugins.Extensions.mediaportal.resources.imports import *
 from Plugins.Extensions.mediaportal.resources.decrypt import *
 from Components.ScrollLabel import ScrollLabel
 from Plugins.Extensions.mediaportal.resources.yt_url import *
 
-CAR_Version = "Car-Channels v0.90"
+CAR_Version = "CARS & BIKES-Channels v0.90"
 
 CAR_siteEncoding = 'utf-8'
 
@@ -57,9 +59,15 @@ class show_CAR_Genre(Screen):
 		#self.genreliste.append((2,'', '/'))
 		self.genreliste.append((1,'Audi Deutschland', '/Audi'))
 		self.genreliste.append((2,'BMW Deutschland', '/BMWDeutschland'))
-		self.genreliste.append((3,'Honda Deutschland', '/HondaDeutschlandGmbH'))
-		self.genreliste.append((4,'Volkswagen', '/myvolkswagen'))
-		self.genreliste.append((5,'Toyota Deutschland', '/toyota'))
+		self.genreliste.append((3,'Fiat Deutschland', '/FiatDeutschland'))
+		self.genreliste.append((4,'Honda Deutschland', '/HondaDeutschlandGmbH'))
+		self.genreliste.append((5,'Land Rover Deutschland', '/experiencegermany'))
+		self.genreliste.append((6,'Mazda Deutschland', '/MazdaDeutschland'))
+		self.genreliste.append((7,'MITSUBISHI MOTORS Deutschland', '/MitsubishiMotorsDE'))
+		self.genreliste.append((8,'SEAT Deutschland', '/SEATde'))
+		self.genreliste.append((9,'ŠKODA AUTO Deutschland', '/skodade'))
+		self.genreliste.append((10,'Toyota Deutschland', '/toyota'))
+		self.genreliste.append((11,'Volkswagen', '/myvolkswagen'))
 		self.chooseMenuList.setList(map(show_CAR_GenreListEntry, self.genreliste))
 	
 	def keyOK(self):
