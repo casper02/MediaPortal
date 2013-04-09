@@ -142,6 +142,8 @@ class auditvFilmScreen(Screen):
 		if phMovies:
 			for (phTitle, phId) in phMovies:
 				self.filmliste.append((decodeHtml(phTitle), phId))
+		self.filmliste = list(set(self.filmliste))
+		self.filmliste.sort()
 		self.chooseMenuList.setList(map(auditvFilmListEntry, self.filmliste))
 		self.chooseMenuList.moveToIndex(0)
 		self.keyLocked = False
