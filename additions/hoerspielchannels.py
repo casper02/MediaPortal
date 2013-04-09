@@ -3,7 +3,7 @@ from Plugins.Extensions.mediaportal.resources.decrypt import *
 from Components.ScrollLabel import ScrollLabel
 from Plugins.Extensions.mediaportal.resources.yt_url import *
 
-HSC_Version = "Hörspiel-Channels v0.90"
+HSC_Version = "Hörspiel-Channels v0.91"
 
 HSC_siteEncoding = 'utf-8'
 
@@ -66,11 +66,16 @@ class show_HSC_Genre(Screen):
 		self.genreliste.append((9,'Für Jung & Alt!', '/Bussard79'))
 		self.genreliste.append((10,'Hein Bloed', '/Heinbloedful'))
 		self.genreliste.append((11,'Hörbücher, Hörspiele und mehr', '/BestSound1000'))
-		self.genreliste.append((12,'Hörspiele und Klassik', '/scyliorhinus'))
-		self.genreliste.append((13,'Hörspielprojekt', '/Hoerspielprojekt'))
-		self.genreliste.append((14,'LAUSCH - Phantastische Hörspiele', '/merlausch'))
-		self.genreliste.append((15,'Nostalgiekanal - Hörspielkiste', '/Hoerspielkiste'))
-		self.genreliste.append((16,'Soundtales Productions', '/SoundtalesProduction'))
+		self.genreliste.append((12,'Hörbücher2013', '/Hoerbuecher2013'))
+		self.genreliste.append((13,'Hörspiele und Klassik', '/scyliorhinus'))
+		self.genreliste.append((14,'Hörspielprojekt', '/Hoerspielprojekt'))
+		self.genreliste.append((15,'KonzertfürFlügel', '/KonzertfuerFluegel'))
+		self.genreliste.append((16,'LAUSCH - Phantastische Hörspiele', '/merlausch'))
+		self.genreliste.append((17,'Lauschgoldladen', '/Lauschgoldladen'))
+		self.genreliste.append((18,'Multipolizei2', '/Multipolizei2'))
+		self.genreliste.append((19,'Multipolizei3', '/Multipolizei3'))
+		self.genreliste.append((20,'Nostalgiekanal - Hörspielkiste', '/Hoerspielkiste'))
+		self.genreliste.append((21,'Soundtales Productions', '/SoundtalesProduction'))
 		self.chooseMenuList.setList(map(show_HSC_GenreListEntry, self.genreliste))
 	
 	def keyOK(self):
@@ -110,16 +115,22 @@ class show_HSC_ListScreen(Screen):
 		Screen.__init__(self, session)
 		
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions"], {
-			"ok" : self.keyOK,
-			"cancel" : self.keyCancel,
-			"up" : self.keyUp,
-			"down" : self.keyDown,
-			"right" : self.keyRight,
-			"left" : self.keyLeft,
-			"nextBouquet" : self.keyPageUpFast,
-			"prevBouquet" : self.keyPageDownFast,
-			"red" :  self.keyTxtPageUp,
-			"blue" :  self.keyTxtPageDown
+			"ok" 		: self.keyOK,
+			"cancel"	: self.keyCancel,
+			"up" 		: self.keyUp,
+			"down" 		: self.keyDown,
+			"right" 	: self.keyRight,
+			"left" 		: self.keyLeft,
+			"nextBouquet": self.keyPageUpFast,
+			"prevBouquet": self.keyPageDownFast,
+			"red" 		:  self.keyTxtPageUp,
+			"blue" 		:  self.keyTxtPageDown,
+			"1" 		: self.key_1,
+			"3" 		: self.key_3,
+			"4" 		: self.key_4,
+			"6" 		: self.key_6,
+			"7" 		: self.key_7,
+			"9" 		: self.key_9
 		}, -1)
 
 		self['title'] = Label(HSC_Version)
@@ -192,7 +203,7 @@ class show_HSC_ListScreen(Screen):
 					desc = decodeHtml(m1.group(1))
 					desc = urllib.unquote(desc)
 				else:
-					desc = ''
+					desc = "Keine weiteren Info's vorhanden."
 					
 				m2 = re.search('/watch\?v=(.*?)&amp;feature=youtube_gdata_player.*?'\
 					'<media:thumbnail url=\'(.*?)\'.*?<media:title type=\'plain\'>(.*?)</.*?<yt:duration seconds=\'(.*?)\'', mg.group(1), re.S)
@@ -201,7 +212,7 @@ class show_HSC_ListScreen(Screen):
 					img = m2.group(2)
 					dura = int(m2.group(4))
 					vtim = str(datetime.timedelta(seconds=dura))
-					title = m2.group(3)
+					title = decodeHtml(m2.group(3))
 					self.filmliste.append((vtim+' ', title, vid, img, desc))
 			else:
 				a = l
@@ -319,11 +330,12 @@ class show_HSC_ListScreen(Screen):
 		oldpage = self.page
 		if (self.page + step) <= self.pages:
 			self.page += step
+			self.start_idx += self.max_res * step
 		else:
-			self.page += self.pages - self.page
+			self.page = self.pages
+			self.start_idx = self.max_res * (self.pages - 1) + 1
 		#print "Page %d/%d" % (self.page,self.pages)
 		if oldpage != self.page:
-			self.start_idx += self.max_res
 			self.loadPageData()
 		
 	def keyPageDownFast(self,step=1):
@@ -333,13 +345,38 @@ class show_HSC_ListScreen(Screen):
 		oldpage = self.page
 		if (self.page - step) >= 1:
 			self.page -= step
+			self.start_idx -= self.max_res * step
 		else:
-			self.page -=  -1 + self.page
+			self.page = 1
+			self.start_idx = 1
 		#print "Page %d/%d" % (self.page,self.pages)
 		if oldpage != self.page:
-			self.start_idx -= self.max_res
 			self.loadPageData()
 			
+	def key_1(self):
+		#print "keyPageDownFast(2)"
+		self.keyPageDownFast(2)
+		
+	def key_4(self):
+		#print "keyPageDownFast(5)"
+		self.keyPageDownFast(5)
+		
+	def key_7(self):
+		#print "keyPageDownFast(10)"
+		self.keyPageDownFast(10)
+		
+	def key_3(self):
+		#print "keyPageUpFast(2)"
+		self.keyPageUpFast(2)
+		
+	def key_6(self):
+		#print "keyPageUpFast(5)"
+		self.keyPageUpFast(5)
+		
+	def key_9(self):
+		#print "keyPageUpFast(10)"
+		self.keyPageUpFast(10)
+
 	def keyOK(self):
 		if self.keyLocked:
 			return
