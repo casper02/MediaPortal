@@ -618,7 +618,7 @@ class AMH_Streams(Screen, ConfigListScreen):
 		self['coverArt'] = Pixmap()
 		self['VideoPrio'] = Label("VideoPrio")
 		
-		self.videoPrio = 0
+		self.videoPrio = int(config.mediaportal.youtubeprio.value)-1
 		self.videoPrioS = ['L','M','H']
 		self.setVideoPrio()
 		self.streamListe = []

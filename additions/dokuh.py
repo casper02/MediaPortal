@@ -902,7 +902,7 @@ class DOKUHStreams(Screen, ConfigListScreen):
 		self['Page'] = Label("")
 		self['page'] = Label("")
 		
-		self.videoPrio = 1
+		self.videoPrio = int(config.mediaportal.youtubeprio.value)-1
 		self.videoPrioS = ['L','M','H']
 		self.setVideoPrio()
 		self.streamListe = []
