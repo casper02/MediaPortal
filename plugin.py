@@ -54,6 +54,7 @@ from additions.carchannels import *
 from additions.gamechannels import *
 from additions.musicchannels import *
 from additions.fiwitu import *
+from additions.userchannels import *
 
 # kids
 from additions.kinderkino import *
@@ -266,6 +267,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige CAR-Channels:", config.mediaportal.showCarChannels))
 		self.configlist.append(getConfigListEntry("Zeige GAME-Channels:", config.mediaportal.showGameChannels))
 		self.configlist.append(getConfigListEntry("Zeige MUSIC-Channels:", config.mediaportal.showMusicChannels))
+		self.configlist.append(getConfigListEntry("Zeige USER-Channels:", config.mediaportal.showUserChannels))
 
 		### mediatheken
 		self.configlist.append(getConfigListEntry("----- Mediatheken -----", config.mediaportal.fake_entry))
@@ -559,6 +561,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.funsport.append(self.hauptListEntry("GAME-Channels", "gamechannels"))
 		if config.mediaportal.showMusicChannels.value:
 			self.funsport.append(self.hauptListEntry("MUSIC-Channels", "musicchannels"))
+		if config.mediaportal.showUserChannels.value:
+			self.funsport.append(self.hauptListEntry("USER-Channels", "userchannels"))
 		
 		# porn
 		if config.mediaportal.show4tube.value:
@@ -953,6 +957,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(show_GAME_Genre)
 		elif auswahl == "MUSIC-Channels":
 			self.session.open(show_MUSIC_Genre)
+		elif auswahl == "USER-Channels":
+			self.session.open(show_USER_Genre)
 		# mediatheken
 		elif auswahl == "VOXNOW":
 			self.session.open(VOXnowGenreScreen)
@@ -1296,6 +1302,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("GAME-Channels", "gamechannels", "Fun"))
 		if config.mediaportal.showMusicChannels.value:
 			self.plugin_liste.append(("MUSIC-Channels", "musicchannels", "Fun"))
+		if config.mediaportal.showUserChannels.value:
+			self.plugin_liste.append(("USER-Channels", "userchannels", "Fun"))
 			
 		### mediatheken	
 		if config.mediaportal.showVoxnow.value:
@@ -1601,6 +1609,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(show_GAME_Genre)
 		elif auswahl == "MUSIC-Channels":
 			self.session.open(show_MUSIC_Genre)
+		elif auswahl == "USER-Channels":
+			self.session.open(show_USER_Genre)
 		# mediatheken
 		elif auswahl == "VOXNOW":
 			self.session.open(VOXnowGenreScreen)
