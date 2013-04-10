@@ -86,9 +86,14 @@ class kikaFilmListeScreen(Screen):
 		self.session = session
 		self.genreLink = genreLink
 		
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/defaultListScreen.xml" % config.mediaportal.skin.value
+		
+		self.plugin_path = mp_globals.pluginPath
+		self.skin_path =  mp_globals.pluginPath + "/skins"
+		
+		path = "%s/%s/defaultListScreen.xml" % (self.skin_path, config.mediaportal.skin.value)
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/defaultListScreen.xml"
+			path = self.skin_path + "/original/defaultListScreen.xml"
+
 		with open(path, "r") as f:
 			self.skin = f.read()
 			f.close()
