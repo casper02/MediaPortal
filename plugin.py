@@ -158,7 +158,7 @@ config.mediaportal.showCarChannels = ConfigYesNo(default = True)
 config.mediaportal.showGameChannels = ConfigYesNo(default = True)
 config.mediaportal.showFiwitu = ConfigYesNo(default = True)
 config.mediaportal.showMusicChannels = ConfigYesNo(default = False)
-
+config.mediaportal.showUserChannels = ConfigYesNo(default = True)
 
 # mediatheken
 config.mediaportal.showVoxnow = ConfigYesNo(default = True)
