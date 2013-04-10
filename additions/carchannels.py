@@ -161,10 +161,10 @@ class show_CAR_ListScreen(Screen):
 		self['vPrio'] = Label("")
 		self['Page'] = Label("Page")
 		self['coverArt'] = Pixmap()
-		
+
 		self.keyLocked = True
 		self.baseUrl = "http://www.youtube.com"
-		
+
 		self.videoPrio = int(config.mediaportal.youtubeprio.value)-1
 		self.videoPrioS = ['L','M','H']
 		self.setVideoPrio()

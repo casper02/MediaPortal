@@ -145,6 +145,7 @@ class show_USER_ListScreen(Screen):
 			"prevBouquet": self.keyPageDownFast,
 			"red" 		:  self.keyTxtPageUp,
 			"blue" 		:  self.keyTxtPageDown,
+			"yellow"	: self.keyYellow,
 			"1" 		: self.key_1,
 			"3" 		: self.key_3,
 			"4" 		: self.key_4,
@@ -160,15 +161,19 @@ class show_USER_ListScreen(Screen):
 		self['page'] = Label("")
 		self['F1'] = Label("Text-")
 		self['F2'] = Label("")
-		self['F3'] = Label("")
+		self['F3'] = Label("VidPrio")
 		self['F4'] = Label("Text+")
-		self['VideoPrio'] = Label("")
+		self['VideoPrio'] = Label("VideoPrio")
 		self['vPrio'] = Label("")
 		self['Page'] = Label("Page")
 		self['coverArt'] = Pixmap()
 		
 		self.keyLocked = True
 		self.baseUrl = "http://www.youtube.com"
+
+		self.videoPrio = int(config.mediaportal.youtubeprio.value)-1
+		self.videoPrioS = ['L','M','H']
+		self.setVideoPrio()
 		
 		self.keckse = {}
 		self.filmliste = []
@@ -303,6 +308,14 @@ class show_USER_ListScreen(Screen):
 		print "youtubeErr: ",error
 		self['handlung'].setText("Das Video kann leider nicht abgespielt werden !\n"+str(error))
 		
+	def setVideoPrio(self):
+		if self.videoPrio+1 > 2:
+			self.videoPrio = 0
+		else:
+			self.videoPrio += 1
+			
+		self['vPrio'].setText(self.videoPrioS[self.videoPrio])
+
 	def keyLeft(self):
 		if self.keyLocked:
 			return
@@ -373,6 +386,9 @@ class show_USER_ListScreen(Screen):
 		if oldpage != self.page:
 			self.loadPageData()
 			
+	def keyYellow(self):
+		self.setVideoPrio()
+
 	def key_1(self):
 		#print "keyPageDownFast(2)"
 		self.keyPageDownFast(2)
@@ -406,7 +422,7 @@ class show_USER_ListScreen(Screen):
 		#print "VideoId: ",dhVideoId
 		y = youtubeUrl(self.session)
 		y.addErrback(self.youtubeErr)
-		dhLink = y.getVideoUrl(dhVideoId, 1)
+		dhLink = y.getVideoUrl(dhVideoId, self.videoPrio)
 		if dhLink:
 			print dhLink
 			sref = eServiceReference(0x1001, 0, dhLink)
