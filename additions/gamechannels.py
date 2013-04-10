@@ -54,9 +54,20 @@ class show_GAME_Genre(Screen):
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
-		#self.genreliste.append((2,'', '/))
+		#self.genreliste.append((2,'', '/'))
 		self.genreliste.append((1,'High definition GAMING!', '/JohnsGameChannel'))
 		self.genreliste.append((2,'... weiß, wer der Babo ist!', '/THCsGameChannel'))
+		self.genreliste.append((3,'Game Tube', '/GameTube'))
+		self.genreliste.append((4,'Electronic Arts GmbH', '/ElectronicArtsDE'))
+		self.genreliste.append((5,'Ubisoft', '/ubisoft'))
+		self.genreliste.append((6,'PlayStation', '/PlayStation'))
+		self.genreliste.append((7,'Game Star', '/GameStarDE'))
+		self.genreliste.append((8,'Assassins Creed DE', '/AssassinsCreedDE'))
+		self.genreliste.append((9,'XboxDE\'s channel', '/XboxDE'))
+		self.genreliste.append((10,'Disney Deutschland', '/WaltDisneyStudiosDE'))
+		#self.genreliste.append((11,'EA Deutschland', '/))
+		
+		self.genreliste.sort(key=lambda t : t[1].lower())
 		self.chooseMenuList.setList(map(show_GAME_GenreListEntry, self.genreliste))
 	
 	def keyOK(self):
