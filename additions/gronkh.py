@@ -167,9 +167,9 @@ class gronkhFilmScreen(Screen):
 		self.keyLocked = True
 		self.page = 1
 		self.lastpage = 1
-		self.videoPrio = 0
-		self.videoPrioS = ['SD','HD-720p', 'HD-1080p']
-		self.keyVideoQuality()
+		self.videoPrio = int(config.mediaportal.youtubeprio.value)
+		self.videoPrioS = ['Low','Medium', 'High']
+		self['title'].setText('gronkh.de (Video Quality: ' + self.videoPrioS[self.videoPrio] + ')')
 		
 		self.filmliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)

@@ -169,9 +169,9 @@ class gigatvFilmScreen(Screen):
 		self.keyLocked = True
 		self.page = 1
 		self.lastpage = 1
-		self.videoPrio = 0
-		self.videoPrioS = ['SD','HD']
-		self.keyVideoQuality()
+		self.videoPrio = int(config.mediaportal.youtubeprio.value)
+		self.videoPrioS = ['Low','Medium','High']
+		self['title'].setText('GIGA.de (Video Quality: ' + self.videoPrioS[self.videoPrio] + ')')
 		
 		self.filmliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -237,10 +237,10 @@ class gigatvFilmScreen(Screen):
 					del self.picload
 
 	def keyVideoQuality(self):
-		if self.videoPrio == 1:
+		if self.videoPrio+1 > 2:
 			self.videoPrio = 0
 		else:
-			self.videoPrio = 1
+			self.videoPrio += 1
 		self['title'].setText('GIGA.de (Video Quality: ' + self.videoPrioS[self.videoPrio] + ')')
 
 	def keyPageNumber(self):
