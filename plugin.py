@@ -53,6 +53,7 @@ from additions.hoerspielchannels import *
 from additions.carchannels import *
 from additions.gamechannels import *
 from additions.musicchannels import *
+from additions.fiwitu import *
 
 # kids
 from additions.kinderkino import *
@@ -150,10 +151,11 @@ config.mediaportal.showDokuStream = ConfigYesNo(default = True)
 config.mediaportal.showScienceTV = ConfigYesNo(default = True)
 config.mediaportal.showSzeneStreams = ConfigYesNo(default = True)
 config.mediaportal.showHoerspielHouse = ConfigYesNo(default = True)
-config.mediaportal.showHoerspielChannels = ConfigYesNo(default = True)
-config.mediaportal.showCarChannels = ConfigYesNo(default = True)
+config.mediaportal.showHoerspielChannels = ConfigYesNo(default = True)config.mediaportal.showCarChannels = ConfigYesNo(default = True)
 config.mediaportal.showGameChannels = ConfigYesNo(default = True)
+config.mediaportal.showFiwitu = ConfigYesNo(default = True)
 config.mediaportal.showMusicChannels = ConfigYesNo(default = False)
+
 
 # mediatheken
 config.mediaportal.showVoxnow = ConfigYesNo(default = True)
@@ -281,6 +283,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige Audi.tv:", config.mediaportal.showaudi))
 		self.configlist.append(getConfigListEntry("Zeige gronkh.de:", config.mediaportal.showgronkh))
 		self.configlist.append(getConfigListEntry("Zeige mahlzeit.tv:", config.mediaportal.showMahlzeitTV))
+		self.configlist.append(getConfigListEntry("Zeige fiwitu.tv:", config.mediaportal.showFiwitu))
 		self.configlist.append(getConfigListEntry("Zeige Apple Movie Trailers:", config.mediaportal.showappletrailers))
 		self.configlist.append(getConfigListEntry("Zeige DOKUh:", config.mediaportal.showDOKUh))
 		self.configlist.append(getConfigListEntry("Zeige DokuHouse:", config.mediaportal.showDokuHouse))
@@ -485,6 +488,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.mediatheken.append(self.hauptListEntry("Focus", "focus"))
 		if config.mediaportal.showMahlzeitTV.value:
 			self.mediatheken.append(self.hauptListEntry("mahlzeit.tv", "mahlzeit"))
+		if config.mediaportal.showFiwitu.value:
+			self.mediatheken.append(self.hauptListEntry("fiwitu.tv", "fiwitu"))
 		if config.mediaportal.showScienceTV.value:
 			self.mediatheken.append(self.hauptListEntry("ScienceTV", "sciencetv"))
 		if config.mediaportal.showSportBild.value:
@@ -913,6 +918,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(showIStreamGenre, "default")
 		elif auswahl == "mahlzeit.tv":
 			self.session.open(mahlzeitMainScreen)
+		elif auswahl == "fiwitu.tv":
+			self.session.open(fiwituGenreScreen)
 		elif auswahl == "AppleTrailer":
 			self.session.open(appletrailersGenreScreen)
 		elif auswahl == "DOKUh":
@@ -1244,6 +1251,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("gronkh.de", "gronkh", "Mediathek"))
 		if config.mediaportal.showMahlzeitTV.value:
 			self.plugin_liste.append(("mahlzeit.tv", "mahlzeit", "Mediathek"))
+		if config.mediaportal.showFiwitu.value:
+			self.plugin_liste.append(("fiwitu.tv", "fiwitu", "Mediathek"))
 		if config.mediaportal.showappletrailers.value:
 			self.plugin_liste.append(("AppleTrailer", "appletrailers", "Mediathek"))
 		if config.mediaportal.showDOKUh.value:
@@ -1559,6 +1568,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(showIStreamGenre, "default")
 		elif auswahl == "mahlzeit.tv":
 			self.session.open(mahlzeitMainScreen)
+		elif auswahl == "fiwitu.tv":
+			self.session.open(fiwituGenreScreen)
 		elif auswahl == "AppleTrailer":
 			self.session.open(appletrailersGenreScreen)
 		elif auswahl == "DOKUh":
