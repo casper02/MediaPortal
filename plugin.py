@@ -326,7 +326,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		
 		self["config"].setList(self.configlist)
 
-		self['title'] = Label("MediaPortal - Setup - (Version 4.1.0)")
+		self['title'] = Label("MediaPortal - Setup - (Version 4.1.1)")
 		self['name'] = Label("Setup")
 		self['coverArt'] = Pixmap()
 		
@@ -403,7 +403,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			"displayHelp" : self.keyHelp
 		}, -1)
 
-		self['title'] = Label("MediaPortal v4.1.0")
+		self['title'] = Label("MediaPortal v4.1.1")
 		
 		self['name'] = Label("Plugin Auswahl")
 		
