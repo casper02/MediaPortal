@@ -334,7 +334,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		
 		self["config"].setList(self.configlist)
 
-		self['title'] = Label("MediaPortal - Setup - (Version 4.1.1)")
+		self['title'] = Label("MediaPortal - Setup - (Version 4.1.2)")
 		self['name'] = Label("Setup")
 		self['coverArt'] = Pixmap()
 		
@@ -411,7 +411,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			"displayHelp" : self.keyHelp
 		}, -1)
 
-		self['title'] = Label("MediaPortal v4.1.1")
+		self['title'] = Label("MediaPortal v4.1.2")
 		
 		self['name'] = Label("Plugin Auswahl")
 		
@@ -1491,6 +1491,9 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		self['name'].setText(plugin_name)		
 				
 	def move_selector(self):
+		#print "mainlist:", self.mainlist[int(self.select_list)]
+		#print "selektor", self.selektor_index	
+		#print "gucken", self.selektor_index, len(self.mainlist[int(self.select_list)])
 		select_nr = self.mainlist[int(self.select_list)][int(self.selektor_index)-1]
 		plugin_name = self.plugin_liste[int(select_nr)-1][0]
 		self['name'].setText(plugin_name)
@@ -1911,7 +1914,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 	def paint_new_last(self):
 		pageinfo = "%s / %s" % (self.select_list+1, len(self.mainlist))
 		self['page'].setText(pageinfo)
-		self.selektor_index = self.mainlist[int(self.select_list)][-1]
+		self.selektor_index = len(self.mainlist[int(self.select_list)])
+		#self.selektor_index = self.mainlist[int(self.select_list)][-1]
 		print self.selektor_index
 		self.move_selector()
 		for x in self.mainlist[int(self.select_list)]:
