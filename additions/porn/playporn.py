@@ -368,6 +368,7 @@ class playpornStreamListeScreen(Screen):
 				if re.match('.*?(putlocker|sockshare|streamclou|xvidstage|filenuke|movreel|nowvideo|xvidstream|uploadc|vreer|MonsterUploads|Novamov|Videoweed|Divxstage|Ginbig|Flashstrea|Movshare|yesload|faststream|Vidstream|PrimeShare|flashx|Divxmov|Putme|Zooupload|Wupfile)', hostername.strip(' '), re.S|re.I):
 					print hostername, stream
 					hostername = hostername.replace('streamcloud1','Streamcloud (Teil 1)').replace('streamcloud2','Streamcloud (Teil 2)')
+					hostername = hostername.replace('flashx1','Flashx (Teil 1)').replace('flashx2','Flashx (Teil 2)')
 					self.filmliste.append((hostername, stream))
 		else:
 			self.filmliste.append(('Keine Streams gefunden.', None))
