@@ -65,7 +65,11 @@ class show_GAME_Genre(Screen):
 		self.genreliste.append((8,'Assassins Creed DE', '/AssassinsCreedDE'))
 		self.genreliste.append((9,'XboxDE\'s channel', '/XboxDE'))
 		self.genreliste.append((10,'Disney Deutschland', '/WaltDisneyStudiosDE'))
-		#self.genreliste.append((11,'EA Deutschland', '/))
+		self.genreliste.append((11,'GIGA', '/giga'))
+		self.genreliste.append((12,'GronkhDE | Gronkh', '/Gronkh'))
+		self.genreliste.append((13,'GronkhDE | Sarazar', '/SarazarLP'))
+		self.genreliste.append((14,'RANDOM ENCOUNTER', '/thegeekmythology'))
+		self.genreliste.append((15,'gameinside tv', '/gameinsideshow'))
 		
 		self.genreliste.sort(key=lambda t : t[1].lower())
 		self.chooseMenuList.setList(map(show_GAME_GenreListEntry, self.genreliste))
