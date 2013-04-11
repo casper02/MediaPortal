@@ -53,7 +53,7 @@ class epornerGenreScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)	
 
 	def genreData(self, data):
-		phCats = re.findall('class="categoriesbox" id=".*?"><a href="(.*?)"><img src="(.*?)"><h2>(.*?)</h2>', data, re.S)
+		phCats = re.findall('class="categoriesbox"\sid=".*?"><a\shref="(.*?)".*?title=".*?"><img\ssrc="(.*?)"><h2>(.*?)</h2>', data, re.S)
 		if phCats:
 			for (phUrl, phImage, phTitle) in phCats:
 				phUrl = "http://www.eporner.com" + phUrl
