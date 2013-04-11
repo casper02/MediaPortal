@@ -68,6 +68,10 @@ class gstreaminxxxGenreScreen(Screen):
 		getPage(url, headers=special_headers).addCallback(self.get_site_cookie2).addErrback(self.dataError)
 		
 	def get_site_cookie2(self, data):
+		x = re.search('searchfrm', data, re.S)
+		if x:
+			self.layoutFinished()
+			return
 		self.keyLocked = True
 		raw = re.findall('javascript"\ssrc="(.*?)">.*?scf\(\'(.*?)\'\+\'(.*?)\'.*?', data, re.S)
 		url = "http://g-stream.in" + str(raw[0][0])
