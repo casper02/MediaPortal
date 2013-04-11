@@ -3,7 +3,7 @@ from Plugins.Extensions.mediaportal.resources.decrypt import *
 from Components.ScrollLabel import ScrollLabel
 from Plugins.Extensions.mediaportal.resources.yt_url import *
 
-USER_Version = "USER-Channels v0.90"
+USER_Version = "USER-Channels v0.91"
 
 USER_siteEncoding = 'utf-8'
 
@@ -56,8 +56,17 @@ class show_USER_Genre(Screen):
 		self.onLayoutFinish.append(self.layoutFinished)
 		
 	def layoutFinished(self):
+		self.genreliste.append((0, "Mit dieser Erweiterung kannst Du deine Lieblings Youtube Kanäle selber hinzufügen.", ""))
+		self.genreliste.append((0, "Für jeden Kanal müssen nur zwei Einträge hinzugefügt werden:", ""))
+		self.genreliste.append((0, "'<name> Kanal Bezeichnung </name>' und '<user> Besitzername </user>'", ""))
+		self.genreliste.append((0, " ", ""))
 		self.genreliste.append((0, "Mit der Taste 'Grün' wird die Datei: './userfiles/userchan.xml' geladen.", ""))
-		self.genreliste.append((0, "With the 'Green' button the userfile: './userfiles/userchan.xml' is loaded.", ""))
+		self.genreliste.append((0, " ", ""))
+		self.genreliste.append((0, "With this extension you can add your favorite Youtube channels themselves.", ""))
+		self.genreliste.append((0, "For each channel, only two entries are added:", ""))
+		self.genreliste.append((0, "'<name> channel name </name>' and '<user> owner name </ user>'", ""))
+		self.genreliste.append((0, " ", ""))
+		self.genreliste.append((0, "With the 'Green' button the user file: './userfiles/userchan.xml' is loaded.", ""))
 		self.chooseMenuList.setList(map(show_USER_GenreListEntry, self.genreliste))
 		
 	def getUserFile(self):
@@ -82,7 +91,7 @@ class show_USER_Genre(Screen):
 		if list:
 			i = 1
 			for (name, user) in list:
-				self.genreliste.append((i, name, '/'+user))
+				self.genreliste.append((i, name.strip(), '/'+user.strip()))
 				i += 1
 				
 			self.genreliste.sort(key=lambda t : t[1].lower())
