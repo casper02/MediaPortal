@@ -1,4 +1,6 @@
-﻿from Plugins.Extensions.mediaportal.resources.imports import *
+﻿#	-*-	coding:	utf-8	-*-
+
+from Plugins.Extensions.mediaportal.resources.imports import *
 from Plugins.Extensions.mediaportal.resources.decrypt import *
 from Components.ScrollLabel import ScrollLabel
 from Plugins.Extensions.mediaportal.resources.yt_url import *
@@ -70,6 +72,12 @@ class show_GAME_Genre(Screen):
 		self.genreliste.append((13,'GronkhDE | Sarazar', '/SarazarLP'))
 		self.genreliste.append((14,'RANDOM ENCOUNTER', '/thegeekmythology'))
 		self.genreliste.append((15,'gameinside tv', '/gameinsideshow'))
+		self.genreliste.append((16,'Comedy Gaming mit Pink Panter', '/WartimeDignity'))
+		self.genreliste.append((17,'CommanderKrieger - Baff Disch', '/CommanderKrieger'))
+		self.genreliste.append((18,'Danny Burnage - Darauf ein Snickers-Eis!', '/TheDannyBurnage'))
+		self.genreliste.append((19,'m4xFPS - Keks mit ♥', '/m4xFPS'))
+		self.genreliste.append((20,'Kanal von xTheSolution', '/xTheSolution'))
+		self.genreliste.append((21,'TheDoctorKaboom', '/TheDoctorKaboom'))
 		
 		self.genreliste.sort(key=lambda t : t[1].lower())
 		self.chooseMenuList.setList(map(show_GAME_GenreListEntry, self.genreliste))

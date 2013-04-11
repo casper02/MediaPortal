@@ -1,4 +1,6 @@
-﻿from Plugins.Extensions.mediaportal.resources.imports import *
+﻿#	-*-	coding:	utf-8	-*-
+
+from Plugins.Extensions.mediaportal.resources.imports import *
 from Plugins.Extensions.mediaportal.resources.decrypt import *
 from Components.ScrollLabel import ScrollLabel
 from Plugins.Extensions.mediaportal.resources.yt_url import *
