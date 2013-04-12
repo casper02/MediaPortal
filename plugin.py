@@ -56,6 +56,7 @@ from additions.musicchannels import *
 from additions.fiwitu import *
 from additions.userchannels import *
 from additions.cinestream import *
+from additions.moovizon import *
 
 # kids
 from additions.kinderkino import *
@@ -158,9 +159,10 @@ config.mediaportal.showHoerspielChannels = ConfigYesNo(default = True)
 config.mediaportal.showCarChannels = ConfigYesNo(default = True)
 config.mediaportal.showGameChannels = ConfigYesNo(default = True)
 config.mediaportal.showFiwitu = ConfigYesNo(default = True)
-config.mediaportal.showMusicChannels = ConfigYesNo(default = False)
+config.mediaportal.showMusicChannels = ConfigYesNo(default = True)
 config.mediaportal.showUserChannels = ConfigYesNo(default = True)
 config.mediaportal.showCinestream = ConfigYesNo(default = True)
+config.mediaportal.showMoovizon = ConfigYesNo(default = True)
 
 # mediatheken
 config.mediaportal.showVoxnow = ConfigYesNo(default = True)
@@ -297,6 +299,8 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige DokuHouse:", config.mediaportal.showDokuHouse))
 		self.configlist.append(getConfigListEntry("Zeige AutoBild:", config.mediaportal.showAutoBild))
 		self.configlist.append(getConfigListEntry("Zeige SportBild:", config.mediaportal.showSportBild))
+		self.configlist.append(getConfigListEntry("Zeige Moovizon:", config.mediaportal.showMoovizon))
+		
 		# Kinder
 		self.configlist.append(getConfigListEntry("Zeige Tivi:", config.mediaportal.showtivi))
 		self.configlist.append(getConfigListEntry("Zeige KinderKino:", config.mediaportal.showKinderKino))
@@ -442,6 +446,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 		# Mediatheken
 		if config.mediaportal.showMyvideo.value:
 			self.mediatheken.append(self.hauptListEntry("MyVideo", "myvideo"))
+		if config.mediaportal.showMoovizon.value:
+			self.mediatheken.append(self.hauptListEntry("Moovizon", "moovizon"))
 		if config.mediaportal.showKinderKino.value:
 			self.mediatheken.append(self.hauptListEntry("KinderKino", "kinderkino"))
 		if config.mediaportal.showNetzKino.value:
@@ -983,6 +989,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(ORFGenreScreen)
 		elif auswahl == "Cinestream":
 			self.session.open(cinestreamFilmListeScreen)
+		elif auswahl == "Moovizon":
+			self.session.open(moovizonGenreScreen)
 		# porn
 		elif auswahl == "4Tube":
 			if config.mediaportal.pornpin.value:
@@ -1238,7 +1246,9 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		if config.mediaportal.showSzeneStreams.value:
 			self.plugin_liste.append(("SzeneStreams", "szenestreams", "Grauzone"))
 		if config.mediaportal.showDoku.value:
-			self.plugin_liste.append(("Doku.me", "doku", "Mediathek"))		
+			self.plugin_liste.append(("Doku.me", "doku", "Mediathek"))
+		if config.mediaportal.showMoovizon.value:
+			self.plugin_liste.append(("Moovizon", "moovizon", "Mediathek"))	
 		if config.mediaportal.showSportBild.value:
 			self.plugin_liste.append(("SportBild", "sportbild", "Mediathek"))
 		if config.mediaportal.showAutoBild.value:
@@ -1625,6 +1635,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(show_USER_Genre)
 		elif auswahl == "Cinestream":
 			self.session.open(cinestreamFilmListeScreen)
+		elif auswahl == "Moovizon":
+			self.session.open(moovizonGenreScreen)
 		# mediatheken
 		elif auswahl == "VOXNOW":
 			self.session.open(VOXnowGenreScreen)
