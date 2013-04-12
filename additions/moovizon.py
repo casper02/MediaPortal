@@ -1,8 +1,9 @@
 from Plugins.Extensions.mediaportal.resources.imports import *
+from Plugins.Extensions.mediaportal.resources.yt_url import *
 
 def moovizonGenreListEntry(entry):
 	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 0, 0, 600, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
+		(eListboxPythonMultiContent.TYPE_TEXT, 0, 0, 300, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		]
 		
 def moovizonListEntry(entry):
@@ -54,7 +55,7 @@ class moovizonGenreScreen(Screen):
 		self['genreList'] = self.chooseMenuList
 
 		self.onLayoutFinish.append(self.loadPage)
-		
+
 	def loadPage(self):
 		self.keyLocked = True
 		url = "http://moovizon.com"
@@ -134,6 +135,9 @@ class moovizonFilmListeScreen(Screen):
 		self['Page'] = Label("1")
 		self['page'] = Label("")
 		self['handlung'] = Label("")
+		self.videoPrio = int(config.mediaportal.youtubeprio.value)-1
+		self.videoPrioS = ['L','M','H']
+		self.setVideoPrio()
 		
 		self.filmliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -142,7 +146,13 @@ class moovizonFilmListeScreen(Screen):
 		self['liste'] = self.chooseMenuList
 
 		self.onLayoutFinish.append(self.loadPage)
-		
+
+	def setVideoPrio(self):
+		if self.videoPrio+1 > 2:
+			self.videoPrio = 0
+		else:
+			self.videoPrio += 1
+			
 	def loadPage(self):
 		self.keyLocked = True
 		url = "%s?page=%s" % (self.genreLink,str(self.page))
@@ -190,7 +200,7 @@ class moovizonFilmListeScreen(Screen):
 		print "PageDown"
 		if self.keyLocked:
 			return
-		if not self.page < 2:
+		if not self.page < 1:
 			self.page -= 1
 			self.loadPage()
 
@@ -231,15 +241,24 @@ class moovizonFilmListeScreen(Screen):
 		self.moovizonName = self['liste'].getCurrent()[0][0]
 		moovizonurl = self['liste'].getCurrent()[0][1]
 		print self.moovizonName, moovizonurl
-		#getPage(moovizonurl, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getStream).addErrback(self.dataError)
+		getPage(moovizonurl, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.get_stream).addErrback(self.dataError)
 		
-	def getStream(self, data):
-		stream = re.findall('so.addVariable\("fullscreenPfad", "(rtmp://.*?)"', data, re.S)
-		if stream:
-			print stream
-			sref = eServiceReference(0x1001, 0, stream[0])
-			sref.setName(self.streamName)
-			self.session.open(MoviePlayer, sref)
+	def get_stream(self, data):
+		youtube_url = re.findall('href="http://www.youtube.com/embed/(.*?)\?', data, re.S)
+		if youtube_url:
+			print youtube_url[0]
+			y = youtubeUrl(self.session)
+			y.addErrback(self.youtubeErr)
+			stream = y.getVideoUrl(youtube_url[0], self.videoPrio)
+			if stream:
+				print stream
+				sref = eServiceReference(0x1001, 0, stream)
+				sref.setName(self.moovizonName)
+				self.session.open(MoviePlayer, sref)
+			
+	def youtubeErr(self, error):
+		print "youtubeErr: ",error
+		self['handlung'].setText("Das Video kann leider nicht abgespielt werden !\n"+str(error))
 
 	def keyCancel(self):
 		self.close()
