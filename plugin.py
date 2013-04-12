@@ -55,6 +55,7 @@ from additions.gamechannels import *
 from additions.musicchannels import *
 from additions.fiwitu import *
 from additions.userchannels import *
+from additions.cinestream import *
 
 # kids
 from additions.kinderkino import *
@@ -96,7 +97,7 @@ from additions.porn.youporn import *
 
 config.mediaportal = ConfigSubsection()
 config.mediaportal.pincode = ConfigPIN(default = 0000)
-config.mediaportal.skin = ConfigSelection(default = "original", choices = [("tec", _("tec")),("liquidblue", _("liquidblue")), ("original", _("original"))])
+config.mediaportal.skin = ConfigSelection(default = "tec", choices = [("tec", _("tec")),("liquidblue", _("liquidblue")), ("original", _("original"))])
 config.mediaportal.ansicht = ConfigSelection(default = "liste", choices = [("liste", _("Liste")),("wall", _("Wall"))])
 config.mediaportal.selektor = ConfigSelection(default = "blue", choices = [("blue", _("blau")),("green", _(u"gr\xfcn")),("red", _("rot")),("turkis", _(u"t\xfcrkis"))])
 config.mediaportal.useRtmpDump = ConfigYesNo(default = False)
@@ -159,6 +160,7 @@ config.mediaportal.showGameChannels = ConfigYesNo(default = True)
 config.mediaportal.showFiwitu = ConfigYesNo(default = True)
 config.mediaportal.showMusicChannels = ConfigYesNo(default = False)
 config.mediaportal.showUserChannels = ConfigYesNo(default = True)
+config.mediaportal.showCinestream = ConfigYesNo(default = True)
 
 # mediatheken
 config.mediaportal.showVoxnow = ConfigYesNo(default = True)
@@ -241,6 +243,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige Burning-Series:", config.mediaportal.showBs))
 		self.configlist.append(getConfigListEntry("Zeige Kinox:", config.mediaportal.showKinox))
 		self.configlist.append(getConfigListEntry("Zeige Movie2k:", config.mediaportal.showM2k))
+		self.configlist.append(getConfigListEntry("Zeige Cinestream:", config.mediaportal.showCinestream))
 		self.configlist.append(getConfigListEntry("Zeige Konzert Oase:", config.mediaportal.showKoase))
 		self.configlist.append(getConfigListEntry("Zeige 1channel:", config.mediaportal.show1channel))
 		
@@ -513,6 +516,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.grauzone.append(self.hauptListEntry("Movie2k", "movie2k"))
 		if config.mediaportal.showKinox.value:
 			self.grauzone.append(self.hauptListEntry("Kinox", "kinox"))
+		if config.mediaportal.showCinestream.value:
+			self.grauzone.append(self.hauptListEntry("Cinestream", "cinestream"))
 		if config.mediaportal.showKinoKiste.value:
 			self.grauzone.append(self.hauptListEntry("KinoKiste", "kinokiste"))
 		if config.mediaportal.showIStream.value:
@@ -976,6 +981,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(ZDFGenreScreen)
 		elif auswahl == "ORF TVthek":
 			self.session.open(ORFGenreScreen)
+		elif auswahl == "Cinestream":
+			self.session.open(cinestreamFilmListeScreen)
 		# porn
 		elif auswahl == "4Tube":
 			if config.mediaportal.pornpin.value:
@@ -1213,6 +1220,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("Kinox", "kinox", "Grauzone"))
 		if config.mediaportal.showStreamOase.value:
 			self.plugin_liste.append(("StreamOase", "streamoase", "Grauzone"))
+		if config.mediaportal.showCinestream.value:
+			self.plugin_liste.append(("Cinestream", "cinestream", "Grauzone"))
 		# kinder
 		if config.mediaportal.showKinderKino.value:
 			self.plugin_liste.append(("KinderKino", "kinderkino", "Mediathek"))
@@ -1614,6 +1623,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(show_MUSIC_Genre)
 		elif auswahl == "USER-Channels":
 			self.session.open(show_USER_Genre)
+		elif auswahl == "Cinestream":
+			self.session.open(cinestreamFilmListeScreen)
 		# mediatheken
 		elif auswahl == "VOXNOW":
 			self.session.open(VOXnowGenreScreen)
