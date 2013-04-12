@@ -288,7 +288,7 @@ class drtuberFilmScreen(Screen):
 		if params:
 			for (x, y, z) in params:
 				drtuberUrl(self.session).getVideoUrl(x, y, z, self.gotVideoPage)
-		
+
 	def gotVideoPage(self, data):
 		if data != None:
 			self.play(data)
