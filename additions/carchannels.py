@@ -5,7 +5,7 @@ from Plugins.Extensions.mediaportal.resources.decrypt import *
 from Components.ScrollLabel import ScrollLabel
 from Plugins.Extensions.mediaportal.resources.yt_url import *
 
-CAR_Version = "CARS & BIKES-Channels v0.90"
+CAR_Version = "CARS & BIKES-Channels v0.91"
 
 CAR_siteEncoding = 'utf-8'
 
@@ -224,7 +224,7 @@ class show_CAR_ListScreen(Screen):
 				else:
 					desc = "Keine weiteren Info's vorhanden."
 					
-				m2 = re.search('/watch\?v=(.*?)&amp;feature=youtube_gdata_player.*?'\
+				m2 = re.search('<media:player url=.*?/watch\?v=(.*?)&amp;feature=youtube_gdata_player.*?'\
 					'<media:thumbnail url=\'(.*?)\'.*?<media:title type=\'plain\'>(.*?)</.*?<yt:duration seconds=\'(.*?)\'', mg.group(1), re.S)
 				if m2:
 					vid = m2.group(1)
