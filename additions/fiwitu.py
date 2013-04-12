@@ -131,7 +131,7 @@ class fiwituGenre2Screen(Screen):
 		
 	def loadpage(self):
 		self.keyLocked = True
-		#self['name'].setText('Bitte warten...')
+		self['name'].setText('fiwitu.tv')
 		self.filmliste = []
 		url = self.phCatLink
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
@@ -237,7 +237,7 @@ class fiwituGenre3Screen(Screen):
 		
 	def loadpage(self):
 		self.keyLocked = True
-		self['name'].setText('Bitte warten...')
+		self['name'].setText('fiwitu.tv')
 		url = self.ftwLink
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
 	
