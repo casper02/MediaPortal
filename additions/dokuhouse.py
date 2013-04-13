@@ -1,11 +1,8 @@
 ﻿#	-*-	coding:	utf-8	-*-
 
 from Plugins.Extensions.mediaportal.resources.imports import *
-from Plugins.Extensions.mediaportal.resources.decrypt import *
-from Plugins.Extensions.mediaportal.resources.yt_url import *
 import Queue
 import threading
-from Components.ScrollLabel import ScrollLabel
 
 DH_Version = "DokuHouse.de v0.94"
 

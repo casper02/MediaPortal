@@ -1,10 +1,8 @@
 ﻿#	-*-	coding:	utf-8	-*-
 
 from Plugins.Extensions.mediaportal.resources.imports import *
-from Plugins.Extensions.mediaportal.resources.decrypt import *
 import Queue
 import threading
-from Components.ScrollLabel import ScrollLabel
 
 # teilweise von movie2k geliehen
 if fileExists('/usr/lib/enigma2/python/Plugins/Extensions/TMDb/plugin.pyo'):
