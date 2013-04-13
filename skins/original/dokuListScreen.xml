@@ -1,5 +1,5 @@
 <!-- dokuListScreen -->
-  <screen name="dokuList" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
+  <screen name="dokuList" position="center,center" size="900,655" backgroundColor="#00060606" flags="wfNoBorder">
     <widget name="title" position="20,10" size="500,40" backgroundColor="#00101214" transparent="1" zPosition="10" font="mediaportal; 26" valign="center" halign="left" />
     <widget source="global.CurrentTime" render="Label" position="730,8" size="150,30" backgroundColor="#00101214" transparent="1" zPosition="1" font="mediaportal; 26" valign="center" halign="right" foregroundColor="#00dcdcdc">
       <convert type="ClockToText">Format:%-H:%M</convert>
@@ -13,8 +13,8 @@
     <widget name="coverArt" pixmap="~/original/images/no_coverArt.png" position="20,396" size="270,200" transparent="1" alphatest="blend" borderWidth="2" borderColor="#00555556" />
     <widget name="name" position="300,395" size="580,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="mediaportal;26" valign="top" zPosition="0" />
     <widget name="handlung" position="300,425" size="580,170" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="top" zPosition="0" />
-    <widget name="VideoPrio" position="745,600" size="105,24" backgroundColor="#00101214" transparent="1" foregroundColor="#00555556" font="mediaportal; 20" valign="center" halign="right" zPosition="1" />
-    <widget name="vPrio" position="855,600" size="25,24" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="center" zPosition="1" foregroundColor="#00bab329" />
+    <widget name="VideoPrio" position="734,628" size="105,24" backgroundColor="#00101214" transparent="1" foregroundColor="#00555556" font="mediaportal; 20" valign="center" halign="right" zPosition="1" />
+    <widget name="vPrio" position="848,628" size="25,24" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="center" zPosition="1" foregroundColor="#00bab329" />
     <widget name="Page" position="700,600" size="56,25" backgroundColor="#00101214" transparent="1" foregroundColor="#00555556" font="mediaportal;20" valign="center" halign="right" zPosition="0" />
     <widget name="page" position="755,600" size="95,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="right" zPosition="0" />
     <ePixmap pixmap="~/original/images/red.png" position="20,597" size="35,27" alphatest="blend" />
