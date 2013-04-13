@@ -18,7 +18,7 @@
     <widget name="handlung" position="55,533" size="850,140" backgroundColor="#26181d20" transparent="1" font="mediaportal;18" valign="top" foregroundColor="#00ffffff" />
     <eLabel text="VideoPrio" position="765,125" size="105,24" backgroundColor="#26181d20" transparent="1" foregroundColor="#00bbbbbb" font="mediaportal; 20" valign="center" halign="right" zPosition="1" />
     <widget name="vPrio" position="870,125" size="25,24" backgroundColor="#26181d20" transparent="1" font="mediaportal;20" valign="center" halign="center" zPosition="1" foregroundColor="#00bbbbbb" />
-    <eLabel text="Page" position="55,106" size="100,60" backgroundColor="#26181d20" transparent="1" foregroundColor="#00ffffff" font="mediaportal;20" valign="center" />
+    <eLabel text="Page " position="55,106" size="100,60" backgroundColor="#26181d20" transparent="1" foregroundColor="#00ffffff" font="mediaportal;20" valign="center" />
     <widget name="page" position="125,106" size="100,60" backgroundColor="#26181d20" transparent="1" font="mediaportal;20" valign="center" foregroundColor="#00ffffff" />
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/buttonred.png" position="55,680" size="90,36" alphatest="blend" zPosition="0" />
     <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/buttongreen.png" position="305,680" size="90,36" alphatest="blend" zPosition="0" />

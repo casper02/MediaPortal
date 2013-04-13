@@ -19,6 +19,6 @@
     <widget name="leftContentTitle" position="913,356" size="328,100" backgroundColor="#26181d20" transparent="1" zPosition="1" font="mediaportal;24" valign="center" halign="center" foregroundColor="#00ffffff" />
     <widget name="streamlist" position="55,136" size="850,500" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/sel.png" foregroundColor="#00555555" />
     <widget name="stationIcon" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/m_no_coverArt.png"  position="1002,439" size="150,200" transparent="1" alphatest="blend" />
-    <eLabel text="Page" position="55,655" size="100,25" backgroundColor="#26181d20" transparent="1" foregroundColor="#00ffffff" font="mediaportal;20" valign="top" />
+    <eLabel text="Page " position="55,655" size="100,25" backgroundColor="#26181d20" transparent="1" foregroundColor="#00ffffff" font="mediaportal;20" valign="top" />
     <widget name="page" position="130,655" size="575,25" backgroundColor="#26181d20" transparent="1" font="mediaportal;18" valign="top" foregroundColor="#00ffffff" />
   </screen>

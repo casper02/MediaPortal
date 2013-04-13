@@ -18,6 +18,6 @@
     <widget name="stationIcon" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/no_coverArt.png" position="917,439" size="320,240" transparent="1" alphatest="blend" />
     <widget name="handlung" position="55,560" size="850,140" backgroundColor="#26181d20" transparent="1" font="mediaportal;18" valign="top" foregroundColor="#00ffffff" />
     <widget name="title" position="170,106" size="740,60" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="mediaportal;26" valign="top" />
-    <eLabel text="Page" position="55,106" size="100,25" backgroundColor="#26181d20" transparent="1" foregroundColor="#00ffffff" font="mediaportal;20" valign="top" />
+    <eLabel text="Page " position="55,106" size="100,25" backgroundColor="#26181d20" transparent="1" foregroundColor="#00ffffff" font="mediaportal;20" valign="top" />
     <widget name="page" position="125,106" size="45,25" backgroundColor="#26181d20" transparent="1" font="mediaportal;18" valign="top" foregroundColor="#00ffffff" />
   </screen>

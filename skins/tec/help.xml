@@ -25,7 +25,7 @@
   <eLabel text="CH-" position="65,330" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
 	    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonglas.png" position="65,330" size="90,36" alphatest="blend" zPosition="2" />
   <ePixmap position="65,380" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttongreen.png" alphatest="blend" backgroundColor="#26181d20" />
-  <eLabel text="Page" position="65,380" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
+  <eLabel text="Page " position="65,380" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
 	    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonglas.png" position="65,380" size="90,36" alphatest="blend" zPosition="2" />
   <!-- select screen -->
    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/setup.png" position="989,424" zPosition="1" size="176,200" alphatest="on" />

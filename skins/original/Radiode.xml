@@ -1,5 +1,5 @@
 <!-- Radiode -->
-		<screen name="Radio.de" position="center,center" size="900,580" backgroundColor="#00060606" flags="wfNoBorder">
+		<screen name="Radio.de" position="center,center" size="900,605" backgroundColor="#00060606" flags="wfNoBorder">
 			<eLabel position="0,0" size="900,80" backgroundColor="#00242424"/>
 			<widget name="title" position="25,15" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="mediaportal;26" valign="center" halign="left" />
 			<widget source="global.CurrentTime" render="Label" position="730,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="mediaportal;26" valign="center" halign="right">
@@ -19,5 +19,9 @@
 				<convert type="ServicePosition">Position</convert>
 			</widget>
 			<eLabel text="Info" position="120,500" size="120,25" backgroundColor="#00101214" foregroundColor="#00555556" transparent="1" font="mediaportal;20" valign="top"/>
-			<widget name="stationDesc" position="240,500" zPosition="1" size="640,60" backgroundColor="#00101214" transparent="1" font="mediaportal;19" halign="left" valign="top"/>		
-	        </screen>
+			<widget name="stationDesc" position="240,500" zPosition="1" size="640,60" backgroundColor="#00101214" transparent="1" font="mediaportal;19" halign="left" valign="top"/>
+			<ePixmap position="637,576" size="36,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/buttongrey.png" alphatest="blend" backgroundColor="#00101214" />
+			<eLabel text="CH+" position="676,572" size="80,36" transparent="1" font="mediaportal; 18" backgroundColor="#00101214" foregroundColor="#00ffffff" valign="center" halign="left" zPosition="1" />
+			<ePixmap position="782,576" size="36,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/buttongrey.png" alphatest="blend" backgroundColor="#00101214" />
+			<eLabel text="CH-" position="819,572" size="80,36" transparent="1" font="mediaportal; 18" backgroundColor="#00101214" foregroundColor="#00ffffff" valign="center" halign="left" zPosition="1" />
+		</screen>

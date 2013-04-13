@@ -1,5 +1,5 @@
 <!-- kxWatchlist -->
-		<screen name="Kinox.to" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
+		<screen name="Kinox.to" position="center,center" size="900,655" backgroundColor="#00060606" flags="wfNoBorder">
 			<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
 			<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="mediaportal;24" valign="center" halign="left" />
 			<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="mediaportal;24" valign="center" halign="right">
@@ -13,5 +13,7 @@
 			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
 			<widget name="stationIcon" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
 			<widget name="name" position="230,420" size="520,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="mediaportal;26" valign="top" />
-			<widget name="handlung" position="205,473" size="680,140" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="top" />		
+			<widget name="handlung" position="205,473" size="680,140" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="top" />
+            <ePixmap position="637,622" size="36,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/red.png" alphatest="blend" backgroundColor="#00101214" />
+			<eLabel text="delete" position="676,618" size="200,36" transparent="1" font="mediaportal; 18" backgroundColor="#00101214" foregroundColor="#00ffffff" valign="center" halign="left" zPosition="1" />			
 			</screen>

@@ -15,6 +15,6 @@
     <widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/no_coverArt.png" position="917,439" size="320,240" transparent="1" alphatest="blend" />
     <widget name="title" position="55,106" size="850,60" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="mediaportal;26" valign="center" halign="center" />
     <widget name="handlung" position="55,558" size="850,140" backgroundColor="#26181d20" transparent="1" font="mediaportal;18" valign="top" foregroundColor="#00ffffff" />
-    <eLabel text="Page" position="55,670" size="100,25" backgroundColor="#26181d20" transparent="1" foregroundColor="#00ffffff" font="mediaportal;20" valign="top" />
+    <eLabel text="Page " position="55,670" size="100,25" backgroundColor="#26181d20" transparent="1" foregroundColor="#00ffffff" font="mediaportal;20" valign="top" />
     <widget name="page" position="130,670" size="575,25" backgroundColor="#26181d20" transparent="1" font="mediaportal;18" valign="top" foregroundColor="#00ffffff" />
   </screen>
