@@ -52,6 +52,7 @@ from time import *
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 
 from Plugins.Extensions.mediaportal.resources import mp_globals
+from Components.ScrollLabel import ScrollLabel
 
 std_headers = {
 	'User-Agent': 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.2.6) Gecko/20100627 Firefox/3.6.6',
