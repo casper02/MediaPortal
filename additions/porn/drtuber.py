@@ -1,5 +1,6 @@
 from Plugins.Extensions.mediaportal.resources.imports import *
-from drtuber_url import *
+import hashlib
+import base64
 
 def drtuberGenreListEntry(entry):
 	return [entry,
@@ -287,7 +288,23 @@ class drtuberFilmScreen(Screen):
 		params = re.findall('params\s\+=\s\'h=(.*?)\'.*?params\s\+=\s\'%26t=(.*?)\'.*?params\s\+=\s\'%26vkey=\'\s\+\s\'(.*?)\'', data, re.S)
 		if params:
 			for (x, y, z) in params:
-				drtuberUrl(self.session).getVideoUrl(x, y, z, self.gotVideoPage)
+				self.getVideoUrl(x, y, z, self.gotVideoPage)
+
+	def getVideoUrl(self, param1, param2, param3, callback):
+		self.param1 = param1
+		self.param2 = param2
+		self.param3 = param3
+		hash = hashlib.md5(self.param3 + base64.b64decode('UFQ2bDEzdW1xVjhLODI3')).hexdigest()
+		url = 'http://www.drtuber.com/player/config.php?h=%s&t=%s&vkey=%s&pkey=%s&aid=' % (self.param1, self.param2, self.param3, hash)
+		got_url = getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getData, callback).addErrback(self.dataError, callback)
+		callback(got_url)
+		
+	def getData(self, data, callback):
+		url = re.findall('video_file.*?(http.*?\.flv).*?\/video_file', data, re.S)
+		if url:
+			url = str(url[0])
+			#print 'URL: ' + url
+			callback(url)
 
 	def gotVideoPage(self, data):
 		if data != None:
