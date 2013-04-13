@@ -9,7 +9,7 @@ MUSIC_siteEncoding = 'utf-8'
 
 def show_MUSIC_GenreListEntry(entry):
 	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[1])
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[1])
 		] 
 		
 class show_MUSIC_Genre(Screen):
@@ -67,6 +67,11 @@ class show_MUSIC_Genre(Screen):
 		self.genreliste.append((11,'Kanal von MyWorldCharts', '/MyWorldCharts'))
 		self.genreliste.append((12,'CaptainCharts', '/CaptainCharts'))
 		self.genreliste.append((13,'PowerCharts', '/PowerCharts'))
+		self.genreliste.append((14,'Kontor.TV', '/kontor'))
+		self.genreliste.append((15,'Scooter Official', '/scooter'))
+		self.genreliste.append((16,'ATZEN MUSIK TV', '/atzenmusiktv'))
+		self.genreliste.append((17,'BigCityBeats', '/HammerDontHurtEm'))
+		#self.genreliste.append((5,'', '/'))
 		#self.genreliste.append((5,'', '/'))
 		
 		self.genreliste.sort(key=lambda t : t[1].lower())
@@ -339,8 +344,8 @@ class show_MUSIC_ListScreen(Screen):
 			self.page += step
 			self.start_idx += self.max_res * step
 		else:
-			self.page = self.pages
-			self.start_idx = self.max_res * (self.pages - 1) + 1
+			self.page = 1
+			self.start_idx = 1
 		#print "Page %d/%d" % (self.page,self.pages)
 		if oldpage != self.page:
 			self.loadPageData()
@@ -354,8 +359,8 @@ class show_MUSIC_ListScreen(Screen):
 			self.page -= step
 			self.start_idx -= self.max_res * step
 		else:
-			self.page = 1
-			self.start_idx = 1
+			self.page = self.pages
+			self.start_idx = self.max_res * (self.pages - 1) + 1
 		#print "Page %d/%d" % (self.page,self.pages)
 		if oldpage != self.page:
 			self.loadPageData()
