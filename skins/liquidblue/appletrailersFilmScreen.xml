@@ -24,6 +24,6 @@
     <widget name="views" position="155,630" size="580,25" backgroundColor="#26181d20" transparent="1" font="mediaportal;20" valign="top" foregroundColor="#00ffffff" />
     <eLabel text="Runtime" position="55,655" size="100,25" backgroundColor="#26181d20" transparent="1" foregroundColor="#00ffffff" font="mediaportal;20" valign="top" />
     <widget name="runtime" position="155,655" size="580,25" backgroundColor="#26181d20" transparent="1" font="mediaportal;20" valign="top" foregroundColor="#00ffffff" />
-    <eLabel text="Page" position="55,680" size="100,25" backgroundColor="#26181d20" transparent="1" foregroundColor="#00ffffff" font="mediaportal;20" valign="top" />
+    <eLabel text="Page " position="55,680" size="100,25" backgroundColor="#26181d20" transparent="1" foregroundColor="#00ffffff" font="mediaportal;20" valign="top" />
     <widget name="page" position="155,680" size="580,25" backgroundColor="#26181d20" transparent="1" font="mediaportal;20" valign="top" foregroundColor="#00ffffff" />
   </screen>

@@ -1,8 +1,8 @@
 <!-- m2kAuswahl -->
-<screen name="Movie2k.to" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
+<screen name="Movie2k.to" position="center,center" size="900,655" backgroundColor="#00060606" flags="wfNoBorder">
 	<eLabel position="0,0" size="900,60" backgroundColor="#00242424" />
-	<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="mediaportal;24" valign="center" halign="left" />
-	<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="mediaportal;24" valign="center" halign="right">
+<!--	<widget name="title" position="30,10" size="500,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="mediaportal;24" valign="center" halign="left" />
+-->	<widget source="global.CurrentTime" render="Label" position="700,00" size="150,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="mediaportal;24" valign="center" halign="right">
 		<convert type="ClockToText">Format:%-H:%M</convert>
 	</widget>
 	<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="mediaportal;16" valign="center" halign="right">

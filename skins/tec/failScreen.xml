@@ -14,6 +14,6 @@
     <widget name="roflList" position="55,190" size="850,470" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/sel.png" foregroundColor="#00555555" />
     <widget name="roflPic" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/m_no_coverArt.png" position="998,487" size="160,120" transparent="1" alphatest="blend" />
     <widget name="title" position="55,106" size="850,60" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="mediaportal;26" valign="center" halign="center" />
-    <eLabel text="Page" position="55,670" size="100,25" backgroundColor="#26181d20" transparent="1" foregroundColor="#00ffffff" font="mediaportal;20" valign="top" />
+    <eLabel text="Page " position="55,670" size="100,25" backgroundColor="#26181d20" transparent="1" foregroundColor="#00ffffff" font="mediaportal;20" valign="top" />
     <widget name="page" position="130,670" size="575,25" backgroundColor="#26181d20" transparent="1" font="mediaportal;18" valign="top" foregroundColor="#00ffffff" />
   </screen>
