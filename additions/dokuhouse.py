@@ -5,7 +5,7 @@ from Plugins.Extensions.mediaportal.resources.yt_url import *
 import Queue
 import threading
 
-DH_Version = "DokuHouse.de v0.94"
+DH_Version = "DokuHouse.de v0.95"
 
 DH_siteEncoding = 'utf-8'
 
@@ -696,7 +696,7 @@ class DH_FilmListeScreen(Screen):
 		if (self.page + step) <= self.pages:
 			self.page += step
 		else:
-			self.page += self.pages - self.page
+			self.page = 1
 		#print "Page %d/%d" % (self.page,self.pages)
 		if oldpage != self.page:
 			self.loadPage()
@@ -709,7 +709,7 @@ class DH_FilmListeScreen(Screen):
 		if (self.page - step) >= 1:
 			self.page -= step
 		else:
-			self.page -=  -1 + self.page
+			self.page = self.pages
 		#print "Page %d/%d" % (self.page,self.pages)
 		if oldpage != self.page:
 			self.loadPage()

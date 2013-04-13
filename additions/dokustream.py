@@ -5,7 +5,7 @@ from Plugins.Extensions.mediaportal.resources.yt_url import *
 import Queue
 import threading
 
-DS_Version = "Doku-Stream.org v0.92"
+DS_Version = "Doku-Stream.org v0.93"
 
 DS_siteEncoding = 'utf-8'
 
@@ -684,7 +684,7 @@ class DS_FilmListeScreen(Screen):
 		if (self.page + step) <= self.pages:
 			self.page += step
 		else:
-			self.page += self.pages - self.page
+			self.page = 1
 		#print "Page %d/%d" % (self.page,self.pages)
 		if oldpage != self.page:
 			self.loadPage()
@@ -697,7 +697,7 @@ class DS_FilmListeScreen(Screen):
 		if (self.page - step) >= 1:
 			self.page -= step
 		else:
-			self.page -=  -1 + self.page
+			self.page = self.pages
 		#print "Page %d/%d" % (self.page,self.pages)
 		if oldpage != self.page:
 			self.loadPage()

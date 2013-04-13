@@ -3,7 +3,7 @@
 from Plugins.Extensions.mediaportal.resources.imports import *
 from Plugins.Extensions.mediaportal.resources.yt_url import *
 
-CAR_Version = "CARS & BIKES-Channels v0.91"
+CAR_Version = "CARS & BIKES-Channels v0.92"
 
 CAR_siteEncoding = 'utf-8'
 
@@ -357,8 +357,8 @@ class show_CAR_ListScreen(Screen):
 			self.page += step
 			self.start_idx += self.max_res * step
 		else:
-			self.page = self.pages
-			self.start_idx = self.max_res * (self.pages - 1) + 1
+			self.page = 1
+			self.start_idx = 1
 		#print "Page %d/%d" % (self.page,self.pages)
 		if oldpage != self.page:
 			self.loadPageData()
@@ -372,8 +372,8 @@ class show_CAR_ListScreen(Screen):
 			self.page -= step
 			self.start_idx -= self.max_res * step
 		else:
-			self.page = 1
-			self.start_idx = 1
+			self.page = self.pages
+			self.start_idx = self.max_res * (self.pages - 1) + 1
 		#print "Page %d/%d" % (self.page,self.pages)
 		if oldpage != self.page:
 			self.loadPageData()

@@ -3,7 +3,7 @@
 from Plugins.Extensions.mediaportal.resources.imports import *
 from Plugins.Extensions.mediaportal.resources.yt_url import *
 
-MUSIC_Version = "MUSIC-Channels v0.91"
+MUSIC_Version = "MUSIC-Channels v0.92"
 
 MUSIC_siteEncoding = 'utf-8'
 
