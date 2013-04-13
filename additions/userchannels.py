@@ -1,6 +1,7 @@
 ﻿#	-*-	coding:	utf-8	-*-
 
 from Plugins.Extensions.mediaportal.resources.imports import *
+from Plugins.Extensions.mediaportal.resources.yt_url import *
 
 USER_Version = "USER-Channels v0.92"
 
