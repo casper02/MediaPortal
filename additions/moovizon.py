@@ -198,7 +198,7 @@ class moovizonFilmListeScreen(Screen):
 			self.filmliste = []
 			for (url,image,title,lang) in movies:
 				url = "http://moovizon.com%s" % url.replace('&amp;','&')
-				self.filmliste.append((title,url,image,lang))
+				self.filmliste.append((decodeHtml(title),url,image,lang))
 			self.chooseMenuList.setList(map(moovizonListEntry, self.filmliste))
 			self.loadPic()
 			self['Page'].setText(str(self.page+1)+" von")
