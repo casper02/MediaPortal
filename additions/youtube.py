@@ -20,9 +20,9 @@ class youtubeGenreScreen(Screen):
 	
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/youtubeAuswahl.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/m2kAuswahl.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/youtubedefaultListeScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/m2kAuswahl.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -76,17 +76,15 @@ class youtubeGenreScreen(Screen):
 			streamGenreLink = 'http://gdata.youtube.com/feeds/api/videos?q=' + callback + '&max-results=50&v=2'
 			self.session.open(youtubeVideosListeScreen, streamGenreLink)
 
-
-
 class youtubeVideosListeScreen(Screen):
 	
 	def __init__(self, session, streamGenreLink):
 		self.session = session
 		self.streamGenreLink = streamGenreLink
 		print self.streamGenreLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/youtubedefaultListeScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/XXXFilmScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/youtubedefaultListeScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/XXXFilmScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -111,7 +109,7 @@ class youtubeVideosListeScreen(Screen):
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
 		self.streamMenuList.l.setItemHeight(25)
-		self['filmList'] = self.streamMenuList		
+		self['genreList'] = self.streamMenuList		
 		self.page = 1
 		self['page'] = Label(" ")
 		self.videoPrioInt = int(config.mediaportal.youtubeprio.value)
@@ -140,8 +138,8 @@ class youtubeVideosListeScreen(Screen):
 		self.keyLocked = False
 
 	def showInfos(self):
-		phRuntime = self['filmList'].getCurrent()[0][2]
-		phImage = self['filmList'].getCurrent()[0][1]
+		phRuntime = self['genreList'].getCurrent()[0][2]
+		phImage = self['genreList'].getCurrent()[0][1]
 		self['name'].setText(phRuntime)
 		downloadPage(phImage, "/tmp/phIcon.jpg").addCallback(self.ShowCover)
 		
@@ -162,8 +160,8 @@ class youtubeVideosListeScreen(Screen):
 	def keyOK(self):
 		if self.keyLocked:
 			return
-		videoId = self['filmList'].getCurrent()[0][3]
-		streamName = self['filmList'].getCurrent()[0][0]
+		videoId = self['genreList'].getCurrent()[0][3]
+		streamName = self['genreList'].getCurrent()[0][0]
 		videoStream = youtubeUrl(self.session).getVideoUrl(videoId, self.videoPrioInt)
 		if videoStream:
 			sref = eServiceReference(0x1001, 0, videoStream)
@@ -179,25 +177,25 @@ class youtubeVideosListeScreen(Screen):
 	def keyLeft(self):
 		if self.keyLocked:
 			return
-		self['filmList'].pageUp()
+		self['genreList'].pageUp()
 		self.showInfos()
 		
 	def keyRight(self):
 		if self.keyLocked:
 			return
-		self['filmList'].pageDown()
+		self['genreList'].pageDown()
 		self.showInfos()
 		
 	def keyUp(self):
 		if self.keyLocked:
 			return
-		self['filmList'].up()
+		self['genreList'].up()
 		self.showInfos()
 
 	def keyDown(self):
 		if self.keyLocked:
 			return
-		self['filmList'].down()
+		self['genreList'].down()
 		self.showInfos()
 			
 	def keyCancel(self):
