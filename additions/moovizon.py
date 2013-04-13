@@ -3,13 +3,22 @@ from Plugins.Extensions.mediaportal.resources.yt_url import *
 
 def moovizonGenreListEntry(entry):
 	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 0, 0, 300, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
+		(eListboxPythonMultiContent.TYPE_TEXT, 0, 0, 850, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		]
 		
 def moovizonListEntry(entry):
-	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 600, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
-		]
+	#TYPE_TEXT, x, y, width, height, fnt, flags, string [, color, backColor, backColorSelected, borderWidth, borderColor])
+	png = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/%s.png" % entry[3]
+	if fileExists(png):
+		flag = LoadPixmap(png)
+		return [entry,
+			(eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 15, 2, 20, 20, flag),
+			(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 600, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
+			]
+	else:
+		return [entry,
+			(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 600, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
+			]		
 
 class moovizonGenreScreen(Screen):
 	
@@ -31,7 +40,9 @@ class moovizonGenreScreen(Screen):
 		
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions"], {
 			"ok"    : self.keyOK,
-			"cancel": self.keyCancel
+			"cancel": self.keyCancel,
+			"red": self.keyCancel,
+			"green": self.change_lang
 		}, -1)
 		
 		self.keyLocked = True
@@ -40,11 +51,9 @@ class moovizonGenreScreen(Screen):
 		self['ContentTitle'] = Label("Genre:")
 		self['name'] = Label("")
 		self['F1'] = Label("Exit")
-		self['F2'] = Label("")
+		self['F2'] = Label("de")
 		self['F3'] = Label("")
 		self['F4'] = Label("")
-		self['F1'].hide()
-		self['F2'].hide()
 		self['F3'].hide()
 		self['F4'].hide()
 
@@ -77,14 +86,34 @@ class moovizonGenreScreen(Screen):
 	def dataError(self, error):
 		print error
 
+	def change_lang(self):
+		if self.language == "de":
+			self.language = "all"
+		elif self.language == "all":
+			self.language = "en"
+		elif self.language == "en":
+			self.language = "es"
+		elif self.language == "es":
+			self.language = "pt"
+		elif self.language == "pt":
+			self.language = "fr"
+		elif self.language == "fr":
+			self.language = "it"
+		elif self.language == "it":
+			self.language = "de"
+			
+		self['F2'].setText(self.language)
+		print "Sprache:", self.language
+		self.loadPage()
+			
 	def keyOK(self):
 		if self.keyLocked:
 			return
 		moovizonGenre = self['genreList'].getCurrent()[0][0]
 		moovizonUrl = self['genreList'].getCurrent()[0][1]
 		print moovizonGenre, moovizonUrl
-		self.session.open(moovizonFilmListeScreen, moovizonGenre, moovizonUrl)
-
+		self.session.open(moovizonFilmListeScreen, moovizonGenre, moovizonUrl)	
+		
 	def keyCancel(self):
 		self.close()
 		
@@ -169,10 +198,10 @@ class moovizonFilmListeScreen(Screen):
 			self.filmliste = []
 			for (url,image,title,lang) in movies:
 				url = "http://moovizon.com%s" % url.replace('&amp;','&')
-				self.filmliste.append((title,url,image))
+				self.filmliste.append((title,url,image,lang))
 			self.chooseMenuList.setList(map(moovizonListEntry, self.filmliste))
 			self.loadPic()
-			self['Page'].setText(str(self.page+1))
+			self['Page'].setText(str(self.page+1)+" von")
 			self.keyLocked = False
 
 	def dataError(self, error):
