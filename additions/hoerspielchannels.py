@@ -1,7 +1,4 @@
 ﻿from Plugins.Extensions.mediaportal.resources.imports import *
-from Plugins.Extensions.mediaportal.resources.decrypt import *
-from Components.ScrollLabel import ScrollLabel
-from Plugins.Extensions.mediaportal.resources.yt_url import *
 
 HSC_Version = "HÖRSPIEL-Channels v0.92"
 
@@ -143,7 +140,7 @@ class show_HSC_ListScreen(Screen):
 		self['F2'] = Label("")
 		self['F3'] = Label("VidPrio")
 		self['F4'] = Label("Text+")
-		self['VideoPrio'] = Label("VideoPrio")
+		self['VideoPrio'] = Label("")
 		self['vPrio'] = Label("")
 		self['Page'] = Label("Page")
 		self['coverArt'] = Pixmap()

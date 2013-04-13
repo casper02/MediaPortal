@@ -2,10 +2,7 @@
 
 import Queue
 import threading
-from Components.ScrollLabel import ScrollLabel
 from Plugins.Extensions.mediaportal.resources.imports import *
-from Plugins.Extensions.mediaportal.resources.decrypt import *
-from Plugins.Extensions.mediaportal.resources.yt_url import *
 
 AMH_Version = "AllMusicHouse.de v0.96"
 

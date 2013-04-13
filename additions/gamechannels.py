@@ -1,9 +1,6 @@
 ﻿#	-*-	coding:	utf-8	-*-
 
 from Plugins.Extensions.mediaportal.resources.imports import *
-from Plugins.Extensions.mediaportal.resources.decrypt import *
-from Components.ScrollLabel import ScrollLabel
-from Plugins.Extensions.mediaportal.resources.yt_url import *
 
 GAME_Version = "GAME-Channels v0.91"
 
@@ -147,7 +144,7 @@ class show_GAME_ListScreen(Screen):
 		self['F2'] = Label("")
 		self['F3'] = Label("VidPrio")
 		self['F4'] = Label("Text+")
-		self['VideoPrio'] = Label("VideoPrio")
+		self['VideoPrio'] = Label("")
 		self['vPrio'] = Label("")
 		self['Page'] = Label("Page")
 		self['coverArt'] = Pixmap()

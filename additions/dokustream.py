@@ -1,11 +1,8 @@
 ﻿#	-*-	coding:	utf-8	-*-
 
 from Plugins.Extensions.mediaportal.resources.imports import *
-from Plugins.Extensions.mediaportal.resources.decrypt import *
-from Plugins.Extensions.mediaportal.resources.yt_url import *
 import Queue
 import threading
-from Components.ScrollLabel import ScrollLabel
 
 DS_Version = "Doku-Stream.org v0.92"
 

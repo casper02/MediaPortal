@@ -48,6 +48,8 @@ import math
 import time
 import hashlib
 from time import *
+from Components.ScrollLabel import ScrollLabel
+from Plugins.Extensions.mediaportal.resources.yt_url import *
 
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 
