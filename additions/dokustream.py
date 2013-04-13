@@ -5,7 +5,7 @@ from Plugins.Extensions.mediaportal.resources.yt_url import *
 import Queue
 import threading
 
-DS_Version = "Doku-Stream.org v0.93"
+DS_Version = "Doku-Stream.org v0.93 (es geht nicht mehr alles)"
 
 DS_siteEncoding = 'utf-8'
 
