@@ -470,7 +470,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.mediatheken.append(self.hauptListEntry("SUPERRTLNOW", "superrtlnow"))
 		if config.mediaportal.showZDF.value:
 			self.mediatheken.append(self.hauptListEntry("ZDF Mediathek", "zdf"))
-		if config.mediaportal.showZDF.value:
+		if config.mediaportal.showORF.value:
 			self.mediatheken.append(self.hauptListEntry("ORF TVthek", "orf"))
 		if config.mediaportal.show4Players.value:
 			self.mediatheken.append(self.hauptListEntry("4Players", "4players"))
