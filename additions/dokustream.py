@@ -5,7 +5,7 @@ from Plugins.Extensions.mediaportal.resources.yt_url import *
 import Queue
 import threading
 
-DS_Version = "Doku-Stream.org v0.92"
+DS_Version = "Doku-Stream.org v0.94"
 
 DS_siteEncoding = 'utf-8'
 
@@ -117,9 +117,8 @@ class show_DS_Genre(Screen):
 			#subGenre_1 = 
 			[
 			("Abenteuer", "/abenteuer"),
-			("Diverses Gesellschaft", "/"),
+			("Diverses Gesellschaft", "/diverses-gesellschaft"),
 			("Drogen", "/drogen-gesellschaft"),
-			("Erotik", "/erotik"),
 			("Gewalt", "/gewalt"),
 			("Kriminalität", "/verbrechen")
 			],
@@ -134,12 +133,14 @@ class show_DS_Genre(Screen):
 			None,
 			#subGenre_5 = 
 			[
-			("Alpha Centauri", "/alpha-centauri-serien"),
+			("Alpha Centauri", "/alpha-centauri"),
 			("Das Römer Experiment", "/das-romer-experiment"),
 			("Die Geschichte der Indianer", "/die-geschichte-der-indianer"),
 			("Geheimnisse des Universums / Unser Universum", "/serie-geheimnisse-des-universums"),
+			("Geist & Gehirn", "/geist-gehirn"),
 			("Leschs Kosmos", "/leschs-kosmos"),
 			("Mathematik zum Anfassen", "/mathematik-zum-anfassen"),
+			("Meilensteine der Naturwissenschaft & Technik", "/meilensteine-der-naturwissenschaft-und-technik"),
 			("Stil-Epochen", "/stil-epochen"),
 			("Terra X", "/terra-x-serien")
 			],
@@ -472,7 +473,7 @@ class DS_FilmListeScreen(Screen):
 			if self.genreNEUESTE:
 				dokus = re.findall('<li><a href="(.*?)" title="(.*?)">', m.group(1))
 			else:
-				dokus = re.findall('<div class="bild"><a href="(.*?)".*?title="(.*?)"><img src="(.*?)"', m.group(1))
+				dokus = re.findall('"post-title">.*?<a href="(.*?)".*?title="(.*?)">.*?<img src="(.*?)"', m.group(1), re.S)
 		else:
 			dokus = None
 		
@@ -684,7 +685,7 @@ class DS_FilmListeScreen(Screen):
 		if (self.page + step) <= self.pages:
 			self.page += step
 		else:
-			self.page += self.pages - self.page
+			self.page = 1
 		#print "Page %d/%d" % (self.page,self.pages)
 		if oldpage != self.page:
 			self.loadPage()
@@ -697,7 +698,7 @@ class DS_FilmListeScreen(Screen):
 		if (self.page - step) >= 1:
 			self.page -= step
 		else:
-			self.page -=  -1 + self.page
+			self.page = self.pages
 		#print "Page %d/%d" % (self.page,self.pages)
 		if oldpage != self.page:
 			self.loadPage()

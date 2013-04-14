@@ -5,7 +5,7 @@ from Plugins.Extensions.mediaportal.resources.yt_url import *
 import Queue
 import threading
 
-DOKUH_Version = "DOKUh.de v0.96"
+DOKUH_Version = "DOKUh.de v0.97"
 
 DOKUH_siteEncoding = 'utf-8'
 
@@ -804,7 +804,7 @@ class DOKUHFilmListeScreen(Screen):
 		if (self.page + step) <= self.pages:
 			self.page += step
 		else:
-			self.page += self.pages - self.page
+			self.page = 1
 		#print "Page %d/%d" % (self.page,self.pages)
 		if oldpage != self.page:
 			self.loadPage()
@@ -817,7 +817,7 @@ class DOKUHFilmListeScreen(Screen):
 		if (self.page - step) >= 1:
 			self.page -= step
 		else:
-			self.page -=  -1 + self.page
+			self.page = self.pages
 		#print "Page %d/%d" % (self.page,self.pages)
 		if oldpage != self.page:
 			self.loadPage()

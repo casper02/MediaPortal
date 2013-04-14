@@ -16,7 +16,7 @@ else:
 	IMDbPresent = False
 	TMDbPresent = False
 
-IS_Version = "iStream.ws v1.08"
+IS_Version = "iStream.ws v1.09"
 
 IS_siteEncoding = 'utf-8'
 
@@ -511,7 +511,7 @@ class IStreamFilmListeScreen(Screen):
 		if (self.page + step) <= self.pages:
 			self.page += step
 		else:
-			self.page += self.pages - self.page
+			self.page = 1
 		#print "Page %d/%d" % (self.page,self.pages)
 		if oldpage != self.page:
 			self.loadPage()
@@ -524,7 +524,7 @@ class IStreamFilmListeScreen(Screen):
 		if (self.page - step) >= 1:
 			self.page -= step
 		else:
-			self.page -=  -1 + self.page
+			self.page = self.pages
 		#print "Page %d/%d" % (self.page,self.pages)
 		if oldpage != self.page:
 			self.loadPage()

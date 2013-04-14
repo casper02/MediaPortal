@@ -3,7 +3,7 @@
 from Plugins.Extensions.mediaportal.resources.imports import *
 from Plugins.Extensions.mediaportal.resources.yt_url import *
 
-USER_Version = "USER-Channels v0.92"
+USER_Version = "USER-Channels v0.93"
 
 USER_siteEncoding = 'utf-8'
 
@@ -374,8 +374,8 @@ class show_USER_ListScreen(Screen):
 			self.page += step
 			self.start_idx += self.max_res * step
 		else:
-			self.page = self.pages
-			self.start_idx = self.max_res * (self.pages - 1) + 1
+			self.page = 1
+			self.start_idx = 1
 		#print "Page %d/%d" % (self.page,self.pages)
 		if oldpage != self.page:
 			self.loadPageData()
@@ -389,8 +389,8 @@ class show_USER_ListScreen(Screen):
 			self.page -= step
 			self.start_idx -= self.max_res * step
 		else:
-			self.page = 1
-			self.start_idx = 1
+			self.page = self.pages
+			self.start_idx = self.max_res * (self.pages - 1) + 1
 		#print "Page %d/%d" % (self.page,self.pages)
 		if oldpage != self.page:
 			self.loadPageData()
