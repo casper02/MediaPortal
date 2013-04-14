@@ -1,4 +1,4 @@
-﻿#	-*-	coding:	utf-8	-*-
+#	-*-	coding:	utf-8	-*-
 
 # General imports
 from resources.imports import *
@@ -57,6 +57,7 @@ from additions.fiwitu import *
 from additions.userchannels import *
 from additions.cinestream import *
 from additions.moovizon import *
+from additions.youtube import *
 
 # kids
 from additions.kinderkino import *
@@ -163,6 +164,7 @@ config.mediaportal.showMusicChannels = ConfigYesNo(default = True)
 config.mediaportal.showUserChannels = ConfigYesNo(default = True)
 config.mediaportal.showCinestream = ConfigYesNo(default = True)
 config.mediaportal.showMoovizon = ConfigYesNo(default = True)
+config.mediaportal.showYoutube = ConfigYesNo(default = True)
 
 # mediatheken
 config.mediaportal.showVoxnow = ConfigYesNo(default = True)
@@ -273,6 +275,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige GAME-Channels:", config.mediaportal.showGameChannels))
 		self.configlist.append(getConfigListEntry("Zeige MUSIC-Channels:", config.mediaportal.showMusicChannels))
 		self.configlist.append(getConfigListEntry("Zeige USER-Channels:", config.mediaportal.showUserChannels))
+		self.configlist.append(getConfigListEntry("Zeige YouTube:", config.mediaportal.showYoutube))
 
 		### mediatheken
 		self.configlist.append(getConfigListEntry("----- Mediatheken -----", config.mediaportal.fake_entry))
@@ -574,6 +577,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.funsport.append(self.hauptListEntry("MUSIC-Channels", "musicchannels"))
 		if config.mediaportal.showUserChannels.value:
 			self.funsport.append(self.hauptListEntry("USER-Channels", "userchannels"))
+		if config.mediaportal.showYoutube.value:
+			self.funsport.append(self.hauptListEntry("YouTube", "youtube"))
 		
 		# porn
 		if config.mediaportal.show4tube.value:
@@ -970,6 +975,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(show_MUSIC_Genre)
 		elif auswahl == "USER-Channels":
 			self.session.open(show_USER_Genre)
+		elif auswahl == "YouTube":
+			self.session.open(youtubeGenreScreen)
 		# mediatheken
 		elif auswahl == "VOXNOW":
 			self.session.open(VOXnowGenreScreen)
@@ -1323,6 +1330,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("MUSIC-Channels", "musicchannels", "Fun"))
 		if config.mediaportal.showUserChannels.value:
 			self.plugin_liste.append(("USER-Channels", "userchannels", "Fun"))
+		if config.mediaportal.showYoutube.value:
+			self.plugin_liste.append(("YouTube", "youtube", "Fun"))
 			
 		### mediatheken	
 		if config.mediaportal.showVoxnow.value:
@@ -1637,6 +1646,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(cinestreamFilmListeScreen)
 		elif auswahl == "Moovizon":
 			self.session.open(moovizonGenreScreen)
+		elif auswahl == "YouTube":
+			self.session.open(youtubeGenreScreen)
 		# mediatheken
 		elif auswahl == "VOXNOW":
 			self.session.open(VOXnowGenreScreen)
