@@ -1,5 +1,5 @@
 <!-- dokuListScreen -->
-  <screen name="dokuList" position="center,center" size="900,630" backgroundColor="#00060606" flags="wfNoBorder">
+  <screen name="dokuList" position="center,center" size="900,655" backgroundColor="#00060606" flags="wfNoBorder">
     <widget name="title" position="20,10" size="500,40" backgroundColor="#00101214" transparent="1" zPosition="10" font="mediaportal; 26" valign="center" halign="left" />
     <widget source="global.CurrentTime" render="Label" position="730,8" size="150,30" backgroundColor="#00101214" transparent="1" zPosition="1" font="mediaportal; 26" valign="center" halign="right" foregroundColor="#00dcdcdc">
       <convert type="ClockToText">Format:%-H:%M</convert>
