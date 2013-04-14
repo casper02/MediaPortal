@@ -7,7 +7,7 @@ STV_siteEncoding = 'utf-8'
 
 def scienceTvGenreListEntry(entry):
 	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[1])
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[1])
 		] 
 		
 class scienceTvGenreScreen(Screen):
@@ -84,7 +84,7 @@ class scienceTvGenreScreen(Screen):
 
 def scienceTvListEntry(entry):
 	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 50, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]+entry[1])
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 50, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]+entry[1])
 		] 
 		
 class scienceTvListScreen(Screen):

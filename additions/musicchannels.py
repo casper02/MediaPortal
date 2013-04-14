@@ -88,7 +88,7 @@ class show_MUSIC_Genre(Screen):
 
 def show_MUSIC_ListEntry(entry):
 	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]+entry[1])
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]+entry[1])
 		] 
 		
 class show_MUSIC_ListScreen(Screen):
