@@ -130,11 +130,11 @@ class youtubeGenreScreen(Screen):
 			]
 
 		self.param_metalang = [
-			('Deutsch', 'lr=de'),
-			('Englisch', 'lr=en'),
-			('Französisch', 'lr=fr'),
-			('Italienisch', 'lr=it'),
-			('Alle', 'lr=')
+			('Deutsch', '&lr=de'),
+			('Englisch', '&lr=en'),
+			('Französisch', '&lr=fr'),
+			('Italienisch', '&lr=it'),
+			('Alle', '')
 			]
 			
 		self.param_regionid = [
@@ -263,7 +263,7 @@ class youtubeGenreScreen(Screen):
 			print "Genre selected"
 			qr = '&q='+urllib.quote(self.param_qr)
 			tm = self.param_time[self.param_time_idx][1]
-			lr = '&'+self.param_metalang[self.param_meta_idx][1]
+			lr = self.param_metalang[self.param_meta_idx][1]
 			regionid = self.param_regionid[self.param_regionid_idx][1]
 			#at = '&author='+self.param_author
 			#self.param_kw
