@@ -157,7 +157,7 @@ class youtubeGenreScreen(Screen):
 		self.genreMenu = [
 			[
 			('Standard feeds', '/standardfeeds'),
-			('Video feeds', '/videos/-')
+			('Video feeds', '/videos')
 			],
 			[
 			self.subGenre_0, self.subCat
@@ -274,7 +274,12 @@ class youtubeGenreScreen(Screen):
 					stdGenre = '_'+stdGenre
 				genreurl = self.baseUrl+self.genreUrl[0]+regionid+self.genreUrl[1]+stdGenre+'?'+tm+lr+qr+self.param_format+self.param_safesearch[0]
 			else:
-				genreurl = self.baseUrl+self.genreUrl[0]+'/'+self.genreUrl[1]+'?'+tm+lr+qr+self.param_format+self.param_safesearch[0]
+				if self.genreUrl[1] != '':
+					c = '/-/'+self.genreUrl[1]
+				else:
+					c = ''
+					
+				genreurl = self.baseUrl+self.genreUrl[0]+c+'?'+tm+lr+qr+self.param_format+self.param_safesearch[0]
 			
 			#print "genreurl: ", genreurl
 			self.session.open(YT_ListScreen, genreurl, self.genreTitle)
