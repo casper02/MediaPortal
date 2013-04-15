@@ -130,11 +130,11 @@ class youtubeGenreScreen(Screen):
 			]
 
 		self.param_metalang = [
-			('Deutsch', 'lr=de'),
-			('Englisch', 'lr=en'),
-			('Französisch', 'lr=fr'),
-			('Italienisch', 'lr=it'),
-			('Alle', 'lr=')
+			('Deutsch', '&lr=de'),
+			('Englisch', '&lr=en'),
+			('Französisch', '&lr=fr'),
+			('Italienisch', '&lr=it'),
+			('Alle', '')
 			]
 			
 		self.param_regionid = [
@@ -157,7 +157,7 @@ class youtubeGenreScreen(Screen):
 		self.genreMenu = [
 			[
 			('Standard feeds', '/standardfeeds'),
-			('Video feeds', '/videos/-')
+			('Video feeds', '/videos')
 			],
 			[
 			self.subGenre_0, self.subCat
@@ -263,7 +263,7 @@ class youtubeGenreScreen(Screen):
 			print "Genre selected"
 			qr = '&q='+urllib.quote(self.param_qr)
 			tm = self.param_time[self.param_time_idx][1]
-			lr = '&'+self.param_metalang[self.param_meta_idx][1]
+			lr = self.param_metalang[self.param_meta_idx][1]
 			regionid = self.param_regionid[self.param_regionid_idx][1]
 			#at = '&author='+self.param_author
 			#self.param_kw
@@ -274,7 +274,12 @@ class youtubeGenreScreen(Screen):
 					stdGenre = '_'+stdGenre
 				genreurl = self.baseUrl+self.genreUrl[0]+regionid+self.genreUrl[1]+stdGenre+'?'+tm+lr+qr+self.param_format+self.param_safesearch[0]
 			else:
-				genreurl = self.baseUrl+self.genreUrl[0]+'/'+self.genreUrl[1]+'?'+tm+lr+qr+self.param_format+self.param_safesearch[0]
+				if self.genreUrl[1] != '':
+					c = '/-/'+self.genreUrl[1]
+				else:
+					c = ''
+					
+				genreurl = self.baseUrl+self.genreUrl[0]+c+'?'+tm+lr+qr+self.param_format+self.param_safesearch[0]
 			
 			#print "genreurl: ", genreurl
 			self.session.open(YT_ListScreen, genreurl, self.genreTitle)
