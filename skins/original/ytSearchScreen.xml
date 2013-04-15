@@ -1,0 +1,37 @@
+<!-- ytSearchScreen -->
+  <screen name="ytSearch" position="center,center" size="900,655" backgroundColor="#00060606" flags="wfNoBorder">
+    <widget name="title" position="20,10" size="500,40" backgroundColor="#00101214" transparent="1" zPosition="10" font="mediaportal; 26" valign="center" halign="left" />
+    <widget source="global.CurrentTime" render="Label" position="730,8" size="150,30" backgroundColor="#00101214" transparent="1" zPosition="1" font="mediaportal; 26" valign="center" halign="right" foregroundColor="#00dcdcdc">
+      <convert type="ClockToText">Format:%-H:%M</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="580,39" size="300,20" backgroundColor="#00101214" transparent="1" zPosition="1" font="mediaportal;18" valign="center" halign="right" foregroundColor="#00dcdcdc">
+      <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+    </widget>
+    <widget name="ContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="0" foregroundColor="#00000000" font="mediaportal;22" halign="center" />
+    <widget name="name" position="20,95" size="860,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="mediaportal;26" valign="top" />
+    <widget name="genreList" position="0,135" size="860,250" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" />
+    <widget name="Parameter" position="20,410" size="200,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="mediaportal; 26" valign="center" zPosition="0" />
+    <widget name="ParameterToEdit" position="570,410" size="100,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="mediaportal; 20" valign="center" zPosition="0" halign="right" />
+    <widget name="parametertoedit" position="680,410" size="200,30" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" zPosition="0" />
+    <eLabel position="20,440" size="860,2" backgroundColor="#00555556" />
+    <widget name="Query" position="20,445" size="150,25" backgroundColor="#00101214" transparent="1" font="mediaportal; 20" valign="center" zPosition="0" halign="right" foregroundColor="#00555556" />
+    <widget name="query" position="180,445" size="700,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" zPosition="0" noWrap="1" />
+    <widget name="Keywords" position="20,470" size="150,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" zPosition="0" halign="right" foregroundColor="#00555556" />
+    <widget name="keywords" position="180,470" size="700,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" zPosition="0" noWrap="1" />
+    <widget name="Time" position="20,495" size="150,25" backgroundColor="#00101214" transparent="1" foregroundColor="#00555556" font="mediaportal;20" valign="center" halign="right" zPosition="0" />
+    <widget name="time" position="180,495" size="200,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="left" zPosition="0" />
+    <widget name="Metalang" position="20,520" size="150,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="right" zPosition="0" foregroundColor="#00555556" />
+    <widget name="metalang" position="180,520" size="200,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="left" zPosition="0" />
+    <widget name="Regionid" position="20,545" size="150,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="right" zPosition="0" foregroundColor="#00555556" />
+    <widget name="regionid" position="180,545" size="200,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="left" zPosition="0" />
+    <widget name="Author" position="20,570" size="150,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="right" zPosition="0" foregroundColor="#00555556" />
+    <widget name="author" position="180,570" size="200,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="left" zPosition="0" />
+    <ePixmap pixmap="~/original/images/red.png" position="20,597" size="35,27" alphatest="blend" />
+    <ePixmap pixmap="~/original/images/green.png" position="165,597" size="35,27" alphatest="blend" />
+    <ePixmap pixmap="~/original/images/yellow.png" position="310,597" size="35,27" alphatest="blend" />
+    <ePixmap pixmap="~/original/images/blue.png" position="455,597" size="35,27" alphatest="blend" />
+    <widget name="F1" position="60,600" size="100,30" transparent="1" font="mediaportal; 20" backgroundColor="#00101214" valign="bottom" />
+    <widget name="F2" position="205,600" size="100,30" transparent="1" backgroundColor="#00101214" font="mediaportal; 20" valign="bottom" />
+    <widget name="F3" position="350,600" size="100,30" transparent="1" font="mediaportal; 20" backgroundColor="#00101214" valign="bottom" />
+    <widget name="F4" position="492,600" size="100,30" transparent="1" font="mediaportal; 20" backgroundColor="#00101214" valign="bottom" />
+  </screen>
