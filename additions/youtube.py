@@ -182,8 +182,9 @@ class youtubeGenreScreen(Screen):
 		self.session.openWithCallback(self.cb_paraQuery, VirtualKeyBoard, title = (_("Suchanfrage")), text = self.param_qr)
 		
 	def cb_paraQuery(self, callback = None, entry = None):
-		self.param_qr = callback.strip()
-		self.showParams()
+		if callback != None:
+			self.param_qr = callback.strip()
+			self.showParams()
 		
 	def paraTime(self):
 		self.param_time_idx += 1
@@ -204,15 +205,17 @@ class youtubeGenreScreen(Screen):
 		self.session.openWithCallback(self.cb_paraAuthor, VirtualKeyBoard, title = (_("Author")), text = self.param_author)
 	
 	def cb_paraAuthor(self, callback = None, entry = None):
-		self.param_author = callback.strip()
-		self.showParams()
+		if callback != None:
+			self.param_author = callback.strip()
+			self.showParams()
 		
 	def paraKey(self):
 		self.session.openWithCallback(self.cb_paraKey, VirtualKeyBoard, title = (_("Suchschlüssel")), text = self.param_kw)
 	
 	def cb_paraKey(self, callback = None, entry = None):
-		self.param_kw = callback.strip()
-		self.showParams()
+		if callback != None:
+			self.param_kw = callback.strip()
+			self.showParams()
 		
 	def showParams(self):
 		self['query'].setText(self.param_qr)
