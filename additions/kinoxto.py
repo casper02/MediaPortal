@@ -1,8 +1,8 @@
-from Plugins.Extensions.mediaportal.resources.imports import *
-from Plugins.Extensions.mediaportal.resources.decrypt import *
+from Plugins.Extensions.MediaPortal.resources.imports import *
+from Plugins.Extensions.MediaPortal.resources.decrypt import *
 
 def kxListEntry(entry):
-	png = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/%s.png" % entry[4]
+	png = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/%s.png" % entry[4]
 	flag = LoadPixmap(png)
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 20, 5, 16, 11, flag),
@@ -29,7 +29,7 @@ def kxList2Entry(entry):
 		]
 def kxWatchedListEntry(entry):
 	if entry[2]:
-		png = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/watched.png"
+		png = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/watched.png"
 		watched = LoadPixmap(png)
 		return [entry,
 			(eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 39, 3, 100, 22, watched),
@@ -44,31 +44,16 @@ def kxLetterEntry(entry):
 		(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 830, 25, 0, RT_HALIGN_CENTER, entry)
 		]
 def kxWatchSeriesListEntry(entry):
-	if int(entry[4]) != 0:
-		new_eps = str(entry[4])
-	else:
-		new_eps = ""
-		
-	png = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/%s.png" % entry[2]
-	if fileExists(png):
-		flag = LoadPixmap(png)	
-		return [entry,
-			(eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 20, 5, 16, 11, flag),
-			(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 750, 25, 0, RT_HALIGN_LEFT, entry[0]),
-			(eListboxPythonMultiContent.TYPE_TEXT, 800, 0, 50, 25, 0, RT_HALIGN_LEFT, new_eps)
-			]
-	else:
-		return [entry,
-			(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 750, 25, 0, RT_HALIGN_LEFT, entry[0]),
-			(eListboxPythonMultiContent.TYPE_TEXT, 800, 0, 50, 25, 0, RT_HALIGN_LEFT, new_eps)
-			]
+	return [entry,
+		(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 830, 25, 0, RT_HALIGN_LEFT, entry[0])
+		]
 class kxMain(Screen):
 	
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxMain.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/kxMain.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxMain.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/kxMain.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -141,9 +126,9 @@ class kxKino(Screen):
 	def __init__(self, session, kxGotLink):
 		self.kxGotLink = kxGotLink
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxKino.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/kxKino.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxKino.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/kxKino.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -257,9 +242,9 @@ class kxNeuesteKino(Screen):
 	def __init__(self, session, kxGotLink):
 		self.kxGotLink = kxGotLink
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxNeuesteKino.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/kxNeuesteKino.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxNeuesteKino.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/kxNeuesteKino.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -384,9 +369,9 @@ class kxNeuesteOnline(Screen):
 	def __init__(self, session, kxGotLink):
 		self.kxGotLink = kxGotLink
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxNeuesteOnline.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/kxNeuesteOnline.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxNeuesteOnline.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/kxNeuesteOnline.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -512,9 +497,9 @@ class kxABC(Screen):
 	def __init__(self, session, kxGotLink):
 		self.kxGotLink = kxGotLink
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxABC.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/kxABC.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxABC.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/kxABC.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -566,9 +551,9 @@ class kxABCpage(Screen):
 	def __init__(self, session, letter):
 		self.letter = letter
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxABCpage.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/kxABCpage.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxABCpage.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/kxABCpage.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -705,9 +690,9 @@ class kxNeuesteSerien(Screen):
 	def __init__(self, session, kxGotLink):
 		self.kxGotLink = kxGotLink
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxNeuesteSerien.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/kxNeuesteSerien.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxNeuesteSerien.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/kxNeuesteSerien.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -802,7 +787,7 @@ class kxNeuesteSerien(Screen):
 			return
 		muTitle = self['streamlist'].getCurrent()[0][0]
 		muID = self['streamlist'].getCurrent()[0][1]
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/resources/kx_watchlist"
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/kx_watchlist"
 		if fileExists(path):
 			writePlaylist = open(path,"a")
 			writePlaylist.write('"%s" "%s"\n' % (muTitle, muID))
@@ -841,9 +826,9 @@ class kxSerienABC(Screen):
 	def __init__(self, session, kxGotLink):
 		self.kxGotLink = kxGotLink
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxSerienABC.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/kxSerienABC.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxSerienABC.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/kxSerienABC.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -895,9 +880,9 @@ class kxSerienABCpage(Screen):
 	def __init__(self, session, letter):
 		self.letter = letter
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxSerienABCpage.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/kxSerienABCpage.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxSerienABCpage.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/kxSerienABCpage.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -1034,13 +1019,10 @@ class kxSerienABCpage(Screen):
 			return
 		muTitle = self['streamlist'].getCurrent()[0][0]
 		muID = self['streamlist'].getCurrent()[0][1]
-		muLang = self['streamlist'].getCurrent()[0][4]
-		#path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/resources/kx_watchlist"
-		if not fileExists(self.plugin_path+"/resources/kx_watchlist"):
-			os.system("touch "+self.plugin_path+"/resources/kx_watchlist")
-		if fileExists(self.plugin_path+"/resources/kx_watchlist"):
-			writePlaylist = open(self.plugin_path+"/resources/kx_watchlist","a")
-			writePlaylist.write('"%s" "%s" "%s" "0"\n' % (muTitle, muID, muLang))
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/kx_watchlist"
+		if fileExists(path):
+			writePlaylist = open(path,"a")
+			writePlaylist.write('"%s" "%s"\n' % (muTitle, muID))
 			writePlaylist.close()
 			message = self.session.open(MessageBox, _("Serie wurde zur watchlist hinzugefuegt."), MessageBox.TYPE_INFO, timeout=3)
 			
@@ -1053,9 +1035,9 @@ class kxEpisoden(Screen):
 		self.url = url
 		self.stream_name = stream_name
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxEpisoden.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/kxEpisoden.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxEpisoden.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/kxEpisoden.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -1078,7 +1060,7 @@ class kxEpisoden(Screen):
 		self['name'] = Label("")
 		self['handlung'] = Label("")
 		
-		self.plugin_path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal"
+		self.plugin_path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal"
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
@@ -1229,11 +1211,9 @@ class kxWatchlist(Screen):
 	
 	def __init__(self, session):
 		self.session = session
-		self.plugin_path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal"
-		
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxWatchlist.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/kxWatchlist.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxWatchlist.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/kxWatchlist.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -1244,8 +1224,7 @@ class kxWatchlist(Screen):
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
 			"ok"    : self.keyOK,
 			"cancel": self.keyCancel,
-			"red" : self.keyDel,
-			"info": self.update
+			"red" : self.keyDel
 		}, -1)
 		
 		self['title'] = Label("Kinox.to")
@@ -1265,52 +1244,20 @@ class kxWatchlist(Screen):
 
 	def loadPlaylist(self):
 		self.streamList = []
-		if fileExists(self.plugin_path+"/resources/kx_watchlist"):
-			readStations = open(self.plugin_path+"/resources/kx_watchlist","r")
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/kx_watchlist"	
+		if fileExists(path):
+			readStations = open(path,"r")
 			for rawData in readStations.readlines():
-				data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
+				data = re.findall('"(.*?)" "(.*?)"', rawData, re.S)
 				if data:
-					(stationName, stationLink, stationLang, stationTotaleps) = data[0]
-					self.streamList.append((stationName, stationLink, stationLang, stationTotaleps, "0"))
-			print "Load Watchlist.."
+					(stationName, stationLink) = data[0]
+					self.streamList.append((stationName, stationLink))
+			print "Reload Playlist"
 			self.streamList.sort()
 			self.streamMenuList.setList(map(kxWatchSeriesListEntry, self.streamList))
 			readStations.close()
 			self.keyLocked = False
 			
-	def update(self):
-		if len(self.streamList) != 0:
-			self.keyLocked = True
-			self.streamList2 = []
-			#print sname, surl, slang, stotaleps
-			ds = defer.DeferredSemaphore(tokens=1)
-			downloads = [ds.run(self.download,item[1]).addCallback(self.check_data, item[0], item[1], item[2], item[3]).addErrback(self.dataError) for item in self.streamList]
-			finished = defer.DeferredList(downloads).addErrback(self.dataError)
-
-	def dataError(self, error):
-		print error
-		
-	def download(self, item):
-		return getPage(item)
-		
-	def check_data(self, data, sname, surl, slang, stotaleps):
-		print sname, surl, slang, stotaleps
-		count_all_eps = 0
-		staffeln = re.findall('<option value="(.*\d)" rel="(.*\d)"', data, re.M)
-		if staffeln:
-			for each in staffeln:
-				(staffel, epsall) = each
-				eps = re.findall('(\d+)', epsall, re.S)
-				count_all_eps += int(len(eps))
-				
-			new_eps =  int(count_all_eps) - int(stotaleps)
-			print sname, stotaleps, count_all_eps, new_eps
-			
-			self.streamList2.append((sname, surl, slang, str(stotaleps), str(new_eps)))
-			self.streamList2.sort()
-			self.streamMenuList.setList(map(kxWatchSeriesListEntry, self.streamList2))
-			self.keyLocked = False
-	
 	def keyOK(self):
 		exist = self['streamlist'].getCurrent()
 		if self.keyLocked or exist == None:
@@ -1326,11 +1273,11 @@ class kxWatchlist(Screen):
 			return
 		
 		selectedName = self['streamlist'].getCurrent()[0][0]
-		#pathTmp = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/resources/kx_watchlist.tmp"
-		writeTmp = open(self.plugin_path+"/resources/kx_watchlist.tmp","w")	
-		#path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/resources/kx_watchlist"
-		if fileExists(self.plugin_path+"/resources/kx_watchlist"):
-			readStations = open(self.plugin_path+"/resources/kx_watchlist","r")
+		pathTmp = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/kx_watchlist.tmp"
+		writeTmp = open(pathTmp,"w")	
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/kx_watchlist"
+		if fileExists(path):
+			readStations = open(path,"r")
 			for rawData in readStations.readlines():
 				data = re.findall('"(.*?)" "(.*?)"', rawData, re.S)
 				if data:
@@ -1339,7 +1286,7 @@ class kxWatchlist(Screen):
 						writeTmp.write('"%s" "%s"\n' % (stationName, stationLink))
 			readStations.close()
 			writeTmp.close()
-			shutil.move(self.plugin_path+"/resources/kx_watchlist.tmp", self.plugin_path+"/resources/kx_watchlist")
+			shutil.move(pathTmp, path)
 			self.loadPlaylist()
 				
 	def keyCancel(self):
@@ -1351,9 +1298,9 @@ class kxStreams(Screen):
 		self.kxGotLink = kxGotLink
 		self.stream_name = stream_name
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxStreams.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/kxStreams.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxStreams.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/kxStreams.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -1372,7 +1319,7 @@ class kxStreams(Screen):
 		self['name'] = Label("")
 		self['handlung'] = Label("")
 		
-		self.plugin_path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal"
+		self.plugin_path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal"
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
@@ -1485,9 +1432,9 @@ class kxParts(Screen):
 		self.parts = parts
 		self.stream_name = stream_name
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/kxParts.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/kxParts.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/kxParts.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/kxParts.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
