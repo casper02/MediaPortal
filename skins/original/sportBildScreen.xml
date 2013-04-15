@@ -8,9 +8,9 @@
 			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="mediaportal;16" valign="center" halign="right">
 				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
 			</widget>
-			<widget name="roflList" position="0,60" size="900,350" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/sel.png"/>
+			<widget name="roflList" position="0,60" size="900,350" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/sel.png"/>
 			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
-			<widget name="roflPic" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/no_coverArt.png" position="20,440" size="160,120" transparent="1" alphatest="blend" />
+			<widget name="roflPic" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/no_coverArt.png" position="20,440" size="160,120" transparent="1" alphatest="blend" />
 			<widget name="name" position="230,420" size="560,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="mediaportal;26" valign="top" />
 			<eLabel text="Date" position="230,470" size="100,25" backgroundColor="#00101214" transparent="1" foregroundColor="#00555556" font="mediaportal;20" valign="top" />
 			<widget name="date" position="330,470" size="580,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="top" />

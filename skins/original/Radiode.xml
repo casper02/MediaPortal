@@ -9,10 +9,10 @@
 				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
 			</widget>
 			<widget name="leftContentTitle" position="0,80" size="440,26" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="mediaportal;22" halign="center"/>
-			<widget name="streamlist" position="0,106" size="440,350" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/sel.png"/>
+			<widget name="streamlist" position="0,106" size="440,350" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/sel.png"/>
 			<widget name="rightContentTitle" position="460,80" size="440,26" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="mediaportal;22" halign="center"/>		
-			<widget name="playlist" position="460,106" size="440,350" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/sel.png"/>
-			<widget name="stationIcon" position="20,465" zPosition="1" size="60,60" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/no_coverArt.png"/>
+			<widget name="playlist" position="460,106" size="440,350" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/sel.png"/>
+			<widget name="stationIcon" position="20,465" zPosition="1" size="60,60" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/no_coverArt.png"/>
 			<eLabel text="Play" position="120,470" size="120,25" backgroundColor="#00101214" transparent="1" foregroundColor="#00555556" font="mediaportal;20" valign="top"/>
 			<widget name="stationInfo" position="240,470" size="450,25" backgroundColor="#00101214" foregroundColor="#00e5b243" transparent="1" font="mediaportal;20" valign="top"/>
 			<widget source="session.CurrentService" render="Label" position="750,470" size="120,25" font="mediaportal;20" foregroundColor="#00e5b243" backgroundColor="#00101214" halign="right" valign="top" transparent="1">
@@ -20,8 +20,8 @@
 			</widget>
 			<eLabel text="Info" position="120,500" size="120,25" backgroundColor="#00101214" foregroundColor="#00555556" transparent="1" font="mediaportal;20" valign="top"/>
 			<widget name="stationDesc" position="240,500" zPosition="1" size="640,60" backgroundColor="#00101214" transparent="1" font="mediaportal;19" halign="left" valign="top"/>
-			<ePixmap position="637,576" size="36,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/buttongrey.png" alphatest="blend" backgroundColor="#00101214" />
+			<ePixmap position="637,576" size="36,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/buttongrey.png" alphatest="blend" backgroundColor="#00101214" />
 			<eLabel text="CH+" position="676,572" size="80,36" transparent="1" font="mediaportal; 18" backgroundColor="#00101214" foregroundColor="#00ffffff" valign="center" halign="left" zPosition="1" />
-			<ePixmap position="782,576" size="36,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/buttongrey.png" alphatest="blend" backgroundColor="#00101214" />
+			<ePixmap position="782,576" size="36,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/buttongrey.png" alphatest="blend" backgroundColor="#00101214" />
 			<eLabel text="CH-" position="819,572" size="80,36" transparent="1" font="mediaportal; 18" backgroundColor="#00101214" foregroundColor="#00ffffff" valign="center" halign="left" zPosition="1" />
 		</screen>

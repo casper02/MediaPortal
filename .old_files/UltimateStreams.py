@@ -37,9 +37,9 @@ class showUSGenre(Screen):
 
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/showUSGenre.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/showUSGenre.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/showUSGenre.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/showUSGenre.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -125,9 +125,9 @@ class USFilmListeScreen(Screen):
 		self.session = session
 		self.genreLink = genreLink
 		self.genreName = genreName
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/USFilmListeScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/USFilmListeScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/USFilmListeScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/USFilmListeScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -402,7 +402,7 @@ class USFilmListeScreen(Screen):
 		
 	def ShowCoverNone(self):
 		print "ShowCoverNone:"
-		picPath = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/images/no_coverArt.png" % config.mediaportal.skin.value
+		picPath = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/images/no_coverArt.png" % config.mediaportal.skin.value
 		self.ShowCoverFile(picPath)
 	
 	def ShowCoverFile(self, picPath):
@@ -611,9 +611,9 @@ class USStreams(Screen, ConfigListScreen):
 		self.filmUrl = filmUrl
 		self.filmName = filmName
 		self.imageUrl = imageLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/USStreams.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/USStreams.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/USStreams.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/USStreams.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

@@ -9,9 +9,9 @@
 				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
 			</widget>
 			<widget name="ContentTitle" position="0,60" size="900,26" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="mediaportal;22" halign="center"/>
-			<widget name="streamList" position="0,85" size="900,325" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/sel.png"/>
+			<widget name="streamList" position="0,85" size="900,325" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/sel.png"/>
 			<eLabel position="185,460" size="700,2" backgroundColor="#00555556" />
-			<widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
+			<widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
 			<widget name="name" position="185,420" size="700,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="mediaportal;26" valign="top" />
 			<widget name="handlung" position="185,473" size="700,140" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="top" />
 	        </screen>

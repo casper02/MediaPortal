@@ -264,7 +264,7 @@ class show_MUSIC_ListScreen(Screen):
 		
 	def ShowCoverNone(self):
 		print "ShowCoverNone:"
-		picPath = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/no_coverArt.png"
+		picPath = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/no_coverArt.png"
 		self.ShowCoverFile(picPath)
 	
 	def ShowCoverFile(self, picPath):

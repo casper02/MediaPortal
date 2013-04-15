@@ -10,9 +10,9 @@ class oasetvGenreScreen(Screen):
 	
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/oasetvGenreScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/oasetvGenreScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/oasetvGenreScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/oasetvGenreScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -68,9 +68,9 @@ class oasetvFilmListeScreen(Screen):
 	def __init__(self, session, streamGenreLink):
 		self.session = session
 		self.streamGenreLink = streamGenreLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/oasetvFilmListeScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/oasetvFilmListeScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/oasetvFilmListeScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/oasetvFilmListeScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -245,9 +245,9 @@ class oasetvCDListeScreen(Screen):
 		self.session = session
 		self.streamParts = parts
 		self.stream_name = stream_name
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/oasetvCDListeScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/oasetvCDListeScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/oasetvCDListeScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/oasetvCDListeScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

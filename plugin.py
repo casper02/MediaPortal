@@ -210,9 +210,9 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/hauptScreenSetup.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/hauptScreenSetup.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/hauptScreenSetup.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/hauptScreenSetup.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -370,9 +370,9 @@ class HelpScreen(Screen):
 
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/help.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/help.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/help.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/help.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -401,9 +401,9 @@ class haupt_Screen(Screen, ConfigListScreen):
 	def __init__(self, session):
 		self.session = session
 
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/haupt_Screen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/haupt_Screen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/haupt_Screen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/haupt_Screen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -411,7 +411,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			
 		Screen.__init__(self, session)
 
-		registerFont("/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/resources/mediaportal.ttf", "mediaportal", 100, False)
+		registerFont("/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/mediaportal.ttf", "mediaportal", 100, False)
 		
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "HelpActions"], {
 			"ok"    : self.keyOK,
@@ -653,9 +653,9 @@ class haupt_Screen(Screen, ConfigListScreen):
 
 	def hauptListEntry(self, name, jpg):
 		res = [(name, jpg)]
-		icon = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons/%s.png" % jpg
+		icon = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/icons/%s.png" % jpg
 		if not fileExists(icon):
-			icon = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons/no_icon.png"
+			icon = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/icons/no_icon.png"
 		res.append(MultiContentEntryPixmapAlphaTest(pos=(0, 1), size=(75, 40), png=loadPNG(icon)))	
 		res.append(MultiContentEntryText(pos=(80, 10), size=(160, 40), font=0, text=name, flags=RT_HALIGN_LEFT))
 		return res
@@ -1430,13 +1430,13 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 				posy = 210
 				
 		self.skin_dump = ""
-		self.skin_dump += "<widget name=\"frame\" position=\"20,210\" size=\"150,80\" pixmap=\"/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons_wall/Selektor_%s.png\" zPosition=\"2\" transparent=\"0\" alphatest=\"blend\" />" % config.mediaportal.selektor.value
+		self.skin_dump += "<widget name=\"frame\" position=\"20,210\" size=\"150,80\" pixmap=\"/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/icons_wall/Selektor_%s.png\" zPosition=\"2\" transparent=\"0\" alphatest=\"blend\" />" % config.mediaportal.selektor.value
 		self.skin_dump += skincontent
 		self.skin_dump += "</screen>"
 		
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/hauptScreenWall.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/hauptScreenWall.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/hauptScreenWall.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/hauptScreenWall.xml"
 		with open(path, "r") as f:
 			self.skin_dump2 = f.read()
 			self.skin_dump2 += self.skin_dump
@@ -1445,7 +1445,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		
 		Screen.__init__(self, session)
 
-		registerFont("/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/resources/mediaportal.ttf", "mediaportal", 100, False)
+		registerFont("/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/mediaportal.ttf", "mediaportal", 100, False)
 		
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions", "HelpActions"], {
 			"ok"    : self.keyOK,
@@ -1490,9 +1490,9 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 
 		for x in range(1,len(self.plugin_liste)+1):
 			postername = self.plugin_liste[int(x)-1][1]
-			poster_path = "%s/%s.png" % ("/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons_wall", postername)
+			poster_path = "%s/%s.png" % ("/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/icons_wall", postername)
 			if not fileExists(poster_path):
-				poster_path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/icons_wall/no_icon.png"
+				poster_path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/icons_wall/no_icon.png"
 
 			self["zeile"+str(x)].instance.setPixmap(None)
 			self["zeile"+str(x)].hide()

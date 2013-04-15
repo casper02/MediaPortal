@@ -14,9 +14,9 @@ class Radiode(Screen):
 	
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/Radiode.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/Radiode.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/Radiode.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/Radiode.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -75,10 +75,10 @@ class Radiode(Screen):
 		print list
 		if list == "streamlist":
 			self.streamList = []
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/resources/radiode_sender"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/radiode_sender"
 		else:
 			self.playList = []
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/resources/radiode_playlist"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/radiode_playlist"
 			
 		if fileExists(path):
 			readStations = open(path,"r")
@@ -218,7 +218,7 @@ class Radiode(Screen):
 		stationImage = self['streamlist'].getCurrent()[0][2]
 		stationDesc = self['streamlist'].getCurrent()[0][3]
 
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/resources/radiode_playlist"
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/radiode_playlist"
 		if fileExists(path):
 			writePlaylist = open(path,"a")
 			writePlaylist.write('"%s" "%s" "%s" "%s"\n' % (stationName, stationLink, stationImage, stationDesc))
@@ -235,10 +235,10 @@ class Radiode(Screen):
 		
 		selectedName = self['playlist'].getCurrent()[0][0]
 		
-		pathTmp = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/resources/radiode_playlist.tmp"
+		pathTmp = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/radiode_playlist.tmp"
 		writeTmp = open(pathTmp,"w")
 		
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/resources/radiode_playlist"
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/radiode_playlist"
 		if fileExists(path):
 			readStations = open(path,"r")
 			for rawData in readStations.readlines():

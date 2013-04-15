@@ -16,9 +16,9 @@ class mahlzeitMainScreen(Screen):
 	
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/mahlzeitMainScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/mahlzeitMainScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/mahlzeitMainScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/mahlzeitMainScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -328,9 +328,9 @@ class mahlzeitStreamScreen(Screen):
 	def __init__(self, session, genreLink):
 		self.session = session
 		self.genreLink = genreLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/mahlzeitStreamScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/mahlzeitStreamScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/mahlzeitStreamScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/mahlzeitStreamScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

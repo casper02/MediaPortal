@@ -26,7 +26,7 @@ def m2kSerienABCEntry(entry):
 		flag_name = "1.png"
 
 	if flag_name:
-		png = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/%s" % flag_name
+		png = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/%s" % flag_name
 		flag = LoadPixmap(png)
 		return [entry,
 			(eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 20, 5, 16, 11, flag),
@@ -52,9 +52,9 @@ class m2kGenreScreen(Screen):
 	def __init__(self, session, mode):
 		self.session = session
 		self.showM2kPorn = mode
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/m2kGenreScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/m2kGenreScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/m2kGenreScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/m2kGenreScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -155,9 +155,9 @@ class m2kKinoAlleFilmeListeScreen(Screen):
 	def __init__(self, session, streamGenreLink):
 		self.session = session
 		self.streamGenreLink = streamGenreLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/m2kdefaultPageListeScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/m2kdefaultPageListeScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/m2kdefaultPageListeScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/m2kdefaultPageListeScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -342,9 +342,9 @@ class m2kKinoFilmeListeScreen(Screen):
 	def __init__(self, session, streamGenreLink):
 		self.session = session
 		self.streamGenreLink = streamGenreLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/m2kdefaultListeScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/m2kdefaultListeScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/m2kdefaultListeScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/m2kdefaultListeScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -468,9 +468,9 @@ class m2kVideoFilmeListeScreen(Screen):
 	def __init__(self, session, streamGenreLink):
 		self.session = session
 		self.streamGenreLink = streamGenreLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/m2kdefaultListeScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/m2kdefaultListeScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/m2kdefaultListeScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/m2kdefaultListeScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -594,9 +594,9 @@ class m2kupdateFilmeListeScreen(Screen):
 	def __init__(self, session, streamGenreLink):
 		self.session = session
 		self.streamGenreLink = streamGenreLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/m2kdefaultListeScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/m2kdefaultListeScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/m2kdefaultListeScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/m2kdefaultListeScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -722,9 +722,9 @@ class m2kTopSerienFilmeListeScreen(Screen):
 	def __init__(self, session, streamGenreLink):
 		self.session = session
 		self.streamGenreLink = streamGenreLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/m2kdefaultListeScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/m2kdefaultListeScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/m2kdefaultListeScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/m2kdefaultListeScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -851,9 +851,9 @@ class m2kSerienUpdateFilmeListeScreen(Screen):
 	def __init__(self, session, streamGenreLink):
 		self.session = session
 		self.streamGenreLink = streamGenreLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/m2kdefaultListeScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/m2kdefaultListeScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/m2kdefaultListeScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/m2kdefaultListeScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -984,9 +984,9 @@ class m2kStreamListeScreen(Screen):
 		self.streamGenreLink = streamGenreLink
 		self.streamName = streamName
 		self.which = which
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/m2kdefaultListeScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/m2kdefaultListeScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/m2kdefaultListeScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/m2kdefaultListeScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -1136,9 +1136,9 @@ class m2kPartListeScreen(Screen):
 		self.session = session
 		self.streamGenreLink = streamGenreLink
 		self.streamName = streamName
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/m2kdefaultListeScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/m2kdefaultListeScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/m2kdefaultListeScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/m2kdefaultListeScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -1179,7 +1179,7 @@ class m2kPartListeScreen(Screen):
 			print "id fehler.."
 
 	def m2kPartsListEntry(self, entry):
-		part = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/teil%s.png" % entry[0]
+		part = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/teil%s.png" % entry[0]
 		return [entry,
 			(eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 396, 3, 108, 35, LoadPixmap(part))
 			]
@@ -1243,9 +1243,9 @@ class m2kEpisodenListeScreen(Screen):
 		self.session = session
 		self.streamGenreLink = streamGenreLink
 		self.streamName = streamName
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/m2kdefaultListeScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/m2kdefaultListeScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/m2kdefaultListeScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/m2kdefaultListeScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -1349,9 +1349,9 @@ class m2kXXXUpdateFilmeListeScreen(Screen):
 		self.genre = False
 		if genre == 'X':
 			self.genre = True
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/m2kdefaultListeScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/m2kdefaultListeScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/m2kdefaultListeScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/m2kdefaultListeScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -1513,9 +1513,9 @@ class m2kSerienABCAuswahl(Screen):
 	def __init__(self, session, m2kGotLink):
 		self.m2kGotLink = m2kGotLink
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/m2kAuswahl.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/m2kAuswahl.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/m2kAuswahl.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/m2kAuswahl.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -1577,9 +1577,9 @@ class m2kSerienABCListe(Screen):
 	def __init__(self, session, streamGenreLink):
 		self.session = session
 		self.streamGenreLink = streamGenreLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/m2kdefaultPageListeScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/m2kdefaultPageListeScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/m2kdefaultPageListeScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/m2kdefaultPageListeScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -1690,9 +1690,9 @@ class m2kSerienABCListeStaffeln(Screen):
 	def __init__(self, session, streamGenreLink):
 		self.session = session
 		self.streamGenreLink = streamGenreLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/m2kdefaultListeScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/m2kdefaultListeScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/m2kdefaultListeScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/m2kdefaultListeScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -1779,9 +1779,9 @@ class m2kSerienABCListeStaffelnFilme(Screen):
 	def __init__(self, session, streamGenreLink):
 		self.session = session
 		self.streamGenreLink = streamGenreLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/m2kdefaultListeScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/m2kdefaultListeScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/m2kdefaultListeScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/m2kdefaultListeScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

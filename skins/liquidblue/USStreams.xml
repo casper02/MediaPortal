@@ -1,6 +1,6 @@
 <!-- USStreams -->
 		<screen name="UStreams" position="center,center" size="1280,720" flags="wfNoBorder">
-    <ePixmap position="0,0" size="1280,720" zPosition="-1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/mpback.png" />
+    <ePixmap position="0,0" size="1280,720" zPosition="-1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/liquidblue/images/mpback.png" />
     <widget source="global.CurrentTime" render="Label" position="840,42" size="300,28" font="mediaportal; 26" halign="left" backgroundColor="#26181d20" transparent="1" foregroundColor="#00bbbbbb">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
@@ -12,8 +12,8 @@
     <!-- select screen -->
     <widget name="ContentTitle" position="55,190" size="850,25" backgroundColor="#26181d20" zPosition="5" foregroundColor="#00ffffff" font="mediaportal;22" halign="center" transparent="1" />
     <widget name="name" position="913,331" size="328,100" backgroundColor="#26181d20" transparent="1" zPosition="1" font="mediaportal;24" valign="center" halign="center" foregroundColor="#00ffffff" />
-    <widget name="streamList" position="55,240" size="850,300" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/sel.png" foregroundColor="#00bbbbbb" />
-    <widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/liquidblue/images/no_coverArt.png" position="917,439" size="320,240" transparent="1" alphatest="blend" />
+    <widget name="streamList" position="55,240" size="850,300" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/liquidblue/images/sel.png" foregroundColor="#00bbbbbb" />
+    <widget name="coverArt" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/liquidblue/images/no_coverArt.png" position="917,439" size="320,240" transparent="1" alphatest="blend" />
     <widget name="title" position="95,106" size="850,60" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="mediaportal;26" valign="center" halign="center" />
     <widget name="handlung" position="55,558" size="850,140" backgroundColor="#26181d20" transparent="1" font="mediaportal;18" valign="top" foregroundColor="#00ffffff" />
   </screen>

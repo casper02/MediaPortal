@@ -8,7 +8,7 @@ def moovizonGenreListEntry(entry):
 		
 def moovizonListEntry(entry):
 	#TYPE_TEXT, x, y, width, height, fnt, flags, string [, color, backColor, backColorSelected, borderWidth, borderColor])
-	png = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/images/%s.png" % entry[3]
+	png = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/%s.png" % entry[3]
 	if fileExists(png):
 		flag = LoadPixmap(png)
 		return [entry,

@@ -20,9 +20,9 @@ class SzeneStreamsGenreScreen(Screen):
 	
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/SzeneStreamsGenreScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/SzeneStreamsGenreScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/SzeneStreamsGenreScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/SzeneStreamsGenreScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -64,9 +64,9 @@ class SzeneStreamsFilmeListeScreen(Screen):
 	def __init__(self, session, streamGenreLink):
 		self.session = session
 		self.streamGenreLink = streamGenreLink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/SzeneStreamsFilmeListeScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/SzeneStreamsFilmeListeScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/SzeneStreamsFilmeListeScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/SzeneStreamsFilmeListeScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -206,9 +206,9 @@ class SzeneStreamsStreamListeScreen(Screen):
 		self.streamFilmLink = streamFilmLink
 		self.streamName = streamName
 
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/SzeneStreamsStreamListeScreen.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/SzeneStreamsStreamListeScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/SzeneStreamsStreamListeScreen.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/SzeneStreamsStreamListeScreen.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

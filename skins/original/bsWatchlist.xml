@@ -9,8 +9,8 @@
 				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
 			</widget>
 			<widget name="leftContentTitle" position="0,80" size="900,26" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="mediaportal;22" halign="center"/>
-			<widget name="streamlist" position="0,106" size="900,300" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/sel.png"/>
-			<widget name="stationIcon" position="10,415" size="107,150" transparent="1" alphatest="blend" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/no_coverArt.png"/>
-			<ePixmap position="637,576" size="36,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/red.png" alphatest="blend" backgroundColor="#00101214" />
+			<widget name="streamlist" position="0,106" size="900,300" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/sel.png"/>
+			<widget name="stationIcon" position="10,415" size="107,150" transparent="1" alphatest="blend" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/no_coverArt.png"/>
+			<ePixmap position="637,576" size="36,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/red.png" alphatest="blend" backgroundColor="#00101214" />
 			<eLabel text="delete " position="676,572" size="200,36" transparent="1" font="mediaportal; 18" backgroundColor="#00101214" foregroundColor="#00ffffff" valign="center" halign="left" zPosition="1" />
 	        </screen>

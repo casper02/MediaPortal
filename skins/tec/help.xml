@@ -1,6 +1,6 @@
 <!-- HelpScreen -->
 <screen name="HelpScreen" position="0,0" size="1280,720" flags="wfNoBorder">
-  <ePixmap position="0,0" size="1280,720" zPosition="-1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/mpback.png" />
+  <ePixmap position="0,0" size="1280,720" zPosition="-1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/mpback.png" />
   <widget source="global.CurrentTime" render="Label" position="840,42" size="300,28" font="mediaportal; 26" halign="left" backgroundColor="#26181d20" transparent="1" foregroundColor="#00555555">
     <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
   </widget>
@@ -9,26 +9,26 @@
   </widget>
   <widget source="session.VideoPicture" render="Pig" position="913,136" size="328,186" zPosition="3" backgroundColor="transparent" />
   <eLabel position="912,135" size="330,188" backgroundColor="#00ffffff" zPosition="0" name="Videoback" foregroundColor="#00ffffff" />
-  <ePixmap position="65,130" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />
+  <ePixmap position="65,130" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />
   <eLabel text="Menu" position="65,130" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
-	    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonglas.png" position="65,130" size="90,36" alphatest="blend" zPosition="2" />
-  <ePixmap position="65,180" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />
+	    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttonglas.png" position="65,130" size="90,36" alphatest="blend" zPosition="2" />
+  <ePixmap position="65,180" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />
   <eLabel text=" Help " position="65,180" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
-	    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonglas.png" position="65,180" size="90,36" alphatest="blend" zPosition="2" />
-  <ePixmap position="65,230" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />
+	    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttonglas.png" position="65,180" size="90,36" alphatest="blend" zPosition="2" />
+  <ePixmap position="65,230" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />
   <eLabel text=" Exit " position="65,230" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
-	    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonglas.png" position="65,230" size="90,36" alphatest="blend" zPosition="2" />
-  <ePixmap position="65,280" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />
+	    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttonglas.png" position="65,230" size="90,36" alphatest="blend" zPosition="2" />
+  <ePixmap position="65,280" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />
   <eLabel text="CH+" position="65,280" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
-	    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonglas.png" position="65,280" size="90,36" alphatest="blend" zPosition="2" />
-  <ePixmap position="65,330" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />
+	    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttonglas.png" position="65,280" size="90,36" alphatest="blend" zPosition="2" />
+  <ePixmap position="65,330" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />
   <eLabel text="CH-" position="65,330" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
-	    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonglas.png" position="65,330" size="90,36" alphatest="blend" zPosition="2" />
-  <ePixmap position="65,380" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttongreen.png" alphatest="blend" backgroundColor="#26181d20" />
+	    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttonglas.png" position="65,330" size="90,36" alphatest="blend" zPosition="2" />
+  <ePixmap position="65,380" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttongreen.png" alphatest="blend" backgroundColor="#26181d20" />
   <eLabel text="Page " position="65,380" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
-	    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/buttonglas.png" position="65,380" size="90,36" alphatest="blend" zPosition="2" />
+	    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttonglas.png" position="65,380" size="90,36" alphatest="blend" zPosition="2" />
   <!-- select screen -->
-   <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/setup.png" position="989,424" zPosition="1" size="176,200" alphatest="on" />
+   <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/setup.png" position="989,424" zPosition="1" size="176,200" alphatest="on" />
   <eLabel text="Setup" position="200,130" size="200,27" font="mediaportal;24" halign="left" foregroundColor="#00ffffff" transparent="1" backgroundColor="#26181d20" />
   <eLabel text="FAQ" position="200,180" size="100,27" font="mediaportal;24" halign="left" foregroundColor="#00ffffff" transparent="1" backgroundColor="#26181d20" />
   <eLabel text="Programm schliessen" position="200,230" size="300,27" font="mediaportal;24" halign="left" foregroundColor="#00ffffff" transparent="1" backgroundColor="#26181d20" />

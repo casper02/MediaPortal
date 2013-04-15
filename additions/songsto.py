@@ -9,9 +9,9 @@ class showSongstoGenre(Screen):
 	
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/showSongstoGenre.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/showSongstoGenre.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/showSongstoGenre.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/showSongstoGenre.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -81,9 +81,9 @@ class showSongstoAll(Screen, InfoBarBase, InfoBarSeek):
 		self.session = session
 		self.scLink = link
 		self.scGuiName = name
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/showSongstoAll.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/showSongstoAll.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/showSongstoAll.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/showSongstoAll.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -221,9 +221,9 @@ class showSongstoTop(Screen, InfoBarBase, InfoBarSeek):
 		self.session = session
 		self.scLink = link
 		self.scGuiName = name
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/showSongstoTop.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/showSongstoTop.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/showSongstoTop.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/showSongstoTop.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

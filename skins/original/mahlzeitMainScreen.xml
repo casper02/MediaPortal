@@ -9,14 +9,14 @@
 			<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
 		</widget>
 		<widget name="Vorspeisen" position="30,60" size="260,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="mediaportal;22" halign="center"/>
-		<widget name="vorspeisen" position="30,85" size="260,215" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/sel.png"/>
+		<widget name="vorspeisen" position="30,85" size="260,215" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/sel.png"/>
 		<widget name="Hauptspeisen" position="320,60" size="260,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="mediaportal;22" halign="center"/>
-		<widget name="hauptspeisen" position="320,85" size="260,215" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/sel.png"/>
+		<widget name="hauptspeisen" position="320,85" size="260,215" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/sel.png"/>
 		<widget name="Desserts" position="610,60" size="260,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="mediaportal;22" halign="center"/>
-		<widget name="desserts" position="610,85" size="260,215" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/sel.png"/>
+		<widget name="desserts" position="610,85" size="260,215" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/sel.png"/>
 		<widget name="Kuchen" position="30,325" size="260,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="mediaportal;22" halign="center"/>
-		<widget name="kuchen" position="30,350" size="260,215" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/sel.png"/>
+		<widget name="kuchen" position="30,350" size="260,215" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/sel.png"/>
 		<widget name="Weiteres" position="320,325" size="260,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="mediaportal;22" halign="center"/>
-		<widget name="weiteres" position="320,350" size="260,215" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/images/sel.png"/>
+		<widget name="weiteres" position="320,350" size="260,215" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/sel.png"/>
 		<widget name="name" position="0,580" size="900,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="mediaportal;28" valign="top" halign="center"/>
 	</screen>

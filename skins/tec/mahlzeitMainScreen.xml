@@ -1,6 +1,6 @@
 <!-- mahlzeit Genre -->
 <screen name="mahlzeit.tv" position="center,center" size="1280,720" flags="wfNoBorder">
-    <ePixmap position="20,0" size="1280,720" zPosition="-1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/mpback.png" />
+    <ePixmap position="20,0" size="1280,720" zPosition="-1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/mpback.png" />
     <widget source="global.CurrentTime" render="Label" position="840,42" size="300,28" font="mediaportal; 26" halign="left" backgroundColor="#26181d20" transparent="1" foregroundColor="#00555555">
       <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
     </widget>
@@ -11,15 +11,15 @@
     <eLabel position="912,135" size="330,188" backgroundColor="#00ffffff" zPosition="0" name="Videoback" foregroundColor="#00ffffff" />
     <!-- select screen -->
     <widget name="Vorspeisen" position="50,130" size="260,30" backgroundColor="#26181d20" zPosition="5" foregroundColor="#00ffffff" font="mediaportal; 25" halign="center" transparent="1" />
-		<widget name="vorspeisen" position="50,170" size="260,215" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/sel.png" foregroundColor="#00555555" />
+		<widget name="vorspeisen" position="50,170" size="260,215" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/sel.png" foregroundColor="#00555555" />
 		<widget name="Hauptspeisen" position="340,130" size="260,30" backgroundColor="#26181d20" zPosition="5" foregroundColor="#00ffffff" font="mediaportal; 25" halign="center" transparent="1" />
-		<widget name="hauptspeisen" position="340,170" size="260,215" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/sel.png" foregroundColor="#00555555" />
+		<widget name="hauptspeisen" position="340,170" size="260,215" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/sel.png" foregroundColor="#00555555" />
 		<widget name="Desserts" position="630,130" size="260,30" backgroundColor="#26181d20" zPosition="5" foregroundColor="#00ffffff" font="mediaportal; 25" halign="center" transparent="1" />
-		<widget name="desserts" position="630,170" size="260,215" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/sel.png" foregroundColor="#00555555" />
+		<widget name="desserts" position="630,170" size="260,215" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/sel.png" foregroundColor="#00555555" />
 		<widget name="Kuchen" position="50,430" size="260,30" backgroundColor="#26181d20" zPosition="5" foregroundColor="#00ffffff" font="mediaportal; 25" halign="center" transparent="1" />
-		<widget name="kuchen" position="50,470" size="260,215" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/sel.png" foregroundColor="#00555555" />
+		<widget name="kuchen" position="50,470" size="260,215" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/sel.png" foregroundColor="#00555555" />
 		<widget name="Weiteres" position="340,430" size="260,30" backgroundColor="#26181d20" zPosition="5" foregroundColor="#00ffffff" font="mediaportal; 25" halign="center" transparent="1" />
-		<widget name="weiteres" position="340,470" size="260,215" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/tec/images/sel.png" foregroundColor="#00555555" />
+		<widget name="weiteres" position="340,470" size="260,215" backgroundColor="#26181d20" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/sel.png" foregroundColor="#00555555" />
 		<widget name="title" position="913,356" size="328,100" backgroundColor="#26181d20" transparent="1" zPosition="1" font="mediaportal;24" valign="center" halign="center" foregroundColor="#00ffffff" />
 <!-- r1 -->
 <eLabel position="48,125" size="264,2" backgroundColor="#00ffffff" zPosition="0" foregroundColor="#00ffffff" />

@@ -20,9 +20,9 @@ class chMain(Screen, ConfigListScreen):
 	
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/chMain.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/chMain.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/chMain.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/chMain.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -75,9 +75,9 @@ class chFeatured(Screen, ConfigListScreen):
 	def __init__(self, session, chGotLink):
 		self.chGotLink = chGotLink
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/chFeatured.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/chFeatured.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/chFeatured.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/chFeatured.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -203,9 +203,9 @@ class chTVshows(Screen, ConfigListScreen):
 	def __init__(self, session, chGotLink):
 		self.chGotLink = chGotLink
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/chTVshows.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/chTVshows.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/chTVshows.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/chTVshows.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -331,9 +331,9 @@ class chTVshowsEpisode(Screen, ConfigListScreen):
 	def __init__(self, session, chGotLink):
 		self.chGotLink = chGotLink
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/chTVshowsEpisode.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/chTVshowsEpisode.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/chTVshowsEpisode.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/chTVshowsEpisode.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -420,9 +420,9 @@ class chStreams(Screen, ConfigListScreen):
 	def __init__(self, session, movielink):
 		self.session = session
 		self.movielink = movielink
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/chStreams.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/chStreams.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/chStreams.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/chStreams.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()

@@ -15,9 +15,9 @@ def mainListEntry(entry):
 class bsMain(Screen, ConfigListScreen):
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/bsMain.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/bsMain.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/bsMain.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/bsMain.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -68,9 +68,9 @@ class bsMain(Screen, ConfigListScreen):
 class bsSerien(Screen, ConfigListScreen):
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/bsSerien.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/bsSerien.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/bsSerien.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/bsSerien.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -130,7 +130,7 @@ class bsSerien(Screen, ConfigListScreen):
 			return
 		muTitle = self['streamlist'].getCurrent()[0][0]
 		muID = self['streamlist'].getCurrent()[0][1]
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/resources/bs_watchlist"
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/bs_watchlist"
 		if fileExists(path):
 			writePlaylist = open(path,"a")
 			writePlaylist.write('"%s" "%s"\n' % (muTitle, muID))
@@ -143,9 +143,9 @@ class bsSerien(Screen, ConfigListScreen):
 class bsWatchlist(Screen, ConfigListScreen):
 	def __init__(self, session):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/bsWatchlist.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/bsWatchlist.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/bsWatchlist.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/bsWatchlist.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -175,7 +175,7 @@ class bsWatchlist(Screen, ConfigListScreen):
 
 	def loadPlaylist(self):
 		self.streamList = []
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/resources/bs_watchlist"	
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/bs_watchlist"	
 		if fileExists(path):
 			readStations = open(path,"r")
 			for rawData in readStations.readlines():
@@ -204,9 +204,9 @@ class bsWatchlist(Screen, ConfigListScreen):
 			return
 		
 		selectedName = self['streamlist'].getCurrent()[0][0]
-		pathTmp = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/resources/bs_watchlist.tmp"
+		pathTmp = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/bs_watchlist.tmp"
 		writeTmp = open(pathTmp,"w")	
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/resources/bs_watchlist"
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/bs_watchlist"
 		if fileExists(path):
 			readStations = open(path,"r")
 			for rawData in readStations.readlines():
@@ -226,9 +226,9 @@ class bsWatchlist(Screen, ConfigListScreen):
 class bsStaffeln(Screen, ConfigListScreen):
 	def __init__(self, session, serienUrl):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/bsStaffeln.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/bsStaffeln.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/bsStaffeln.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/bsStaffeln.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -315,7 +315,7 @@ class bsStaffeln(Screen, ConfigListScreen):
 			return
 		muTitle = self['streamlist'].getCurrent()[0][0]
 		muID = self['streamlist'].getCurrent()[0][1]
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/resources/bs_watchlist"
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/bs_watchlist"
 		if fileExists(path):
 			writePlaylist = open(path,"a")
 			writePlaylist.write('"%s" "%s"\n' % (muTitle, muID))
@@ -328,9 +328,9 @@ class bsStaffeln(Screen, ConfigListScreen):
 class bsEpisoden(Screen, ConfigListScreen):
 	def __init__(self, session, serienUrl, bsStaffel):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/bsEpisoden.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/bsEpisoden.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/bsEpisoden.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/bsEpisoden.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
@@ -424,9 +424,9 @@ class bsStreams(Screen, ConfigListScreen):
 	
 	def __init__(self, session, serienUrl, title):
 		self.session = session
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/%s/bsStreams.xml" % config.mediaportal.skin.value
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/bsStreams.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
-			path = "/usr/lib/enigma2/python/Plugins/Extensions/mediaportal/skins/original/bsStreams.xml"
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/bsStreams.xml"
 		print path
 		with open(path, "r") as f:
 			self.skin = f.read()
