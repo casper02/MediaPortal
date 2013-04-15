@@ -1,8 +1,8 @@
 ##Thanks to Tristan Fischer for XBMC-API (sphere@dersphere.de)
-from Plugins.Extensions.mediaportal.resources.imports import *
-from Plugins.Extensions.mediaportal.resources.decrypt import *
+from Plugins.Extensions.MediaPortal.resources.imports import *
+from Plugins.Extensions.MediaPortal.resources.decrypt import *
 
-from Plugins.Extensions.mediaportal.resources.api import VuBox4PlayersApi, NetworkError, SYSTEMS
+from Plugins.Extensions.MediaPortal.resources.api import VuBox4PlayersApi, NetworkError, SYSTEMS
 
 api = VuBox4PlayersApi()
 

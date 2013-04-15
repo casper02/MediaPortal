@@ -1,4 +1,4 @@
-from Plugins.Extensions.mediaportal.resources.imports import *
+from Plugins.Extensions.MediaPortal.resources.imports import *
 
 def cinestreamListEntry(entry):
 	return [entry,

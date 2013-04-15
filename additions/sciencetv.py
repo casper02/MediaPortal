@@ -1,5 +1,5 @@
-﻿from Plugins.Extensions.mediaportal.resources.imports import *
-from Plugins.Extensions.mediaportal.resources.decrypt import *
+﻿from Plugins.Extensions.MediaPortal.resources.imports import *
+from Plugins.Extensions.MediaPortal.resources.decrypt import *
 
 STV_Version = "Science-Tv.com v0.91"
 

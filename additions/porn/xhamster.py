@@ -1,4 +1,4 @@
-from Plugins.Extensions.mediaportal.resources.imports import *
+from Plugins.Extensions.MediaPortal.resources.imports import *
 
 def xhamsterGenreListEntry(entry):
 	return [entry,

@@ -1,4 +1,4 @@
-from Plugins.Extensions.mediaportal.resources.imports import *
+from Plugins.Extensions.MediaPortal.resources.imports import *
 
 def putpattvGenreListEntry(entry):
 	return [entry,

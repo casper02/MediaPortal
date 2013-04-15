@@ -1,5 +1,5 @@
-﻿from Plugins.Extensions.mediaportal.resources.imports import *
-from Plugins.Extensions.mediaportal.resources.yt_url import *
+﻿from Plugins.Extensions.MediaPortal.resources.imports import *
+from Plugins.Extensions.MediaPortal.resources.yt_url import *
 
 HSC_Version = "HÖRSPIEL-Channels v0.93"
 

@@ -1,7 +1,7 @@
 from Components.config import config
 from Components.ScrollLabel import ScrollLabel
-from Plugins.Extensions.mediaportal.resources.imports import *
-from Plugins.Extensions.mediaportal.resources.yt_url import *
+from Plugins.Extensions.MediaPortal.resources.imports import *
+from Plugins.Extensions.MediaPortal.resources.yt_url import *
 
 def youtubeGenreEntry(entry):
 	return [entry,

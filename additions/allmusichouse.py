@@ -2,8 +2,8 @@
 
 import Queue
 import threading
-from Plugins.Extensions.mediaportal.resources.imports import *
-from Plugins.Extensions.mediaportal.resources.yt_url import *
+from Plugins.Extensions.MediaPortal.resources.imports import *
+from Plugins.Extensions.MediaPortal.resources.yt_url import *
 
 AMH_Version = "AllMusicHouse.de v0.97"
 
