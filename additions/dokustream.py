@@ -5,7 +5,7 @@ from Plugins.Extensions.MediaPortal.resources.yt_url import *
 import Queue
 import threading
 
-DS_Version = "Doku-Stream.org v0.94"
+DS_Version = "Doku-Stream.org v0.95"
 
 DS_siteEncoding = 'utf-8'
 
@@ -464,16 +464,20 @@ class DS_FilmListeScreen(Screen):
 		
 		if self.genreNEUESTE:
 			print "Specials Dokus suche..."
-			m=re.search('<ul class="lcp_catlist"(.*?)</ul>',data,re.S)
+			m=re.search('class="lcp_catlist"(.*?)</ul>',data,re.S)
+			#m=re.search('<ul class="lcp_catlist"(.*?)</ul>',data,re.S)
 		else:
 			print "Normal search.."
-			m=re.search('<div id="content-left">(.*?)<!-- end content-left -->',data,re.S)
+			#m=re.search('<div id="content-left">(.*?)<!-- end content-left -->',data,re.S)
+			m=re.search('id="content-left">(.*?)"box-left navigation">',data,re.S)
 			
 		if m:
 			if self.genreNEUESTE:
-				dokus = re.findall('<li><a href="(.*?)" title="(.*?)">', m.group(1))
+				#dokus = re.findall('<li><a href="(.*?)" title="(.*?)">', m.group(1))
+				dokus = re.findall('href="(.*?)".*?title="(.*?)">', m.group(1))
 			else:
-				dokus = re.findall('"post-title">.*?<a href="(.*?)".*?title="(.*?)">.*?<img src="(.*?)"', m.group(1), re.S)
+				#dokus = re.findall('"post-title">.*?<a href="(.*?)".*?title="(.*?)">.*?<img src="(.*?)"', m.group(1), re.S)
+				dokus = re.findall('"post-title">.*?<a.*?href="(.*?)".*?title="(.*?)">.*?<img.*?src="(.*?)"', m.group(1), re.S)
 		else:
 			dokus = None
 		
@@ -808,7 +812,8 @@ class DS_Streams(Screen, ConfigListScreen):
 		
 	def parseData(self, data):
 		print "parseData:"
-		m = re.search('<div id="content-left">(.*?)<!-- end content-left -->', data, re.S)
+		#m = re.search('<div id="content-left">(.*?)<!-- end content-left -->', data, re.S)
+		m = re.search('id="content-left">(.*?)class="nr_clear">', data, re.S)
 		if m:
 			#ldesc = re.findall('<p>(.*?</p>)',m.group(1),re.S)
 			ldesc = False
