@@ -3,7 +3,7 @@
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.yt_url import *
 
-YT_Version = "Youtube Search v0.90 (experimental)"
+YT_Version = "Youtube Search v0.91 (experimental)"
 
 YT_siteEncoding = 'utf-8'
 
@@ -54,7 +54,7 @@ class youtubeGenreScreen(Screen):
 		self['query'] = Label("")
 		self['Time'] = Label("Zeitbereich")
 		self['time'] = Label("")
-		self['Metalang'] = Label("Suchsprache")
+		self['Metalang'] = Label("Meta Sprache")
 		self['metalang'] = Label("")
 		self['Regionid'] = Label("Suchregion")
 		self['regionid'] = Label("")
@@ -148,9 +148,9 @@ class youtubeGenreScreen(Screen):
 		self.paramList = [
 			('Suchanfrage', self.paraQuery),
 			('Zeitbereich', self.paraTime),
-			('Suchsprache', self.paraMeta),
-			('Suchregion', self.paraRegionID)
+			('Meta Sprache', self.paraMeta),
 			#('Author', self.paraAuthor),
+			('Suchregion', self.paraRegionID)
 			#('Schlüsselworte', self.paraKey)
 			]
 			
@@ -281,7 +281,12 @@ class youtubeGenreScreen(Screen):
 				else:
 					c = ''
 					
-				genreurl = self.baseUrl+self.genreUrl[0]+c+'?'+tm+lr+qr+self.param_format+self.param_safesearch[0]
+				if self.param_author != '':
+					at = '&author=' + urllib.quote(self.param_author)
+				else:
+					at = ''
+					
+				genreurl = self.baseUrl+self.genreUrl[0]+c+'?'+tm+lr+qr+self.param_format+self.param_safesearch[0]+at
 			
 			#print "genreurl: ", genreurl
 			self.session.open(YT_ListScreen, genreurl, self.genreTitle)
