@@ -39,7 +39,7 @@ class youtubeGenreScreen(Screen):
 			"left"	: self.keyLeft,
 			"right"	: self.keyRight,
 			"red"	: self.keyRed,
-			"green"	: self.keyGreen,
+			#"green"	: self.keyGreen,
 			"yellow": self.keyYellow
 		}, -1)
 
@@ -240,11 +240,13 @@ class youtubeGenreScreen(Screen):
 		self.genreTitle = "%s%s%s" % (self.genreName[0],self.genreName[1],self.genreName[2])
 		self['name'].setText("Genre: "+self.genreTitle)
 		
+		"""
 		if self.genreSelected:
 			print "Genre selected"
 			self['F2'].setText("Start")
 		else:
 			self['F2'].setText("")
+		"""
 
 	def loadMenu(self):
 		print "Youtube:"
@@ -323,9 +325,10 @@ class youtubeGenreScreen(Screen):
 		self.menuIdx[self.menuLevel] = self['genreList'].getSelectedIndex()
 		self.setMenu(1)
 		
-		#if self.genreSelected:
-		#	print "Genre selected"
-		#	self['F2'].setText("Start")
+		if self.genreSelected:
+			print "Genre selected"
+			#self['F2'].setText("Start")
+			self.keyGreen()
 
 	def setMenu(self, levelIncr, menuInit=False):
 		print "setMenu: ",levelIncr
