@@ -485,9 +485,16 @@ class DS_FilmListeScreen(Screen):
 		if dokus:
 			print "Dokus found !"
 			if not self.pages:
-				m = re.findall('class=\'pages\'>Seite.*?von (.*?)</', data)
+				#m = re.findall('class=\'pages\'>Seite.*?von (.*?)</', data)
+				m = re.findall('class=\'page larger\'>(.*?)</', data)
 				if m:
-					self.pages = int(m[0])
+					pages = 0
+					for i in m:
+						x = int(i)
+						if x > pages:
+							pages = x
+							
+					self.pages = pages
 				else:
 					self.pages = 1
 				self.page = 1
