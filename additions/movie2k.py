@@ -72,6 +72,7 @@ class m2kGenreScreen(Screen):
 		self['coverArt'] = Pixmap()
 		
 		self.genreliste = []
+		self.searchStr = ''
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.chooseMenuList.l.setItemHeight(25)
@@ -91,6 +92,7 @@ class m2kGenreScreen(Screen):
 			self.genreliste.append(("Letzte Updates (Serien)", "http://www.movie2k.to/tvshows_featured.php"))
 			self.genreliste.append(("Alle Filme A-Z", "FilmeAZ"))
 			self.genreliste.append(("Alle Serien A-Z", "SerienAZ"))
+			self.genreliste.append(("Suche", "http://www.movie2k.com/movies.php?list=search"))
 			self.genreliste.append(("Abenteuer", "http://movie2k.to/movies-genre-4-"))
 			self.genreliste.append(("Action", "http://movie2k.to/movies-genre-1-"))
 			self.genreliste.append(('Biografie', 'http://movie2k.to/movies-genre-6-'))
@@ -140,13 +142,179 @@ class m2kGenreScreen(Screen):
 			self.session.open(m2kSerienABCAuswahl, streamGenreLink)
 		elif streamGenreName == "Alle Filme A-Z":
 			self.session.open(m2kSerienABCAuswahl, streamGenreLink)
+		elif streamGenreLink == 'http://www.movie2k.com/movies.php?list=search':
+			self.streamGenreLink = streamGenreLink
+			self.session.openWithCallback(self.searchCallback, VirtualKeyBoard, title = (_("Suchbegriff eingeben")), text = " ")
 		elif streamGenreName == "Letzte Updates (XXX)":
 			self.session.open(m2kXXXUpdateFilmeListeScreen, streamGenreLink, '')
 		elif streamGenreName == "Pornos":
 			self.session.open(m2kKinoAlleFilmeListeScreen, streamGenreLink)
 		else:
 			self.session.open(m2kKinoAlleFilmeListeScreen, streamGenreLink)
+			
+	def searchCallback(self, callbackStr):
+		if callbackStr is not None:
+			self.searchStr = callbackStr
+			url = self.streamGenreLink
+			self.searchData = self.searchStr
+			self.session.open(m2kSucheAlleFilmeListeScreen, url, self.searchData)
+			
+	def keyCancel(self):
+		self.close()
+		
+class m2kSucheAlleFilmeListeScreen(Screen):
+	
+	def __init__(self, session, searchUrl, searchData):
+		self.session = session
+		self.searchUrl = searchUrl
+		self.searchData = searchData
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/m2kdefaultPageListeScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/m2kdefaultPageListeScreen.xml"
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
+		Screen.__init__(self, session)
+		
+		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions"], {
+			"ok"    : self.keyOK,
+			"cancel": self.keyCancel,
+			"up" : self.keyUp,
+			"down" : self.keyDown,
+			"right" : self.keyRight,
+			"left" : self.keyLeft,
+			"nextBouquet" : self.keyPageUp,
+			"prevBouquet" : self.keyPageDown,
+			"green" : self.keyPageNumber,
+			"red" : self.keyTMDbInfo
+		}, -1)
 
+		self['title'] = Label("movie2k.to")
+		self['name'] = Label("Filme Auswahl")
+		self['handlung'] = Label("")
+		self['coverArt'] = Pixmap()
+		self.keyLocked = True
+		self.filmliste = []
+		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
+		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
+		self.chooseMenuList.l.setItemHeight(25)
+		self['filmList'] = self.chooseMenuList
+		self.page = 1
+		self['page'] = Label("1")
+		self.onLayoutFinish.append(self.loadPage)
+
+	def loadPage(self):
+		url = self.searchUrl
+		sData = self.searchData
+		getPage(url,method='POST',postdata=urllib.urlencode({'search':sData}),headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
+
+	def dataError(self, error):
+		print error
+
+	def loadPageData(self, data):
+		kino = re.findall('<TR id="coverPreview(.*?)">.*?<a href="(.*?)">(.*?)     ', data, re.S)
+		if kino:
+			self.filmliste = []
+			for image, teil_url, title in kino:
+				url = '%s%s' % ('http://www.movie2k.to/', teil_url)
+				print title
+				self.filmliste.append((decodeHtml(title), url, image))
+			self.chooseMenuList.setList(map(m2kFilmListEntry, self.filmliste))
+			self.keyLocked = False
+			self['page'].setText(str(self.page))
+
+	def loadPic(self):
+		url = self['filmList'].getCurrent()[0][1]
+		getPage(url, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPicData).addErrback(self.dataError)
+		
+	def loadPicData(self, data):
+		filmdaten = re.findall('<div style="float:left">.*?<img src="(.*?)".*?<div class="moviedescription">(.*?)</div>', data, re.S)
+		if filmdaten:
+			streamPic, handlung = filmdaten[0]
+			downloadPage(streamPic, "/tmp/Icon.jpg").addCallback(self.ShowCover)
+			self['handlung'].setText(decodeHtml(handlung))
+		
+	def showHandlung(self, data):
+		handlung = re.findall('<div class="moviedescription">(.*?)<', data, re.S)
+		if handlung:
+			handlung = re.sub(r"\s+", " ", handlung[0])
+			self['handlung'].setText(decodeHtml(handlung))
+		else:
+			self['handlung'].setText("Keine infos gefunden.")
+			
+	def ShowCover(self, picData):
+		if fileExists("/tmp/Icon.jpg"):
+			self['coverArt'].instance.setPixmap(None)
+			self.scale = AVSwitch().getFramebufferScale()
+			self.picload = ePicLoad()
+			size = self['coverArt'].instance.size()
+			self.picload.setPara((size.width(), size.height(), self.scale[0], self.scale[1], False, 1, "#FF000000"))
+			if self.picload.startDecode("/tmp/Icon.jpg", 0, 0, False) == 0:
+				ptr = self.picload.getData()
+				if ptr != None:
+					self['coverArt'].instance.setPixmap(ptr.__deref__())
+					self['coverArt'].show()
+					del self.picload
+
+	def keyPageNumber(self):
+		self.session.openWithCallback(self.callbackkeyPageNumber, VirtualKeyBoard, title = (_("Seitennummer eingeben")), text = str(self.page))
+
+	def callbackkeyPageNumber(self, answer):
+		if answer is not None:
+			self.page = int(answer)
+			self.loadPage()
+
+	def keyOK(self):
+		if self.keyLocked:
+			return
+		streamName = self['filmList'].getCurrent()[0][0]
+		streamLink = self['filmList'].getCurrent()[0][1]
+		self.session.open(m2kStreamListeScreen, streamLink, streamName, "movie")
+
+	def keyTMDbInfo(self):
+		if TMDbPresent:
+			title = self['filmList'].getCurrent()[0][0]
+			self.session.open(TMDbMain, title)
+
+	def keyLeft(self):
+		if self.keyLocked:
+			return
+		self['filmList'].pageUp()
+
+		
+	def keyRight(self):
+		if self.keyLocked:
+			return
+		self['filmList'].pageDown()
+
+		
+	def keyUp(self):
+		if self.keyLocked:
+			return
+		self['filmList'].up()
+
+	def keyDown(self):
+		if self.keyLocked:
+			return
+		self['filmList'].down()
+
+	def keyPageDown(self):
+		print "PageDown"
+		if self.keyLocked:
+			return
+		if not self.page < 1:
+			self.page -= 1
+			self.loadPage()
+			
+	def keyPageUp(self):
+		print "PageUp"
+		if self.keyLocked:
+			return
+		self.page += 1 
+		self.loadPage()
+			
 	def keyCancel(self):
 		self.close()
 
