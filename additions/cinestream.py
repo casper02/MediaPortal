@@ -52,7 +52,7 @@ class cinestreamFilmListeScreen(Screen):
 		self['F3'].hide()
 		self['F4'].hide()
 		self['coverArt'] = Pixmap()
-		self['Page'] = Label("1")
+		self['Page'] = Label("Page")
 		self['page'] = Label("")
 		self['handlung'] = Label("")
 		
@@ -70,16 +70,16 @@ class cinestreamFilmListeScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
 		
 	def loadPageData(self, data):
-		countp = re.findall('<span class="nav_ext">...</span> <a href="http://cinestream.cc/page/.*?/">(.*?)</a></div>', data, re.S)
+		lastparse = re.search('class="pagesList"(.*?)class="turn"', data, re.S)
+		countp = re.findall('href=.*>([0-9]+)<', lastparse.group(1), re.S)
 		if countp:
-			self['page'].setText(countp[0])
+			self['page'].setText(str(self.page) + " / " + countp[0])
 		movies = re.findall('<h2 class="newsTitle"><a href="(http://cinestream.cc/news/.*?)">(.*?)</a></h2>.*?<div align="center"><span style="font-size: 18pt;".*?</span><br/><img src="(.*?)" alt="" width="256" height="340" border="0"/><br/>(.*?)<', data, re.S)
 		if movies:
 			self.filmliste = []
 			for url,title,image,handlung in movies:
 				self.filmliste.append((title,url,image,decodeHtml(handlung)))
 			self.chooseMenuList.setList(map(cinestreamListEntry, self.filmliste))
-			self['Page'].setText(str(self.page)+" von")
 			self.loadPic()
 			self.keyLocked = False
 
