@@ -5,7 +5,7 @@ from Plugins.Extensions.MediaPortal.resources.yt_url import *
 import Queue
 import threading
 
-DS_Version = "Doku-Stream.org v0.95"
+DS_Version = "Doku-Stream.org v0.96"
 
 DS_siteEncoding = 'utf-8'
 
@@ -89,7 +89,7 @@ class show_DS_Genre(Screen):
 		
 		self.genreMenu = [
 			[
-			("Neueste Dokus", "/"),
+			("Neueste Dokus", "/neuste-dokus"),
 			("Doku Empfehlungen", "/tag/empfehlung"),
 			("Geschichte", "/zeitgeschichte"),
 			("Gesellschaft", "/gesellschaft"),
@@ -409,7 +409,8 @@ class DS_FilmListeScreen(Screen):
 		self.keckse = {}
 		self.page = 0
 		self.pages = 0;
-		self.genreNEUESTE = re.match(".*?Neueste Dokus",self.genreName)
+		#self.genreNEUESTE = re.match(".*?Neueste Dokus",self.genreName)
+		self.genreNEUESTE = False
 		self.genreEMPFEHLUNG = re.match(".*?Doku Empfehlung",self.genreName)
 		self.genreSpecials = self.genreNEUESTE or self.genreEMPFEHLUNG
 
