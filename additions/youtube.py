@@ -3,7 +3,7 @@
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.yt_url import *
 
-YT_Version = "Youtube Search v0.91 (experimental)"
+YT_Version = "Youtube Search v0.92 (experimental)"
 
 YT_siteEncoding = 'utf-8'
 
@@ -58,13 +58,21 @@ class youtubeGenreScreen(Screen):
 		self['metalang'] = Label("")
 		self['Regionid'] = Label("Suchregion")
 		self['regionid'] = Label("")
-		self['Author'] = Label("")
+		self['Author'] = Label("Uploader")
 		self['author'] = Label("")
 		self['Keywords'] = Label("")
 		self['keywords'] = Label("")
 		self['Parameter'] = Label("Parameter")
 		self['ParameterToEdit'] = Label("Edit:")
 		self['parametertoedit'] = Label("")
+		self['3D'] = Label("3D Suche")
+		self['3d'] = Label("")
+		self['Duration'] = Label("Laufzeit")
+		self['duration'] = Label("")
+		self['Reserve1'] = Label("")
+		self['reserve1'] = Label("")
+		self['Reserve2'] = Label("")
+		self['reserve2'] = Label("")
 		
 		self.param_qr = ""
 		self.param_lr_idx = 0
@@ -74,6 +82,8 @@ class youtubeGenreScreen(Screen):
 		self.param_meta_idx = 0
 		self.paramListIdx = 0
 		self.param_author = ""
+		self.param_3d_idx = 0
+		self.param_duration_idx = 0
 		
 		self.menuLevel = 0
 		self.menuMaxLevel = 2
@@ -130,8 +140,8 @@ class youtubeGenreScreen(Screen):
 			]
 
 		self.param_metalang = [
-			('Deutsch', '&lr=de'),
 			('Englisch', '&lr=en'),
+			('Deutsch', '&lr=de'),
 			('Französisch', '&lr=fr'),
 			('Italienisch', '&lr=it'),
 			('Alle', '')
@@ -139,17 +149,31 @@ class youtubeGenreScreen(Screen):
 			
 		self.param_regionid = [
 			('Ganze Welt', ''),
-			('Deutschland', '/DE'),
 			('England', '/EN'),
+			('Deutschland', '/DE'),
 			('Frankreich', '/FR'),
 			('Italien', '/IT')
 			]
 			
+		self.param_duration = [
+			('Alle', ''),
+			('< 4 Min', '&duration=short'),
+			('4..20 Min', '&duration=medium'),
+			('> 20 Min', '&duration=long')
+			]
+
+		self.param_3d = [
+			('AUS', ''),
+			('EIN', '&3d=true')
+			]
+
 		self.paramList = [
 			('Suchanfrage', self.paraQuery),
 			('Zeitbereich', self.paraTime),
 			('Meta Sprache', self.paraMeta),
-			#('Author', self.paraAuthor),
+			('Uploader', self.paraAuthor),
+			('3D Suche', self.para3D),
+			('Laufzeit', self.paraDuration),
 			('Suchregion', self.paraRegionID)
 			#('Schlüsselworte', self.paraKey)
 			]
@@ -191,6 +215,16 @@ class youtubeGenreScreen(Screen):
 		if self.param_time_idx not in range(0, len(self.param_time)):
 			self.param_time_idx = 0
 		
+	def para3D(self):
+		self.param_3d_idx += 1
+		if self.param_3d_idx not in range(0, len(self.param_3d)):
+			self.param_3d_idx = 0
+		
+	def paraDuration(self):
+		self.param_duration_idx += 1
+		if self.param_duration_idx not in range(0, len(self.param_duration)):
+			self.param_duration_idx = 0
+		
 	def paraMeta(self):
 		self.param_meta_idx += 1
 		if self.param_meta_idx not in range(0, len(self.param_metalang)):
@@ -222,6 +256,8 @@ class youtubeGenreScreen(Screen):
 		self['time'].setText(self.param_time[self.param_time_idx][0])
 		self['metalang'].setText(self.param_metalang[self.param_meta_idx][0])
 		self['regionid'].setText(self.param_regionid[self.param_regionid_idx][0])
+		self['3d'].setText(self.param_3d[self.param_3d_idx][0])
+		self['duration'].setText(self.param_duration[self.param_duration_idx][0])
 		self['author'].setText(self.param_author)
 		self['keywords'].setText(self.param_kw)
 		self['parametertoedit'].setText(self.paramList[self.paramListIdx][0])
@@ -267,14 +303,14 @@ class youtubeGenreScreen(Screen):
 			tm = self.param_time[self.param_time_idx][1]
 			lr = self.param_metalang[self.param_meta_idx][1]
 			regionid = self.param_regionid[self.param_regionid_idx][1]
-			#at = '&author='+self.param_author
-			#self.param_kw
+			_3d = self.param_3d[self.param_3d_idx][1]
+			dura = self.param_duration[self.param_duration_idx][1]
 			
 			if re.match('Standard', self.genreTitle):
 				stdGenre = self.genreUrl[2]
 				if stdGenre != '':
 					stdGenre = '_'+stdGenre
-				genreurl = self.baseUrl+self.genreUrl[0]+regionid+self.genreUrl[1]+stdGenre+'?'+tm+lr+qr+self.param_format+self.param_safesearch[0]
+				genreurl = self.baseUrl+self.genreUrl[0]+regionid+self.genreUrl[1]+stdGenre+'?'+tm+lr+qr+self.param_format+self.param_safesearch[0]+_3d+dura
 			else:
 				if self.genreUrl[1] != '':
 					c = '/-/'+self.genreUrl[1]
@@ -286,7 +322,7 @@ class youtubeGenreScreen(Screen):
 				else:
 					at = ''
 					
-				genreurl = self.baseUrl+self.genreUrl[0]+c+'?'+tm+lr+qr+self.param_format+self.param_safesearch[0]+at
+				genreurl = self.baseUrl+self.genreUrl[0]+c+'?'+tm+lr+qr+self.param_format+self.param_safesearch[0]+at+_3d+dura
 			
 			#print "genreurl: ", genreurl
 			self.session.open(YT_ListScreen, genreurl, self.genreTitle)

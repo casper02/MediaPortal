@@ -26,6 +26,14 @@
     <widget name="regionid" position="180,545" size="200,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="left" zPosition="0" />
     <widget name="Author" position="20,570" size="150,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="right" zPosition="0" foregroundColor="#00555556" />
     <widget name="author" position="180,570" size="200,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="left" zPosition="0" />
+    <widget name="3D" position="400,495" size="150,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="right" zPosition="0" foregroundColor="#00555556" />
+    <widget name="3d" position="560,495" size="200,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="left" zPosition="0" />
+    <widget name="Duration" position="400,520" size="150,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="right" zPosition="0" foregroundColor="#00555556" />
+    <widget name="duration" position="560,520" size="200,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="left" zPosition="0" />
+    <widget name="Reserve1" position="400,545" size="150,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="right" zPosition="0" foregroundColor="#00555556" />
+    <widget name="reserve1" position="560,545" size="200,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="left" zPosition="0" />
+    <widget name="Reserve2" position="400,545" size="150,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="right" zPosition="0" foregroundColor="#00555556" />
+    <widget name="reserve2" position="560,545" size="200,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="left" zPosition="0" />
     <ePixmap pixmap="~/original/images/red.png" position="20,597" size="35,27" alphatest="blend" />
     <ePixmap pixmap="~/original/images/green.png" position="165,597" size="35,27" alphatest="blend" />
     <ePixmap pixmap="~/original/images/yellow.png" position="310,597" size="35,27" alphatest="blend" />
