@@ -805,11 +805,11 @@ class kxNeuesteSerien(Screen):
 		muTitle = self['streamlist'].getCurrent()[0][0]
 		muID = self['streamlist'].getCurrent()[0][1]
 		muLang = self['streamlist'].getCurrent()[0][4]
-		#path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/kx_watchlist"
-		if not fileExists(config.mediaportal.watchlistpath+"resources/kx_watchlist"):
-			os.system("touch "+config.mediaportal.watchlistpath+"resources/kx_watchlist")
-		if fileExists(config.mediaportal.watchlistpath+"resources/kx_watchlist"):
-			writePlaylist = open(config.mediaportal.watchlistpath+"resources/kx_watchlist","a")
+
+		if not fileExists(config.mediaportal.watchlistpath.value+"kx_watchlist"):
+			os.system("touch "+config.mediaportal.watchlistpath.value+"kx_watchlist")
+		if fileExists(config.mediaportal.watchlistpath.value+"kx_watchlist"):
+			writePlaylist = open(config.mediaportal.watchlistpath.value+"kx_watchlist","a")
 			writePlaylist.write('"%s" "%s" "%s" "0"\n' % (muTitle, muID, muLang))
 			writePlaylist.close()
 			message = self.session.open(MessageBox, _("Serie wurde zur watchlist hinzugefuegt."), MessageBox.TYPE_INFO, timeout=3)
@@ -1043,10 +1043,10 @@ class kxSerienABCpage(Screen):
 		muID = self['streamlist'].getCurrent()[0][1]
 		muLang = self['streamlist'].getCurrent()[0][4]
 		#path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/kx_watchlist"
-		if not fileExists(config.mediaportal.watchlistpath+"resources/kx_watchlist"):
-			os.system("touch "+config.mediaportal.watchlistpath+"resources/kx_watchlist")
-		if fileExists(config.mediaportal.watchlistpath+"resources/kx_watchlist"):
-			writePlaylist = open(config.mediaportal.watchlistpath+"resources/kx_watchlist","a")
+		if not fileExists(config.mediaportal.watchlistpath.value+"kx_watchlist"):
+			os.system("touch "+config.mediaportal.watchlistpath.value+"kx_watchlist")
+		if fileExists(config.mediaportal.watchlistpath.value+"kx_watchlist"):
+			writePlaylist = open(config.mediaportal.watchlistpath.value+"kx_watchlist","a")
 			writePlaylist.write('"%s" "%s" "%s" "0"\n' % (muTitle, muID, muLang))
 			writePlaylist.close()
 			message = self.session.open(MessageBox, _("Serie wurde zur watchlist hinzugefuegt."), MessageBox.TYPE_INFO, timeout=3)
@@ -1103,12 +1103,12 @@ class kxEpisoden(Screen):
 	
 		self.watched_liste = []
 		self.mark_last_watched = []
-		if not fileExists(self.plugin_path+"/resources/kx_watched"):
-			os.system("touch "+self.plugin_path+"/resources/kx_watched")
-		if fileExists(self.plugin_path+"/resources/kx_watched"):
-			leer = os.path.getsize(self.plugin_path+"/resources/kx_watched")
+		if not fileExists(config.mediaportal.watchlistpath.value+"kx_watched"):
+			os.system("touch "+config.mediaportal.watchlistpath.value+"kx_watched")
+		if fileExists(config.mediaportal.watchlistpath.value+"kx_watched"):
+			leer = os.path.getsize(config.mediaportal.watchlistpath.value+"kx_watched")
 			if not leer == 0:
-				self.updates_read = open(self.plugin_path+"/resources/kx_watched" , "r")
+				self.updates_read = open(config.mediaportal.watchlistpath.value+"kx_watched" , "r")
 				for lines in sorted(self.updates_read.readlines()):
 					line = re.findall('"(.*?)"', lines)
 					if line:
@@ -1272,8 +1272,8 @@ class kxWatchlist(Screen):
 
 	def loadPlaylist(self):
 		self.streamList = []
-		if fileExists(config.mediaportal.watchlistpath+"resources/kx_watchlist"):
-			readStations = open(config.mediaportal.watchlistpath+"resources/kx_watchlist","r")
+		if fileExists(config.mediaportal.watchlistpath.value+"kx_watchlist"):
+			readStations = open(config.mediaportal.watchlistpath.value+"kx_watchlist","r")
 			for rawData in readStations.readlines():
 				data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
 				if data:
@@ -1289,11 +1289,11 @@ class kxWatchlist(Screen):
 		self.count = len(self.streamList)
 		self.counting = 0
 		
-		if fileExists(config.mediaportal.watchlistpath+"resources/kx_watchlist.tmp"):
-			self.write_tmp = open(config.mediaportal.watchlistpath+"resources/kx_watchlist.tmp" , "a")
+		if fileExists(config.mediaportal.watchlistpath.value+"kx_watchlist.tmp"):
+			self.write_tmp = open(config.mediaportal.watchlistpath.value+"kx_watchlist.tmp" , "a")
 			self.write_tmp.truncate(0)
 		else:
-			self.write_tmp = open(config.mediaportal.watchlistpath+"resources/kx_watchlist.tmp" , "a")
+			self.write_tmp = open(config.mediaportal.watchlistpath.value+"kx_watchlist.tmp" , "a")
 					
 		if len(self.streamList) != 0:
 			self.keyLocked = True
@@ -1334,7 +1334,7 @@ class kxWatchlist(Screen):
 		if self.counting == self.count:
 			print "update done."
 			self.write_tmp.close()
-			shutil.move(config.mediaportal.watchlistpath+"resources/kx_watchlist.tmp", config.mediaportal.watchlistpath+"resources/kx_watchlist")
+			shutil.move(config.mediaportal.watchlistpath.value+"kx_watchlist.tmp", config.mediaportal.watchlistpath.value+"kx_watchlist")
 	
 	def keyOK(self):
 		exist = self['streamlist'].getCurrent()
@@ -1352,9 +1352,9 @@ class kxWatchlist(Screen):
 		
 		selectedName = self['streamlist'].getCurrent()[0][0]
 
-		writeTmp = open(config.mediaportal.watchlistpath+"resources/kx_watchlist.tmp","w")
-		if fileExists(config.mediaportal.watchlistpath+"resources/kx_watchlist"):
-			readStations = open(config.mediaportal.watchlistpath+"resources/kx_watchlist","r")
+		writeTmp = open(config.mediaportal.watchlistpath.value+"kx_watchlist.tmp","w")
+		if fileExists(config.mediaportal.watchlistpath.value+"kx_watchlist"):
+			readStations = open(config.mediaportal.watchlistpath.value+"kx_watchlist","r")
 			for rawData in readStations.readlines():
 				data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
 				if data:
@@ -1363,7 +1363,7 @@ class kxWatchlist(Screen):
 						writeTmp.write('"%s" "%s" "%s" "%s"\n' % (stationName, stationLink, stationLang, stationTotaleps))
 			readStations.close()
 			writeTmp.close()
-			shutil.move(config.mediaportal.watchlistpath+"resources/kx_watchlist.tmp", config.mediaportal.watchlistpath+"resources/kx_watchlist")
+			shutil.move(config.mediaportal.watchlistpath.value+"kx_watchlist.tmp", config.mediaportal.watchlistpath.value+"kx_watchlist")
 			self.loadPlaylist()
 				
 	def keyCancel(self):
@@ -1468,13 +1468,13 @@ class kxStreams(Screen):
 	def playfile(self, stream_url):
 		if stream_url != None:
 			print stream_url
-			if not fileExists(self.plugin_path+"/resources/kx_watched"):
-				os.system("touch "+self.plugin_path+"/resources/kx_watched")
+			if not fileExists(config.mediaportal.watchlistpath.value+"kx_watched"):
+				os.system("touch "+config.mediaportal.watchlistpath.value+"kx_watched")
 				
 			self.update_liste = []
-			leer = os.path.getsize(self.plugin_path+"/resources/kx_watched")
+			leer = os.path.getsize(config.mediaportal.watchlistpath.value+"kx_watched")
 			if not leer == 0:
-				self.updates_read = open(self.plugin_path+"/resources/kx_watched" , "r")
+				self.updates_read = open(config.mediaportal.watchlistpath.value+"kx_watched" , "r")
 				for lines in sorted(self.updates_read.readlines()):
 					line = re.findall('"(.*?)"', lines)
 					if line:
@@ -1482,7 +1482,7 @@ class kxStreams(Screen):
 						self.update_liste.append("%s" % (line[0]))
 				self.updates_read.close()
 				
-				updates_read2 = open(self.plugin_path+"/resources/kx_watched" , "a")
+				updates_read2 = open(config.mediaportal.watchlistpath.value+"kx_watched" , "a")
 				check = ("%s" % self.stream_name)
 				if not check in self.update_liste:
 					print "[kinox] update add: %s" % (self.stream_name)
@@ -1491,7 +1491,7 @@ class kxStreams(Screen):
 				else:
 					print "[kinox] dupe %s" % (self.stream_name)
 			else:
-				updates_read3 = open(self.plugin_path+"/kx_watched" , "a")
+				updates_read3 = open(config.mediaportal.watchlistpath.value+"kx_watched" , "a")
 				print "[kinox] update add: %s" % (self.stream_name)
 				updates_read3.write('"%s"\n' % (self.stream_name))
 				updates_read3.close()
