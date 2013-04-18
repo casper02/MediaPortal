@@ -8,12 +8,14 @@
 			<widget source="global.CurrentTime" render="Label" position="450,20" size="400,55" backgroundColor="#18101214" transparent="1" zPosition="1" font="mediaportal;16" valign="center" halign="right">
 				<convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
 			</widget>
-			<widget name="leftContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="mediaportal;22" halign="center"/>
-			<widget name="streamlist" position="0,85" size="900,325" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/sel.png"/>
+			<widget name="leftContentTitle" position="0,60" size="900,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="mediaportal;22" halign="center" />
+			<widget name="streamlist" position="0,85" size="900,325" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/sel.png" />
 			<eLabel position="215,460" size="675,2" backgroundColor="#00555556" />
 			<widget name="stationIcon" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
 			<widget name="name" position="230,420" size="520,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="mediaportal;26" valign="top" />
 			<widget name="handlung" position="205,473" size="680,140" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="top" />
-            <ePixmap position="637,622" size="36,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/red.png" alphatest="blend" backgroundColor="#00101214" />
-			<eLabel text="delete" position="676,618" size="200,36" transparent="1" font="mediaportal; 18" backgroundColor="#00101214" foregroundColor="#00ffffff" valign="center" halign="left" zPosition="1" />			
-			</screen>
+            <ePixmap position="697,622" size="36,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/red.png" alphatest="blend" backgroundColor="#00101214" />
+			<eLabel text="delete " position="736,618" size="150,36" transparent="1" font="mediaportal; 18" backgroundColor="#00101214" foregroundColor="#00ffffff" valign="center" halign="left" zPosition="1" />
+            <ePixmap position="487,622" size="36,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/buttongrey.png" alphatest="blend" backgroundColor="#00101214" />
+			<eLabel text="Info/EPG" position="526,618" size="150,36" transparent="1" font="mediaportal; 18" backgroundColor="#00101214" foregroundColor="#00ffffff" valign="center" halign="left" zPosition="1" />			
+		</screen>
