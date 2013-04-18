@@ -68,6 +68,7 @@ class showIStreamGenre(Screen):
 		self['F3'] = Label("")
 		self['F4'] = Label("")
 		
+		self.param_search = ""
 		self.keyLocked = True
 		self.genreListe = []
 		self.keckse = {}
@@ -84,7 +85,9 @@ class showIStreamGenre(Screen):
 		if self.mode == "porn":
 			Genre = [("Porn", "http://istream.ws/c/porn/page/")]
 		else:
-			Genre = [("Kino", "http://istream.ws/c/filme/kino/page/"),
+			Genre = [
+				("Suche...", "http://istream.ws/?s=%s"),
+				("Kino", "http://istream.ws/c/filme/kino/page/"),
 				("Neue Filme", "http://istream.ws/page/"),
 				("Alle Filme", "http://istream.ws/c/filme/page/"),
 				("Abenteuer", "http://istream.ws/c/filme/abenteuer/page/"),
@@ -123,13 +126,36 @@ class showIStreamGenre(Screen):
 			self.chooseMenuList.setList(map(IStreamGenreListEntry, self.genreListe))
 		self.keyLocked = False
 
+	
+	def cb_Search(self, callback = None, entry = None):
+		if callback != None:
+			self.param_search = callback.strip()
+			words = re.split('[^a-zA-Z0-9äÄöÖüÜß]+', self.param_search)
+			s = ""
+			j = len(words)
+			i = 0
+			for word in words:
+				i += 1
+				if word != '':
+					s += urllib.quote(word)
+				if i < (j-1):
+					s += '+'
+					
+			genreName = 'Videosuche: ' + self.param_search
+			genreLink = self['genreList'].getCurrent()[0][1] % s
+			print genreLink
+			self.session.open(IStreamFilmListeScreen, genreLink, genreName)
+		
 	def keyOK(self):
 		if self.keyLocked:
 			return
 		genreName = self['genreList'].getCurrent()[0][0]
 		genreLink = self['genreList'].getCurrent()[0][1]
 		print genreLink
-		self.session.open(IStreamFilmListeScreen, genreLink, genreName)
+		if re.match('.*?Suche...',genreName):
+			self.session.openWithCallback(self.cb_Search, VirtualKeyBoard, title = (_("Suchanfrage")), text = self.param_search)
+		else:
+			self.session.open(IStreamFilmListeScreen, genreLink, genreName)
 		
 	def keyCancel(self):
 		self.close()
@@ -223,6 +249,7 @@ class IStreamFilmListeScreen(Screen):
 		self.page = 0
 		self.pages = 0;
 		self.neueFilme = re.match('.*?Neue Filme',self.genreName)
+		self.sucheFilme = re.match('.*?Videosuche',self.genreName)
 		self.setGenreStrTitle()
 		
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -233,7 +260,7 @@ class IStreamFilmListeScreen(Screen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def setGenreStrTitle(self):
-		if not self.neueFilme:
+		if not self.neueFilme and not self.sucheFilme:
 			if not self.sortOrder:
 				self.sortOrderStrGenre = self.sortOrderStrAZ
 			else:
@@ -244,10 +271,14 @@ class IStreamFilmListeScreen(Screen):
 
 	def loadPage(self):
 		print "loadPage:"
-		if not self.sortOrder:
-			url = "%s%s%s" % (self.genreLink, str(self.page), self.sortParAZ)
+		if not self.sucheFilme:
+			if not self.sortOrder:	
+				url = "%s%d%s" % (self.genreLink, self.page, self.sortParAZ)
+			else:
+				url = "%s%d%s" % (self.genreLink, self.page, self.sortParIMDB)
 		else:
-			url = "%s%s%s" % (self.genreLink, str(self.page), self.sortParIMDB)
+			url = self.genreLink
+		
 		if self.page:
 			self['page'].setText("%d / %d" % (self.page,self.pages))
 
