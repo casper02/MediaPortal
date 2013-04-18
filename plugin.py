@@ -1450,6 +1450,51 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		if config.mediaportal.showyouporn.value:
 			self.plugin_liste.append(("YouPorn", "youporn", "Porn"))
 			
+			
+		# Plugin Sortierung
+
+		# Erstelle Pluginliste falls keine vorhanden ist.
+		self.sort_plugins_file = "/etc/enigma2/mp_pluginliste"
+		if not fileExists(self.sort_plugins_file):
+			print "Erstelle Wall-Pluginliste."
+			os.system("touch "+self.sort_plugins_file)
+				
+		pluginliste_leer = os.path.getsize(self.sort_plugins_file)
+		if pluginliste_leer == 0:
+			print "1st time - Schreibe Wall-Pluginliste."
+			read_pluginliste = open(self.sort_plugins_file,"a")
+			for name,picname,genre in self.plugin_liste:
+				print name
+				read_pluginliste.write('"%s" "%s" "%s" "%s" "%s"\n' % (name, picname, genre, "0", "0"))
+			read_pluginliste.close()
+			print "Wall-Pluginliste wurde erstellt."
+			
+		# Lese Pluginliste ein.
+		if fileExists(self.sort_plugins_file):
+		
+			count_sort_plugins_file = len(open(self.sort_plugins_file).readlines())
+			count_plugin_liste = len(self.plugin_liste)
+			
+			print count_plugin_liste, count_sort_plugins_file
+			if int(count_plugin_liste) != int(count_sort_plugins_file):
+				print "stimmt nicht...."
+
+			self.new_pluginliste = []
+			read_pluginliste = open(self.sort_plugins_file,"r")
+			for rawData in read_pluginliste.readlines():
+				data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
+				if data:
+					(p_name, p_picname, p_genre, p_hits, p_sort) = data[0]
+					self.new_pluginliste.append((p_name, p_picname, p_genre, p_hits, p_sort))
+			read_pluginliste.close()
+			
+			#for (p_name, p_picname, p_genre, p_hits, p_sort) in self.new_pluginliste:
+				#print p_name, p_picname, p_genre, p_hits, p_sort
+				
+			self.new_pluginliste.sort(key=lambda x: int(x[3]))
+			self.new_pluginliste.reverse()
+			self.plugin_liste = self.new_pluginliste
+			
 		skincontent = ""
 		
 		posx = 20
@@ -1507,7 +1552,24 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		self.selektor_index = 1
 		self.select_list = 0
 		self.onFirstExecBegin.append(self._onFirstExecBegin)
-		
+
+	def hit_plugin(self, pname):
+		if fileExists(self.sort_plugins_file):
+			read_pluginliste = open(self.sort_plugins_file,"r")
+			read_pluginliste_tmp = open(self.sort_plugins_file+".tmp","w")
+			for rawData in read_pluginliste.readlines():
+				data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
+				if data:
+					(p_name, p_picname, p_genre, p_hits, p_sort) = data[0]
+					if pname == p_name:
+						new_hits = int(p_hits)+1
+						read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (p_name, p_picname, p_genre, str(new_hits), p_sort))
+					else:
+						read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (p_name, p_picname, p_genre, p_hits, p_sort))
+			read_pluginliste.close()
+			read_pluginliste_tmp.close()
+			shutil.move(self.sort_plugins_file+".tmp", self.sort_plugins_file)
+
 	def _onFirstExecBegin(self):
 		# load plugin icons
 		print "Set Filter:", config.mediaportal.filter.value
@@ -1606,6 +1668,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		elif auswahl == "KinoKiste":
 			self.session.open(kinokisteGenreScreen)
 		elif auswahl == "Burning-Series":
+			self.hit_plugin("Burning-Series")
 			self.session.open(bsMain)
 		elif auswahl == "1channel":
 			self.session.open(chMain)
