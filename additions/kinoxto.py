@@ -2,30 +2,31 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.decrypt import *
 
 def kxListEntry(entry):
-	png = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/%s.png" % entry[4]
+	#png = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/%s.png" % entry[4]
+	png = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/%s.png" % entry[2]
 	flag = LoadPixmap(png)
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 20, 5, 16, 11, flag),
-		(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 830, 25, 0, RT_HALIGN_LEFT, entry[0])
+		(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 830, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		]
 def kxStreamListEntry(entry):
 	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 230, 25, 0, RT_HALIGN_LEFT, entry[0]),
-		(eListboxPythonMultiContent.TYPE_TEXT, 270, 0, 120, 25, 0, RT_HALIGN_LEFT, entry[2]),
-		(eListboxPythonMultiContent.TYPE_TEXT, 390, 0, 130, 25, 0, RT_HALIGN_LEFT, entry[3]),
-		(eListboxPythonMultiContent.TYPE_TEXT, 520, 0, 150, 25, 0, RT_HALIGN_LEFT, entry[4])
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 230, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]),
+		(eListboxPythonMultiContent.TYPE_TEXT, 270, 0, 120, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[2]),
+		(eListboxPythonMultiContent.TYPE_TEXT, 390, 0, 130, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[3]),
+		(eListboxPythonMultiContent.TYPE_TEXT, 520, 0, 150, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[4])
 		]
 def kxMainListEntry(entry):
 	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER, entry[0])
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		]
 def kxPartsListEntry(entry):
 	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 830, 25, 0, RT_HALIGN_CENTER, entry[0])
+		(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 830, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		]
 def kxList2Entry(entry):
 	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 830, 25, 0, RT_HALIGN_LEFT, entry[0])
+		(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 830, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		]
 def kxWatchedListEntry(entry):
 	if entry[2]:
@@ -33,15 +34,15 @@ def kxWatchedListEntry(entry):
 		watched = LoadPixmap(png)
 		return [entry,
 			(eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 39, 3, 100, 22, watched),
-			(eListboxPythonMultiContent.TYPE_TEXT, 100, 0, 700, 25, 0, RT_HALIGN_LEFT, entry[0])
+			(eListboxPythonMultiContent.TYPE_TEXT, 100, 0, 700, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 			]
 	else:
 		return [entry,
-			(eListboxPythonMultiContent.TYPE_TEXT, 100, 0, 700, 25, 0, RT_HALIGN_LEFT, entry[0])
+			(eListboxPythonMultiContent.TYPE_TEXT, 100, 0, 700, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 			]
 def kxLetterEntry(entry):
 	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 830, 25, 0, RT_HALIGN_CENTER, entry)
+		(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 830, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry)
 		]
 def kxWatchSeriesListEntry(entry):
 	if int(entry[4]) != 0:
@@ -54,13 +55,13 @@ def kxWatchSeriesListEntry(entry):
 		flag = LoadPixmap(png)	
 		return [entry,
 			(eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 20, 5, 16, 11, flag),
-			(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 750, 25, 0, RT_HALIGN_LEFT, entry[0]),
-			(eListboxPythonMultiContent.TYPE_TEXT, 800, 0, 50, 25, 0, RT_HALIGN_LEFT, new_eps)
+			(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 750, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]),
+			(eListboxPythonMultiContent.TYPE_TEXT, 800, 0, 50, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, new_eps)
 			]
 	else:
 		return [entry,
-			(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 750, 25, 0, RT_HALIGN_LEFT, entry[0]),
-			(eListboxPythonMultiContent.TYPE_TEXT, 800, 0, 50, 25, 0, RT_HALIGN_LEFT, new_eps)
+			(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 750, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]),
+			(eListboxPythonMultiContent.TYPE_TEXT, 800, 0, 50, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, new_eps)
 			]
 class kxMain(Screen):
 	
@@ -88,7 +89,7 @@ class kxMain(Screen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 		
@@ -168,7 +169,7 @@ class kxKino(Screen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 		
@@ -286,7 +287,7 @@ class kxNeuesteKino(Screen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 		
@@ -413,7 +414,7 @@ class kxNeuesteOnline(Screen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 		
@@ -535,7 +536,7 @@ class kxABC(Screen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 		
@@ -596,7 +597,7 @@ class kxABCpage(Screen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 		
@@ -736,7 +737,7 @@ class kxNeuesteSerien(Screen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 		
@@ -746,19 +747,23 @@ class kxNeuesteSerien(Screen):
 		
 	def loadPage(self):
 		self.streamList = []
-		url = "http://kinox.to/aSET/ListMode/cover"
-		getPage(url, cookies=self.keckse, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getKeckse).addErrback(self.dataError)
+		# bitte stehen lassen das ist fuer die cover ansicht. aktuell gibt es aber den fehler 500 da stimmt was bei kinox.t nicht.
+		#url = "http://kinox.to/aSET/ListMode/cover"
+		#getPage(url, cookies=self.keckse, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getKeckse).addErrback(self.dataError)
+		getPage(self.kxGotLink, cookies=self.keckse, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 		
 	def getKeckse(self, data):
 		print self.keckse
 		getPage(self.kxGotLink, cookies=self.keckse, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 		
 	def parseData(self, data):
-		kxMovies = re.findall('<div class="Opt leftOpt Headlne"><a title=".*?" href="(.*?)"><h1>(.*?)</h1></a></div>.*?<div class="Thumb"><img style="width: 70px; height: 100px" src="(.*?)" /></div>.*?<div class="Descriptor">(.*?)</div>.*?src="/gr/sys/lng/(.*?).png"', data, re.S)
+		#kxMovies = re.findall('<div class="Opt leftOpt Headlne"><a title=".*?" href="(.*?)"><h1>(.*?)</h1></a></div>.*?<div class="Thumb"><img style="width: 70px; height: 100px" src="(.*?)" /></div>.*?<div class="Descriptor">(.*?)</div>.*?src="/gr/sys/lng/(.*?).png"', data, re.S)
+		kxMovies = re.findall('<td class="Icon"><img width="16" height="11" src="/gr/sys/lng/(.*?).png" alt="language"></td>.*?<td class="Title"><a href="(.*?)" onclick="return false;">(.*?)</a>', data, re.S)
 		if kxMovies:
-			for (kxUrl,kxTitle,kxImage,kxHandlung,kxLang) in kxMovies:
+			#for (kxUrl,kxTitle,kxImage,kxHandlung,kxLang) in kxMovies:
+			for (kxLang,kxUrl,kxTitle) in kxMovies:
 				kxUrl = "http://kinox.to" + kxUrl
-				self.streamList.append((decodeHtml(kxTitle),kxUrl,kxImage,kxHandlung,kxLang))
+				self.streamList.append((decodeHtml(kxTitle),kxUrl,kxLang))
 				self.streamMenuList.setList(map(kxListEntry, self.streamList))
 			self.keyLocked = False
 			self.showInfos()
@@ -766,11 +771,11 @@ class kxNeuesteSerien(Screen):
 	def showInfos(self):
 		filmName = self['streamlist'].getCurrent()[0][0]
 		self['name'].setText(filmName)
-		coverUrl = self['streamlist'].getCurrent()[0][2]
-		handlung = self['streamlist'].getCurrent()[0][3]
-		self['handlung'].setText(decodeHtml(handlung))
-		if coverUrl:
-			downloadPage(coverUrl, "/tmp/kxIcon.jpg").addCallback(self.showCover)
+		#coverUrl = self['streamlist'].getCurrent()[0][2]
+		#handlung = self['streamlist'].getCurrent()[0][3]
+		#self['handlung'].setText(decodeHtml(handlung))
+		#if coverUrl:
+		#	downloadPage(coverUrl, "/tmp/kxIcon.jpg").addCallback(self.showCover)
 		
 	def showCover(self, picData):
 		if fileExists("/tmp/kxIcon.jpg"):
@@ -804,12 +809,13 @@ class kxNeuesteSerien(Screen):
 			return
 		muTitle = self['streamlist'].getCurrent()[0][0]
 		muID = self['streamlist'].getCurrent()[0][1]
-		muLang = self['streamlist'].getCurrent()[0][4]
+		#muLang = self['streamlist'].getCurrent()[0][4]
+		muLang = self['streamlist'].getCurrent()[0][2]
 
-		if not fileExists(config.mediaportal.watchlistpath.value+"kx_watchlist"):
-			os.system("touch "+config.mediaportal.watchlistpath.value+"kx_watchlist")
-		if fileExists(config.mediaportal.watchlistpath.value+"kx_watchlist"):
-			writePlaylist = open(config.mediaportal.watchlistpath.value+"kx_watchlist","a")
+		if not fileExists(config.mediaportal.watchlistpath.value+"mp_kx_watchlist"):
+			os.system("touch "+config.mediaportal.watchlistpath.value+"mp_kx_watchlist")
+		if fileExists(config.mediaportal.watchlistpath.value+"mp_kx_watchlist"):
+			writePlaylist = open(config.mediaportal.watchlistpath.value+"mp_kx_watchlist","a")
 			writePlaylist.write('"%s" "%s" "%s" "0"\n' % (muTitle, muID, muLang))
 			writePlaylist.close()
 			message = self.session.open(MessageBox, _("Serie wurde zur watchlist hinzugefuegt."), MessageBox.TYPE_INFO, timeout=3)
@@ -869,7 +875,7 @@ class kxSerienABC(Screen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 		
@@ -933,7 +939,7 @@ class kxSerienABCpage(Screen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 		
@@ -1042,11 +1048,10 @@ class kxSerienABCpage(Screen):
 		muTitle = self['streamlist'].getCurrent()[0][0]
 		muID = self['streamlist'].getCurrent()[0][1]
 		muLang = self['streamlist'].getCurrent()[0][4]
-		#path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/kx_watchlist"
-		if not fileExists(config.mediaportal.watchlistpath.value+"kx_watchlist"):
-			os.system("touch "+config.mediaportal.watchlistpath.value+"kx_watchlist")
-		if fileExists(config.mediaportal.watchlistpath.value+"kx_watchlist"):
-			writePlaylist = open(config.mediaportal.watchlistpath.value+"kx_watchlist","a")
+		if not fileExists(config.mediaportal.watchlistpath.value+"mp_kx_watchlist"):
+			os.system("touch "+config.mediaportal.watchlistpath.value+"mp_kx_watchlist")
+		if fileExists(config.mediaportal.watchlistpath.value+"mp_kx_watchlist"):
+			writePlaylist = open(config.mediaportal.watchlistpath.value+"mp_kx_watchlist","a")
 			writePlaylist.write('"%s" "%s" "%s" "0"\n' % (muTitle, muID, muLang))
 			writePlaylist.close()
 			message = self.session.open(MessageBox, _("Serie wurde zur watchlist hinzugefuegt."), MessageBox.TYPE_INFO, timeout=3)
@@ -1088,7 +1093,7 @@ class kxEpisoden(Screen):
 		self.plugin_path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal"
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 		
@@ -1103,12 +1108,12 @@ class kxEpisoden(Screen):
 	
 		self.watched_liste = []
 		self.mark_last_watched = []
-		if not fileExists(config.mediaportal.watchlistpath.value+"kx_watched"):
-			os.system("touch "+config.mediaportal.watchlistpath.value+"kx_watched")
-		if fileExists(config.mediaportal.watchlistpath.value+"kx_watched"):
-			leer = os.path.getsize(config.mediaportal.watchlistpath.value+"kx_watched")
+		if not fileExists(config.mediaportal.watchlistpath.value+"mp_kx_watched"):
+			os.system("touch "+config.mediaportal.watchlistpath.value+"mp_kx_watched")
+		if fileExists(config.mediaportal.watchlistpath.value+"mp_kx_watched"):
+			leer = os.path.getsize(config.mediaportal.watchlistpath.value+"mp_kx_watched")
 			if not leer == 0:
-				self.updates_read = open(config.mediaportal.watchlistpath.value+"kx_watched" , "r")
+				self.updates_read = open(config.mediaportal.watchlistpath.value+"mp_kx_watched" , "r")
 				for lines in sorted(self.updates_read.readlines()):
 					line = re.findall('"(.*?)"', lines)
 					if line:
@@ -1263,7 +1268,7 @@ class kxWatchlist(Screen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 		
@@ -1272,8 +1277,8 @@ class kxWatchlist(Screen):
 
 	def loadPlaylist(self):
 		self.streamList = []
-		if fileExists(config.mediaportal.watchlistpath.value+"kx_watchlist"):
-			readStations = open(config.mediaportal.watchlistpath.value+"kx_watchlist","r")
+		if fileExists(config.mediaportal.watchlistpath.value+"mp_kx_watchlist"):
+			readStations = open(config.mediaportal.watchlistpath.value+"mp_kx_watchlist","r")
 			for rawData in readStations.readlines():
 				data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
 				if data:
@@ -1289,11 +1294,11 @@ class kxWatchlist(Screen):
 		self.count = len(self.streamList)
 		self.counting = 0
 		
-		if fileExists(config.mediaportal.watchlistpath.value+"kx_watchlist.tmp"):
-			self.write_tmp = open(config.mediaportal.watchlistpath.value+"kx_watchlist.tmp" , "a")
+		if fileExists(config.mediaportal.watchlistpath.value+"mp_kx_watchlist.tmp"):
+			self.write_tmp = open(config.mediaportal.watchlistpath.value+"mp_kx_watchlist.tmp" , "a")
 			self.write_tmp.truncate(0)
 		else:
-			self.write_tmp = open(config.mediaportal.watchlistpath.value+"kx_watchlist.tmp" , "a")
+			self.write_tmp = open(config.mediaportal.watchlistpath.value+"mp_kx_watchlist.tmp" , "a")
 					
 		if len(self.streamList) != 0:
 			self.keyLocked = True
@@ -1334,7 +1339,7 @@ class kxWatchlist(Screen):
 		if self.counting == self.count:
 			print "update done."
 			self.write_tmp.close()
-			shutil.move(config.mediaportal.watchlistpath.value+"kx_watchlist.tmp", config.mediaportal.watchlistpath.value+"kx_watchlist")
+			shutil.move(config.mediaportal.watchlistpath.value+"mp_kx_watchlist.tmp", config.mediaportal.watchlistpath.value+"mp_kx_watchlist")
 	
 	def keyOK(self):
 		exist = self['streamlist'].getCurrent()
@@ -1352,9 +1357,9 @@ class kxWatchlist(Screen):
 		
 		selectedName = self['streamlist'].getCurrent()[0][0]
 
-		writeTmp = open(config.mediaportal.watchlistpath.value+"kx_watchlist.tmp","w")
-		if fileExists(config.mediaportal.watchlistpath.value+"kx_watchlist"):
-			readStations = open(config.mediaportal.watchlistpath.value+"kx_watchlist","r")
+		writeTmp = open(config.mediaportal.watchlistpath.value+"mp_kx_watchlist.tmp","w")
+		if fileExists(config.mediaportal.watchlistpath.value+"mp_kx_watchlist"):
+			readStations = open(config.mediaportal.watchlistpath.value+"mp_kx_watchlist","r")
 			for rawData in readStations.readlines():
 				data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
 				if data:
@@ -1363,7 +1368,7 @@ class kxWatchlist(Screen):
 						writeTmp.write('"%s" "%s" "%s" "%s"\n' % (stationName, stationLink, stationLang, stationTotaleps))
 			readStations.close()
 			writeTmp.close()
-			shutil.move(config.mediaportal.watchlistpath.value+"kx_watchlist.tmp", config.mediaportal.watchlistpath.value+"kx_watchlist")
+			shutil.move(config.mediaportal.watchlistpath.value+"mp_kx_watchlist.tmp", config.mediaportal.watchlistpath.value+"mp_kx_watchlist")
 			self.loadPlaylist()
 				
 	def keyCancel(self):
@@ -1399,7 +1404,7 @@ class kxStreams(Screen):
 		self.plugin_path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal"
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 		
@@ -1468,13 +1473,13 @@ class kxStreams(Screen):
 	def playfile(self, stream_url):
 		if stream_url != None:
 			print stream_url
-			if not fileExists(config.mediaportal.watchlistpath.value+"kx_watched"):
-				os.system("touch "+config.mediaportal.watchlistpath.value+"kx_watched")
+			if not fileExists(config.mediaportal.watchlistpath.value+"mp_kx_watched"):
+				os.system("touch "+config.mediaportal.watchlistpath.value+"mp_kx_watched")
 				
 			self.update_liste = []
-			leer = os.path.getsize(config.mediaportal.watchlistpath.value+"kx_watched")
+			leer = os.path.getsize(config.mediaportal.watchlistpath.value+"mp_kx_watched")
 			if not leer == 0:
-				self.updates_read = open(config.mediaportal.watchlistpath.value+"kx_watched" , "r")
+				self.updates_read = open(config.mediaportal.watchlistpath.value+"mp_kx_watched" , "r")
 				for lines in sorted(self.updates_read.readlines()):
 					line = re.findall('"(.*?)"', lines)
 					if line:
@@ -1482,7 +1487,7 @@ class kxStreams(Screen):
 						self.update_liste.append("%s" % (line[0]))
 				self.updates_read.close()
 				
-				updates_read2 = open(config.mediaportal.watchlistpath.value+"kx_watched" , "a")
+				updates_read2 = open(config.mediaportal.watchlistpath.value+"mp_kx_watched" , "a")
 				check = ("%s" % self.stream_name)
 				if not check in self.update_liste:
 					print "[kinox] update add: %s" % (self.stream_name)
@@ -1491,7 +1496,7 @@ class kxStreams(Screen):
 				else:
 					print "[kinox] dupe %s" % (self.stream_name)
 			else:
-				updates_read3 = open(config.mediaportal.watchlistpath.value+"kx_watched" , "a")
+				updates_read3 = open(config.mediaportal.watchlistpath.value+"mp_kx_watched" , "a")
 				print "[kinox] update add: %s" % (self.stream_name)
 				updates_read3.write('"%s"\n' % (self.stream_name))
 				updates_read3.close()
@@ -1532,7 +1537,7 @@ class kxParts(Screen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 		
