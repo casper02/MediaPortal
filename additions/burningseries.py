@@ -5,11 +5,11 @@ ck = {}
 
 def bsListEntry(entry):
 	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_LEFT, entry[0])
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		]	
 def mainListEntry(entry):
 	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER, entry[0])
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		]	
 		
 class bsMain(Screen, ConfigListScreen):
@@ -37,7 +37,7 @@ class bsMain(Screen, ConfigListScreen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 		
@@ -90,7 +90,7 @@ class bsSerien(Screen, ConfigListScreen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 		
@@ -130,13 +130,17 @@ class bsSerien(Screen, ConfigListScreen):
 			return
 		muTitle = self['streamlist'].getCurrent()[0][0]
 		muID = self['streamlist'].getCurrent()[0][1]
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/bs_watchlist"
-		if fileExists(path):
-			writePlaylist = open(path,"a")
+		
+		if not fileExists(config.mediaportal.watchlistpath.value+"mp_bs_watchlist"):
+			print "Erstelle Burning-Series Watchlist."
+			os.system("touch "+config.mediaportal.watchlistpath.value+"mp_bs_watchlist")
+			
+		if fileExists(config.mediaportal.watchlistpath.value+"mp_bs_watchlist"):
+			writePlaylist = open(config.mediaportal.watchlistpath.value+"mp_bs_watchlist","a")
 			writePlaylist.write('"%s" "%s"\n' % (muTitle, muID))
 			writePlaylist.close()
 			message = self.session.open(MessageBox, _("Serie wurde zur watchlist hinzugefuegt."), MessageBox.TYPE_INFO, timeout=3)
-				
+			
 	def keyCancel(self):
 		self.close()
 
@@ -166,7 +170,7 @@ class bsWatchlist(Screen, ConfigListScreen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 		
@@ -175,9 +179,13 @@ class bsWatchlist(Screen, ConfigListScreen):
 
 	def loadPlaylist(self):
 		self.streamList = []
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/bs_watchlist"	
-		if fileExists(path):
-			readStations = open(path,"r")
+		
+		if not fileExists(config.mediaportal.watchlistpath.value+"mp_bs_watchlist"):
+			print "Erstelle Burning-Series Watchlist."
+			os.system("touch "+config.mediaportal.watchlistpath.value+"mp_bs_watchlist")
+			
+		if fileExists(config.mediaportal.watchlistpath.value+"mp_bs_watchlist"):
+			readStations = open(config.mediaportal.watchlistpath.value+"mp_bs_watchlist","r")
 			for rawData in readStations.readlines():
 				data = re.findall('"(.*?)" "(.*?)"', rawData, re.S)
 				if data:
@@ -204,11 +212,9 @@ class bsWatchlist(Screen, ConfigListScreen):
 			return
 		
 		selectedName = self['streamlist'].getCurrent()[0][0]
-		pathTmp = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/bs_watchlist.tmp"
-		writeTmp = open(pathTmp,"w")	
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/bs_watchlist"
-		if fileExists(path):
-			readStations = open(path,"r")
+		writeTmp = open(config.mediaportal.watchlistpath.value+"mp_bs_watchlist.tmp","w")	
+		if fileExists(config.mediaportal.watchlistpath.value+"mp_bs_watchlist"):
+			readStations = open(config.mediaportal.watchlistpath.value+"mp_bs_watchlist","r")
 			for rawData in readStations.readlines():
 				data = re.findall('"(.*?)" "(.*?)"', rawData, re.S)
 				if data:
@@ -217,7 +223,7 @@ class bsWatchlist(Screen, ConfigListScreen):
 						writeTmp.write('"%s" "%s"\n' % (stationName, stationLink))
 			readStations.close()
 			writeTmp.close()
-			shutil.move(pathTmp, path)
+			shutil.move(config.mediaportal.watchlistpath.value+"mp_bs_watchlist.tmp", config.mediaportal.watchlistpath.value+"mp_bs_watchlist")
 			self.loadPlaylist()
 				
 	def keyCancel(self):
@@ -240,7 +246,7 @@ class bsStaffeln(Screen, ConfigListScreen):
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
 			"ok"    : self.keyOK,
 			"cancel": self.keyCancel,
-			"green" : self.keyAdd,
+			#"green" : self.keyAdd,
 		}, -1)
 		
 		self['title'] = Label("Burning-seri.es")
@@ -250,7 +256,7 @@ class bsStaffeln(Screen, ConfigListScreen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 		
@@ -352,7 +358,7 @@ class bsEpisoden(Screen, ConfigListScreen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 		
@@ -448,7 +454,7 @@ class bsStreams(Screen, ConfigListScreen):
 		
 		self.streamList = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.streamMenuList.l.setItemHeight(25)
 		self['streamlist'] = self.streamMenuList
 		self.keyLocked = True
