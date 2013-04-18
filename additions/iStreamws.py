@@ -134,6 +134,9 @@ class showIStreamGenre(Screen):
 			s = ""
 			j = len(words)
 			i = 0
+			if not j:
+				return
+				
 			for word in words:
 				i += 1
 				if word != '':
