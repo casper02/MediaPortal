@@ -245,8 +245,7 @@ class bsStaffeln(Screen, ConfigListScreen):
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
 			"ok"    : self.keyOK,
-			"cancel": self.keyCancel,
-			#"green" : self.keyAdd,
+			"cancel": self.keyCancel
 		}, -1)
 		
 		self['title'] = Label("Burning-seri.es")
@@ -314,20 +313,7 @@ class bsStaffeln(Screen, ConfigListScreen):
 		auswahl = self['streamlist'].getCurrent()[0][1]
 		print auswahl, staffel
 		self.session.open(bsEpisoden, auswahl, staffel)
-
-	def keyAdd(self):
-		exist = self['streamlist'].getCurrent()
-		if self.keyLocked or exist == None:
-			return
-		muTitle = self['streamlist'].getCurrent()[0][0]
-		muID = self['streamlist'].getCurrent()[0][1]
-		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/resources/bs_watchlist"
-		if fileExists(path):
-			writePlaylist = open(path,"a")
-			writePlaylist.write('"%s" "%s"\n' % (muTitle, muID))
-			writePlaylist.close()
-			self.loadPlaylist()
-				
+		
 	def keyCancel(self):
 		self.close()
 
