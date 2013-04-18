@@ -29,6 +29,14 @@
     <widget name="regionid" position="220,610" size="200,25" backgroundColor="#26181d20" transparent="1" font="mediaportal;20" valign="center" halign="left" zPosition="0" />
     <widget name="Author" position="55,635" size="150,25" backgroundColor="#26181d20" transparent="1" font="mediaportal;20" valign="center" halign="center" zPosition="0" foregroundColor="#00555555" />
     <widget name="author" position="220,635" size="200,25" backgroundColor="#26181d20" transparent="1" font="mediaportal;20" valign="center" halign="left" zPosition="0" />
+    <widget name="3D" position="450,560" size="150,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="right" zPosition="0" foregroundColor="#00555556" />
+    <widget name="3d" position="615,560" size="200,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="left" zPosition="0" />
+    <widget name="Duration" position="450,585" size="150,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="right" zPosition="0" foregroundColor="#00555556" />
+    <widget name="duration" position="615,585" size="200,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="left" zPosition="0" />
+    <widget name="Reserve1" position="450,610" size="150,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="right" zPosition="0" foregroundColor="#00555556" />
+    <widget name="reserve1" position="615,610" size="200,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="left" zPosition="0" />
+    <widget name="Reserve2" position="450,635" size="150,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="right" zPosition="0" foregroundColor="#00555556" />
+    <widget name="reserve2" position="615,635" size="200,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="left" zPosition="0" />
     <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttonred.png" position="55,680" size="90,36" alphatest="blend" zPosition="0" />
     <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttongreen.png" position="305,680" size="90,36" alphatest="blend" zPosition="0" />
     <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttonyellow.png" position="565,680" size="90,36" alphatest="blend" zPosition="0" />
@@ -54,4 +62,11 @@
     <eLabel position="55,505" size="150,1" backgroundColor="#00555555" zPosition="0" foregroundColor="#00555555" />
     <eLabel position="55,475" size="1,30" backgroundColor="#00555555" zPosition="0" foregroundColor="#00555555" />
     <eLabel position="205,475" size="1,30" backgroundColor="#00555555" zPosition="0" foregroundColor="#00555555" />
+    <eLabel position="450,560" size="150,1" backgroundColor="#00555555" zPosition="0" foregroundColor="#00555555" />
+    <eLabel position="450,585" size="150,1" backgroundColor="#00555555" zPosition="0" foregroundColor="#00555555" />
+    <eLabel position="450,610" size="150,1" backgroundColor="#00555555" zPosition="0" foregroundColor="#00555555" />	
+    <eLabel position="450,635" size="150,1" backgroundColor="#00555555" zPosition="0" foregroundColor="#00555555" />
+    <eLabel position="450,660" size="150,1" backgroundColor="#00555555" zPosition="0" foregroundColor="#00555555" />
+    <eLabel position="450,560" size="1,100" backgroundColor="#00555555" zPosition="0" foregroundColor="#00555555" />
+    <eLabel position="600,560" size="1,100" backgroundColor="#00555555" zPosition="0" foregroundColor="#00555555" />
 </screen>
