@@ -16,7 +16,7 @@ else:
 	IMDbPresent = False
 	TMDbPresent = False
 
-IS_Version = "iStream.ws v1.09"
+IS_Version = "iStream.ws v1.10"
 
 IS_siteEncoding = 'utf-8'
 
