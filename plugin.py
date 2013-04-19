@@ -114,6 +114,7 @@ config.mediaportal.filter = ConfigSelection(default = "ALL", choices = [("ALL", 
 config.mediaportal.youtubeprio = ConfigSelection(default = "1", choices = [("0", _("Low")),("1", _("Medium")),("2", _("High"))])
 config.mediaportal.pornpin = ConfigYesNo(default = True)
 config.mediaportal.watchlistpath = ConfigText(default="/etc/enigma2/", fixed_size=False)
+config.mediaportal.sortplugins = ConfigSelection(default = "default", choices = [("default", _("default")),("hits", _("hits")), ("abc", _("abc"))])
 
 config.mediaportal.showDoku = ConfigYesNo(default = True)
 config.mediaportal.showRofl = ConfigYesNo(default = True)
@@ -246,6 +247,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Autoplay Threshold [%]:", config.mediaportal.autoplayThreshold))
 		self.configlist.append(getConfigListEntry("YouTube Video Quality Priority:", config.mediaportal.youtubeprio))
 		self.configlist.append(getConfigListEntry("Watchlist path:", config.mediaportal.watchlistpath))
+		self.configlist.append(getConfigListEntry("Plugins Sortieren nach:", config.mediaportal.sortplugins))
 		
 		### Grauzone
 		self.configlist.append(getConfigListEntry("----- Grauzone -----", config.mediaportal.fake_entry))
@@ -1486,6 +1488,77 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("xHamster", "xhamster", "Porn"))
 		if config.mediaportal.showyouporn.value:
 			self.plugin_liste.append(("YouPorn", "youporn", "Porn"))
+
+		# Plugin Sortierung		
+		if config.mediaportal.sortplugins != "default":
+		
+			# Erstelle Pluginliste falls keine vorhanden ist.
+			self.sort_plugins_file = "/etc/enigma2/mp_pluginliste"
+			if not fileExists(self.sort_plugins_file):
+				print "Erstelle Wall-Pluginliste."
+				os.system("touch "+self.sort_plugins_file)
+					
+			pluginliste_leer = os.path.getsize(self.sort_plugins_file)
+			if pluginliste_leer == 0:
+				print "1st time - Schreibe Wall-Pluginliste."
+				read_pluginliste = open(self.sort_plugins_file,"a")
+				for name,picname,genre in self.plugin_liste:
+					print name
+					read_pluginliste.write('"%s" "%s" "%s" "%s" "%s"\n' % (name, picname, genre, "0", "0"))
+				read_pluginliste.close()
+				print "Wall-Pluginliste wurde erstellt."
+				
+			# Lese Pluginliste ein.
+			if fileExists(self.sort_plugins_file):
+			
+				count_sort_plugins_file = len(open(self.sort_plugins_file).readlines())
+				count_plugin_liste = len(self.plugin_liste)
+				
+				print count_plugin_liste, count_sort_plugins_file
+				if int(count_plugin_liste) != int(count_sort_plugins_file):
+					print "Ein Plugin wurde aktiviert oder deaktiviert.. erstelle neue pluginliste."
+					
+					read_pluginliste_tmp = open(self.sort_plugins_file+".tmp","w")
+					p_dupeliste = []
+					
+					for pname, ppic, pgenre in self.plugin_liste:
+						read_pluginliste = open(self.sort_plugins_file,"r")
+						for rawData in read_pluginliste.readlines():
+							data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
+							if data:
+								(p_name, p_picname, p_genre, p_hits, p_sort) = data[0]
+								if pname == p_name:
+									if pname not in p_dupeliste:
+										read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (p_name, p_picname, p_genre, p_hits, p_sort))
+								else:
+									if pname not in p_dupeliste:
+										read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (pname, ppic, pgenre, "0", "0"))
+							p_dupeliste.append((pname))
+							read_pluginliste.close()
+
+					read_pluginliste_tmp.close()
+					shutil.move(self.sort_plugins_file+".tmp", self.sort_plugins_file)
+
+				self.new_pluginliste = []
+				read_pluginliste = open(self.sort_plugins_file,"r")
+				for rawData in read_pluginliste.readlines():
+					data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
+					if data:
+						(p_name, p_picname, p_genre, p_hits, p_sort) = data[0]
+						self.new_pluginliste.append((p_name, p_picname, p_genre, p_hits, p_sort))
+				read_pluginliste.close()
+	
+			# Sortieren nach hits
+			if config.mediaportal.sortplugins.value == "hits":
+				self.new_pluginliste.sort(key=lambda x: int(x[3]))
+				self.new_pluginliste.reverse()
+				
+				
+			# Sortieren nach abcde..
+			elif config.mediaportal.sortplugins.value == "abc":
+				self.new_pluginliste.sort(key=lambda x: str(x[0]))
+
+			self.plugin_liste = self.new_pluginliste
 			
 		skincontent = ""
 		
@@ -1543,6 +1616,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		
 		self.selektor_index = 1
 		self.select_list = 0
+<<<<<<< HEAD
 		self.onFirstExecBegin.append(self.checkforupdate)
 
 	def checkforupdate(self):
@@ -1580,6 +1654,27 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		else:
 			self._onFirstExecBegin()
 		
+=======
+		self.onFirstExecBegin.append(self._onFirstExecBegin)
+
+	def hit_plugin(self, pname):
+		if fileExists(self.sort_plugins_file):
+			read_pluginliste = open(self.sort_plugins_file,"r")
+			read_pluginliste_tmp = open(self.sort_plugins_file+".tmp","w")
+			for rawData in read_pluginliste.readlines():
+				data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
+				if data:
+					(p_name, p_picname, p_genre, p_hits, p_sort) = data[0]
+					if pname == p_name:
+						new_hits = int(p_hits)+1
+						read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (p_name, p_picname, p_genre, str(new_hits), p_sort))
+					else:
+						read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (p_name, p_picname, p_genre, p_hits, p_sort))
+			read_pluginliste.close()
+			read_pluginliste_tmp.close()
+			shutil.move(self.sort_plugins_file+".tmp", self.sort_plugins_file)
+
+>>>>>>> origin/einfall
 	def _onFirstExecBegin(self):
 		# load plugin icons
 		print "Set Filter:", config.mediaportal.filter.value
@@ -1662,133 +1757,197 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		print auswahl
 
 		if auswahl == "Doku.me":
+			self.hit_plugin("Doku.me")
 			self.session.open(dokuScreen)
 		elif auswahl == "Rofl.to":
+			self.hit_plugin("Rofl.to")
 			self.session.open(roflScreen)
 		elif auswahl == "Fail.to":
+			self.hit_plugin("Fail.to")
 			self.session.open(failScreen)
 		elif auswahl == "KinderKino":
+			self.hit_plugin("KinderKino")
 			self.session.open(kinderKinoScreen)
 		elif auswahl == "MyVideo":
+			self.hit_plugin("MyVideo")
 			self.session.open(myVideoGenreScreen)
 		elif auswahl == "SportBild":
+			self.hit_plugin("SportBild")
 			self.session.open(sportBildScreen)
 		elif auswahl == "Laola1 Live":
+			self.hit_plugin("Laola1 Live")
 			self.session.open(laolaScreen)
 		elif auswahl == "KinoKiste":
+			self.hit_plugin("KinoKiste")
 			self.session.open(kinokisteGenreScreen)
 		elif auswahl == "Burning-Series":
+			self.hit_plugin("Burning-Series")
 			self.session.open(bsMain)
 		elif auswahl == "1channel":
+			self.hit_plugin("1channel")
 			self.session.open(chMain)
 		elif auswahl == "Focus":
+			self.hit_plugin("Focus")
 			self.session.open(focusGenre)
 		elif auswahl == "FilmOn":
+			self.hit_plugin("FilmOn")
 			self.session.open(filmON)
 		elif auswahl == "NetzKino":
+			self.hit_plugin("NetzKino")
 			self.session.open(netzKinoGenreScreen)
 		elif auswahl == "Spobox":
+			self.hit_plugin("Spobox")
 			self.session.open(spoboxGenreScreen)
 		elif auswahl == "Radio.de":
+			self.hit_plugin("Radio.de")
 			self.session.open(Radiode)
 		elif auswahl == "CCZwei":
+			self.hit_plugin("CCZwei")
 			self.session.open(cczwei)
 		elif auswahl == "Filmtrailer":
+			self.hit_plugin("Filmtrailer")
 			self.session.open(trailer)
 		elif auswahl == "Baskino":
+			self.hit_plugin("Baskino")
 			self.session.open(baskino)
 		elif auswahl == "Kinox":
+			self.hit_plugin("Kinox")
 			self.session.open(kxMain) 
 		elif auswahl == "Vutechtalk":
+			self.hit_plugin("Vutechtalk")
 			self.session.open(vutechtalk)
 		elif auswahl == "Dreamscreencast":
+			self.hit_plugin("Dreamscreencast")
 			self.session.open(dreamscreencast)
 		elif auswahl == "TV-Kino":
+			self.hit_plugin("TV-Kino")
 			self.session.open(tvkino)
 		elif auswahl == "Konzert Oase":
+			self.hit_plugin("Konzert Oase")
 			self.session.open(oaseGenreScreen)
 		elif auswahl == "StreamOase":
+			self.hit_plugin("StreamOase")
 			self.session.open(oasetvGenreScreen)
 		elif auswahl == "AutoBild":
+			self.hit_plugin("AutoBild")
 			self.session.open(autoBildGenreScreen)
 		elif auswahl == "NHL":
+			self.hit_plugin("NHL")
 			self.session.open(nhlGenreScreen)
 		elif auswahl == "4Players":
+			self.hit_plugin("4Players")
 			self.session.open(forPlayersGenreScreen)
 		elif auswahl == "GIGA.de":
+			self.hit_plugin("GIGA.de")
 			self.session.open(gigatvGenreScreen)
 		elif auswahl == "Audi.tv":
+			self.hit_plugin("Audi.tv")
 			self.session.open(auditvGenreScreen)
 		elif auswahl == "gronkh.de":
+			self.hit_plugin("gronkh.de")
 			self.session.open(gronkhGenreScreen)
 		elif auswahl == "Tivi":
+			self.hit_plugin("Tivi")
 			self.session.open(tiviGenreListeScreen)
 		elif auswahl == "My-Entertainment":
+			self.hit_plugin("My-Entertainment")
 			self.session.open(showMEHDGenre)
 		elif auswahl == "Songs.to":
+			self.hit_plugin("Songs.to")
 			self.session.open(showSongstoGenre)
 		elif auswahl == "Movie2k":
+			self.hit_plugin("Movie2k")
 			self.session.open(m2kGenreScreen, "default")
 		elif auswahl == "IStream":
+			self.hit_plugin("IStream")
 			self.session.open(showIStreamGenre, "default")
 		elif auswahl == "mahlzeit.tv":
+			self.hit_plugin("mahlzeit.tv")
 			self.session.open(mahlzeitMainScreen)
 		elif auswahl == "fiwitu.tv":
+			self.hit_plugin("fiwitu.tv")
 			self.session.open(fiwituGenreScreen)
 		elif auswahl == "AppleTrailer":
+			self.hit_plugin("AppleTrailer")
 			self.session.open(appletrailersGenreScreen)
 		elif auswahl == "DOKUh":
+			self.hit_plugin("DOKUh")
 			self.session.open(showDOKUHGenre)
 		elif auswahl == "DokuHouse":
+			self.hit_plugin("DokuHouse")
 			self.session.open(show_DH_Genre)
 		elif auswahl == "AllMusicHouse":
+			self.hit_plugin("AllMusicHouse")
 			self.session.open(show_AMH_Genre)
 		elif auswahl == "putpat.tv":
+			self.hit_plugin("putpat.tv")
 			self.session.open(putpattvGenreScreen)
 		elif auswahl == "LiveLeak":
+			self.hit_plugin("LiveLeak")
 			self.session.open(LiveLeakScreen)
 		elif auswahl == "DokuStream":
+			self.hit_plugin("DokuStream")
 			self.session.open(show_DS_Genre)
 		elif auswahl == "ScienceTV":
+			self.hit_plugin("ScienceTV")
 			self.session.open(scienceTvGenreScreen)
 		elif auswahl == "SzeneStreams":
+			self.hit_plugin("SzeneStreams")
 			self.session.open(SzeneStreamsGenreScreen)
 		elif auswahl == "HörspielHouse":
+			self.hit_plugin("HörspielHouse")
 			self.session.open(show_HSH_Genre)
 		elif auswahl == "Hörspiel-Channels":
+			self.hit_plugin("Hörspiel-Channels")
 			self.session.open(show_HSC_Genre)
 		elif auswahl == "CAR-Channels":
+			self.hit_plugin("CAR-Channels")
 			self.session.open(show_CAR_Genre)
 		elif auswahl == "GAME-Channels":
+			self.hit_plugin("GAME-Channels")
 			self.session.open(show_GAME_Genre)
 		elif auswahl == "MUSIC-Channels":
+			self.hit_plugin("MUSIC-Channels")
 			self.session.open(show_MUSIC_Genre)
 		elif auswahl == "USER-Channels":
+			self.hit_plugin("USER-Channels")
 			self.session.open(show_USER_Genre)
 		elif auswahl == "Cinestream":
+			self.hit_plugin("Cinestream")
 			self.session.open(cinestreamFilmListeScreen)
 		elif auswahl == "Moovizon":
+			self.hit_plugin("Moovizon")
 			self.session.open(moovizonGenreScreen)
 		elif auswahl == "YouTube":
+			self.hit_plugin("YouTube")
 			self.session.open(youtubeGenreScreen)
 		# mediatheken
 		elif auswahl == "VOXNOW":
+			self.hit_plugin("VOXNOW")
 			self.session.open(VOXnowGenreScreen)
 		elif auswahl == "RTLNOW":
+			self.hit_plugin("RTLNOW")
 			self.session.open(RTLnowGenreScreen)
 		elif auswahl == "N-TVNOW":
+			self.hit_plugin("N-TVNOW")
 			self.session.open(NTVnowGenreScreen)
 		elif auswahl == "RTL2NOW":
+			self.hit_plugin("RTL2NOW")
 			self.session.open(RTL2nowGenreScreen)
 		elif auswahl == "RTLNITRONOW":
+			self.hit_plugin("RTLNITRONOW")
 			self.session.open(RTLNITROnowGenreScreen)
 		elif auswahl == "SUPERRTLNOW":
+			self.hit_plugin("SUPERRTLNOW")
 			self.session.open(SUPERRTLnowGenreScreen)
 		elif auswahl == "ZDF Mediathek":
+			self.hit_plugin("ZDF Mediathek")
 			self.session.open(ZDFGenreScreen)
 		elif auswahl == "ORF TVthek":
+			self.hit_plugin("ORF TVthek")
 			self.session.open(ORFGenreScreen)
 		elif auswahl == "KIKA+":
+			self.hit_plugin("KIKA+")
 			self.session.open(kikaGenreScreen)
 		# porn
 		elif auswahl == "4Tube":
