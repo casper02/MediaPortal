@@ -101,6 +101,8 @@ from additions.porn.x4tube import *
 from additions.porn.youporn import *
 
 config.mediaportal = ConfigSubsection()
+config.mediaportal.version = NoSave(ConfigText(default="412"))
+config.mediaportal.versiontext = NoSave(ConfigText(default="4.1.2"))
 config.mediaportal.pincode = ConfigPIN(default = 0000)
 config.mediaportal.skin = ConfigSelection(default = "tec", choices = [("tec", _("tec")),("liquidblue", _("liquidblue")), ("original", _("original"))])
 config.mediaportal.ansicht = ConfigSelection(default = "liste", choices = [("liste", _("Liste")),("wall", _("Wall"))])
@@ -356,7 +358,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		
 		self["config"].setList(self.configlist)
 
-		self['title'] = Label("MediaPortal - Setup - (Version 4.1.2)")
+		self['title'] = Label("MediaPortal - Setup - (Version %s)" % config.mediaportal.versiontext.value)
 		self['name'] = Label("Setup")
 		self['coverArt'] = Pixmap()
 		
@@ -433,7 +435,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			"displayHelp" : self.keyHelp
 		}, -1)
 
-		self['title'] = Label("MediaPortal v4.1.2")
+		self['title'] = Label("MediaPortal v%s" % config.mediaportal.versiontext.value)
 		
 		self['name'] = Label("Plugin Auswahl")
 		
@@ -450,8 +452,40 @@ class haupt_Screen(Screen, ConfigListScreen):
 		self['Porn'] = Label("Porn")
 
 		self.currentlist = "porn"
-		self.onLayoutFinish.append(self.layoutFinished)
+		self.onLayoutFinish.append(self.checkforupdate)
 		
+	def checkforupdate(self):
+		try:
+			getPage("http://mediaportale2.ohost.de/version.txt").addCallback(self.gotUpdateInfo)
+		except Exception, error:
+			print str(error)
+
+	def gotUpdateInfo(self, html):
+		tmp_infolines = html.splitlines()
+		remoteversion = tmp_infolines[0]
+		self.updateurl = tmp_infolines[1]
+		if config.mediaportal.version.value < remoteversion:
+			self.session.openWithCallback(self.startPluginUpdate,MessageBox,_("An update is available for the MediaPortal Plugin!\nDo you want to download and install it now?"), MessageBox.TYPE_YESNO)
+		else:
+			self.layoutFinished()
+
+	def startPluginUpdate(self, answer):
+		if answer is True:
+			self.container=eConsoleAppContainer()
+			self.container.appClosed.append(self.finishedPluginUpdate)
+			self.container.execute("opkg install --force-overwrite " + str(self.updateurl))
+		else:
+			self.layoutFinished()
+
+	def finishedPluginUpdate(self,retval):
+		self.session.openWithCallback(self.restartGUI, MessageBox, _("MediaPortal successfully updated!\nDo you want to restart the Enigma2 GUI now?"), MessageBox.TYPE_YESNO)
+
+	def restartGUI(self, answer):
+		if answer is True:
+			self.session.open(TryQuitMainloop, 3)
+		else:
+			self.layoutFinished()
+
 	def layoutFinished(self):
 		self.mediatheken = []
 		self.grauzone = []
@@ -1506,7 +1540,39 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		
 		self.selektor_index = 1
 		self.select_list = 0
-		self.onFirstExecBegin.append(self._onFirstExecBegin)
+		self.onFirstExecBegin.append(self.checkforupdate)
+
+	def checkforupdate(self):
+		try:
+			getPage("http://mediaportale2.ohost.de/version.txt").addCallback(self.gotUpdateInfo)
+		except Exception, error:
+			print str(error)
+
+	def gotUpdateInfo(self, html):
+		tmp_infolines = html.splitlines()
+		remoteversion = tmp_infolines[0]
+		self.updateurl = tmp_infolines[1]
+		if config.mediaportal.version.value < remoteversion:
+			self.session.openWithCallback(self.startPluginUpdate,MessageBox,_("An update is available for the MediaPortal Plugin!\nDo you want to download and install it now?"), MessageBox.TYPE_YESNO)
+		else:
+			self._onFirstExecBegin()
+
+	def startPluginUpdate(self, answer):
+		if answer is True:
+			self.container=eConsoleAppContainer()
+			self.container.appClosed.append(self.finishedPluginUpdate)
+			self.container.execute("opkg install --force-overwrite " + str(self.updateurl))
+		else:
+			self._onFirstExecBegin()
+
+	def finishedPluginUpdate(self,retval):
+		self.session.openWithCallback(self.restartGUI, MessageBox, _("MediaPortal successfully updated!\nDo you want to restart the Enigma2 GUI now?"), MessageBox.TYPE_YESNO)
+
+	def restartGUI(self, answer):
+		if answer is True:
+			self.session.open(TryQuitMainloop, 3)
+		else:
+			self._onFirstExecBegin()
 		
 	def _onFirstExecBegin(self):
 		# load plugin icons
