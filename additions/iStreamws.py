@@ -3,6 +3,7 @@
 from Plugins.Extensions.MediaPortal.resources.imports import *
 import Queue
 import threading
+from Plugins.Extensions.MediaPortal.resources.playhttpmovie import PlayHttpMovie
 
 # teilweise von movie2k geliehen
 if fileExists('/usr/lib/enigma2/python/Plugins/Extensions/TMDb/plugin.pyo'):
@@ -756,9 +757,18 @@ class IStreamStreams(Screen, ConfigListScreen):
 		if stream_url == None:
 			message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=3)
 		else:
-			sref = eServiceReference(0x1001, 0, stream_url)
-			sref.setName("%s%s" % (self.filmName,self['liste'].getCurrent()[0][2]))
-			self.session.open(MoviePlayer, sref)
+			if config.mediaportal.useHttpDump.value:
+				title = self.filmName + self['liste'].getCurrent()[0][2]
+				if re.match('.*?flashx', stream_url):
+					movieinfo = [stream_url,self.filmName,"http://play.flashx.tv/"]
+				else:
+					movieinfo = [stream_url,self.filmName,""]
+			
+				self.session.open(PlayHttpMovie, movieinfo, title)
+			else:
+				sref = eServiceReference(0x1001, 0, stream_url)
+				sref.setName("%s%s" % (self.filmName,self['liste'].getCurrent()[0][2]))
+				self.session.open(MoviePlayer, sref)
 	
 	def keyOK(self):
 		if self.keyLocked:

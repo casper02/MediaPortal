@@ -149,8 +149,8 @@ class get_stream_link:
 				#print link
 				getPage(link, cookies=cj, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.check_istream_link).addErrback(self.errorload)
 				
-			#elif re.match('.*?http:/.*?flashx.tv', data, re.S):
-			elif re.match('.*?http:/disabled', data, re.S):
+			elif re.match('.*?http:/.*?flashx.tv', data, re.S):
+			#elif re.match('.*?http:/disabled', data, re.S):
 				link = data
 				#print link
 				hash = re.findall('http://flashx.tv/video/(.*?)/', link)
