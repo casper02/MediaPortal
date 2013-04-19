@@ -1556,7 +1556,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 				
 			# Sortieren nach abcde..
 			elif config.mediaportal.sortplugins.value == "abc":
-				self.new_pluginliste.sort(key=lambda x: str(x[0]))
+				self.new_pluginliste.sort(key=lambda x: str(x[0]).lower())
 
 			self.plugin_liste = self.new_pluginliste
 			
