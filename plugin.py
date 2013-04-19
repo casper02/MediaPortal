@@ -1616,7 +1616,6 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		
 		self.selektor_index = 1
 		self.select_list = 0
-<<<<<<< HEAD
 		self.onFirstExecBegin.append(self.checkforupdate)
 
 	def checkforupdate(self):
@@ -1654,7 +1653,6 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		else:
 			self._onFirstExecBegin()
 		
-=======
 		self.onFirstExecBegin.append(self._onFirstExecBegin)
 
 	def hit_plugin(self, pname):
@@ -1674,7 +1672,6 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			read_pluginliste_tmp.close()
 			shutil.move(self.sort_plugins_file+".tmp", self.sort_plugins_file)
 
->>>>>>> origin/einfall
 	def _onFirstExecBegin(self):
 		# load plugin icons
 		print "Set Filter:", config.mediaportal.filter.value
