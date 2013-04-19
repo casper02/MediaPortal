@@ -456,7 +456,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 		
 	def checkforupdate(self):
 		try:
-			getPage("http://mediaportale2.ohost.de/versio.txt").addCallback(self.gotUpdateInfo).addErrback(self.gotError)
+			getPage("http://mediaportale2.ohost.de/version.txt").addCallback(self.gotUpdateInfo).addErrback(self.gotError)
 		except Exception, error:
 			print str(error)
 
