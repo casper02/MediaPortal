@@ -33,7 +33,8 @@ class PlayRtmpMovie(Screen):
 		self.movietitle = movietitle
 		self.movieinfo = movieinfo
 		self.destination = config.mediaportal.storagepath.value
-		self.moviepath = self.destination + ASCIItranslit.legacyEncode(self.filename)
+		#self.moviepath = self.destination + ASCIItranslit.legacyEncode(self.filename)
+		self.moviepath = self.destination + ".rtmp_movie"
 		
 		self.streamactive = False
 		self.isVisible = True
