@@ -456,9 +456,12 @@ class haupt_Screen(Screen, ConfigListScreen):
 		
 	def checkforupdate(self):
 		try:
-			getPage("http://mediaportale2.ohost.de/version.txt").addCallback(self.gotUpdateInfo)
+			getPage("http://mediaportale2.ohost.de/versio.txt").addCallback(self.gotUpdateInfo).addErrback(self.gotError)
 		except Exception, error:
 			print str(error)
+
+	def gotError(self, error=""):
+		self.layoutFinished()
 
 	def gotUpdateInfo(self, html):
 		tmp_infolines = html.splitlines()
@@ -1544,9 +1547,12 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 
 	def checkforupdate(self):
 		try:
-			getPage("http://mediaportale2.ohost.de/version.txt").addCallback(self.gotUpdateInfo)
+			getPage("http://mediaportale2.ohost.de/version.txt").addCallback(self.gotUpdateInfo).addErrback(self.gotError)
 		except Exception, error:
 			print str(error)
+
+	def gotError(self, error=""):
+		self._onFirstExecBegin()
 
 	def gotUpdateInfo(self, html):
 		tmp_infolines = html.splitlines()
