@@ -71,6 +71,8 @@ class show_MUSIC_Genre(Screen):
 		self.genreliste.append((15,'Scooter Official', '/scooter'))
 		self.genreliste.append((16,'ATZEN MUSIK TV', '/atzenmusiktv'))
 		self.genreliste.append((17,'BigCityBeats', '/HammerDontHurtEm'))
+		self.genreliste.append((18,'The Best Of', '/alltimebestofmusic'))
+		#self.genreliste.append((19,'The Beatles', '/BeatlesHD'))
 		#self.genreliste.append((5,'', '/'))
 		#self.genreliste.append((5,'', '/'))
 		

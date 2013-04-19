@@ -148,8 +148,9 @@ class get_stream_link:
 				link = data
 				#print link
 				getPage(link, cookies=cj, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.check_istream_link).addErrback(self.errorload)
-
-			elif re.match('.*?http:/.*?flashx.tv', data, re.S):
+				
+			#elif re.match('.*?http:/.*?flashx.tv', data, re.S):
+			elif re.match('.*?http:/disabled', data, re.S):
 				link = data
 				#print link
 				hash = re.findall('http://flashx.tv/video/(.*?)/', link)
@@ -160,7 +161,7 @@ class get_stream_link:
 				else:
 					print "flashx_tv link not found: ",link
 					self.stream_not_found()
-
+					
 			elif re.match('.*?putme.org', data, re.S):
 				link = data
 				#print link
@@ -197,17 +198,17 @@ class get_stream_link:
 				self.userporn_tv(link)
 
 			else:
-				message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=3)
+				message = self.session.open(MessageBox, _("No supported Stream Hoster, try another one !"), MessageBox.TYPE_INFO, timeout=5)
 		else:
 			print "Invalid link",link
 			if self.showmsgbox:
-				message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=3)
+				message = self.session.open(MessageBox, _("Invalid Stream link, try another Stream Hoster !"), MessageBox.TYPE_INFO, timeout=5)
 				
 	def stream_not_found(self):
 		#self._callback(None)
 		print "stream_not_found!"
 		if self.showmsgbox:
-			message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=3)
+			message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=5)
 
 	def zooupload(self, data):
 		get_packedjava = re.findall("<script type=.text.javascript.>eval.function(.*?)</script>", data, re.S|re.DOTALL)
