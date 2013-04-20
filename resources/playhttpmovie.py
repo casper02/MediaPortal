@@ -35,6 +35,13 @@ class PlayHttpMovie(Screen):
 		self.destination = config.mediaportal.storagepath.value
 		self.moviepath = self.destination + ".http_movie"
 		self.referer_val = movieinfo[2]
+		if self.referer_val != '':
+			self.referer = "--header 'Referer: %s'" % self.referer_val
+		else:
+			self.referer = ''
+		
+		self.useragent = "QuickTime/7.6.2 (qtver=7.6.2;os=Windows NT 5.1Service Pack 3)"
+		self.useragent_header = "--header='User-Agent: %s'" % self.useragent
 		
 		self.streamactive = False
 		self.isVisible = True
@@ -49,7 +56,18 @@ class PlayHttpMovie(Screen):
 
 		self.BgFileEraser = eBackgroundFileEraser.getInstance()
 
-		filesize = 0
+		try:
+			req = Request(self.url)
+			req.add_header('User-agent',self.useragent)
+			req.add_header('Referer',self.referer_val)
+			usock = urlopen(req)
+			filesize =  usock.info().get('Content-Length')
+		except Exception, e:
+			filesize = 0
+
+		if filesize is None:
+			filesize = 0
+			
 		self.filesize = float(filesize) # in bytes
 		
 		self.timeleft = ""
@@ -152,6 +170,10 @@ class PlayHttpMovie(Screen):
 
 		self.lastlocalsize = self.localsize
 
+		if timeleft > 0.0:
+			secs = int(timeleft * 60)
+			self.timeleft = str(datetime.timedelta(seconds=secs))
+			
 		self["label_speed"].setText("Speed: " + str(transferspeed) + " KBit/s")
 		self["label_progress"].setText("Progress: " + str(int(float(self.localsize) / 1024.0 / 1024.0 + 0.5)) + "MB of " + str(int(float(self.filesize) / 1024.0 / 1024.0 + 0.5)) + "MB (" + str(self.progressperc) + "%)")
 		#self["label_timeleft"].setText("Time left: " + str(timeleft) + " Minutes")
@@ -163,13 +185,8 @@ class PlayHttpMovie(Screen):
 
 	def copyfile(self):
 		#print "copyfile:"
-		if self.referer_val != '':
-			header = "--header 'Referer: %s'" % self.referer_val
-		else:
-			header = ''
-			
 		if self.url[0:4] == "http":
-			cmd = "wget %s -O %s %s" % (header, self.moviepath, self.url)
+			cmd = "wget %s %s -q -O '%s' '%s' &" % (self.useragent_header, self.referer, self.moviepath, self.url)
 		else:
 			self.session.openWithCallback(self.exit, MessageBox, _("This stream can not get saved on HDD\nProtocol %s not supported :(") % self.url[0:5], MessageBox.TYPE_ERROR)
 			return
@@ -188,11 +205,13 @@ class PlayHttpMovie(Screen):
 		self.container.execute(cmd)
 
 	def progressUpdate(self, data):
+		#print "progressupd:"
 		self.lastcmddata = data
 		m = re.search('.*?(\d+?)%.*?(\d+?)k.*?(\d+?:\d+?:\d+?) ETA', data)
 		if m:
 			self.progressperc = int(m.group(1))
 			self.timeleft = m.group(3)
+			#print "pupd: ",self.progressperc,self.timeleft
 			if self.lastlocalsize > 0 and self.progressperc > 0:
 				self.filesize = int(float(self.lastlocalsize/self.progressperc)*100+0.5)
 				self.dummyfilesize = True
@@ -223,7 +242,7 @@ class PlayHttpMovie(Screen):
 		#print "movieplayercallback:"
 		if self.isVisible == False:
 			self.visibility()
-		self.filesize = self.localsize
+		#self.filesize = self.localsize
 		self.UpdateStatus()
 
 	def visibility(self):
