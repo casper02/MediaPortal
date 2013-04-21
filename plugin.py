@@ -115,7 +115,7 @@ config.mediaportal.filter = ConfigSelection(default = "ALL", choices = [("ALL", 
 config.mediaportal.youtubeprio = ConfigSelection(default = "1", choices = [("0", _("Low")),("1", _("Medium")),("2", _("High"))])
 config.mediaportal.pornpin = ConfigYesNo(default = True)
 config.mediaportal.watchlistpath = ConfigText(default="/etc/enigma2/", fixed_size=False)
-config.mediaportal.sortplugins = ConfigSelection(default = "default", choices = [("default", _("default")),("hits", _("hits")), ("abc", _("abc"))])
+config.mediaportal.sortplugins = ConfigSelection(default = "default", choices = [("default", _("default")),("hits", _("hits")), ("abc", _("abc")), ("eigene", _("eigene"))])
 
 config.mediaportal.showDoku = ConfigYesNo(default = True)
 config.mediaportal.showRofl = ConfigYesNo(default = True)
@@ -1299,10 +1299,105 @@ class haupt_Screen(Screen, ConfigListScreen):
 	def restart(self):
 		self.close(self.session, False)
 
+class pluginSort(Screen):
+	skin = """
+		<screen position="center,center" size="800,400" title="Plugins Sortieren nach 'eigene'">
+			<widget name="config2" position="10,10" size="790,375" scrollbarMode="showOnDemand" />
+		</screen>"""	
+		
+	def __init__(self, session,):
+		Screen.__init__(self, session)
+		self.session = session
+
+		self.list = [] 
+		self["config2"] = chooseMenuList([])
+		self.plugin_path = ""
+		self.selected = False
+		self.move_on = False
+
+		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "HelpActions"], {
+			"ok":	self.select,
+			"cancel": self.keyCancel
+		}, -1)
+		
+		self.readconfig()
+		
+	def select(self):
+		if not self.selected:
+			self.last_newidx = self["config2"].getSelectedIndex()
+			self.last_plugin_name = self["config2"].getCurrent()[0][0]
+			self.last_plugin_pic = self["config2"].getCurrent()[0][1]
+			self.last_plugin_genre = self["config2"].getCurrent()[0][2]
+			self.last_plugin_hits = self["config2"].getCurrent()[0][3]
+			self.last_plugin_msort = self["config2"].getCurrent()[0][4]
+			print "Select:", self.last_plugin_name, self.last_newidx
+			self.selected = True
+			self.readconfig()
+		else:
+			self.now_newidx = self["config2"].getSelectedIndex()
+			self.now_plugin_name = self["config2"].getCurrent()[0][0]
+			self.now_plugin_pic = self["config2"].getCurrent()[0][1]
+			self.now_plugin_genre = self["config2"].getCurrent()[0][2]
+			self.now_plugin_hits = self["config2"].getCurrent()[0][3]
+			self.now_plugin_msort = self["config2"].getCurrent()[0][4]
+
+			count_move = 0
+			
+			config_tmp = open("/etc/enigma2/mp_pluginliste.tmp" , "w")
+			for each in self.config_list_select:
+				(name, pic, genre, hits, msort) = each
+				if int(self.now_newidx) == int(count_move):
+					print "MOVED:", self.last_plugin_name, count_move, "<--------------------------------------------------------------------------------------"
+					config_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (self.last_plugin_name, self.last_plugin_pic, self.last_plugin_genre, self.last_plugin_hits, count_move))
+					count_move += 1
+					
+				elif int(self.last_newidx) == int(count_move):
+					print "MOVED:", self.last_plugin_name, count_move, "<--------------------------------------------------------------------------------------"
+					config_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (self.now_plugin_name, self.now_plugin_pic, self.now_plugin_genre, self.now_plugin_hits, count_move))
+					count_move += 1
+					
+				else:		
+					print each[0], count_move, len(self.config_list_select)-1
+					config_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (name, pic, genre, hits, count_move))
+					count_move += 1
+						
+			print "change:", self.last_newidx, "with", self.now_newidx, "total:", len(self.config_list_select)-1
+				
+			config_tmp.close()
+			shutil.move("/etc/enigma2/mp_pluginliste.tmp", "/etc/enigma2/mp_pluginliste")			
+			self.selected = False
+			self.readconfig()
+				
+	def readconfig(self):
+		config_read = open("/etc/enigma2/mp_pluginliste","r")
+		self.config_list = []
+		self.config_list_select = []
+		for line in config_read.readlines():
+			ok = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)" "(.*?)"', line, re.S)
+			if ok:
+				(name, pic, genre, hits, msort) = ok[0]
+				self.config_list_select.append((name, pic, genre, hits, msort))
+				self.config_list.append(self.show_menu(name, pic, genre, hits, msort))
+		
+		self.config_list.sort(key=lambda x: int(x[0][4]))
+		self.config_list_select.sort(key=lambda x: int(x[4]))
+		self["config2"].l.setList(self.config_list)
+		self["config2"].l.setItemHeight(25)				
+		config_read.close()
+		
+	def show_menu(self, name, pic, genre, hits, msort):
+		res = [(name, pic, genre, hits, msort)]
+		res.append(MultiContentEntryText(pos=(100, 0), size=(390, 22), font=0, text=name, flags=RT_HALIGN_LEFT))
+		if self.selected and name == self.last_plugin_name:
+			res.append(MultiContentEntryPixmapAlphaTest(pos=(70, 2), size=(20, 20), png=loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/select.png")))
+		return res
+
+	def keyCancel(self):
+		self.close()
+
 class haupt_Screen_Wall(Screen, ConfigListScreen):
 	def __init__(self, session, filter):
 		self.session = session
-		#config.mediaportal.filter.value = filter
 
 		self.plugin_liste = []
 		if config.mediaportal.showMyvideo.value:
@@ -1503,10 +1598,12 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			pluginliste_leer = os.path.getsize(self.sort_plugins_file)
 			if pluginliste_leer == 0:
 				print "1st time - Schreibe Wall-Pluginliste."
+				first_count = 0
 				read_pluginliste = open(self.sort_plugins_file,"a")
 				for name,picname,genre in self.plugin_liste:
 					print name
-					read_pluginliste.write('"%s" "%s" "%s" "%s" "%s"\n' % (name, picname, genre, "0", "0"))
+					read_pluginliste.write('"%s" "%s" "%s" "%s" "%s"\n' % (name, picname, genre, "0", str(first_count)))
+					first_count += 1
 				read_pluginliste.close()
 				print "Wall-Pluginliste wurde erstellt."
 				
@@ -1521,25 +1618,50 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 					print "Ein Plugin wurde aktiviert oder deaktiviert.. erstelle neue pluginliste."
 					
 					read_pluginliste_tmp = open(self.sort_plugins_file+".tmp","w")
+					read_pluginliste = open(self.sort_plugins_file,"r")
 					p_dupeliste = []
 					
-					for pname, ppic, pgenre in self.plugin_liste:
-						read_pluginliste = open(self.sort_plugins_file,"r")
-						for rawData in read_pluginliste.readlines():
-							data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
-							if data:
-								(p_name, p_picname, p_genre, p_hits, p_sort) = data[0]
-								if pname == p_name:
-									if pname not in p_dupeliste:
+					for rawData in read_pluginliste.readlines():
+						data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
+						
+						if data:
+							(p_name, p_picname, p_genre, p_hits, p_sort) = data[0]
+							pop_count = 0
+							for pname, ppic, pgenre in self.plugin_liste:
+								if p_name not in p_dupeliste:
+									if p_name == pname:
 										read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (p_name, p_picname, p_genre, p_hits, p_sort))
-								else:
-									if pname not in p_dupeliste:
-										read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (pname, ppic, pgenre, "0", "0"))
-							p_dupeliste.append((pname))
-							read_pluginliste.close()
-
+										p_dupeliste.append((p_name))
+										print pop_count
+										self.plugin_liste.pop(int(pop_count))
+										
+									pop_count += 1
+							
+					if len(self.plugin_liste) != 0:
+						for pname, ppic, pgenre in self.plugin_liste:
+							read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (pname, ppic, pgenre, "0", "99"))
+					
+					read_pluginliste.close()
 					read_pluginliste_tmp.close()
 					shutil.move(self.sort_plugins_file+".tmp", self.sort_plugins_file)
+					
+					#for pname, ppic, pgenre in self.plugin_liste:
+					#	read_pluginliste = open(self.sort_plugins_file,"r")
+					#	for rawData in read_pluginliste.readlines():
+					#		data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
+					#		if data:
+					#			(p_name, p_picname, p_genre, p_hits, p_sort) = data[0]
+					#			if pname not in p_dupeliste:
+					#				if pname == p_name:
+					#					read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (p_name, p_picname, p_genre, p_hits, p_sort))	
+					#				else:
+					#					read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (pname, ppic, pgenre, "0", "99"))
+					#					
+					#		p_dupeliste.append((pname))
+					#		read_pluginliste.close()
+
+					#read_pluginliste_tmp.close()
+					#shutil.move(self.sort_plugins_file+".tmp", self.sort_plugins_file)
 
 				self.new_pluginliste = []
 				read_pluginliste = open(self.sort_plugins_file,"r")
@@ -1554,11 +1676,17 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			if config.mediaportal.sortplugins.value == "hits":
 				self.new_pluginliste.sort(key=lambda x: int(x[3]))
 				self.new_pluginliste.reverse()
-				
-				
+
 			# Sortieren nach abcde..
 			elif config.mediaportal.sortplugins.value == "abc":
+<<<<<<< HEAD
 				self.new_pluginliste.sort(key=lambda x: str(x[0]).lower())
+=======
+				self.new_pluginliste.sort(key=lambda x: str(x[0]))
+				
+			elif config.mediaportal.sortplugins.value == "eigene":
+				self.new_pluginliste.sort(key=lambda x: int(x[4]))
+>>>>>>> origin/einfall
 
 			self.plugin_liste = self.new_pluginliste
 			
@@ -1605,7 +1733,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			"prevBouquet" :	self.page_back,
 			"menu" : self.keySetup,
 			"displayHelp" : self.keyHelp,
-			"blue" : self.chFilter
+			"blue" : self.chFilter,
+			"yellow": self.manuelleSortierung
 		}, -1)
 		
 		self['name'] = Label("Plugin Auswahl")
@@ -1618,6 +1747,10 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		
 		self.selektor_index = 1
 		self.select_list = 0
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/einfall
 		self.onFirstExecBegin.append(self.checkforupdate)
 
 	def checkforupdate(self):
@@ -1654,8 +1787,15 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(TryQuitMainloop, 3)
 		else:
 			self._onFirstExecBegin()
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> origin/einfall
 		self.onFirstExecBegin.append(self._onFirstExecBegin)
+
+	def manuelleSortierung(self):
+		self.session.openWithCallback(self.restart, pluginSort)
 
 	def hit_plugin(self, pname):
 		if fileExists(self.sort_plugins_file):
@@ -1682,7 +1822,18 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			dump_liste = self.plugin_liste
 			self.plugin_liste = []
 			self.plugin_liste = [x for x in dump_liste if config.mediaportal.filter.value == x[2]]
-			self.plugin_liste.sort(key=lambda t : tuple(t[0].lower()))
+			
+			if config.mediaportal.sortplugins.value == "hits":
+				self.plugin_liste.sort(key=lambda x: int(x[3]))
+				self.plugin_liste.reverse()
+
+			# Sortieren nach abcde..
+			elif config.mediaportal.sortplugins.value == "abc":
+				self.plugin_liste.sort(key=lambda t : tuple(t[0].lower()))
+				
+			elif config.mediaportal.sortplugins.value == "eigene":
+				self.plugin_liste.sort(key=lambda x: int(x[4]))
+				
 			if self.check_empty_list():
 				return
 				
