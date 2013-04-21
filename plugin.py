@@ -2259,106 +2259,132 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 
 	def pin4tube(self, pincode):
 		if pincode:
+			self.hit_plugin("4Tube")
 			self.session.open(fourtubeGenreScreen)
 
 	def pinahme(self, pincode):
 		if pincode:
+			self.hit_plugin("Ah-Me")
 			self.session.open(ahmeGenreScreen)
 
 	def pinamateurporn(self, pincode):
 		if pincode:
+			self.hit_plugin("AmateurPorn")
 			self.session.open(amateurpornGenreScreen)
 
 	def pinbeeg(self, pincode):
 		if pincode:
+			self.hit_plugin("beeg")
 			self.session.open(beegGenreScreen)
 
 	def pindreiin(self, pincode):
 		if pincode:
+			self.hit_plugin("Drei.in")
 			self.session.open(dreiinGenreScreen)
 
 	def pindrtuber(self, pincode):
 		if pincode:
+			self.hit_plugin("DrTuber")
 			self.session.open(drtuberGenreScreen)
 
 	def pineporner(self, pincode):
 		if pincode:
+			self.hit_plugin("Eporner")
 			self.session.open(epornerGenreScreen)
 
 	def pinextremetube(self, pincode):
 		if pincode:
+			self.hit_plugin("ExtremeTube")
 			self.session.open(extremetubeGenreScreen)
 
 	def pingstreaminxxx(self, pincode):
 		if pincode:
+			self.hit_plugin("G-Stream-XXX")
 			self.session.open(gstreaminxxxGenreScreen)
 
 	def pinhdporn(self, pincode):
 		if pincode:
+			self.hit_plugin("HDPorn")
 			self.session.open(hdpornGenreScreen)
 
 	def pinhotshame(self, pincode):
 		if pincode:
+			self.hit_plugin("hotshame")
 			self.session.open(hotshameGenreScreen)
 
 	def pinistreamporn(self, pincode):
 		if pincode:
+			self.hit_plugin("IStream-XXX")
 			self.session.open(showIStreamGenre, "porn")
 
 	def pinmovie2kporn(self, pincode):
 		if pincode:
+			self.hit_plugin("Movie2k-XXX")
 			self.session.open(m2kGenreScreen, "porn")
 			
 	def pinpinkrod(self, pincode):
 		if pincode:
+			self.hit_plugin("Pinkrod")
 			self.session.open(pinkrodGenreScreen)
 
 	def pinplayporn(self, pincode):
 		if pincode:
+			self.hit_plugin("PlayPorn")
 			self.session.open(playpornGenreScreen)
 
 	def pinpornostreams(self, pincode):
 		if pincode:
+			self.hit_plugin("PornoStreams")
 			self.session.open(pornostreamsGenreScreen)
 
 	def pinpornerbros(self, pincode):
 		if pincode:
+			self.hit_plugin("PornerBros")
 			self.session.open(pornerbrosGenreScreen)
 
 	def pinpornhub(self, pincode):
 		if pincode:
+			self.hit_plugin("Pornhub")
 			self.session.open(pornhubGenreScreen)
 
 	def pinpornrabbit(self, pincode):
 		if pincode:
+			self.hit_plugin("PornRabbit")
 			self.session.open(pornrabbitGenreScreen)
 
 	def pinrealgfporn(self, pincode):
 		if pincode:
+			self.hit_plugin("RealGFPorn")
 			self.session.open(realgfpornGenreScreen)
 
 	def pinredtube(self, pincode):
 		if pincode:
+			self.hit_plugin("RedTube")
 			self.session.open(redtubeGenreScreen)
 
 	def pinsunporno(self, pincode):
 		if pincode:
+			self.hit_plugin("SunPorno")
 			self.session.open(sunpornoGenreScreen)
 
 	def pinthenewporn(self, pincode):
 		if pincode:
+			self.hit_plugin("TheNewPorn")
 			self.session.open(thenewpornGenreScreen)
 
 	def pinwetplace(self, pincode):
 		if pincode:
+			self.hit_plugin("WetPlace")
 			self.session.open(wetplaceGenreScreen)
 
 	def pinxhamster(self, pincode):
 		if pincode:
+			self.hit_plugin("xHamster")
 			self.session.open(xhamsterGenreScreen)
 
 	def pinyouporn(self, pincode):
 		if pincode:
+			self.hit_plugin("YouPorn")
 			self.session.open(youpornGenreScreen)
 	
 	def	keyLeft(self):
