@@ -1679,14 +1679,10 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 
 			# Sortieren nach abcde..
 			elif config.mediaportal.sortplugins.value == "abc":
-<<<<<<< HEAD
 				self.new_pluginliste.sort(key=lambda x: str(x[0]).lower())
-=======
-				self.new_pluginliste.sort(key=lambda x: str(x[0]))
-				
+
 			elif config.mediaportal.sortplugins.value == "eigene":
 				self.new_pluginliste.sort(key=lambda x: int(x[4]))
->>>>>>> origin/einfall
 
 			self.plugin_liste = self.new_pluginliste
 			
@@ -1747,10 +1743,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		
 		self.selektor_index = 1
 		self.select_list = 0
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/einfall
 		self.onFirstExecBegin.append(self.checkforupdate)
 
 	def checkforupdate(self):
@@ -1787,11 +1780,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(TryQuitMainloop, 3)
 		else:
 			self._onFirstExecBegin()
-<<<<<<< HEAD
 		
-=======
-
->>>>>>> origin/einfall
 		self.onFirstExecBegin.append(self._onFirstExecBegin)
 
 	def manuelleSortierung(self):
