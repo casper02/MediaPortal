@@ -9,11 +9,13 @@
  </widget>
  <widget source="session.VideoPicture" render="Pig" position="913,136" size="328,186" zPosition="3" backgroundColor="transparent" />
  <eLabel position="912,135" size="330,188" backgroundColor="#00ffffff" zPosition="0" name="Videoback" foregroundColor="#00ffffff" />
- <widget name="config2" position="45,136" size="790,375" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/liquidblue/images/sel.png"/> />
+ <eLabel text="eigene Plugin Sortierung" position="145,110" size="590,36" transparent="1" font="mediaportal; 26" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
+ <widget name="config2" position="45,156" size="790,500" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/liquidblue/images/sel.png" /> /&gt;
  <ePixmap position="1050,680" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/liquidblue/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />"
  <eLabel text="OK " position="1050,680" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
  <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/liquidblue/images/buttonglas.png" position="1050,680" size="90,36" alphatest="blend" zPosition="2" />
  <ePixmap position="1160,680" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/liquidblue/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />"
  <eLabel text="Exit " position="1160,680" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
  <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/liquidblue/images/buttonglas.png" position="1160,680" size="90,36" alphatest="blend" zPosition="2" />
+ <eLabel text="bitte im Setup 'Plugins Sortieren nach: eigene' auswaehlen" position="45,668" size="790,36" transparent="1" font="mediaportal; 15" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
 </screen>
