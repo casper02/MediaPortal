@@ -1300,14 +1300,19 @@ class haupt_Screen(Screen, ConfigListScreen):
 		self.close(self.session, False)
 
 class pluginSort(Screen):
-	skin = """
-		<screen position="center,center" size="800,400" title="Plugins Sortieren nach 'eigene'">
-			<widget name="config2" position="10,10" size="790,375" scrollbarMode="showOnDemand" />
-		</screen>"""	
-		
-	def __init__(self, session,):
-		Screen.__init__(self, session)
+
+	def __init__(self, session):
 		self.session = session
+		
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/pluginSort_Screen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/pluginSort_Screen.xml"
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
+		Screen.__init__(self, session)
 
 		self.list = [] 
 		self["config2"] = chooseMenuList([])
