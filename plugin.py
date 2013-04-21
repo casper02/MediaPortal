@@ -1347,26 +1347,18 @@ class pluginSort(Screen):
 			self.now_plugin_msort = self["config2"].getCurrent()[0][4]
 
 			count_move = 0
-			
 			config_tmp = open("/etc/enigma2/mp_pluginliste.tmp" , "w")
-			for each in self.config_list_select:
-				(name, pic, genre, hits, msort) = each
-				if int(self.now_newidx) == int(count_move):
-					print "MOVED:", self.last_plugin_name, count_move, "<--------------------------------------------------------------------------------------"
-					config_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (self.last_plugin_name, self.last_plugin_pic, self.last_plugin_genre, self.last_plugin_hits, count_move))
-					count_move += 1
-					
-				elif int(self.last_newidx) == int(count_move):
-					print "MOVED:", self.last_plugin_name, count_move, "<--------------------------------------------------------------------------------------"
-					config_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (self.now_plugin_name, self.now_plugin_pic, self.now_plugin_genre, self.now_plugin_hits, count_move))
-					count_move += 1
-					
-				else:		
-					print each[0], count_move, len(self.config_list_select)-1
-					config_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (name, pic, genre, hits, count_move))
-					count_move += 1
-						
-			print "change:", self.last_newidx, "with", self.now_newidx, "total:", len(self.config_list_select)-1
+			# del element from list
+			del self.config_list_select[int(self.last_newidx)];
+			# add element to list at the right place
+			self.config_list_select.insert(int(self.now_newidx), (self.last_plugin_name, self.last_plugin_pic, self.last_plugin_genre, self.last_plugin_hits, self.now_newidx));
+
+			# liste neu nummerieren
+			for (name, pic, genre, hits, msort) in self.config_list_select:
+				count_move += 1
+				config_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (name, pic, genre, hits, count_move))
+
+			print "change:", self.last_newidx+1, "with", self.now_newidx+1, "total:", len(self.config_list_select)
 				
 			config_tmp.close()
 			shutil.move("/etc/enigma2/mp_pluginliste.tmp", "/etc/enigma2/mp_pluginliste")			
