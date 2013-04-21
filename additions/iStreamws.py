@@ -757,9 +757,10 @@ class IStreamStreams(Screen, ConfigListScreen):
 		if stream_url == None:
 			message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=3)
 		else:
-			if config.mediaportal.useHttpDump.value:
+			fx = re.match('.*?flashx', stream_url)
+			if config.mediaportal.useHttpDump.value or fx:
 				title = self.filmName + self['liste'].getCurrent()[0][2]
-				if re.match('.*?flashx', stream_url):
+				if fx:
 					movieinfo = [stream_url,self.filmName,"http://play.flashx.tv/"]
 				else:
 					movieinfo = [stream_url,self.filmName,""]

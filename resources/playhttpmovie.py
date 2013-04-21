@@ -41,7 +41,7 @@ class PlayHttpMovie(Screen):
 			self.referer = ''
 		
 		self.useragent = "QuickTime/7.6.2 (qtver=7.6.2;os=Windows NT 5.1Service Pack 3)"
-		self.useragent_header = "--header='User-Agent: %s'" % self.useragent
+		self.useragent_header = "--user-agent '%s'" % self.useragent
 		
 		self.streamactive = False
 		self.isVisible = True
@@ -170,9 +170,12 @@ class PlayHttpMovie(Screen):
 
 		self.lastlocalsize = self.localsize
 
+		print "timeleft: ",timeleft
+		print "self.timeleft1: ",self.timeleft
 		if timeleft > 0.0:
 			secs = int(timeleft * 60)
 			self.timeleft = str(datetime.timedelta(seconds=secs))
+			print "self.timeleft2: ",self.timeleft
 			
 		self["label_speed"].setText("Speed: " + str(transferspeed) + " KBit/s")
 		self["label_progress"].setText("Progress: " + str(int(float(self.localsize) / 1024.0 / 1024.0 + 0.5)) + "MB of " + str(int(float(self.filesize) / 1024.0 / 1024.0 + 0.5)) + "MB (" + str(self.progressperc) + "%)")
@@ -205,13 +208,13 @@ class PlayHttpMovie(Screen):
 		self.container.execute(cmd)
 
 	def progressUpdate(self, data):
-		#print "progressupd:"
+		print "progressupd:"
 		self.lastcmddata = data
 		m = re.search('.*?(\d+?)%.*?(\d+?)k.*?(\d+?:\d+?:\d+?) ETA', data)
 		if m:
 			self.progressperc = int(m.group(1))
 			self.timeleft = m.group(3)
-			#print "pupd: ",self.progressperc,self.timeleft
+			print "pupd: ",self.progressperc,self.timeleft
 			if self.lastlocalsize > 0 and self.progressperc > 0:
 				self.filesize = int(float(self.lastlocalsize/self.progressperc)*100+0.5)
 				self.dummyfilesize = True
