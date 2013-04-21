@@ -160,7 +160,7 @@ class PlayHttpMovie(Screen):
 			if kbytesleft < 0:
 				kbytesleft = 0
 			if transferspeed > 0:
-				timeleft = round(float(kbytesleft) / transferspeed / 60.0, 1)
+				timeleft = int(float(kbytesleft) / transferspeed + .5)
 			else:
 				timeleft = 0
 		else:
@@ -172,9 +172,8 @@ class PlayHttpMovie(Screen):
 
 		print "timeleft: ",timeleft
 		print "self.timeleft1: ",self.timeleft
-		if timeleft > 0.0:
-			secs = int(timeleft * 60)
-			self.timeleft = str(datetime.timedelta(seconds=secs))
+		if timeleft > 0:
+			self.timeleft = str(datetime.timedelta(seconds=timeleft))
 			print "self.timeleft2: ",self.timeleft
 			
 		self["label_speed"].setText("Speed: " + str(transferspeed) + " KBit/s")
