@@ -1300,14 +1300,19 @@ class haupt_Screen(Screen, ConfigListScreen):
 		self.close(self.session, False)
 
 class pluginSort(Screen):
-	skin = """
-		<screen position="center,center" size="800,400" title="Plugins Sortieren nach 'eigene'">
-			<widget name="config2" position="10,10" size="790,375" scrollbarMode="showOnDemand" />
-		</screen>"""	
-		
-	def __init__(self, session,):
-		Screen.__init__(self, session)
+
+	def __init__(self, session):
 		self.session = session
+		
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/pluginSortScreen.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/pluginSortScreen.xml"
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
+		Screen.__init__(self, session)
 
 		self.list = [] 
 		self["config2"] = chooseMenuList([])
@@ -1372,12 +1377,18 @@ class pluginSort(Screen):
 		config_read = open("/etc/enigma2/mp_pluginliste","r")
 		self.config_list = []
 		self.config_list_select = []
+		print "Filer:", config.mediaportal.filter.value
 		for line in config_read.readlines():
 			ok = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)" "(.*?)"', line, re.S)
 			if ok:
 				(name, pic, genre, hits, msort) = ok[0]
-				self.config_list_select.append((name, pic, genre, hits, msort))
-				self.config_list.append(self.show_menu(name, pic, genre, hits, msort))
+				if config.mediaportal.filter.value != "ALL":
+					if genre == config.mediaportal.filter.value:
+						self.config_list_select.append((name, pic, genre, hits, msort))
+						self.config_list.append(self.show_menu(name, pic, genre, hits, msort))	
+				else:
+					self.config_list_select.append((name, pic, genre, hits, msort))
+					self.config_list.append(self.show_menu(name, pic, genre, hits, msort))
 		
 		self.config_list.sort(key=lambda x: int(x[0][4]))
 		self.config_list_select.sort(key=lambda x: int(x[4]))

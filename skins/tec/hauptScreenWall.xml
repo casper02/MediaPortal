@@ -24,3 +24,6 @@
 	<ePixmap position="130,680" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />"
 	<eLabel text="CH-" position="130,680" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttonglas.png" position="130,680" size="90,36" alphatest="blend" zPosition="2" />
+    <ePixmap position="510,680" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttonyellow.png" alphatest="blend" backgroundColor="#26181d20" />"
+	<eLabel text="Sort" position="510,680" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttonglas.png" position="510,680" size="90,36" alphatest="blend" zPosition="2" />

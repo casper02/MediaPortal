@@ -68,7 +68,7 @@ class PlayHttpMovie(Screen):
 		if filesize is None:
 			filesize = 0
 			
-		self.filesize = float(filesize) # in bytes
+		self.filesize = int(filesize) # in bytes
 		
 		self.timeleft = ""
 		self.dummyfilesize = False
@@ -155,8 +155,8 @@ class PlayHttpMovie(Screen):
 			self["activityslider"].setValue(self.progressperc)
 
 		if self.lastlocalsize != 0:
-			transferspeed = int(float(self.localsize - self.lastlocalsize) / 1024.0 / 5 + 0.5)
-			kbytesleft = int(float(self.filesize - self.localsize) / 1024.0 + 0.5)
+			transferspeed = ((self.localsize - self.lastlocalsize) >> 10) / 5
+			kbytesleft = (self.filesize - self.localsize) >> 10
 			if kbytesleft < 0:
 				kbytesleft = 0
 			if transferspeed > 0:
@@ -178,8 +178,7 @@ class PlayHttpMovie(Screen):
 			print "self.timeleft2: ",self.timeleft
 			
 		self["label_speed"].setText("Speed: " + str(transferspeed) + " KBit/s")
-		self["label_progress"].setText("Progress: " + str(int(float(self.localsize) / 1024.0 / 1024.0 + 0.5)) + "MB of " + str(int(float(self.filesize) / 1024.0 / 1024.0 + 0.5)) + "MB (" + str(self.progressperc) + "%)")
-		#self["label_timeleft"].setText("Time left: " + str(timeleft) + " Minutes")
+		self["label_progress"].setText("Progress: " + str(self.localsize >> 20) + "MB of " + str(self.filesize >> 20) + "MB (" + str(self.progressperc) + "%)")
 		self["label_timeleft"].setText("Time left: " + self.timeleft)
 		#print "sz: ",self.localsize," lsz: ", self.lastlocalsize, " dsz: ", self.dummyfilesize, " fsz: ",self.filesize
 		self.StatusTimer.start(5000, True)
