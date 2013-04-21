@@ -1372,12 +1372,18 @@ class pluginSort(Screen):
 		config_read = open("/etc/enigma2/mp_pluginliste","r")
 		self.config_list = []
 		self.config_list_select = []
+		print "Filer:", config.mediaportal.filter.value
 		for line in config_read.readlines():
 			ok = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)" "(.*?)"', line, re.S)
 			if ok:
 				(name, pic, genre, hits, msort) = ok[0]
-				self.config_list_select.append((name, pic, genre, hits, msort))
-				self.config_list.append(self.show_menu(name, pic, genre, hits, msort))
+				if config.mediaportal.filter.value != "ALL":
+					if genre == config.mediaportal.filter.value:
+						self.config_list_select.append((name, pic, genre, hits, msort))
+						self.config_list.append(self.show_menu(name, pic, genre, hits, msort))	
+				else:
+					self.config_list_select.append((name, pic, genre, hits, msort))
+					self.config_list.append(self.show_menu(name, pic, genre, hits, msort))
 		
 		self.config_list.sort(key=lambda x: int(x[0][4]))
 		self.config_list_select.sort(key=lambda x: int(x[4]))
