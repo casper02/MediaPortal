@@ -5,7 +5,7 @@ from Plugins.Extensions.MediaPortal.resources.yt_url import *
 import Queue
 import threading
 
-DS_Version = "Doku-Stream.org v0.96"
+DS_Version = "Doku-Stream.org v0.97"
 
 DS_siteEncoding = 'utf-8'
 
@@ -821,26 +821,15 @@ class DS_Streams(Screen, ConfigListScreen):
 	def parseData(self, data):
 		print "parseData:"
 		#m = re.search('<div id="content-left">(.*?)<!-- end content-left -->', data, re.S)
-		m = re.search('id="content-left">(.*?)class="nr_clear">', data, re.S)
-		if m:
-			#ldesc = re.findall('<p>(.*?</p>)',m.group(1),re.S)
-			ldesc = False
-			if ldesc:
-				desc = ""
-				i = 0
-				for txt in ldesc:
-					txt = re.sub('<span.*?</span>','',txt)
-					txt = re.sub('\n','',txt)
-					if i > 0:
-						txt = re.sub('</p>','\n',txt)
-					txt = re.sub('&nbsp;',' ',txt)
-					desc = "%s%s" % (desc,re.sub('<.*?>','',txt))
-					i += 1
+		m = re.search('id="content-left">(.*?)</div>', data, re.S)
 		
+		m2 = None
+		desc = None
 		self.streamListe = []
-		m2 = re.search('"http://www.youtube.com/(embed|v)/(.*?)&amp', m.group(1), re.S)
-		#parts = re.search('<p>Part 1 von (.*?)<br', m.group(1))
-		#img = re.search('<img class=.*?src="(.*?)"', m.group(1))
+		
+		if m:
+			m2 = re.search('"http://www.youtube.com/(embed|v)/(.*?)&amp', m.group(1), re.S)
+			
 		parts = False
 		img = self.imgUrl
 		if img:
@@ -858,7 +847,7 @@ class DS_Streams(Screen, ConfigListScreen):
 				self.nParts = 0
 				pstr = ""
 				
-			self.streamListe.append((self.dokuName,m2.group(2),None,imgurl))
+			self.streamListe.append((self.dokuName,m2.group(2),desc,imgurl))
 		else:
 			print "No dokus found !"
 			desc = None
