@@ -13,5 +13,5 @@
  <eLabel text="OK " position="676,618" size="80,36" transparent="1" font="mediaportal; 18" backgroundColor="#00101214" foregroundColor="#00ffffff" valign="center" halign="left" zPosition="1" />
  <ePixmap position="782,622" size="36,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/buttongrey.png" alphatest="blend" backgroundColor="#00101214" />
  <eLabel text="Exit " position="819,618" size="80,36" transparent="1" font="mediaportal; 18" backgroundColor="#00101214" foregroundColor="#00ffffff" valign="center" halign="left" zPosition="1" />	
- <eLabel text="bitte im Setup 'Plugins Sortieren nach: eigene' auswaehlen" position="43,618" size="590,36" transparent="1" font="mediaportal; 15" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="left" zPosition="1" />
+ <eLabel text="bitte im Setup 'Plugins sortieren nach: User' auswaehlen" position="43,618" size="590,36" transparent="1" font="mediaportal; 15" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="left" zPosition="1" />
 </screen>
