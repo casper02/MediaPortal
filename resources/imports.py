@@ -23,6 +23,7 @@ from Screens.MessageBox import MessageBox
 from Screens.InputBox import PinInput
 from Screens.InfoBarGenerics import InfoBarSeek, InfoBarNotifications
 from Screens.InfoBar import MoviePlayer, InfoBar
+from Screens.Standby import TryQuitMainloop
 from twisted.web.client import downloadPage, getPage, error
 from twisted.internet import reactor
 from twisted.internet import defer
