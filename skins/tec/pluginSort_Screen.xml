@@ -1,0 +1,19 @@
+<!-- pluginSort_Screen -->
+<screen name="Plugins Sortieren nach 'eigene'" position="0,0" size="1280,720" flags="wfNoBorder">
+ <ePixmap position="0,0" size="1280,720" zPosition="-1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/mpback.png" />
+ <widget source="global.CurrentTime" render="Label" position="840,42" size="300,28" font="mediaportal; 26" halign="left" backgroundColor="#26181d20" transparent="1" foregroundColor="#00555555">
+  <convert type="ClockToText">Format:%A, %d.%m.%Y</convert>
+ </widget>
+ <widget source="global.CurrentTime" render="Label" position="1140,42" size="100,28" font="mediaportal;26" halign="center" backgroundColor="#26181d20" transparent="1" foregroundColor="#00555555">
+  <convert type="ClockToText">Default</convert>
+ </widget>
+ <widget source="session.VideoPicture" render="Pig" position="913,136" size="328,186" zPosition="3" backgroundColor="transparent" />
+ <eLabel position="912,135" size="330,188" backgroundColor="#00ffffff" zPosition="0" name="Videoback" foregroundColor="#00ffffff" />
+ <widget name="config2" position="45,136" size="790,375" scrollbarMode="showOnDemand" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/sel.png" />
+ <ePixmap position="1050,680" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />"
+ <eLabel text="OK " position="1050,680" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
+ <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttonglas.png" position="1050,680" size="90,36" alphatest="blend" zPosition="2" />
+ <ePixmap position="1160,680" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />"
+ <eLabel text="Exit " position="1160,680" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
+ <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttonglas.png" position="1160,680" size="90,36" alphatest="blend" zPosition="2" />
+</screen>
