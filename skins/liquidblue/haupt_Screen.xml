@@ -3,7 +3,7 @@
   <ePixmap position="0,0" size="1280,720" zPosition="-1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/liquidblue/images/mpback.png" />
  <widget source="session.VideoPicture" render="Pig" position="886,22" size="328,186" zPosition="3" backgroundColor="transparent" />
   <ePixmap position="1180,575" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/liquidblue/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />
-  <eLabel text="Menu" position="1180,575" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
+  <eLabel text="Menu " position="1180,575" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
   <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttonglas.png" position="1180,575" size="90,36" alphatest="blend" zPosition="2" />
   <ePixmap position="1180,625" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/liquidblue/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />
   <eLabel text=" Help " position="1180,625" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
