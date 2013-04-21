@@ -115,7 +115,7 @@ config.mediaportal.filter = ConfigSelection(default = "ALL", choices = [("ALL", 
 config.mediaportal.youtubeprio = ConfigSelection(default = "1", choices = [("0", _("Low")),("1", _("Medium")),("2", _("High"))])
 config.mediaportal.pornpin = ConfigYesNo(default = True)
 config.mediaportal.watchlistpath = ConfigText(default="/etc/enigma2/", fixed_size=False)
-config.mediaportal.sortplugins = ConfigSelection(default = "default", choices = [("default", _("default")),("hits", _("hits")), ("abc", _("abc")), ("eigene", _("eigene"))])
+config.mediaportal.sortplugins = ConfigSelection(default = "default", choices = [("default", _("Default")),("hits", _("Hits")), ("abc", _("ABC")), ("eigene", _("User"))])
 
 config.mediaportal.showDoku = ConfigYesNo(default = True)
 config.mediaportal.showRofl = ConfigYesNo(default = True)
@@ -248,8 +248,8 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("RTMPDump Cachepath:", config.mediaportal.storagepath))
 		self.configlist.append(getConfigListEntry("Autoplay Threshold [%]:", config.mediaportal.autoplayThreshold))
 		self.configlist.append(getConfigListEntry("YouTube Video Quality Priority:", config.mediaportal.youtubeprio))
-		self.configlist.append(getConfigListEntry("Watchlist path:", config.mediaportal.watchlistpath))
-		self.configlist.append(getConfigListEntry("Plugins Sortieren nach:", config.mediaportal.sortplugins))
+		self.configlist.append(getConfigListEntry("Watchlist/Playlist/Userchan path:", config.mediaportal.watchlistpath))
+		self.configlist.append(getConfigListEntry("Plugins sortieren nach:", config.mediaportal.sortplugins))
 		
 		### Grauzone
 		self.configlist.append(getConfigListEntry("----- Grauzone -----", config.mediaportal.fake_entry))
