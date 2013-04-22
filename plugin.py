@@ -95,6 +95,7 @@ from additions.porn.realgfporn import *
 from additions.porn.redtube import *
 from additions.porn.sunporno import *
 from additions.porn.thenewporn import *
+from additions.porn.updatetube import *
 from additions.porn.wetplace import *
 from additions.porn.xhamster import *
 from additions.porn.x4tube import *
@@ -209,6 +210,7 @@ config.mediaportal.showrealgfporn = ConfigYesNo(default = False)
 config.mediaportal.showredtube = ConfigYesNo(default = False)
 config.mediaportal.showsunporno = ConfigYesNo(default = False)
 config.mediaportal.showthenewporn = ConfigYesNo(default = False)
+config.mediaportal.showupdatetube = ConfigYesNo(default = False)
 config.mediaportal.showwetplace = ConfigYesNo(default = False)
 config.mediaportal.showXhamster = ConfigYesNo(default = False)
 config.mediaportal.showyouporn = ConfigYesNo(default = False)
@@ -356,6 +358,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige RedTube:", config.mediaportal.showredtube))
 		self.configlist.append(getConfigListEntry("Zeige SunPorno:", config.mediaportal.showsunporno))
 		self.configlist.append(getConfigListEntry("Zeige TheNewPorn:", config.mediaportal.showthenewporn))
+		self.configlist.append(getConfigListEntry("Zeige UpdateTube:", config.mediaportal.showupdatetube))
 		self.configlist.append(getConfigListEntry("Zeige WetPlace:", config.mediaportal.showwetplace))
 		self.configlist.append(getConfigListEntry("Zeige xHamster:", config.mediaportal.showXhamster))
 		self.configlist.append(getConfigListEntry("Zeige YouPorn:", config.mediaportal.showyouporn))
@@ -680,6 +683,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.porn.append(self.hauptListEntry("SunPorno", "sunporno"))
 		if config.mediaportal.showthenewporn.value:
 			self.porn.append(self.hauptListEntry("TheNewPorn", "thenewporn"))
+		if config.mediaportal.showupdatetube.value:
+			self.porn.append(self.hauptListEntry("UpdateTube", "updatetube"))
 		if config.mediaportal.showwetplace.value:
 			self.porn.append(self.hauptListEntry("WetPlace", "wetplace"))
 		if config.mediaportal.showXhamster.value:
@@ -1173,6 +1178,11 @@ class haupt_Screen(Screen, ConfigListScreen):
 				self.session.openWithCallback(self.pinthenewporn, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
 			else:
 				self.session.open(thenewpornGenreScreen)
+		elif auswahl == "UpdateTube":
+			if config.mediaportal.pornpin.value:
+				self.session.openWithCallback(self.pinupdatetube, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
+			else:
+				self.session.open(updatetubeGenreScreen)
 		elif auswahl == "WetPlace":
 			if config.mediaportal.pornpin.value:
 				self.session.openWithCallback(self.pinwetplace, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
@@ -1280,6 +1290,10 @@ class haupt_Screen(Screen, ConfigListScreen):
 	def pinthenewporn(self, pincode):
 		if pincode:
 			self.session.open(thenewpornGenreScreen)
+
+	def pinupdatetube(self, pincode):
+		if pincode:
+			self.session.open(updatetubeGenreScreen)
 
 	def pinwetplace(self, pincode):
 		if pincode:
@@ -1582,6 +1596,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("SunPorno", "sunporno", "Porn"))
 		if config.mediaportal.showthenewporn.value:
 			self.plugin_liste.append(("TheNewPorn", "thenewporn", "Porn"))
+		if config.mediaportal.showupdatetube.value:
+			self.plugin_liste.append(("UpdateTube", "updatetube", "Porn"))
 		if config.mediaportal.showwetplace.value:
 			self.plugin_liste.append(("WetPlace", "wetplace", "Porn"))
 		if config.mediaportal.showXhamster.value:
@@ -2230,6 +2246,12 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			else:
 				self.hit_plugin("TheNewPorn")
 				self.session.open(thenewpornGenreScreen)
+		elif auswahl == "UpdateTube":
+			if config.mediaportal.pornpin.value:
+				self.session.openWithCallback(self.pinupdatetube, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
+			else:
+				self.hit_plugin("UpdateTube")
+				self.session.open(updatetubeGenreScreen)
 		elif auswahl == "WetPlace":
 			if config.mediaportal.pornpin.value:
 				self.session.openWithCallback(self.pinwetplace, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
@@ -2363,6 +2385,11 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		if pincode:
 			self.hit_plugin("TheNewPorn")
 			self.session.open(thenewpornGenreScreen)
+
+	def pinupdatetube(self, pincode):
+		if pincode:
+			self.hit_plugin("UpdateTube")
+			self.session.open(updatetubeGenreScreen)
 
 	def pinwetplace(self, pincode):
 		if pincode:
