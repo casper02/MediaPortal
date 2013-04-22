@@ -17,6 +17,19 @@ def m2kLetterEntry(entry):
 		(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 830, 25, 0, RT_HALIGN_CENTER, entry)
 		]
 
+def m2kFilmListEntry2(entry):
+	png = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/%s.png" % entry[2]
+	if fileExists(png):
+		flag = LoadPixmap(png)	
+		return [entry,
+			(eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 5, 3, 20, 20, flag),
+			(eListboxPythonMultiContent.TYPE_TEXT, 30, 0, 880, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
+			]
+	else:
+		return [entry,
+			(eListboxPythonMultiContent.TYPE_TEXT, 30, 0, 880, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
+			]
+		
 def m2kSerienABCEntry(entry):
 	flag_name = False
 
@@ -46,6 +59,25 @@ def m2kFilmListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		] 
+def m2kWatchSeriesListEntry(entry):
+	if int(entry[4]) != 0:
+		new_eps = str(entry[4])
+	else:
+		new_eps = ""
+		
+	png = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/%s.png" % entry[2]
+	if fileExists(png):
+		flag = LoadPixmap(png)	
+		return [entry,
+			(eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 15, 3, 20, 20, flag),
+			(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 750, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]),
+			(eListboxPythonMultiContent.TYPE_TEXT, 800, 0, 50, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, new_eps)
+			]
+	else:
+		return [entry,
+			(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 750, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]),
+			(eListboxPythonMultiContent.TYPE_TEXT, 800, 0, 50, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, new_eps)
+			]
 
 class m2kGenreScreen(Screen):
 	
@@ -85,6 +117,7 @@ class m2kGenreScreen(Screen):
 			self.genreliste.append(("Letzte Updates (XXX)", "http://www.movie2k.to/xxx-updates.html"))
 			self.genreliste.append(('Pornos', 'http://www.movie2k.to/genres-xxx.html'))
 		else:
+			self.genreliste.append(("Watchlist", "Watchlist"))
 			self.genreliste.append(("Kinofilme", "http://www.movie2k.to/index.php?lang=de"))
 			self.genreliste.append(("Videofilme", "http://www.movie2k.to/index.php?lang=de"))
 			self.genreliste.append(("Neue Updates (Filme)", "http://www.movie2k.to/movies-updates-"))
@@ -128,7 +161,10 @@ class m2kGenreScreen(Screen):
 	def keyOK(self):
 		streamGenreName = self['genreList'].getCurrent()[0][0]
 		streamGenreLink = self['genreList'].getCurrent()[0][1]
-		if streamGenreName == "Kinofilme":
+		
+		if streamGenreName == "Watchlist":
+			self.session.open(m2kWatchlist)
+		elif streamGenreName == "Kinofilme":
 			self.session.open(m2kKinoFilmeListeScreen, streamGenreLink)
 		elif streamGenreName == "Videofilme":
 			self.session.open(m2kVideoFilmeListeScreen, streamGenreLink)
@@ -159,6 +195,158 @@ class m2kGenreScreen(Screen):
 			self.searchData = self.searchStr
 			self.session.open(m2kSucheAlleFilmeListeScreen, url, self.searchData)
 			
+	def keyCancel(self):
+		self.close()
+		
+class m2kWatchlist(Screen):
+	
+	def __init__(self, session):
+		self.session = session
+		self.plugin_path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal"
+		
+		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/kxWatchlist.xml" % config.mediaportal.skin.value
+		if not fileExists(path):
+			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/kxWatchlist.xml"
+		print path
+		with open(path, "r") as f:
+			self.skin = f.read()
+			f.close()
+			
+		Screen.__init__(self, session)
+
+		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
+			"ok"    : self.keyOK,
+			"cancel": self.keyCancel,
+			"red" : self.keyDel,
+			"info": self.update
+		}, -1)
+		
+		self['title'] = Label("Kinox.to")
+		self['leftContentTitle'] = Label("Watchlist")
+		self['stationIcon'] = Pixmap()
+		self['handlung'] = Label("")
+		self['name'] = Label("")
+		
+		self.streamList = []
+		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
+		self.streamMenuList.l.setFont(0, gFont('mediaportal', 23))
+		self.streamMenuList.l.setItemHeight(25)
+		self['streamlist'] = self.streamMenuList
+		
+		self.keyLocked = True
+		self.onLayoutFinish.append(self.loadPlaylist)
+
+	def loadPlaylist(self):
+		self.streamList = []
+		if fileExists(config.mediaportal.watchlistpath.value+"mp_m2k_watchlist"):
+			readStations = open(config.mediaportal.watchlistpath.value+"mp_m2k_watchlist","r")
+			for rawData in readStations.readlines():
+				data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
+				if data:
+					(stationName, stationLink, stationLang, stationTotaleps) = data[0]
+					self.streamList.append((stationName, stationLink, stationLang, stationTotaleps, "0"))
+			print "Load Watchlist.."
+			self.streamList.sort()
+			self.streamMenuList.setList(map(m2kWatchSeriesListEntry, self.streamList))
+			readStations.close()
+			self.keyLocked = False
+			
+	def update(self):
+		self.count = len(self.streamList)
+		self.counting = 0
+		
+		if fileExists(config.mediaportal.watchlistpath.value+"mp_m2k_watchlist.tmp"):
+			self.write_tmp = open(config.mediaportal.watchlistpath.value+"mp_m2k_watchlist.tmp" , "a")
+			self.write_tmp.truncate(0)
+		else:
+			self.write_tmp = open(config.mediaportal.watchlistpath.value+"mp_m2k_watchlist.tmp" , "a")
+					
+		if len(self.streamList) != 0:
+			self.keyLocked = True
+			self.streamList2 = []
+			#print sname, surl, slang, stotaleps
+			ds = defer.DeferredSemaphore(tokens=1)
+			downloads = [ds.run(self.download,item[1]).addCallback(self.check_data, item[0], item[1], item[2], item[3]).addErrback(self.dataError) for item in self.streamList]
+			finished = defer.DeferredList(downloads).addErrback(self.dataError)
+
+	def dataError(self, error):
+		print error
+		
+	def download(self, item):
+		return getPage(item)
+		
+	def check_data(self, data, sname, surl, slang, stotaleps):
+		#print sname, surl, slang, stotaleps
+		count_all_eps = 0
+		self.counting += 1
+
+		staffeln = re.findall('<FORM name="episodeform(.*?)">(.*?)</FORM>', data, re.S)
+		for (staffel, ep_data) in staffeln:
+			#(staffel, ep_data) = each
+			episodes = re.findall('<OPTION value=".*?".*?>Episode.(.*?)</OPTION>', ep_data, re.S)
+			count_all_eps += int(len(episodes))
+			last_new_ep = staffel, episodes[-1]
+			
+			
+		new_eps =  int(count_all_eps) - int(stotaleps)	
+			
+		self.write_tmp.write('"%s" "%s" "%s" "%s"\n' % (sname, surl, slang, count_all_eps))
+		
+		self.streamList2.append((sname, surl, slang, str(stotaleps), str(new_eps)))
+		self.streamList2.sort()
+		self.streamMenuList.setList(map(m2kWatchSeriesListEntry, self.streamList2))
+		self.keyLocked = False
+
+		print self.counting, self.count
+		if self.counting == self.count:
+			print "update done."
+			self.write_tmp.close()
+			shutil.move(config.mediaportal.watchlistpath.value+"mp_m2k_watchlist.tmp", config.mediaportal.watchlistpath.value+"mp_m2k_watchlist")
+			
+		if last_new_ep:
+			(staffel, episode) = last_new_ep
+			if int(staffel) < 10:
+				staffel3 = "S0"+str(staffel)
+			else:
+				staffel3 = "S"+str(staffel)
+
+			if int(episode) < 10:
+				episode3 = "E0"+str(episode)
+			else:
+				episode3 = "E"+str(episode)
+								
+			SeEp = "%s%s" % (staffel3, episode3)
+	
+	def keyOK(self):
+		exist = self['streamlist'].getCurrent()
+		if self.keyLocked or exist == None:
+			return
+		stream_name = self['streamlist'].getCurrent()[0][0]
+		url = self['streamlist'].getCurrent()[0][1]
+		print stream_name, url
+		self.session.open(m2kEpisodenListeScreen, url, stream_name)
+			
+	def keyDel(self):
+		exist = self['streamlist'].getCurrent()
+		if self.keyLocked or exist == None:
+			return
+		
+		selectedName = self['streamlist'].getCurrent()[0][0]
+
+		writeTmp = open(config.mediaportal.watchlistpath.value+"mp_m2k_watchlist.tmp","w")
+		if fileExists(config.mediaportal.watchlistpath.value+"mp_m2k_watchlist"):
+			readStations = open(config.mediaportal.watchlistpath.value+"mp_m2k_watchlist","r")
+			for rawData in readStations.readlines():
+				data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
+				if data:
+					(stationName, stationLink, stationLang, stationTotaleps) = data[0]
+					if stationName != selectedName:
+						writeTmp.write('"%s" "%s" "%s" "%s"\n' % (stationName, stationLink, stationLang, stationTotaleps))
+			readStations.close()
+			writeTmp.close()
+			shutil.move(config.mediaportal.watchlistpath.value+"mp_m2k_watchlist.tmp", config.mediaportal.watchlistpath.value+"mp_m2k_watchlist")
+			self.loadPlaylist()
+				
 	def keyCancel(self):
 		self.close()
 		
@@ -906,7 +1094,8 @@ class m2kTopSerienFilmeListeScreen(Screen):
 			"up" : self.keyUp,
 			"down" : self.keyDown,
 			"right" : self.keyRight,
-			"left" : self.keyLeft
+			"left" : self.keyLeft,
+			"green" : self.keyAdd
 		}, -1)
 
 		self['title'] = Label("movie2k.to")
@@ -939,12 +1128,12 @@ class m2kTopSerienFilmeListeScreen(Screen):
 
 	def loadPageData(self, data):
 		print "daten bekommen"
-		serien = re.findall('<div style="float:left"><a href="(.*?)"><img src="(.*?)" border=0 width=105 height=150 alt=".*?" title="(.*?)"></a>', data, re.S)
+		serien = re.findall('<div style="float:left"><a href="(.*?)"><img src="(.*?)" border=0 width=105 height=150 alt=".*?" title="(.*?)"></a>.*?<img src="http://img.movie2k.to/img/(.*?).png"', data, re.S)
 		if serien:
-			for url,image,title in serien:
+			for url,image,title,lang in serien:
 				url = "%s%s" % ("http://www.movie2k.to/", url)
 				print title
-				self.filmliste.append((decodeHtml(title), url, image))
+				self.filmliste.append((decodeHtml(title), url, image, lang))
 			self.chooseMenuList.setList(map(m2kFilmListEntry, self.filmliste))
 			self.keyLocked = False
 			self.loadPic()
@@ -987,6 +1176,31 @@ class m2kTopSerienFilmeListeScreen(Screen):
 		print streamName, streamLink
 		self.session.open(m2kEpisodenListeScreen, streamLink, streamName)
 
+	def keyAdd(self):
+		exist = self['filmList'].getCurrent()
+		if self.keyLocked or exist == None:
+			return
+
+		self.mTitle = self['filmList'].getCurrent()[0][0]
+		self.mUrl = self['filmList'].getCurrent()[0][1]
+		self.mLang = self['filmList'].getCurrent()[0][3]
+		
+		if not fileExists(config.mediaportal.watchlistpath.value+"mp_m2k_watchlist"):
+			os.system("touch "+config.mediaportal.watchlistpath.value+"mp_m2k_watchlist")
+		if fileExists(config.mediaportal.watchlistpath.value+"mp_m2k_watchlist"):
+			writePlaylist = open(config.mediaportal.watchlistpath.value+"mp_m2k_watchlist","a")
+			if self.mLang == "us_ger_small":
+				Lang = "de"
+			elif self.mLang == "us_flag_small":
+				Lang = "en"
+			else:
+				Lang = ""
+				
+			print self.mUrl, self.mTitle, Lang
+			writePlaylist.write('"%s" "%s" "%s" "0"\n' % (self.mTitle, self.mUrl, Lang))
+			writePlaylist.close()
+			message = self.session.open(MessageBox, _("Serie wurde zur watchlist hinzugefuegt."), MessageBox.TYPE_INFO, timeout=3)
+		
 	def keyLeft(self):
 		if self.keyLocked:
 			return
@@ -1035,7 +1249,8 @@ class m2kSerienUpdateFilmeListeScreen(Screen):
 			"up" : self.keyUp,
 			"down" : self.keyDown,
 			"right" : self.keyRight,
-			"left" : self.keyLeft
+			"left" : self.keyLeft,
+			"green" : self.keyAdd
 		}, -1)
 
 		self['title'] = Label("movie2k.to")
@@ -1067,12 +1282,11 @@ class m2kSerienUpdateFilmeListeScreen(Screen):
 		print error
 		
 	def loadPageData(self, data):
-		print "daten bekommen"
+		print "daten bekommen2"
 		serien = re.findall('<td id="tdmovies"> <img style="vertical-align:top;".*?<a href="(.*?)">.*?<font color="#000000">(.*?)</font></a>', data, re.S)
 		if serien:
 			for url,title in serien:
-				url = "%s%s" % ("http://www.movie2k.to/", url)
-				print title
+				url = "http://www.movie2k.to/"+url
 				self.filmliste.append((decodeHtml(title), url))
 			self.chooseMenuList.setList(map(m2kFilmListEntry, self.filmliste))
 			self.keyLocked = False
@@ -1111,13 +1325,42 @@ class m2kSerienUpdateFilmeListeScreen(Screen):
 					del self.picload
 
 	def keyOK(self):
-		if self.keyLocked:
+		exist = self['filmList'].getCurrent()
+		if self.keyLocked or exist == None:
 			return
 		streamName = self['filmList'].getCurrent()[0][0]
 		streamLink = self['filmList'].getCurrent()[0][1]
 		print streamName, streamLink
+		
+		if re.match('.*?,.*?,.*?', streamName):
+			cname = re.findall('(.*?),.*?,.*?', streamName, re.S)
+			if cname:
+				streamName = cname[0]
+
 		self.session.open(m2kEpisodenListeScreen, streamLink, streamName)
 
+	def keyAdd(self):
+		exist = self['filmList'].getCurrent()
+		if self.keyLocked or exist == None:
+			return
+
+		mTitle = self['filmList'].getCurrent()[0][0]
+		mUrl = self['filmList'].getCurrent()[0][1]
+		
+		if re.match('.*?,.*?,.*?', mTitle):
+			cname = re.findall('(.*?),.*?,.*?', mTitle, re.S)
+			if cname:
+				mTitle = cname[0]
+				
+		if not fileExists(config.mediaportal.watchlistpath.value+"mp_m2k_watchlist"):
+			os.system("touch "+config.mediaportal.watchlistpath.value+"mp_m2k_watchlist")
+		if fileExists(config.mediaportal.watchlistpath.value+"mp_m2k_watchlist"):
+			writePlaylist = open(config.mediaportal.watchlistpath.value+"mp_m2k_watchlist","a")
+			print mUrl, mTitle
+			writePlaylist.write('"%s" "%s" "%s" "0"\n' % (mTitle, mUrl, "de"))
+			writePlaylist.close()
+			message = self.session.open(MessageBox, _("Serie wurde zur watchlist hinzugefuegt."), MessageBox.TYPE_INFO, timeout=3)
+			
 	def keyLeft(self):
 		if self.keyLocked:
 			return
@@ -1198,9 +1441,15 @@ class m2kStreamListeScreen(Screen):
 					print hostername, url
 					if re.match('.*?(putlocker|sockshare|streamclou|xvidstage|filenuke|movreel|nowvideo|xvidstream|uploadc|vreer|MonsterUploads|Novamov|Videoweed|Divxstage|Ginbig|Flashstrea|Movshare|yesload|faststream|Vidstream|PrimeShare|flashx|Divxmov|Putme|Zooupload|Wupfile|BitShare|Userporn)', hostername, re.S|re.I):
 						self.filmliste.append((url, datum, hostername, quali.replace('Movie quality ','').replace('\\','')))
-				self.chooseMenuList.setList(map(self.m2kStreamListEntry, self.filmliste))
-				self.keyLocked = False
-				self.loadPic()
+						
+				if len(self.filmliste) == 0:
+					self.filmliste.append(("nix", "No supported streams found."))
+					self.chooseMenuList.setList(map(self.m2kStream2ListEntry, self.filmliste))
+					self.loadPic()
+				else:
+					self.chooseMenuList.setList(map(self.m2kStreamListEntry, self.filmliste))
+					self.keyLocked = False
+					self.loadPic()
 		else:
 			hoster = re.findall('"tablemoviesindex2.*?<a href.*?"(.*?.html).*?style.*?src.*?"http://img.movie2k.to/img/.*?.[gif|png].*?> \&nbsp;(.*?)</a></td></tr>', data, re.S)
 			if hoster:
@@ -1209,9 +1458,15 @@ class m2kStreamListeScreen(Screen):
 					print hostername, url
 					if re.match('.*?(putlocker|sockshare|streamclou|xvidstage|filenuke|movreel|nowvideo|xvidstream|uploadc|vreer|MonsterUploads|Novamov|Videoweed|Divxstage|Ginbig|Flashstrea|Movshare|yesload|faststream|Vidstream|PrimeShare|flashx|Divxmov|Putme|Zooupload|Wupfile|BitShare|Userporn)', hostername, re.S|re.I):
 						self.filmliste.append((url, hostername))
-				self.chooseMenuList.setList(map(self.m2kStream2ListEntry, self.filmliste))
-				self.keyLocked = False
-				self.loadPic()
+						
+				if len(self.filmliste) == 0:
+					self.filmliste.append(("nix", "No supported streams found."))
+					self.chooseMenuList.setList(map(self.m2kStream2ListEntry, self.filmliste))
+					self.loadPic()
+				else:
+					self.chooseMenuList.setList(map(self.m2kStream2ListEntry, self.filmliste))
+					self.keyLocked = False
+					self.loadPic()
 		
 	def m2kStreamListEntry(self, entry):
 		return [entry,
@@ -1248,7 +1503,8 @@ class m2kStreamListeScreen(Screen):
 					del self.picload
 
 	def keyOK(self):
-		if self.keyLocked:
+		exist = self['filmList'].getCurrent()
+		if self.keyLocked or exist == None:
 			return
 		streamLink = self['filmList'].getCurrent()[0][0]
 		print self.streamName, streamLink
@@ -1353,7 +1609,8 @@ class m2kPartListeScreen(Screen):
 			]
 
 	def keyOK(self):
-		if self.keyLocked:
+		exist = self['filmList'].getCurrent()
+		if self.keyLocked or exist == None:
 			return
 		streamPart = self['filmList'].getCurrent()[0][0]
 		streamLinkPart = self['filmList'].getCurrent()[0][1]
@@ -1499,7 +1756,8 @@ class m2kEpisodenListeScreen(Screen):
 					del self.picload
 
 	def keyOK(self):
-		if self.keyLocked:
+		exist = self['filmList'].getCurrent()
+		if self.keyLocked or exist == None:
 			return
 		streamEpisode = self['filmList'].getCurrent()[0][0]
 		streamLink = self['filmList'].getCurrent()[0][1]
@@ -1628,7 +1886,8 @@ class m2kXXXUpdateFilmeListeScreen(Screen):
 			self.loadPage()
 				
 	def keyOK(self):
-		if self.keyLocked:
+		exist = self['filmList'].getCurrent()
+		if self.keyLocked or exist == None:
 			return
 		streamName = self['filmList'].getCurrent()[0][0]
 		streamLink = self['filmList'].getCurrent()[0][1]
@@ -1761,7 +2020,8 @@ class m2kSerienABCListe(Screen):
 			"up" : self.keyUp,
 			"down" : self.keyDown,
 			"right" : self.keyRight,
-			"left" : self.keyLeft
+			"left" : self.keyLeft,
+			"green" : self.keyAdd
 		}, -1)
 
 		self['title'] = Label("movie2k.to")
@@ -1820,12 +2080,75 @@ class m2kSerienABCListe(Screen):
 					del self.picload
 
 	def keyOK(self):
-		if self.keyLocked:
+		exist = self['filmList'].getCurrent()
+		if self.keyLocked or exist == None:
 			return
 		streamName = self['filmList'].getCurrent()[0][0]
 		streamLink = self['filmList'].getCurrent()[0][1]
 		self.session.open(m2kSerienABCListeStaffeln, streamLink)
 
+	def keyAdd(self):
+		exist = self['filmList'].getCurrent()
+		if self.keyLocked or exist == None:
+			return
+
+		self.mTitle = self['filmList'].getCurrent()[0][0]
+		self.mUrl = self['filmList'].getCurrent()[0][1]
+		self.mLang = self['filmList'].getCurrent()[0][2]
+		self.flag_stored = self.mLang.replace('http://img.movie2k.to/img/','').replace('.png','')
+		print self.flag_stored
+
+		getPage(self.mUrl, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.get_final).addErrback(self.dataError)
+		
+	def get_final(self, data):
+		print "final"
+		season_link = False
+		series = re.findall('<TD id="tdmovies" width="538"><a href="(.*?)">(.*?)\t.*?<TD id="tdmovies"><img border=0 src="http://img.movie2k.to/img/(.*?)\..*?"', data, re.S)
+		if series:
+			for each in series:
+				(link, seriesname, flag) = each
+				if flag == self.flag_stored:
+					season_link = "http://www.movie2k.to/%s" % link
+		else:
+			message = self.session.open(MessageBox, _("No Link FOUND."), MessageBox.TYPE_INFO, timeout=3)
+			
+		if season_link:
+			print season_link
+			getPage(season_link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.get_final2).addErrback(self.dataError)
+		else:
+			message = self.session.open(MessageBox, _("No Link FOUND."), MessageBox.TYPE_INFO, timeout=3)
+
+			
+	def get_final2(self, data):
+		print "final2"
+		series = re.findall('<TD id="tdmovies" width="538"><a href="(.*?)">(.*?)\t.*?<TD id="tdmovies"><img border=0 src="http://img.movie2k.to/img/(.*?)\..*?"', data, re.S)
+		if series:
+			for each in series:
+				(link, seriesname, flag) = each
+				if flag == self.flag_stored:
+					season_link = "http://www.movie2k.to/%s" % link
+		else:
+			message = self.session.open(MessageBox, _("No Link FOUND."), MessageBox.TYPE_INFO, timeout=3)
+
+		if season_link:
+			if not fileExists(config.mediaportal.watchlistpath.value+"mp_m2k_watchlist"):
+				os.system("touch "+config.mediaportal.watchlistpath.value+"mp_m2k_watchlist")
+			if fileExists(config.mediaportal.watchlistpath.value+"mp_m2k_watchlist"):
+				writePlaylist = open(config.mediaportal.watchlistpath.value+"mp_m2k_watchlist","a")
+				if self.mLang == "http://img.movie2k.to/img/us_ger_small.png":
+					Lang = "de"
+				elif self.mLang == "http://img.movie2k.to/img/us_flag_small.png":
+					Lang = "en"
+				else:
+					Lang = ""
+					
+				print season_link, seriesname.replace('    ',''), Lang
+				writePlaylist.write('"%s" "%s" "%s" "0"\n' % (seriesname.replace('    ',''), season_link, Lang))
+				writePlaylist.close()
+				message = self.session.open(MessageBox, _("Serie wurde zur watchlist hinzugefuegt."), MessageBox.TYPE_INFO, timeout=3)
+		else:
+			message = self.session.open(MessageBox, _("No Link FOUND."), MessageBox.TYPE_INFO, timeout=3)
+			
 	def keyLeft(self):
 		if self.keyLocked:
 			return
@@ -1913,7 +2236,8 @@ class m2kSerienABCListeStaffeln(Screen):
 			print "parsen - Keine Daten gefunden"
 
 	def keyOK(self):
-		if self.keyLocked:
+		exist = self['filmList'].getCurrent()
+		if self.keyLocked or exist == None:
 			return
 		streamName = self['filmList'].getCurrent()[0][0]
 		streamLink = self['filmList'].getCurrent()[0][1]
@@ -2003,7 +2327,8 @@ class m2kSerienABCListeStaffelnFilme(Screen):
 			print "parsen - Keine Daten gefunden"
 
 	def keyOK(self):
-		if self.keyLocked:
+		exist = self['filmList'].getCurrent()
+		if self.keyLocked or exist == None:
 			return
 		streamEpisode = self['filmList'].getCurrent()[0][2] + self['filmList'].getCurrent()[0][0]
 		streamLink = self['filmList'].getCurrent()[0][1]
