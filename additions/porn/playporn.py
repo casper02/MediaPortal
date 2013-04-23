@@ -108,6 +108,8 @@ class playpornGenreScreen(Screen):
 		print error
 
 	def keyOK(self):
+		if self.keyLocked:
+			return
 		streamGenreName = self['genreList'].getCurrent()[0][0]
 		if streamGenreName == "--- Search ---":
 			self.suchen()
@@ -127,15 +129,23 @@ class playpornGenreScreen(Screen):
 			self.session.open(playpornFilmScreen, streamGenreLink, streamGenreName)
 
 	def keyLeft(self):
+		if self.keyLocked:
+			return
 		self['genreList'].pageUp()
 		
 	def keyRight(self):
+		if self.keyLocked:
+			return
 		self['genreList'].pageDown()
 		
 	def keyUp(self):
+		if self.keyLocked:
+			return
 		self['genreList'].up()
 		
 	def keyDown(self):
+		if self.keyLocked:
+			return
 		self['genreList'].down()
 
 	def keyCancel(self):

@@ -102,6 +102,8 @@ class gigatvGenreScreen(Screen):
 					del self.picload
 
 	def keyOK(self):
+		if self.keyLocked:
+			return
 		streamGenreLink = self['genreList'].getCurrent()[0][1]
 		self.session.open(gigatvFilmScreen, streamGenreLink)
 		

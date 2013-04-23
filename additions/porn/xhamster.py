@@ -70,6 +70,8 @@ class xhamsterGenreScreen(Screen):
 		print error
 
 	def keyOK(self):
+		if self.keyLocked:
+			return
 		streamGenreName = self['genreList'].getCurrent()[0][0]
 		if streamGenreName == "--- Search ---":
 			self.suchen()

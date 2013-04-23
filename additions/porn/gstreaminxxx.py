@@ -108,19 +108,29 @@ class gstreaminxxxGenreScreen(Screen):
 		print error
 
 	def keyOK(self):
+		if self.keyLocked:
+			return
 		streamGenreLink = self['genreList'].getCurrent()[0][1]
 		self.session.open(gstreaminxxxFilmScreen, streamGenreLink)
 		
 	def keyLeft(self):
+		if self.keyLocked:
+			return
 		self['genreList'].pageUp()
 		
 	def keyRight(self):
+		if self.keyLocked:
+			return
 		self['genreList'].pageDown()
 		
 	def keyUp(self):
+		if self.keyLocked:
+			return
 		self['genreList'].up()
 		
 	def keyDown(self):
+		if self.keyLocked:
+			return
 		self['genreList'].down()
 
 	def keyCancel(self):

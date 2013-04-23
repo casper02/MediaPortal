@@ -57,22 +57,33 @@ class appletrailersGenreScreen(Screen):
 		self.genreliste.append(("Newest (SD)", "http://trailers.apple.com/trailers/home/xml/newest.xml", "SD"))
 		self.genreliste.append(("Current (SD)", "http://trailers.apple.com/trailers/home/xml/current.xml", "SD"))
 		self.chooseMenuList.setList(map(appletrailersGenreListEntry, self.genreliste))
+		self.keyLocked = False
 
 	def keyOK(self):
+		if self.keyLocked:
+			return
 		streamGenreLink = self['genreList'].getCurrent()[0][1]
 		streamHD = self['genreList'].getCurrent()[0][2]
 		self.session.open(appletrailersFilmScreen, streamGenreLink, streamHD)
 		
 	def keyLeft(self):
+		if self.keyLocked:
+			return
 		self['genreList'].pageUp()
 		
 	def keyRight(self):
+		if self.keyLocked:
+			return
 		self['genreList'].pageDown()
 		
 	def keyUp(self):
+		if self.keyLocked:
+			return
 		self['genreList'].up()
 		
 	def keyDown(self):
+		if self.keyLocked:
+			return
 		self['genreList'].down()
 
 	def keyCancel(self):

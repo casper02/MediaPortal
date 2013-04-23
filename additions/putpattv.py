@@ -111,6 +111,8 @@ class putpattvGenreScreen(Screen):
 					del self.picload
 
 	def keyOK(self):
+		if self.keyLocked:
+			return
 		streamGenreName = self['genreList'].getCurrent()[0][0]
 		if streamGenreName == "--- Search ---":
 			self.suchen()

@@ -60,6 +60,8 @@ class auditvGenreScreen(Screen):
 		print error
 
 	def keyOK(self):
+		if self.keyLocked:
+			return
 		streamGenreName = self['genreList'].getCurrent()[0][0]
 		streamGenreLink = self['genreList'].getCurrent()[0][1]		
 		self.session.open(auditvFilmScreen, streamGenreLink, streamGenreName)
