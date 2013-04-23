@@ -102,8 +102,9 @@ from additions.porn.x4tube import *
 from additions.porn.youporn import *
 
 config.mediaportal = ConfigSubsection()
-config.mediaportal.version = NoSave(ConfigText(default="420"))
-config.mediaportal.versiontext = NoSave(ConfigText(default="4.2.0"))
+config.mediaportal.version = NoSave(ConfigText(default="421"))
+config.mediaportal.versiontext = NoSave(ConfigText(default="4.2.1"))
+config.mediaportal.autoupdate = ConfigYesNo(default = True)
 config.mediaportal.pincode = ConfigPIN(default = 0000)
 config.mediaportal.skin = ConfigSelection(default = "tec", choices = [("tec", _("tec")),("liquidblue", _("liquidblue")), ("original", _("original"))])
 config.mediaportal.ansicht = ConfigSelection(default = "liste", choices = [("liste", _("Liste")),("wall", _("Wall"))])
@@ -239,6 +240,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 
 		## Allgemein
 		self.configlist.append(getConfigListEntry("----- Allgemein -----", config.mediaportal.fake_entry))
+		self.configlist.append(getConfigListEntry("Automatic Update Check:", config.mediaportal.autoupdate))
 		self.configlist.append(getConfigListEntry("Filter:", config.mediaportal.filter))
 		self.configlist.append(getConfigListEntry("Pincode:", config.mediaportal.pincode))
 		self.configlist.append(getConfigListEntry("XXX-Pincodeabfrage:", config.mediaportal.pornpin))
@@ -459,11 +461,15 @@ class haupt_Screen(Screen, ConfigListScreen):
 		self['Porn'] = Label("Porn")
 
 		self.currentlist = "porn"
-		self.onLayoutFinish.append(self.checkforupdate)
+
+		if config.mediaportal.autoupdate.value:
+			self.onLayoutFinish.append(self.checkforupdate)
+		else:
+			self.onLayoutFinish.append(self.layoutFinished)
 		
 	def checkforupdate(self):
 		try:
-			getPage("http://mediaportale2.ohost.de/version.txt").addCallback(self.gotUpdateInfo).addErrback(self.gotError)
+			getPage("http://master.dl.sourceforge.net/project/e2-mediaportal/version.txt").addCallback(self.gotUpdateInfo).addErrback(self.gotError)
 		except Exception, error:
 			print str(error)
 
@@ -1763,11 +1769,14 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		self.selektor_index = 1
 		self.select_list = 0
 
-		self.onFirstExecBegin.append(self.checkforupdate)
-
+		if config.mediaportal.autoupdate.value:
+			self.onFirstExecBegin.append(self.checkforupdate)
+		else:
+			self.onFirstExecBegin.append(self._onFirstExecBegin)
+		
 	def checkforupdate(self):
 		try:
-			getPage("http://mediaportale2.ohost.de/version.txt").addCallback(self.gotUpdateInfo).addErrback(self.gotError)
+			getPage("http://master.dl.sourceforge.net/project/e2-mediaportal/version.txt").addCallback(self.gotUpdateInfo).addErrback(self.gotError)
 		except Exception, error:
 			print str(error)
 
