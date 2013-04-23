@@ -86,6 +86,8 @@ class show_CAR_Genre(Screen):
 		self.genreliste.append((29,'MOTORVISION BIKE', '/motorvisionbike'))
 		self.genreliste.append((30,'www.MOTORRADonline.de', '/motorrad'))
 		self.genreliste.append((31,'TOURENFAHRER', '/Tourenfahrer'))
+		self.genreliste.append((32,'DEKRA Automobil GmbH', '/DEKRAAutomobil'))
+		self.genreliste.append((33,'Motorvision', '/MOTORVISIONcom'))
 		
 		self.genreliste.sort(key=lambda t : t[1].lower())
 		self.chooseMenuList.setList(map(show_CAR_GenreListEntry, self.genreliste))

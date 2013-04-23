@@ -3,7 +3,7 @@
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.yt_url import *
 
-YT_Version = "Youtube Search v0.92 (experimental)"
+YT_Version = "Youtube Search v0.93 (experimental)"
 
 YT_siteEncoding = 'utf-8'
 
@@ -181,13 +181,15 @@ class youtubeGenreScreen(Screen):
 		self.genreMenu = [
 			[
 			('Standard feeds', '/standardfeeds'),
-			('Video feeds', '/videos')
+			('Video feeds', '/videos'),
+			('Playlist feeds', '/playlists/snippets')
 			],
 			[
-			self.subGenre_0, self.subCat
+			self.subGenre_0, self.subCat, None
 			],
 			[
 			[self.subCat,self.subCat,self.subCat,self.subCat,self.subCat,self.subCat],
+			[None,None,None,None,None,None,None,None,None,None,None,None,None,None],
 			[None,None,None,None,None,None,None,None,None,None,None,None,None,None]
 			]
 			]
@@ -310,7 +312,7 @@ class youtubeGenreScreen(Screen):
 				stdGenre = self.genreUrl[2]
 				if stdGenre != '':
 					stdGenre = '_'+stdGenre
-				genreurl = self.baseUrl+self.genreUrl[0]+regionid+self.genreUrl[1]+stdGenre+'?'+tm+lr+qr+self.param_format+self.param_safesearch[0]+_3d+dura
+				genreurl = self.baseUrl+self.genreUrl[0]+regionid+self.genreUrl[1]+stdGenre+'?'+tm+lr+qr+self.param_format+self.param_safesearch[0]+_3d+dura+'&'
 			else:
 				if self.genreUrl[1] != '':
 					c = '/-/'+self.genreUrl[1]
@@ -322,7 +324,7 @@ class youtubeGenreScreen(Screen):
 				else:
 					at = ''
 					
-				genreurl = self.baseUrl+self.genreUrl[0]+c+'?'+tm+lr+qr+self.param_format+self.param_safesearch[0]+at+_3d+dura
+				genreurl = self.baseUrl+self.genreUrl[0]+c+'?'+tm+lr+qr+self.param_format+self.param_safesearch[0]+at+_3d+dura+'&'
 			
 			#print "genreurl: ", genreurl
 			self.session.open(YT_ListScreen, genreurl, self.genreTitle)
@@ -511,6 +513,7 @@ class YT_ListScreen(Screen):
 		self.videoPrioS = ['L','M','H']
 		self.setVideoPrio()
 		
+		self.playlistGenre = re.match('.*?Playlist', self.genreName)
 		self.keckse = {}
 		self.filmliste = []
 		self.start_idx = 1
@@ -536,7 +539,7 @@ class YT_ListScreen(Screen):
 		self.filmliste.append(('Bitte warten...','','','',''))
 		self.chooseMenuList.setList(map(YT_ListEntry, self.filmliste))
 		
-		url = self.stvLink+"&start-index=%d&max-results=%d&v=2" % (self.start_idx, self.max_res)
+		url = self.stvLink+"start-index=%d&max-results=%d&v=2" % (self.start_idx, self.max_res)
 		print "YT-Url: ",url
 		getPage(url, cookies=self.keckse, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
 
@@ -556,38 +559,64 @@ class YT_ListScreen(Screen):
 		a = 0
 		l = len(data)
 		self.filmliste = []
-		while a < l:
-			mg = re.search('<media:group>(.*?)</media:group>', data[a:], re.S)
-			if mg:
-				a += mg.end()
-				m1 = re.search('description type=\'plain\'>(.*?)</', mg.group(1), re.S)
-				if m1:
-					desc = decodeHtml(m1.group(1))
-					desc = urllib.unquote(desc)
+		if self.playlistGenre:
+			while a < l:
+				mg = re.search('<entry gd:etag=(.*?)</entry>', data[a:], re.S)
+				if mg:
+					a += mg.end()
+					m2 = re.search('<title>(.*?)</title>.*?<summary>(.*?)</summary>.*?src=\'(.*?)\'.*?url=\'(.*?)\'.*?height=\'180\'', mg.group(1), re.S)
+					if m2:
+						title = decodeHtml(m2.group(1))
+						desc = decodeHtml(m2.group(2))
+						url = m2.group(3)
+						img = m2.group(4)
+						
+						self.filmliste.append(('', title, url, img, desc))
 				else:
-					desc = "Keine weiteren Info's vorhanden."
+					a = l
 					
-				m2 = re.search('<media:player url=.*?/watch\?v=(.*?)&amp;feature=youtube_gdata_player.*?'\
-					'<media:thumbnail url=\'(.*?)\'.*?<media:title type=\'plain\'>(.*?)</.*?<yt:duration seconds=\'(.*?)\'', mg.group(1), re.S)
-				if m2:
-					vid = m2.group(1)
-					img = m2.group(2)
-					dura = int(m2.group(4))
-					vtim = str(datetime.timedelta(seconds=dura))
-					title = decodeHtml(m2.group(3))
-					self.filmliste.append((vtim+' ', title, vid, img, desc))
+			if len(self.filmliste) == 0:
+				print "No playlist found!"
+				self.pages = 0
+				self.filmliste.append(('Keine Playlists gefunden !','','','',''))
 			else:
-				a = l
+				#self.filmliste.sort(key=lambda t : t[0].lower())
+				menu_len = len(self.filmliste)
+				print "Playlists found: ",menu_len
 				
-		if len(self.filmliste) == 0:
-			print "No video found!"
-			self.pages = 0
-			self.filmliste.append(('Keine Videos gefunden !','','','',''))
 		else:
-			#self.filmliste.sort(key=lambda t : t[0].lower())
-			menu_len = len(self.filmliste)
-			print "Videos found: ",menu_len
-			
+			while a < l:
+				mg = re.search('<media:group>(.*?)</media:group>', data[a:], re.S)
+				if mg:
+					a += mg.end()
+					m1 = re.search('description type=\'plain\'>(.*?)</', mg.group(1), re.S)
+					if m1:
+						desc = decodeHtml(m1.group(1))
+						desc = urllib.unquote(desc)
+					else:
+						desc = "Keine weiteren Info's vorhanden."
+						
+					m2 = re.search('<media:player url=.*?/watch\?v=(.*?)&amp;feature=youtube_gdata_player.*?'\
+						'<media:thumbnail url=\'(.*?)\'.*?<media:title type=\'plain\'>(.*?)</.*?<yt:duration seconds=\'(.*?)\'', mg.group(1), re.S)
+					if m2:
+						vid = m2.group(1)
+						img = m2.group(2)
+						dura = int(m2.group(4))
+						vtim = str(datetime.timedelta(seconds=dura))
+						title = decodeHtml(m2.group(3))
+						self.filmliste.append((vtim+' ', title, vid, img, desc))
+				else:
+					a = l
+					
+			if len(self.filmliste) == 0:
+				print "No video found!"
+				self.pages = 0
+				self.filmliste.append(('Keine Videos gefunden !','','','',''))
+			else:
+				#self.filmliste.sort(key=lambda t : t[0].lower())
+				menu_len = len(self.filmliste)
+				print "Videos found: ",menu_len
+				
 		self.chooseMenuList.setList(map(YT_ListEntry, self.filmliste))
 		self.keyLocked = False
 		self.showInfos()
@@ -754,18 +783,24 @@ class YT_ListScreen(Screen):
 	def keyOK(self):
 		if self.keyLocked:
 			return
-		dhTitle = self['liste'].getCurrent()[0][1]
-		dhVideoId = self['liste'].getCurrent()[0][2]
-		print "Title: ",dhTitle
-		#print "VideoId: ",dhVideoId
-		y = youtubeUrl(self.session)
-		y.addErrback(self.youtubeErr)
-		dhLink = y.getVideoUrl(dhVideoId, self.videoPrio)
-		if dhLink:
-			print dhLink
-			sref = eServiceReference(0x1001, 0, dhLink)
-			sref.setName(dhTitle)
-			self.session.open(MoviePlayer, sref)
+
+		if self.playlistGenre:
+			dhTitle = 'Videos: ' + self['liste'].getCurrent()[0][1]
+			genreurl = re.sub('v=2', '', self['liste'].getCurrent()[0][2])
+			self.session.open(YT_ListScreen, genreurl, dhTitle)
+		else:
+			dhTitle = self['liste'].getCurrent()[0][1]
+			dhVideoId = self['liste'].getCurrent()[0][2]
+			print "Title: ",dhTitle
+			#print "VideoId: ",dhVideoId
+			y = youtubeUrl(self.session)
+			y.addErrback(self.youtubeErr)
+			dhLink = y.getVideoUrl(dhVideoId, self.videoPrio)
+			if dhLink:
+				print dhLink
+				sref = eServiceReference(0x1001, 0, dhLink)
+				sref.setName(dhTitle)
+				self.session.open(MoviePlayer, sref)
 
 	def keyCancel(self):
 		self.close()
