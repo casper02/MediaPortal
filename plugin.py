@@ -468,6 +468,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.onLayoutFinish.append(self.layoutFinished)
 		
 	def checkforupdate(self):
+		self.keyLocked = True
 		try:
 			getPage("http://master.dl.sourceforge.net/project/e2-mediaportal/version.txt").addCallback(self.gotUpdateInfo).addErrback(self.gotError)
 		except Exception, error:
@@ -714,6 +715,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 		self["funsport"].l.setItemHeight(44)
 		self["porn"].setList(self.porn)
 		self["porn"].l.setItemHeight(44)
+		self.keyLocked = False
 		self.keyRight()
 
 	def hauptListEntry(self, name, jpg):
@@ -726,10 +728,13 @@ class haupt_Screen(Screen, ConfigListScreen):
 		return res
 	
 	def keySetup(self):
-		print config.mediaportal.pincode.value
+		if self.keyLocked:
+			return
 		self.session.openWithCallback(self.pinok, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
 	
 	def keyHelp(self):
+		if self.keyLocked:
+			return
 		self.session.open(HelpScreen)
 
 	def getTriesEntry(self):
@@ -758,6 +763,9 @@ class haupt_Screen(Screen, ConfigListScreen):
 		self['name'].setText(auswahl)
 
 	def keyRight(self):
+		exist = self[self.currentlist].getCurrent()
+		if exist == None:
+			return
 		self.cur_idx = self[self.currentlist].getSelectedIndex()
 		self["mediatheken"].selectionEnabled(0)
 		self["grauzone"].selectionEnabled(0)
@@ -845,6 +853,9 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self['name'].setText(auswahl)
 		
 	def keyLeft(self):
+		exist = self[self.currentlist].getCurrent()
+		if exist == None:
+			return
 		self.cur_idx = self[self.currentlist].getSelectedIndex()
 		self["mediatheken"].selectionEnabled(0)
 		self["grauzone"].selectionEnabled(0)
@@ -1775,6 +1786,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.onFirstExecBegin.append(self._onFirstExecBegin)
 		
 	def checkforupdate(self):
+		self.keyLocked = True
 		try:
 			getPage("http://master.dl.sourceforge.net/project/e2-mediaportal/version.txt").addCallback(self.gotUpdateInfo).addErrback(self.gotError)
 		except Exception, error:
@@ -1873,6 +1885,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 					
 		# erstelle mainlist
 		self.widget_list()
+		self.keyLocked = False
 				
 	def widget_list(self):
 		count = 1
@@ -1916,6 +1929,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		self["frame"].startMoving()
 		
 	def keyOK(self):
+		if self.keyLocked:
+			return
 		if self.check_empty_list():
 			return
 		
@@ -2416,6 +2431,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(youpornGenreScreen)
 	
 	def	keyLeft(self):
+		if self.keyLocked:
+			return
 		if self.check_empty_list():
 			return
 		if self.selektor_index > 1: 
@@ -2425,6 +2442,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.page_back()
 
 	def	keyRight(self):
+		if self.keyLocked:
+			return
 		if self.check_empty_list():
 			return
 		if self.selektor_index < 40 and self.selektor_index != len(self.mainlist[int(self.select_list)]):
@@ -2434,6 +2453,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.page_next()
 			
 	def keyUp(self):
+		if self.keyLocked:
+			return
 		if self.check_empty_list():
 			return
 		if self.selektor_index-8 > 1:
@@ -2444,9 +2465,10 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.move_selector()
 
 	def keyDown(self):
+		if self.keyLocked:
+			return
 		if self.check_empty_list():
 			return
-			
 		if self.selektor_index+8 <= len(self.mainlist[int(self.select_list)]):
 			self.selektor_index +=8
 			self.move_selector()
@@ -2457,7 +2479,6 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 	def page_next(self):
 		if self.check_empty_list():
 			return
-			
 		if self.select_list < len(self.mainlist)-1:
 			self.paint_hide()
 			self.select_list += 1
@@ -2466,7 +2487,6 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 	def page_back(self):
 		if self.check_empty_list():
 			return
-			
 		if self.select_list > 0:
 			self.paint_hide()
 			self.select_list -= 1
@@ -2503,10 +2523,14 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self["zeile"+str(x)].show()
 	
 	def keySetup(self):
+		if self.keyLocked:
+			return
 		print config.mediaportal.pincode.value
 		self.session.openWithCallback(self.pinok, PinInput, pinList = [(config.mediaportal.pincode.value)], triesEntry = self.getTriesEntry(), title = _("Please enter the correct pin code"), windowTitle = _("Enter pin code"))
 	
 	def keyHelp(self):
+		if self.keyLocked:
+			return
 		self.session.open(HelpScreen)
 
 	def getTriesEntry(self):
