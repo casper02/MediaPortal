@@ -458,7 +458,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 		self['Mediatheken'] = Label("Mediatheken")
 	
 		self['porn'] = chooseMenuList([])
-		self['Porn'] = Label("Porn")
+		self['Porn'] = Label("")
 
 		self.currentlist = "porn"
 
@@ -701,7 +701,9 @@ class haupt_Screen(Screen, ConfigListScreen):
 		
 		if len(self.porn) < 1:
 			self['Porn'].hide()
-
+		else:
+			self['Porn'].setText("Porn")
+			
 		self.mediatheken.sort(key=lambda t : tuple(t[0][0].lower()))
 		self.grauzone.sort(key=lambda t : tuple(t[0][0].lower()))
 		self.funsport.sort(key=lambda t : tuple(t[0][0].lower()))		
@@ -763,9 +765,6 @@ class haupt_Screen(Screen, ConfigListScreen):
 		self['name'].setText(auswahl)
 
 	def keyRight(self):
-		exist = self[self.currentlist].getCurrent()
-		if exist == None:
-			return
 		self.cur_idx = self[self.currentlist].getSelectedIndex()
 		self["mediatheken"].selectionEnabled(0)
 		self["grauzone"].selectionEnabled(0)
@@ -853,9 +852,6 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self['name'].setText(auswahl)
 		
 	def keyLeft(self):
-		exist = self[self.currentlist].getCurrent()
-		if exist == None:
-			return
 		self.cur_idx = self[self.currentlist].getSelectedIndex()
 		self["mediatheken"].selectionEnabled(0)
 		self["grauzone"].selectionEnabled(0)
