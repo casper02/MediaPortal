@@ -1827,7 +1827,16 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		# load plugin icons
 		print "Set Filter:", config.mediaportal.filter.value
 		self['blue'].setText(config.mediaportal.filter.value)
-		self['green'].setText(config.mediaportal.sortplugins.value)
+		self.sortplugin = config.mediaportal.sortplugins.value
+		if self.sortplugin == "default":
+			self.sortplugin = "Default"
+		elif self.sortplugin == "hits":
+			self.sortplugin = "Hits"
+		elif self.sortplugin == "abc":
+			self.sortplugin = "ABC"
+		elif self.sortplugin == "eigene":
+			self.sortplugin = "User"
+		self['green'].setText(self.sortplugin)
 		self.dump_liste = self.plugin_liste
 		if config.mediaportal.filter.value != "ALL":
 			self.plugin_liste = []
