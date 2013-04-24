@@ -700,11 +700,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.porn.append(self.hauptListEntry("YouPorn", "youporn"))
 		
 		if len(self.porn) < 1:
-<<<<<<< HEAD
 			self['Porn'].hide()
-=======
-			self['Porn'] = Label("")
->>>>>>> origin/einfall
 
 		self.mediatheken.sort(key=lambda t : tuple(t[0][0].lower()))
 		self.grauzone.sort(key=lambda t : tuple(t[0][0].lower()))
