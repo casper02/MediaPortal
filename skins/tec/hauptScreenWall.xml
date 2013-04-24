@@ -3,9 +3,9 @@
 	<widget name="name" position="59,91" size="650,50" foregroundColor="#00aaaaaa" backgroundColor="#26181d20" transparent="1" font="mediaportal; 30" valign="center" halign="center" />
 	<widget name="page" position="290,680" size="100,40" foregroundColor="#00aaaaaa" backgroundColor="#26181d20" transparent="1" font="mediaportal;28" valign="center" halign="center" />"
 	<eLabel text="Page " position="240,680" size="100,40" font="mediaportal;28" halign="left" valign="center" foregroundColor="#00aaaaaa" transparent="1" backgroundColor="#26181d20" />"
-	<widget name="blue" position="400,680" size="90,36" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="mediaportal; 18" valign="center" halign="center" zPosition="1" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttonblue.png" position="400,680" size="90,36" alphatest="blend" zPosition="0" transparent="1" />
-	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttonglas.png" position="400,680" size="90,36" alphatest="blend" zPosition="2" />		
+	<widget name="blue" position="620,680" size="90,36" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="mediaportal; 18" valign="center" halign="center" zPosition="1" />
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttonblue.png" position="620,680" size="90,36" alphatest="blend" zPosition="0" transparent="1" />
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttonglas.png" position="620,680" size="90,36" alphatest="blend" zPosition="2" />		
 	<ePixmap position="0,0" size="1280,720" zPosition="-1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/mpback.png" />"
 	<widget source="session.VideoPicture" render="Pig" position="930,15" size="320,180" zPosition="3" backgroundColor="transparent" />"
 	<eLabel position="929,14" size="322,182" backgroundColor="#00aaaaaa" zPosition="0" name="Videoback" foregroundColor="#00aaaaaa" />"
@@ -27,3 +27,6 @@
     <ePixmap position="510,680" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttonyellow.png" alphatest="blend" backgroundColor="#26181d20" />"
 	<eLabel text="Sort" position="510,680" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttonglas.png" position="510,680" size="90,36" alphatest="blend" zPosition="2" />
+    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttongreen.png" position="400,680" size="90,36" alphatest="blend" zPosition="0" transparent="1" />
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/tec/images/buttonglas.png" position="400,680" size="90,36" alphatest="blend" zPosition="2" />		
+    <widget name="green" position="400,680" size="90,36" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="mediaportal; 18" valign="center" halign="center" zPosition="1" />

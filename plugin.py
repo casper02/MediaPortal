@@ -1754,7 +1754,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		
 		self['name'] = Label("Plugin Auswahl")
 		self['blue'] = Label("")
-		#self['green'] = Label("")
+		self['green'] = Label("")
 		self['page'] = Label("")
 		self["frame"] = MovingPixmap()
 		for x in range(1,len(self.plugin_liste)+1):
@@ -1831,7 +1831,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		# load plugin icons
 		print "Set Filter:", config.mediaportal.filter.value
 		self['blue'].setText(config.mediaportal.filter.value)
-		#self['green'].setText(config.mediaportal.sortplugins.value)
+		self['green'].setText(config.mediaportal.sortplugins.value)
 		self.dump_liste = self.plugin_liste
 		if config.mediaportal.filter.value != "ALL":
 			self.plugin_liste = []
