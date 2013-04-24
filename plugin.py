@@ -117,7 +117,7 @@ config.mediaportal.filter = ConfigSelection(default = "ALL", choices = [("ALL", 
 config.mediaportal.youtubeprio = ConfigSelection(default = "1", choices = [("0", _("Low")),("1", _("Medium")),("2", _("High"))])
 config.mediaportal.pornpin = ConfigYesNo(default = True)
 config.mediaportal.watchlistpath = ConfigText(default="/etc/enigma2/", fixed_size=False)
-config.mediaportal.sortplugins = ConfigSelection(default = "default", choices = [("default", _("Default")),("hits", _("Hits")), ("abc", _("ABC")), ("eigene", _("User"))])
+config.mediaportal.sortplugins = ConfigSelection(default = "abc", choices = [("hits", _("Hits")), ("abc", _("ABC")), ("user", _("User"))])
 
 config.mediaportal.showDoku = ConfigYesNo(default = True)
 config.mediaportal.showRofl = ConfigYesNo(default = True)
@@ -458,7 +458,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 		self['Mediatheken'] = Label("Mediatheken")
 	
 		self['porn'] = chooseMenuList([])
-		self['Porn'] = Label("Porn")
+		self['Porn'] = Label("")
 
 		self.currentlist = "porn"
 
@@ -701,7 +701,9 @@ class haupt_Screen(Screen, ConfigListScreen):
 		
 		if len(self.porn) < 1:
 			self['Porn'].hide()
-
+		else:
+			self['Porn'].setText("Porn")
+			
 		self.mediatheken.sort(key=lambda t : tuple(t[0][0].lower()))
 		self.grauzone.sort(key=lambda t : tuple(t[0][0].lower()))
 		self.funsport.sort(key=lambda t : tuple(t[0][0].lower()))		
@@ -763,9 +765,6 @@ class haupt_Screen(Screen, ConfigListScreen):
 		self['name'].setText(auswahl)
 
 	def keyRight(self):
-		exist = self[self.currentlist].getCurrent()
-		if exist == None:
-			return
 		self.cur_idx = self[self.currentlist].getSelectedIndex()
 		self["mediatheken"].selectionEnabled(0)
 		self["grauzone"].selectionEnabled(0)
@@ -853,9 +852,6 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self['name'].setText(auswahl)
 		
 	def keyLeft(self):
-		exist = self[self.currentlist].getCurrent()
-		if exist == None:
-			return
 		self.cur_idx = self[self.currentlist].getSelectedIndex()
 		self["mediatheken"].selectionEnabled(0)
 		self["grauzone"].selectionEnabled(0)
@@ -1427,6 +1423,7 @@ class pluginSort(Screen):
 		return res
 
 	def keyCancel(self):
+		config.mediaportal.sortplugins.value = "user"
 		self.close()
 
 class haupt_Screen_Wall(Screen, ConfigListScreen):
@@ -1699,7 +1696,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			elif config.mediaportal.sortplugins.value == "abc":
 				self.new_pluginliste.sort(key=lambda x: str(x[0]).lower())
 
-			elif config.mediaportal.sortplugins.value == "eigene":
+			elif config.mediaportal.sortplugins.value == "user":
 				self.new_pluginliste.sort(key=lambda x: int(x[4]))
 
 			self.plugin_liste = self.new_pluginliste
@@ -1754,7 +1751,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		
 		self['name'] = Label("Plugin Auswahl")
 		self['blue'] = Label("")
-		#self['green'] = Label("")
+		self['green'] = Label("")
 		self['page'] = Label("")
 		self["frame"] = MovingPixmap()
 		for x in range(1,len(self.plugin_liste)+1):
@@ -1831,7 +1828,14 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		# load plugin icons
 		print "Set Filter:", config.mediaportal.filter.value
 		self['blue'].setText(config.mediaportal.filter.value)
-		#self['green'].setText(config.mediaportal.sortplugins.value)
+		self.sortplugin = config.mediaportal.sortplugins.value
+		if self.sortplugin == "hits":
+			self.sortplugin = "Hits"
+		elif self.sortplugin == "abc":
+			self.sortplugin = "ABC"
+		elif self.sortplugin == "user":
+			self.sortplugin = "User"
+		self['green'].setText(self.sortplugin)
 		self.dump_liste = self.plugin_liste
 		if config.mediaportal.filter.value != "ALL":
 			self.plugin_liste = []
@@ -1845,7 +1849,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		elif config.mediaportal.sortplugins.value == "abc":
 			self.plugin_liste.sort(key=lambda t : tuple(t[0].lower()))
 			
-		elif config.mediaportal.sortplugins.value == "eigene":
+		elif config.mediaportal.sortplugins.value == "user":
 			self.plugin_liste.sort(key=lambda x: int(x[4]))
 
 		print "rolle weiter.."
@@ -2524,14 +2528,12 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 	def chSort(self):
 		print "Sort: %s" % config.mediaportal.sortplugins.value
 		
-		if config.mediaportal.sortplugins.value == "default":
-			config.mediaportal.sortplugins.value = "hits"
-		elif config.mediaportal.sortplugins.value == "hits":
+		if config.mediaportal.sortplugins.value == "hits":
 			config.mediaportal.sortplugins.value = "abc"
 		elif config.mediaportal.sortplugins.value == "abc":
-			config.mediaportal.sortplugins.value = "eigene"
-		elif config.mediaportal.sortplugins.value == "eigene":
-			config.mediaportal.sortplugins.value = "default"
+			config.mediaportal.sortplugins.value = "user"
+		elif config.mediaportal.sortplugins.value == "user":
+			config.mediaportal.sortplugins.value = "hits"
 			
 		print "Sort changed:", config.mediaportal.sortplugins.value
 		self.restart()
@@ -2582,6 +2584,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 	def restart(self):
 		print "Mediaportal restart."
 		config.mediaportal.filter.save()
+		config.mediaportal.sortplugins.save()
 		configfile.save()
 		self.close(self.session, False)
 

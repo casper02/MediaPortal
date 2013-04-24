@@ -24,8 +24,11 @@
 		<ePixmap position="510,680" size="90,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/liquidblue/images/buttonyellow.png" alphatest="blend" backgroundColor="#26181d20" />"
 	    <eLabel text="Sort" position="510,680" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
 	    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/liquidblue/images/buttonglas.png" position="510,680" size="90,36" alphatest="blend" zPosition="2" />
-		<widget name="blue" position="400,680" size="90,36" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="mediaportal; 18" valign="center" halign="center" zPosition="1" />
-	    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/liquidblue/images/buttonblue.png" position="400,680" size="90,36" alphatest="blend" zPosition="0" transparent="1" />
+		<widget name="blue" position="620,680" size="90,36" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="mediaportal; 18" valign="center" halign="center" zPosition="1" />
+	    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/liquidblue/images/buttonblue.png" position="620,680" size="90,36" alphatest="blend" zPosition="0" transparent="1" />
+	    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/liquidblue/images/buttonglas.png" position="620,680" size="90,36" alphatest="blend" zPosition="2" />		
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/liquidblue/images/buttongreen.png" position="400,680" size="90,36" alphatest="blend" zPosition="0" transparent="1" />
 	    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/liquidblue/images/buttonglas.png" position="400,680" size="90,36" alphatest="blend" zPosition="2" />		
-		
+        <widget name="green" position="400,680" size="90,36" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="mediaportal; 18" valign="center" halign="center" zPosition="1" />
+
 		 

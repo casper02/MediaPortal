@@ -3,7 +3,7 @@
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.yt_url import *
 
-YT_Version = "Youtube Search v0.93 (experimental)"
+YT_Version = "Youtube Search v0.94 (experimental)"
 
 YT_siteEncoding = 'utf-8'
 
@@ -84,6 +84,7 @@ class youtubeGenreScreen(Screen):
 		self.param_author = ""
 		self.param_3d_idx = 0
 		self.param_duration_idx = 0
+		self.old_mainidx = -1
 		
 		self.menuLevel = 0
 		self.menuMaxLevel = 2
@@ -168,13 +169,13 @@ class youtubeGenreScreen(Screen):
 			]
 
 		self.paramList = [
-			('Suchanfrage', self.paraQuery),
-			('Zeitbereich', self.paraTime),
-			('Meta Sprache', self.paraMeta),
-			('Uploader', self.paraAuthor),
-			('3D Suche', self.para3D),
-			('Laufzeit', self.paraDuration),
-			('Suchregion', self.paraRegionID)
+			('Suchanfrage', self.paraQuery, [0,1,2,3]),
+			('Zeitbereich', self.paraTime, [0,1]),
+			('Meta Sprache', self.paraMeta, [1]),
+			('Uploader', self.paraAuthor, [1]),
+			('3D Suche', self.para3D, [0,1]),
+			('Laufzeit', self.paraDuration, [0,1]),
+			('Suchregion', self.paraRegionID, [0])
 			#('Schlüsselworte', self.paraKey)
 			]
 			
@@ -182,15 +183,17 @@ class youtubeGenreScreen(Screen):
 			[
 			('Standard feeds', '/standardfeeds'),
 			('Video feeds', '/videos'),
-			('Playlist feeds', '/playlists/snippets')
+			('Playlist feeds', '/playlists/snippets'),
+			('Channel feeds', '/channels')
 			],
 			[
-			self.subGenre_0, self.subCat, None
+			self.subGenre_0, self.subCat, None, None
 			],
 			[
 			[self.subCat,self.subCat,self.subCat,self.subCat,self.subCat,self.subCat],
 			[None,None,None,None,None,None,None,None,None,None,None,None,None,None],
-			[None,None,None,None,None,None,None,None,None,None,None,None,None,None]
+			[None],
+			[None]
 			]
 			]
 
@@ -263,6 +266,62 @@ class youtubeGenreScreen(Screen):
 		self['author'].setText(self.param_author)
 		self['keywords'].setText(self.param_kw)
 		self['parametertoedit'].setText(self.paramList[self.paramListIdx][0])
+		self.paramShowHide()
+		
+	def paramShowHide(self):
+		if self.old_mainidx == self.menuIdx[0]:
+			return
+		else:
+			self.old_mainidx = self.menuIdx[0]
+			
+		if self.menuIdx[0] in self.paramList[0][2]:
+			self['query'].show()
+			self['Query'].show()
+		else:
+			self['query'].hide()
+			self['Query'].hide()
+			
+		if self.menuIdx[0] in self.paramList[1][2]:
+			self['time'].show()
+			self['Time'].show()
+		else:
+			self['time'].hide()
+			self['Time'].hide()
+		
+		if self.menuIdx[0] in self.paramList[2][2]:
+			self['metalang'].show()
+			self['Metalang'].show()
+		else:
+			self['metalang'].hide()
+			self['Metalang'].hide()
+		
+		if self.menuIdx[0] in self.paramList[6][2]:
+			self['regionid'].show()
+			self['Regionid'].show()
+		else:
+			self['regionid'].hide()
+			self['Regionid'].hide()
+		
+		if self.menuIdx[0] in self.paramList[4][2]:
+			self['3d'].show()
+			self['3D'].show()
+		else:
+			self['3d'].hide()
+			self['3D'].hide()
+		
+		if self.menuIdx[0] in self.paramList[5][2]:
+			self['duration'].show()
+			self['Duration'].show()
+		else:
+			self['duration'].hide()
+			self['Duration'].hide()
+		
+		if self.menuIdx[0] in self.paramList[3][2]:
+			self['author'].show()
+			self['Author'].show()
+		else:
+			self['author'].hide()
+			self['Author'].hide()
 	
 	def setGenreStrTitle(self):
 		genreName = self['genreList'].getCurrent()[0][0]
@@ -278,6 +337,8 @@ class youtubeGenreScreen(Screen):
 		self.genreTitle = "%s%s%s" % (self.genreName[0],self.genreName[1],self.genreName[2])
 		self['name'].setText("Genre: "+self.genreTitle)
 		
+		self.keyRed(0)
+		
 		"""
 		if self.genreSelected:
 			print "Genre selected"
@@ -292,10 +353,22 @@ class youtubeGenreScreen(Screen):
 		self.setMenu(0, True)
 		self.keyLocked = False
 
-	def keyRed(self):
-		self.paramListIdx += 1
-		if self.paramListIdx not in range(0, len(self.paramList)):
-			self.paramListIdx = 0
+	def keyRed(self, inc=1):
+		old_idx = self.paramListIdx
+		self.paramListIdx += inc
+		
+		while True:
+			if self.paramListIdx not in range(0, len(self.paramList)):
+				self.paramListIdx = 0
+				
+			if self.menuIdx[0] in self.paramList[self.paramListIdx][2]:
+				break
+			else:
+				self.paramListIdx += 1
+				
+			if old_idx == self.paramListIdx:
+				break
+
 		self.showParams()
 
 	def keyGreen(self):
@@ -330,8 +403,9 @@ class youtubeGenreScreen(Screen):
 			self.session.open(YT_ListScreen, genreurl, self.genreTitle)
 
 	def keyYellow(self):
-		self.paramList[self.paramListIdx][1]()
-		self.showParams()
+		if self.menuIdx[0] in self.paramList[self.paramListIdx][2]:
+			self.paramList[self.paramListIdx][1]()
+			self.showParams()
 	
 	def keyUp(self):
 		self['genreList'].up()
@@ -514,6 +588,7 @@ class YT_ListScreen(Screen):
 		self.setVideoPrio()
 		
 		self.playlistGenre = re.match('.*?Playlist', self.genreName)
+		self.channelGenre = re.match('.*?Channel', self.genreName)
 		self.keckse = {}
 		self.filmliste = []
 		self.start_idx = 1
@@ -583,6 +658,32 @@ class YT_ListScreen(Screen):
 				#self.filmliste.sort(key=lambda t : t[0].lower())
 				menu_len = len(self.filmliste)
 				print "Playlists found: ",menu_len
+				
+		elif self.channelGenre:
+			while a < l:
+				mg = re.search('<entry gd:etag=(.*?)</entry>', data[a:], re.S)
+				if mg:
+					a += mg.end()
+					m2 = re.search('<title>(.*?)</title>.*?<summary>(.*?)</summary>.*?<gd:feedLink.*?href=\'(.*?)\''\
+						'.*?<media:thumbnail.*?url=\'(.*?)\'', mg.group(1), re.S)
+					if m2:
+						title = decodeHtml(m2.group(1))
+						desc = decodeHtml(m2.group(2))
+						url = m2.group(3)
+						img = m2.group(4)
+						
+						self.filmliste.append(('', title, url, img, desc))
+				else:
+					a = l
+					
+			if len(self.filmliste) == 0:
+				print "No channel found!"
+				self.pages = 0
+				self.filmliste.append(('Keine Channels gefunden !','','','',''))
+			else:
+				#self.filmliste.sort(key=lambda t : t[0].lower())
+				menu_len = len(self.filmliste)
+				print "Channels found: ",menu_len
 				
 		else:
 			while a < l:
@@ -784,7 +885,7 @@ class YT_ListScreen(Screen):
 		if self.keyLocked:
 			return
 
-		if self.playlistGenre:
+		if self.playlistGenre or self.channelGenre:
 			dhTitle = 'Videos: ' + self['liste'].getCurrent()[0][1]
 			genreurl = re.sub('v=2', '', self['liste'].getCurrent()[0][2])
 			self.session.open(YT_ListScreen, genreurl, dhTitle)
