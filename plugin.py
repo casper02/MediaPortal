@@ -1423,6 +1423,7 @@ class pluginSort(Screen):
 		return res
 
 	def keyCancel(self):
+		config.mediaportal.sortplugins.value = "user"
 		self.close()
 
 class haupt_Screen_Wall(Screen, ConfigListScreen):
@@ -2583,6 +2584,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 	def restart(self):
 		print "Mediaportal restart."
 		config.mediaportal.filter.save()
+		config.mediaportal.sortplugins.save()
 		configfile.save()
 		self.close(self.session, False)
 
