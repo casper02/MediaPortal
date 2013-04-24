@@ -14,6 +14,6 @@
 			<widget name="stationIcon" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/no_coverArt.png" position="20,420" size="145,200" transparent="1" alphatest="blend" />
 			<widget name="name" position="230,420" size="520,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="mediaportal;26" valign="top" />
 			<widget name="handlung" position="205,473" size="680,140" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="top" />
-                        <ePixmap position="647,622" size="36,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/green.png" alphatest="blend" backgroundColor="#00101214" />
+                        <ePixmap position="647,616" size="38,38" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/buttongreen.png" alphatest="blend" backgroundColor="#00101214" />
 			<eLabel text="add to Watchlist" position="686,618" size="200,36" transparent="1" font="mediaportal; 18" backgroundColor="#00101214" foregroundColor="#00ffffff" valign="center" halign="left" zPosition="1" />             
 	    </screen>

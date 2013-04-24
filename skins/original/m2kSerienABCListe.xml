@@ -15,6 +15,6 @@
 	<widget name="handlung" position="185,473" size="700,140" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="top" />
 	<eLabel text="Page " position="750,420" size="100,25" backgroundColor="#00101214" transparent="1" foregroundColor="#00555556" font="mediaportal;20" valign="top" />
 	<widget name="page" position="850,420" size="45,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="top" />	
-    <ePixmap position="637,576" size="36,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/green.png" alphatest="blend" backgroundColor="#00101214" />
+    <ePixmap position="637,576" size="38,38" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/buttongreen.png" alphatest="blend" backgroundColor="#00101214" />
     <eLabel text="add to Watchlist" position="676,572" size="200,36" transparent="1" font="mediaportal; 18" backgroundColor="#00101214" foregroundColor="#00ffffff" valign="center" halign="left" zPosition="1" />
 </screen>

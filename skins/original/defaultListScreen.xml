@@ -15,10 +15,10 @@
     <widget name="handlung" position="180,425" size="700,170" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="top" zPosition="0" />
     <widget name="Page" position="765,605" size="56,25" backgroundColor="#00101214" transparent="1" foregroundColor="#00555556" font="mediaportal;20" valign="center" halign="right" zPosition="0" />
     <widget name="page" position="820,605" size="60,25" backgroundColor="#00101214" transparent="1" font="mediaportal;20" valign="center" halign="right" zPosition="0" />
-    <ePixmap pixmap="~/original/images/red.png" position="20,597" size="35,27" alphatest="blend" />
-    <ePixmap pixmap="~/original/images/green.png" position="165,597" size="35,27" alphatest="blend" />
-    <ePixmap pixmap="~/original/images/yellow.png" position="310,597" size="35,27" alphatest="blend" />
-    <ePixmap pixmap="~/original/images/blue.png" position="455,597" size="35,27" alphatest="blend" />
+    <ePixmap pixmap="~/original/images/buttonred.png" position="20,597" size="38,38" alphatest="blend" />
+    <ePixmap pixmap="~/original/images/buttongreen.png" position="165,597" size="38,38" alphatest="blend" />
+    <ePixmap pixmap="~/original/images/buttonyellow.png" position="310,597" size="38,38" alphatest="blend" />
+    <ePixmap pixmap="~/original/images/buttonblue.png" position="455,597" size="38,38" alphatest="blend" />
 	<ePixmap pixmap="~/original/images/info.png" position="600,597" size="70,30" alphatest="blend" />    <widget name="F1" position="60,600" size="100,30" transparent="1" font="mediaportal; 20" backgroundColor="#00101214" valign="bottom" />
     <widget name="F1" position="60,600" size="100,30" transparent="1" font="mediaportal; 20" backgroundColor="#00101214" valign="bottom" />
     <widget name="F2" position="205,600" size="100,30" transparent="1" backgroundColor="#00101214" font="mediaportal; 20" valign="bottom" />
