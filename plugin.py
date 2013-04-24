@@ -700,7 +700,11 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.porn.append(self.hauptListEntry("YouPorn", "youporn"))
 		
 		if len(self.porn) < 1:
+<<<<<<< HEAD
 			self['Porn'].hide()
+=======
+			self['Porn'] = Label("")
+>>>>>>> origin/einfall
 
 		self.mediatheken.sort(key=lambda t : tuple(t[0][0].lower()))
 		self.grauzone.sort(key=lambda t : tuple(t[0][0].lower()))
@@ -1680,24 +1684,6 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 					read_pluginliste.close()
 					read_pluginliste_tmp.close()
 					shutil.move(self.sort_plugins_file+".tmp", self.sort_plugins_file)
-					
-					#for pname, ppic, pgenre in self.plugin_liste:
-					#	read_pluginliste = open(self.sort_plugins_file,"r")
-					#	for rawData in read_pluginliste.readlines():
-					#		data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
-					#		if data:
-					#			(p_name, p_picname, p_genre, p_hits, p_sort) = data[0]
-					#			if pname not in p_dupeliste:
-					#				if pname == p_name:
-					#					read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (p_name, p_picname, p_genre, p_hits, p_sort))	
-					#				else:
-					#					read_pluginliste_tmp.write('"%s" "%s" "%s" "%s" "%s"\n' % (pname, ppic, pgenre, "0", "99"))
-					#					
-					#		p_dupeliste.append((pname))
-					#		read_pluginliste.close()
-
-					#read_pluginliste_tmp.close()
-					#shutil.move(self.sort_plugins_file+".tmp", self.sort_plugins_file)
 
 				self.new_pluginliste = []
 				read_pluginliste = open(self.sort_plugins_file,"r")
@@ -1766,11 +1752,13 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			"menu" : self.keySetup,
 			"displayHelp" : self.keyHelp,
 			"blue" : self.chFilter,
+			"green" : self.chSort,
 			"yellow": self.manuelleSortierung
 		}, -1)
 		
 		self['name'] = Label("Plugin Auswahl")
 		self['blue'] = Label("")
+		#self['green'] = Label("")
 		self['page'] = Label("")
 		self["frame"] = MovingPixmap()
 		for x in range(1,len(self.plugin_liste)+1):
@@ -1847,27 +1835,24 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		# load plugin icons
 		print "Set Filter:", config.mediaportal.filter.value
 		self['blue'].setText(config.mediaportal.filter.value)
+		#self['green'].setText(config.mediaportal.sortplugins.value)
+		self.dump_liste = self.plugin_liste
 		if config.mediaportal.filter.value != "ALL":
-			dump_liste = self.plugin_liste
 			self.plugin_liste = []
-			self.plugin_liste = [x for x in dump_liste if config.mediaportal.filter.value == x[2]]
-			
-			if config.mediaportal.sortplugins.value == "hits":
-				self.plugin_liste.sort(key=lambda x: int(x[3]))
-				self.plugin_liste.reverse()
+			self.plugin_liste = [x for x in self.dump_liste if config.mediaportal.filter.value == x[2]]
 
-			# Sortieren nach abcde..
-			elif config.mediaportal.sortplugins.value == "abc":
-				self.plugin_liste.sort(key=lambda t : tuple(t[0].lower()))
-				
-			elif config.mediaportal.sortplugins.value == "eigene":
-				self.plugin_liste.sort(key=lambda x: int(x[4]))
-				
-			if self.check_empty_list():
-				return
-				
-			for each in self.plugin_liste:
-				print each
+		if config.mediaportal.sortplugins.value == "hits":
+			self.plugin_liste.sort(key=lambda x: int(x[3]))
+			self.plugin_liste.reverse()
+
+		# Sortieren nach abcde..
+		elif config.mediaportal.sortplugins.value == "abc":
+			self.plugin_liste.sort(key=lambda t : tuple(t[0].lower()))
+			
+		elif config.mediaportal.sortplugins.value == "eigene":
+			self.plugin_liste.sort(key=lambda x: int(x[4]))
+
+		print "rolle weiter.."
 
 		for x in range(1,len(self.plugin_liste)+1):
 			postername = self.plugin_liste[int(x)-1][1]
@@ -2539,9 +2524,25 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 	def pinok(self, pincode):
 		if pincode:
 			self.session.openWithCallback(self.restart, hauptScreenSetup)
+
+	def chSort(self):
+		print "Sort: %s" % config.mediaportal.sortplugins.value
+		
+		if config.mediaportal.sortplugins.value == "default":
+			config.mediaportal.sortplugins.value = "hits"
+		elif config.mediaportal.sortplugins.value == "hits":
+			config.mediaportal.sortplugins.value = "abc"
+		elif config.mediaportal.sortplugins.value == "abc":
+			config.mediaportal.sortplugins.value = "eigene"
+		elif config.mediaportal.sortplugins.value == "eigene":
+			config.mediaportal.sortplugins.value = "default"
 			
+		print "Sort changed:", config.mediaportal.sortplugins.value
+		self.restart()
+	
 	def chFilter(self):
-		print config.mediaportal.filter.value
+		print "Filter:", config.mediaportal.filter.value
+		
 		if config.mediaportal.filter.value == "ALL":
 			config.mediaportal.filter.value = "Mediathek"
 		elif config.mediaportal.filter.value == "Mediathek":
@@ -2555,8 +2556,27 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		elif config.mediaportal.filter.value == "Porn":
 			config.mediaportal.filter.value = "ALL"
 
-		print "Filter:", config.mediaportal.filter.value
-		self.restart()
+		print "Filter changed:", config.mediaportal.filter.value
+		self.restartAndCheck()
+		
+	def restartAndCheck(self):
+		if config.mediaportal.filter.value != "ALL":
+			dump_liste2 = self.dump_liste
+			self.plugin_liste = []
+			self.plugin_liste = [x for x in dump_liste2 if config.mediaportal.filter.value == x[2]]
+			if len(self.plugin_liste) == 0:
+				print "Filter ist deaktviert.. recheck..: %s" % config.mediaportal.filter.value
+				self.chFilter()
+			else:
+				print "Mediaportal restart."
+				config.mediaportal.filter.save()
+				configfile.save()
+				self.close(self.session, False)
+		else:
+			print "Mediaportal restart."
+			config.mediaportal.filter.save()
+			configfile.save()
+			self.close(self.session, False)			
 		
 	def keyCancel(self):
 		config.mediaportal.filter.save()
@@ -2564,6 +2584,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		self.close(self.session, True)
 
 	def restart(self):
+		print "Mediaportal restart."
 		config.mediaportal.filter.save()
 		configfile.save()
 		self.close(self.session, False)
