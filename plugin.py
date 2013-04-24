@@ -117,7 +117,7 @@ config.mediaportal.filter = ConfigSelection(default = "ALL", choices = [("ALL", 
 config.mediaportal.youtubeprio = ConfigSelection(default = "1", choices = [("0", _("Low")),("1", _("Medium")),("2", _("High"))])
 config.mediaportal.pornpin = ConfigYesNo(default = True)
 config.mediaportal.watchlistpath = ConfigText(default="/etc/enigma2/", fixed_size=False)
-config.mediaportal.sortplugins = ConfigSelection(default = "default", choices = [("default", _("Default")),("hits", _("Hits")), ("abc", _("ABC")), ("eigene", _("User"))])
+config.mediaportal.sortplugins = ConfigSelection(default = "default", choices = [("default", _("Standard")),("hits", _("Hits")), ("abc", _("ABC")), ("eigene", _("User"))])
 
 config.mediaportal.showDoku = ConfigYesNo(default = True)
 config.mediaportal.showRofl = ConfigYesNo(default = True)
@@ -1829,7 +1829,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		self['blue'].setText(config.mediaportal.filter.value)
 		self.sortplugin = config.mediaportal.sortplugins.value
 		if self.sortplugin == "default":
-			self.sortplugin = "Default"
+			self.sortplugin = "Standard"
 		elif self.sortplugin == "hits":
 			self.sortplugin = "Hits"
 		elif self.sortplugin == "abc":
