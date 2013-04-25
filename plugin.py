@@ -490,7 +490,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 		if answer is True:
 			self.container=eConsoleAppContainer()
 			self.container.appClosed.append(self.finishedPluginUpdate)
-			self.container.execute("opkg install --force-overwrite " + str(self.updateurl))
+			self.container.execute("opkg install --force-overwrite --force-depends " + str(self.updateurl))
 		else:
 			self.layoutFinished()
 
@@ -1789,7 +1789,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		if answer is True:
 			self.container=eConsoleAppContainer()
 			self.container.appClosed.append(self.finishedPluginUpdate)
-			self.container.execute("opkg install --force-overwrite " + str(self.updateurl))
+			self.container.execute("opkg install --force-overwrite --force-depends " + str(self.updateurl))
 		else:
 			self._onFirstExecBegin()
 
