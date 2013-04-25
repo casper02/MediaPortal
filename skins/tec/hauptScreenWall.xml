@@ -1,6 +1,6 @@
 <!-- Hauptscreen_Wall -->
 <screen name="MediaPortal" position="0,0" size="1280,720" flags="wfNoBorder">
-	<widget name="name" position="59,91" size="650,50" foregroundColor="#00aaaaaa" backgroundColor="#26181d20" transparent="1" font="mediaportal; 30" valign="center" halign="center" />
+	<widget name="name" position="59,120" size="650,50" foregroundColor="#00aaaaaa" backgroundColor="#26181d20" transparent="1" font="mediaportal; 30" valign="center" halign="center" />
 	<widget name="page" position="290,680" size="100,40" foregroundColor="#00aaaaaa" backgroundColor="#26181d20" transparent="1" font="mediaportal;28" valign="center" halign="center" />"
 	<eLabel text="Page " position="240,680" size="100,40" font="mediaportal;28" halign="left" valign="center" foregroundColor="#00aaaaaa" transparent="1" backgroundColor="#26181d20" />"
 	<widget name="blue" position="620,680" size="90,36" foregroundColor="#00ffffff" backgroundColor="#26181d20" transparent="1" font="mediaportal; 18" valign="center" halign="center" zPosition="1" />
