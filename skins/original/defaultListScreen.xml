@@ -1,5 +1,5 @@
 <!-- defaultListScreen -->
-  <screen name="defaultList" position="center,center" size="900,655" backgroundColor="#00060606" flags="wfNoBorder">
+ <screen name="defaultList" position="center,center" size="900,655" backgroundColor="#00060606" flags="wfNoBorder">
     <widget name="title" position="20,10" size="500,40" backgroundColor="#00101214" transparent="1" zPosition="10" font="mediaportal; 26" valign="center" halign="left" />
     <widget source="global.CurrentTime" render="Label" position="730,8" size="150,30" backgroundColor="#00101214" transparent="1" zPosition="1" font="mediaportal; 26" valign="center" halign="right" foregroundColor="#00dcdcdc">
       <convert type="ClockToText">Format:%-H:%M</convert>
@@ -19,7 +19,8 @@
     <ePixmap pixmap="~/original/images/buttongreen.png" position="165,597" size="38,38" alphatest="blend" />
     <ePixmap pixmap="~/original/images/buttonyellow.png" position="310,597" size="38,38" alphatest="blend" />
     <ePixmap pixmap="~/original/images/buttonblue.png" position="455,597" size="38,38" alphatest="blend" />
-	<ePixmap pixmap="~/original/images/info.png" position="600,597" size="70,30" alphatest="blend" />    <widget name="F1" position="60,600" size="100,30" transparent="1" font="mediaportal; 20" backgroundColor="#00101214" valign="bottom" />
+    <ePixmap pixmap="~/original/images/buttongrey.png" position="600,597" size="36,36" alphatest="blend" /> 
+    <eLabel text="Info" position="637,600" size="100,30" font="mediaportal; 20" halign="left" transparent="1" backgroundColor="#00060606" foregroundColor="#00ffffff" />   
     <widget name="F1" position="60,600" size="100,30" transparent="1" font="mediaportal; 20" backgroundColor="#00101214" valign="bottom" />
     <widget name="F2" position="205,600" size="100,30" transparent="1" backgroundColor="#00101214" font="mediaportal; 20" valign="bottom" />
     <widget name="F3" position="350,600" size="100,30" transparent="1" font="mediaportal; 20" backgroundColor="#00101214" valign="bottom" />
