@@ -198,7 +198,7 @@ class MEHDFilmListeScreen(Screen):
 			self.session.open(enterColListScreen, searchCol, searchTitle)
 
 	def getStreamLink(self, data):
-			print 'streamdata...:', data
+			#print 'streamdata...:', data
 			streamName = self['filmList'].getCurrent()[0][0]
 			stream_url = re.findall('<source src="(.*?)".*?type="video/mp4"', data, re.S)
 			print stream_url
