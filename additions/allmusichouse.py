@@ -368,7 +368,7 @@ class AMH_FilmListeScreen(Screen):
 		self.eventL.clear()
 		print "dataError:"
 		print error
-		self.musicListe.append(("No music found !","","",""))
+		self.musicListe.append(("No music found !","",""))
 		self.chooseMenuList.setList(map(AMH_FilmListEntry, self.musicListe))
 		
 	def loadPageData(self, data):
