@@ -185,22 +185,23 @@ class MEHDFilmListeScreen(Screen):
 		getPage(streamLink, cookies=kekse, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getStream).addErrback(self.dataError)
 		
 	def getStream(self, data):
-		stream = re.findall('href="(http://my-entertainment.biz/.*?/Free-Membe.*?.php\?mov=.*?)"', data)
+		stream = re.findall('href="(http://my-entertainment.biz/.*?/Non-Membe.*?.php\?mov=.*?)"', data)
 		# Wenn nur ein Link, dann stream starten, ansonsten handelt es sich wohl um eine Collection
 		if len(stream) == 1:
 			print 'Ein Free Stream....',stream
 			getPage(stream[0], cookies=kekse, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getStreamLink).addErrback(self.dataError)
 		else:
 			searchTitle = re.findall('<title>(.*?)</title>', data, re.S)
-			searchCol = re.findall('<img src="(http://my-entertainment.biz.*?)".*?href="(http://my-entertainment.biz/server/Free-Member.php\\?mov=.*?)"', data, re.S)
+			searchCol = re.findall('<img src="(http://my-entertainment.biz.*?)".*?href="(http://my-entertainment.biz/server/Non-Member.php\\?mov=.*?)"', data, re.S)
 			print 'Mehrere Free-Streams...',searchCol
 			# Jetzt muessen wir eine neue Screen oeffnen um die Filme der Collection anzuzeigen
 			self.session.open(enterColListScreen, searchCol, searchTitle)
 
 	def getStreamLink(self, data):
-			#print data
+			print 'streamdata...:', data
 			streamName = self['filmList'].getCurrent()[0][0]
-			stream_url = re.findall('src="(http://.*?my-entertainment.biz.*?)"', data, re.S)
+			stream_url = re.findall('<source src="(.*?)".*?type="video/mp4"', data, re.S)
+			print stream_url
 			if stream_url:
 				streamName = self['filmList'].getCurrent()[0][0]
 				sref = eServiceReference(0x1001, 0, stream_url[0])
@@ -328,7 +329,7 @@ class enterColListScreen(Screen):
 					
 	def getRealLink(self, data):
 		print 'getRealLink'
-		stream_url = re.findall('src="(http://.*?my-entertainment.biz.*?)"', data, re.S)
+		stream_url = re.findall('<source src="(.*?)".*?type="video/mp4"', data, re.S)
 		print stream_url
 		if stream_url:
 			print stream_url
