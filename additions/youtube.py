@@ -639,12 +639,16 @@ class YT_ListScreen(Screen):
 				mg = re.search('<entry gd:etag=(.*?)</entry>', data[a:], re.S)
 				if mg:
 					a += mg.end()
-					m2 = re.search('<title>(.*?)</title>.*?<summary>(.*?)</summary>.*?src=\'(.*?)\'.*?url=\'(.*?)\'.*?height=\'180\'', mg.group(1), re.S)
+					m1 = re.search('<summary>(.*?)</summary>', mg.group(1), re.S)
+					m2 = re.search('<title>(.*?)</title>.*?src=\'(.*?)\'.*?url=\'(.*?)\'.*?height=\'180\'', mg.group(1), re.S)
 					if m2:
 						title = decodeHtml(m2.group(1))
-						desc = decodeHtml(m2.group(2))
-						url = m2.group(3)
-						img = m2.group(4)
+						if m1:
+							desc = decodeHtml(m1.group(1))
+						else:
+							desc = "Keine weiteren Info's vorhanden."
+						url = m2.group(2)
+						img = m2.group(3)
 						
 						self.filmliste.append(('', title, url, img, desc))
 				else:
@@ -664,13 +668,17 @@ class YT_ListScreen(Screen):
 				mg = re.search('<entry gd:etag=(.*?)</entry>', data[a:], re.S)
 				if mg:
 					a += mg.end()
-					m2 = re.search('<title>(.*?)</title>.*?<summary>(.*?)</summary>.*?<gd:feedLink.*?href=\'(.*?)\''\
+					m1 = re.search('<summary>(.*?)</summary>', mg.group(1), re.S)
+					m2 = re.search('<title>(.*?)</title>.*?<gd:feedLink.*?href=\'(.*?)\''\
 						'.*?<media:thumbnail.*?url=\'(.*?)\'', mg.group(1), re.S)
 					if m2:
 						title = decodeHtml(m2.group(1))
-						desc = decodeHtml(m2.group(2))
-						url = m2.group(3)
-						img = m2.group(4)
+						if m1:
+							desc = decodeHtml(m1.group(1))
+						else:
+							desc = "Keine weiteren Info's vorhanden."
+						url = m2.group(2)
+						img = m2.group(3)
 						
 						self.filmliste.append(('', title, url, img, desc))
 				else:

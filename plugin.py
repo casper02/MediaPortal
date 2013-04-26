@@ -58,6 +58,7 @@ from additions.userchannels import *
 from additions.cinestream import *
 from additions.moovizon import *
 from additions.youtube import *
+from additions.clipfish import *
 
 # kids
 from additions.kinderkino import *
@@ -102,8 +103,8 @@ from additions.porn.x4tube import *
 from additions.porn.youporn import *
 
 config.mediaportal = ConfigSubsection()
-config.mediaportal.version = NoSave(ConfigText(default="421"))
-config.mediaportal.versiontext = NoSave(ConfigText(default="4.2.1"))
+config.mediaportal.version = NoSave(ConfigText(default="422"))
+config.mediaportal.versiontext = NoSave(ConfigText(default="4.2.2"))
 config.mediaportal.autoupdate = ConfigYesNo(default = True)
 config.mediaportal.pincode = ConfigPIN(default = 0000)
 config.mediaportal.skin = ConfigSelection(default = "tec", choices = [("tec", _("tec")),("liquidblue", _("liquidblue")), ("original", _("original"))])
@@ -176,6 +177,7 @@ config.mediaportal.showUserChannels = ConfigYesNo(default = True)
 config.mediaportal.showCinestream = ConfigYesNo(default = True)
 config.mediaportal.showMoovizon = ConfigYesNo(default = True)
 config.mediaportal.showYoutube = ConfigYesNo(default = True)
+config.mediaportal.showClipfish = ConfigYesNo(default = True)
 
 # mediatheken
 config.mediaportal.showVoxnow = ConfigYesNo(default = True)
@@ -490,7 +492,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 		if answer is True:
 			self.container=eConsoleAppContainer()
 			self.container.appClosed.append(self.finishedPluginUpdate)
-			self.container.execute("opkg install --force-overwrite " + str(self.updateurl))
+			self.container.execute("opkg install --force-overwrite --force-depends " + str(self.updateurl))
 		else:
 			self.layoutFinished()
 
@@ -642,6 +644,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.funsport.append(self.hauptListEntry("USER-Channels", "userchannels"))
 		if config.mediaportal.showYoutube.value:
 			self.funsport.append(self.hauptListEntry("YouTube", "youtube"))
+		if config.mediaportal.showClipfish.value:
+			self.funsport.append(self.hauptListEntry("Clipfish", "clipfish"))
 		
 		# porn
 		if config.mediaportal.show4tube.value:
@@ -1054,6 +1058,9 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(show_USER_Genre)
 		elif auswahl == "YouTube":
 			self.session.open(youtubeGenreScreen)
+		elif auswahl == "Clipfish":
+			self.session.open(show_CF_Genre)
+			
 		# mediatheken
 		elif auswahl == "VOXNOW":
 			self.session.open(VOXnowGenreScreen)
@@ -1544,6 +1551,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("USER-Channels", "userchannels", "Fun"))
 		if config.mediaportal.showYoutube.value:
 			self.plugin_liste.append(("YouTube", "youtube", "Fun"))
+		if config.mediaportal.showClipfish.value:
+			self.plugin_liste.append(("Clipfish", "clipfish", "Fun"))
 			
 		### mediatheken	
 		if config.mediaportal.showVoxnow.value:
@@ -1789,7 +1798,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		if answer is True:
 			self.container=eConsoleAppContainer()
 			self.container.appClosed.append(self.finishedPluginUpdate)
-			self.container.execute("opkg install --force-overwrite " + str(self.updateurl))
+			self.container.execute("opkg install --force-overwrite --force-depends " + str(self.updateurl))
 		else:
 			self._onFirstExecBegin()
 
@@ -2088,6 +2097,9 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		elif auswahl == "YouTube":
 			self.hit_plugin("YouTube")
 			self.session.open(youtubeGenreScreen)
+		elif auswahl == "Clipfish":
+			self.hit_plugin("Clipfish")
+			self.session.open(show_CF_Genre)
 		# mediatheken
 		elif auswahl == "VOXNOW":
 			self.hit_plugin("VOXNOW")

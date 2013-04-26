@@ -5,9 +5,9 @@ import threading
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.yt_url import *
 
-AMH_Version = "AllMusicHouse.de v0.97"
+CF_Version = "Clipfish.de v0.90 (experimental)"
 
-AMH_siteEncoding = 'utf-8'
+CF_siteEncoding = 'utf-8'
 
 """
 Sondertastenbelegung:
@@ -27,12 +27,12 @@ Stream Auswahl:
 	Gelb				: Videopriorität 'L','M','H'
 
 """
-def AMH_menuListentry(entry):
+def CF_menuListentry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		] 
 		
-class show_AMH_Genre(Screen):
+class show_CF_Genre(Screen):
 
 	def __init__(self, session):
 		self.session = session
@@ -59,8 +59,8 @@ class show_AMH_Genre(Screen):
 			"red"	: self.keyRed
 		}, -1)
 
-		self['title'] = Label(AMH_Version)
-		self['ContentTitle'] = Label("Musik Auswahl")
+		self['title'] = Label(CF_Version)
+		self['ContentTitle'] = Label("Musik Genre")
 		self['name'] = Label("")
 		self['F1'] = Label("")
 		self['F2'] = Label("")
@@ -73,8 +73,8 @@ class show_AMH_Genre(Screen):
 		self.keyLocked = True
 		self.genreSelected = False
 		self.menuListe = []
-		self.baseUrl = "http://www.allmusichouse.de"
-		self.genreBase = "/category"
+		self.baseUrl = "http://www.clipfish.de"
+		self.genreBase = "/musikvideos/genre"
 		self.genreName = ["","","",""]
 		self.genreUrl = ["","","",""]
 		self.genreTitle = ""
@@ -85,19 +85,19 @@ class show_AMH_Genre(Screen):
 		
 		self.genreMenu = [
 			[
-			("0-9", "/0-9"),
-			("A-B", "/a-c"),
-			("C-D", "/d-f"),
-			("E-F", "/g-i"),
-			("G-H", "/j-l"),
-			("I-J", "/m-o"),
-			("K-L", "/p-r"),
-			("M-N", "/s-u"),
-			("O-P-Q", "/v-z"),
-			("R-S", "/r-s"),
-			("T-U", "/t-u"),
-			("V-W", "/v-w"),
-			("X-Y-Z", "/x-y-z"),
+			("Country / Folk", "/207/country-folk"),
+			("Dance / Elektro", "/109/dance-electro"),
+			("HipHop / Rap", "/211/hip-hop-rap"),
+			("Pop", "/4/pop"),
+			("Gospel / Christian", "/5911/christian"),
+			("World Music", "/163/world-music"),
+			("Klassik", "/12/klassik"),
+			("R&B / Soul", "/55/r-b-soul"),
+			("Blues / Jazz", "/26/blues-jazz"),
+			("Latin Music", "/247/latin"),
+			("Metal / Hard Rock", "/59/metal-hard-rock"),
+			("Rock / Alternative", "/119/rock-alternative"),
+			("Schlager", "/38/schlager")
 			],
 			[None],
 			[
@@ -118,10 +118,10 @@ class show_AMH_Genre(Screen):
 				
 			self.genreUrl[self.menuLevel] = genreLink
 		self.genreTitle = "%s%s%s" % (self.genreName[0],self.genreName[1],self.genreName[2])
-		self['name'].setText("Auswahl: "+self.genreTitle)
+		self['name'].setText("Genre: "+self.genreTitle)
 
 	def loadMenu(self):
-		print "AllMusicHouse.de:"
+		print "Clipfish.de:"
 		self.setMenu(0, True)
 		self.keyLocked = False
 
@@ -167,7 +167,7 @@ class show_AMH_Genre(Screen):
 			print "Genre selected"
 			genreurl = self.baseUrl+self.genreBase+self.genreUrl[0]+self.genreUrl[1]
 			print genreurl
-			self.session.open(AMH_FilmListeScreen, genreurl, self.genreTitle)
+			self.session.open(CF_FilmListeScreen, genreurl, self.genreTitle)
 
 	def setMenu(self, levelIncr, menuInit=False):
 		print "setMenu: ",levelIncr
@@ -187,7 +187,7 @@ class show_AMH_Genre(Screen):
 					self.menuListe = []
 					for (Name,Url) in self.genreMenu[0]:
 						self.menuListe.append((Name,Url))
-					self.chooseMenuList.setList(map(AMH_menuListentry, self.menuListe))
+					self.chooseMenuList.setList(map(CF_menuListentry, self.menuListe))
 					self['genreList'].moveToIndex(self.menuIdx[0])
 				else:
 					self.genreName[self.menuLevel] = ""
@@ -199,7 +199,7 @@ class show_AMH_Genre(Screen):
 					self.menuListe = []
 					for (Name,Url) in self.genreMenu[1][self.menuIdx[0]]:
 						self.menuListe.append((Name,Url))
-					self.chooseMenuList.setList(map(AMH_menuListentry, self.menuListe))
+					self.chooseMenuList.setList(map(CF_menuListentry, self.menuListe))
 					self['genreList'].moveToIndex(self.menuIdx[1])
 				else:
 					self.genreName[self.menuLevel] = ""
@@ -213,7 +213,7 @@ class show_AMH_Genre(Screen):
 					self.menuListe = []
 					for (Name,Url) in self.genreMenu[2][self.menuIdx[0]][self.menuIdx[1]]:
 						self.menuListe.append((Name,Url))
-					self.chooseMenuList.setList(map(AMH_menuListentry, self.menuListe))
+					self.chooseMenuList.setList(map(CF_menuListentry, self.menuListe))
 					self['genreList'].moveToIndex(self.menuIdx[2])
 				else:
 					self.genreName[self.menuLevel] = ""
@@ -242,11 +242,11 @@ class show_AMH_Genre(Screen):
 			self.keyMenuUp()
 	
 
-def AMH_FilmListEntry(entry):
+def CF_FilmListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		] 
-class AMH_FilmListeScreen(Screen):
+class CF_FilmListeScreen(Screen):
 	
 	def __init__(self, session, genreLink, genreName):
 		self.session = session
@@ -293,14 +293,14 @@ class AMH_FilmListeScreen(Screen):
 		}, -1)
 
 		self.sortOrder = 0
-		self.baseUrl = "http://www.allmusichouse.de"
-		self.genreTitle = "Musik in Auswahl "
+		self.baseUrl = "http://www.clipfish.de"
+		self.genreTitle = "Titel in Genre "
 		self.sortParIMDB = ""
 		self.sortParAZ = ""
 		self.sortOrderStrAZ = ""
 		self.sortOrderStrIMDB = ""
 		self.sortOrderStrGenre = ""
-		self['title'] = Label(AMH_Version)
+		self['title'] = Label(CF_Version)
 		self['ContentTitle'] = Label("")
 		self['name'] = Label("")
 		self['handlung'] = ScrollLabel("")
@@ -342,7 +342,7 @@ class AMH_FilmListeScreen(Screen):
 	def loadPage(self):
 		print "loadPage:"
 		#if not self.genreSpecials:
-		url = "%s/page/%d/" % (self.genreLink, self.page)
+		url = "%s/beste/%d/#" % (self.genreLink, self.page)
 		#else:
 		#	url = 
 			
@@ -360,93 +360,153 @@ class AMH_FilmListeScreen(Screen):
 		self['name'].setText('Bitte warten...')
 		while not self.filmQ.empty():
 			url = self.filmQ.get_nowait()
+			
 		#self.eventL.clear()
 		print url
-		getPage(url, cookies=self.keckse, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
-		
+		getPage(url, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageData).addErrback(self.dataError)
+
 	def dataError(self, error):
 		self.eventL.clear()
 		print "dataError:"
 		print error
-		self.musicListe.append(("No music found !","",""))
-		self.chooseMenuList.setList(map(AMH_FilmListEntry, self.musicListe))
+		self['handlung'].setText("Fehler:\n" + str(error))
 		
 	def loadPageData(self, data):
 		print "loadPageData:"
-		
-		if self.genreSpecials:
-			print "Specials suche..."
-			m=re.search('<div id="content">(.*?)<!-- #content -->',data,re.S)
+		a = 0
+		l = len(data)
+		self.musicListe = []
+		while a < l:
+			mg = re.search('<li id="cf-video-item_(.*?)</li>', data[a:], re.S)
+			if mg:
+				a += mg.end()
+				m1 = re.search('href="(.*?)".*?title="(.*?)">.*?<img.*?src="(.*?)"', mg.group(1), re.S)
+				if m1:
+					title = decodeHtml(m1.group(2))
+					url = m1.group(1)
+					img = m1.group(3)
+					
+					self.musicListe.append((title, url, img))
+			else:
+				a = l
+				
+		if len(self.musicListe) == 0:
+			print "No videos found!"
+			self.pages = 0
+			self.musicListe.append(('Keine Musikvideos gefunden !','',''))
 		else:
-			print "Normal search.."
-			m=re.search('<div id="content">(.*?)<!-- #content -->',data,re.S)
-			
-		if m:
-			music = re.findall('<h2 class="title"><a href="(.*?)".*?rel="bookmark">(.*?)</a>.*?class="entry clearfix">'\
-								'.*?<p>(.*?)</p>', m.group(1), re.S)
-		else:
-			music = None
-		
-		if music:
-			print "Music found !"
+			menu_len = len(self.musicListe)
+			print "Music videos found: ",menu_len
+	
 			if not self.pages:
-				m = re.findall('class=\'pages\'>Seite.*?von (.*?)</', data)
+				m = re.findall('/#">(.*?)</a>', data)
 				if m:
-					self.pages = int(m[0])
+					pages = 0
+					for i in m:
+						x = int(i)
+						if x > pages:
+							pages = x
+							
+					self.pages = pages
 				else:
 					self.pages = 1
 				self.page = 1
 				print "Page: %d / %d" % (self.page,self.pages)
 				self['page'].setText("%d / %d" % (self.page,self.pages))
-			
-			self.musicListe = []
-			for	(url,name,desc) in music:
-				#print	"Url: ", url, "Name: ", name
-				self.musicListe.append((decodeHtml(name), url, desc.lstrip().rstrip()))
-			self.chooseMenuList.setList(map(AMH_FilmListEntry, self.musicListe))
-			
-		else:
-			print "No music found !"
-			self.musicListe.append(("No music found !","",""))
-			self.chooseMenuList.setList(map(AMH_FilmListEntry, self.musicListe))
+	
+		self.chooseMenuList.setList(map(CF_FilmListEntry, self.musicListe))
 		self.loadPic()
-
+	
 	def loadPic(self):
 		print "loadPic:"
 		streamName = self['liste'].getCurrent()[0][0]
 		self['name'].setText(streamName)
-		desc = self['liste'].getCurrent()[0][2]
-		#print "streamName: ",streamName
+		desc = None
+		print "streamName: ",streamName
 		#print "streamUrl: ",streamUrl
 		self.getHandlung(desc)
+		
 		if not self.filmQ.empty():
 			self.loadPageQueued()
 		else:
 			self.eventL.clear()
 		self.keyLocked	= False
 		
+		url = self['liste'].getCurrent()[0][2]
+		if url != '':
+			downloadPage(url, "/tmp/Icon.jpg").addCallback(self.ShowCover).addErrback(self.dataError)
+		else:
+			self.ShowCoverNone()
+		
 	def getHandlung(self, desc):
 		print "getHandlung:"
 		if desc == None:
 			print "No Infos found !"
-			self['handlung'].setText("Keine infos gefunden.")
+			self['handlung'].setText("Keine weiteren Info's vorhanden.")
 			return
 		self.setHandlung(desc)
 		
 	def setHandlung(self, data):
 		print "setHandlung:"
 		self['handlung'].setText(decodeHtml(data))
+
+	def getVid(self, data):
+		print "playVid: "
+		m = re.search('NAME="FlashVars".*?data=(.*?)&amp', data)
+		if m:
+			url = self.baseUrl + m.group(1)
+			getPage(url, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getXml).addErrback(self.dataError)
+		else:
+			print "No xml data found!"
+	
+	def getXml(self, data):
+		print "getXml:"
+		m = re.search('<filename>.*?ondemand/(.*?):(.*?)\?', data)
+		if m:
+			url = 'http://video.clipfish.de/' + m.group(2) + '.' + m.group(1)
+			self.playVid(url)
+		else:
+			print "No video url found!"
+	
+	def playVid(self, url):
+		print "playVid: ",url
+		title = self['liste'].getCurrent()[0][0]
+		sref = eServiceReference(0x1001, 0, url)
+		sref.setName(title)
+		self.session.open(MoviePlayer, sref)
+		
+	def ShowCover(self, picData):
+		print "ShowCover:"
+		picPath = "/tmp/Icon.jpg"
+		self.ShowCoverFile(picPath)
+		
+	def ShowCoverNone(self):
+		print "ShowCoverNone:"
+		picPath = self.plugin_path + "/images/no_coverArt.png"
+		self.ShowCoverFile(picPath)
+	
+	def ShowCoverFile(self, picPath):
+		print "showCoverFile:"
+		if fileExists(picPath):
+			print "picpath: ",picPath
+			self['coverArt'].instance.setPixmap(None)
+			self.scale = AVSwitch().getFramebufferScale()
+			self.picload = ePicLoad()
+			size = self['coverArt'].instance.size()
+			self.picload.setPara((size.width(), size.height(), self.scale[0], self.scale[1], False, 1, "#FF000000"))
+			if self.picload.startDecode(picPath, 0, 0, False) == 0:
+				ptr = self.picload.getData()
+				if ptr != None:
+					self['coverArt'].instance.setPixmap(ptr.__deref__())
+					self['coverArt'].show()
+					del self.picload
 		
 	def keyOK(self):
 		if (self.keyLocked|self.eventL.is_set()):
 			return
 
-		streamLink = self['liste'].getCurrent()[0][1]
-		streamName = self['liste'].getCurrent()[0][0]
-		print "Open AMH_Streams:"
-		print "Name: ",streamName
-		print "Link: ",streamLink
-		self.session.open(AMH_Streams, streamLink, streamName)
+		url = self.baseUrl + self['liste'].getCurrent()[0][1]
+		getPage(url, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVid).addErrback(self.dataError)
 	
 	def keyUp(self):
 		if self.keyLocked:
@@ -567,193 +627,3 @@ class AMH_FilmListeScreen(Screen):
 	def keyCancel(self):
 		self.close()
 
-def AMH_StreamListEntry(entry):
-	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
-		] 
-class AMH_Streams(Screen, ConfigListScreen):
-	
-	def __init__(self, session, dokuUrl, dokuName):
-		self.session = session
-		self.dokuUrl = dokuUrl
-		self.dokuName = dokuName
-		self.plugin_path = mp_globals.pluginPath
-		self.skin_path = mp_globals.pluginPath + "/skins"
-
-		path = "%s/%s/dokuListScreen.xml" % (self.skin_path, config.mediaportal.skin.value)
-		if not fileExists(path):
-			path = self.skin_path + "/original/dokuListScreen.xml"
-		print path
-		with open(path, "r") as f:
-			self.skin = f.read()
-			f.close()
-			
-		Screen.__init__(self, session)
-
-		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
-			"ok"    	: self.keyOK,
-			"cancel"	: self.keyCancel,
-			"up" 		: self.keyUp,
-			"down" 		: self.keyDown,
-			"right" 	: self.keyRight,
-			"left" 		: self.keyLeft,
-			"blue" 		: self.keyTxtPageDown,
-			"red" 		: self.keyTxtPageUp,
-			"yellow"	: self.keyYellow
-		}, -1)
-		
-		self['title'] = Label(AMH_Version)
-		self['ContentTitle'] = Label("Streams für "+dokuName)
-		self['handlung'] = ScrollLabel("")
-		self['name'] = Label(dokuName)
-		self['vPrio'] = Label("")
-		self['F1'] = Label("Text-")
-		self['F2'] = Label("")
-		self['F3'] = Label("VidPrio")
-		self['F4'] = Label("Text+")
-		self['Page'] = Label("")
-		self['page'] = Label("")
-		self['coverArt'] = Pixmap()
-		self['VideoPrio'] = Label("VideoPrio")
-		
-		self.videoPrio = int(config.mediaportal.youtubeprio.value)-1
-		self.videoPrioS = ['L','M','H']
-		self.setVideoPrio()
-		self.streamListe = []
-		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
-		self.streamMenuList.l.setItemHeight(25)
-		self['liste'] = self.streamMenuList
-		self.keyLocked = True
-		self.onLayoutFinish.append(self.loadPage)
-		
-	def loadPage(self):
-		print "loadPage:"
-		streamUrl = self.dokuUrl
-		#print "FilmUrl: %s" % self.dokuUrl
-		#print "FilmName: %s" % self.dokuName
-		getPage(streamUrl, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
-		
-	def parseData(self, data):
-		print "parseData:"
-		m = re.search('"http://www.youtube.com/(embed|v)/(.*?)("|\?).*?data-text="(.*?)"', data, re.S)
-		parts = re.search('<p>Part 1 von (.*?)<br', data)
-		mdesc = re.search('</iframe></p>.*?>(.*?)</p>', data, re.S)
-		self.streamListe = []
-		#if streams:
-		if m:
-			print "Streams found"
-			if mdesc:
-				print "Descr. found"
-				desc = mdesc.group(1).replace('<br />','')
-			else:
-				desc = ""
-			if parts:
-				self.nParts = int(parts.group(1))
-				pstr = " [1/%d]" % self.nParts
-			else:
-				self.nParts = 0
-				pstr = ""
-				
-			self.streamListe.append((decodeHtml(m.group(4))+pstr,m.group(2),desc))
-		else:
-			print "No music found !"
-			self.streamListe.append(("No streams found !","",""))
-		self.streamMenuList.setList(map(AMH_StreamListEntry, self.streamListe))
-		self.loadPic()
-
-	def youtubeErr(self, error):
-		self.keyLocked = True
-		print "youtubeErr: "
-		self.streamListe = []
-		self.streamListe.append(("Das Video kann leider nicht abgespielt werden !","",""))
-		self.streamMenuList.setList(map(AMH_StreamListEntry, self.streamListe))
-		self['handlung'].setText(str(error))
-		
-	def getHandlung(self, desc):
-		print "getHandlung:"
-		if desc == None:
-			print "No Infos found !"
-			self['handlung'].setText("Keine infos gefunden.")
-		else:
-			self.setHandlung(desc)
-		
-	def setHandlung(self, data):
-		#print "setHandlung:"
-		self['handlung'].setText(decodeHtml(data))
-		
-	def loadPic(self):
-		print "loadPic:"
-		streamName = self['liste'].getCurrent()[0][0]
-		self['name'].setText(streamName)
-		desc = self['liste'].getCurrent()[0][2]
-		print "streamName: ",streamName
-		self.getHandlung(desc)
-		self.keyLocked = False
-		
-	def dataError(self, error):
-		print "dataError:"
-		print error
-		self.streamListe.append(("Read error !","",""))			
-		self.streamMenuList.setList(map(AMH_StreamListEntry, self.streamListe))
-			
-	def setVideoPrio(self):
-		if self.videoPrio+1 > 2:
-			self.videoPrio = 0
-		else:
-			self.videoPrio += 1
-		self['vPrio'].setText(self.videoPrioS[self.videoPrio])
-
-	def keyOK(self):
-		print "keyOK:"
-		if self.keyLocked:
-			return
-		dhTitle = self['liste'].getCurrent()[0][0]
-		dhVideoId = self['liste'].getCurrent()[0][1]
-		print "Title: ",dhTitle
-		#print "VideoId: ",dhVideoId
-		y = youtubeUrl(self.session)
-		y.addErrback(self.youtubeErr)
-		dhLink = y.getVideoUrl(dhVideoId, self.videoPrio)
-		if dhLink:
-			print dhLink
-			sref = eServiceReference(0x1001, 0, dhLink)
-			sref.setName(dhTitle)
-			self.session.open(MoviePlayer, sref)
-			
-	def keyYellow(self):
-		self.setVideoPrio()
-		
-	def keyUp(self):
-		if self.keyLocked:
-			return
-		self['liste'].up()
-		self.loadPic()
-		
-	def keyDown(self):
-		if self.keyLocked:
-			return
-		self['liste'].down()
-		self.loadPic()
-		
-	def keyLeft(self):
-		if self.keyLocked:
-			return
-		self['liste'].pageUp()
-		self.loadPic()
-		
-	def keyRight(self):
-		if self.keyLocked:
-			return
-		self['liste'].pageDown()
-		self.loadPic()
-	
-	def keyTxtPageUp(self):
-		self['handlung'].pageUp()
-			
-	def keyTxtPageDown(self):
-		self['handlung'].pageDown()
-			
-	def keyCancel(self):
-		self.close()
-		

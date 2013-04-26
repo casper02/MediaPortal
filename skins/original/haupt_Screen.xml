@@ -16,10 +16,10 @@
 	<widget name="funsport" position="580,85" size="260,480" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/sel.png" />
 	<widget name="Porn" position="860,60" size="260,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="mediaportal;22" halign="center" />
 	<widget name="porn" position="860,85" size="260,480" backgroundColor="#00101214" scrollbarMode="showOnDemand" transparent="0" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/sel.png" />
-	<ePixmap position="741,620" size="36,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/buttongrey.png" alphatest="blend" backgroundColor="#00101214" />
+	<ePixmap position="741,618" size="38,38" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/buttongrey.png" alphatest="blend" backgroundColor="#00101214" />
 	<eLabel text="Menu " position="783,617" size="80,36" transparent="1" font="mediaportal; 18" backgroundColor="#00101214" foregroundColor="#00ffffff" valign="center" halign="left" zPosition="1" />
-    <ePixmap position="878,620" size="36,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/buttongrey.png" alphatest="blend" backgroundColor="#00101214" />
+    <ePixmap position="878,618" size="38,38" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/buttongrey.png" alphatest="blend" backgroundColor="#00101214" />
 	<eLabel text="Help " position="918,617" size="80,36" transparent="1" font="mediaportal; 18" backgroundColor="#00101214" foregroundColor="#00ffffff" valign="center" halign="left" zPosition="1" />
-	<ePixmap position="1017,620" size="36,36" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/buttongrey.png" alphatest="blend" backgroundColor="#00101214" />
+	<ePixmap position="1017,618" size="38,38" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/buttongrey.png" alphatest="blend" backgroundColor="#00101214" />
 	<eLabel text="Exit " position="1058,617" size="80,36" transparent="1" font="mediaportal; 18" backgroundColor="#00101214" foregroundColor="#00ffffff" valign="center" halign="left" zPosition="1" />
 </screen>
