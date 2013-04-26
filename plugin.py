@@ -153,6 +153,8 @@ config.mediaportal.showSongsto = ConfigYesNo(default = True)
 config.mediaportal.showMEHD = ConfigYesNo(default = True)
 config.mediaportal.showIStream = ConfigYesNo(default = True)
 config.mediaportal.showM2k = ConfigYesNo(default = True)
+config.mediaportal.showM2kWatchlist = ConfigYesNo(default = False)
+config.mediaportal.showKinoxWatchlist = ConfigYesNo(default = False)
 config.mediaportal.show4Players = ConfigYesNo(default = True)
 config.mediaportal.showGIGA = ConfigYesNo(default = True)
 config.mediaportal.showaudi = ConfigYesNo(default = True)
@@ -271,6 +273,10 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige Cinestream:", config.mediaportal.showCinestream))
 		self.configlist.append(getConfigListEntry("Zeige Konzert Oase:", config.mediaportal.showKoase))
 		self.configlist.append(getConfigListEntry("Zeige 1channel:", config.mediaportal.show1channel))
+		
+		self.configlist.append(getConfigListEntry("----- Watchlist -----", config.mediaportal.fake_entry))
+		self.configlist.append(getConfigListEntry("Zeige Kinox Watchlist:", config.mediaportal.showKinoxWatchlist))
+		self.configlist.append(getConfigListEntry("Zeige Movie2k Watchlist:", config.mediaportal.showM2kWatchlist))
 		
 		### Sport
 		self.configlist.append(getConfigListEntry("----- Sport -----", config.mediaportal.fake_entry))
@@ -1463,6 +1469,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("Tivi", "tivi", "Mediathek"))
 		if config.mediaportal.showkika.value:
 			self.plugin_liste.append(("KIKA+", "kika", "Mediathek"))
+			
+		# Grauzone
 		if config.mediaportal.showMEHD.value:
 			self.plugin_liste.append(("My-Entertainment", "mehd", "Grauzone"))
 		if config.mediaportal.showM2k.value:
@@ -1471,6 +1479,13 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("IStream", "istream", "Grauzone"))
 		if config.mediaportal.showSzeneStreams.value:
 			self.plugin_liste.append(("SzeneStreams", "szenestreams", "Grauzone"))
+			
+		# Watchlisten - Grauzone
+		if config.mediaportal.showM2kWatchlist.value:
+			self.plugin_liste.append(("Movie2k Watchlist", "movie2kwatchlist", "Grauzone"))
+		if config.mediaportal.showKinoxWatchlist.value:
+			self.plugin_liste.append(("Kinox Watchlist", "kinoxwatchlist", "Grauzone"))
+		
 		if config.mediaportal.showDoku.value:
 			self.plugin_liste.append(("Doku.me", "doku", "Mediathek"))
 		if config.mediaportal.showMoovizon.value:
@@ -1988,7 +2003,10 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(baskino)
 		elif auswahl == "Kinox":
 			self.hit_plugin("Kinox")
-			self.session.open(kxMain) 
+			self.session.open(kxMain)
+		elif auswahl == "Kinox Watchlist":
+			self.hit_plugin("Kinox Watchlist")
+			self.session.open(kxWatchlist)
 		elif auswahl == "Vutechtalk":
 			self.hit_plugin("Vutechtalk")
 			self.session.open(vutechtalk)
@@ -2034,6 +2052,9 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		elif auswahl == "Movie2k":
 			self.hit_plugin("Movie2k")
 			self.session.open(m2kGenreScreen, "default")
+		elif auswahl == "Movie2k Watchlist":
+			self.hit_plugin("Movie2k Watchlist")
+			self.session.open(m2kWatchlist)
 		elif auswahl == "IStream":
 			self.hit_plugin("IStream")
 			self.session.open(showIStreamGenre, "default")

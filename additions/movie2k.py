@@ -221,8 +221,8 @@ class m2kWatchlist(Screen):
 			"info": self.update
 		}, -1)
 		
-		self['title'] = Label("Kinox.to")
-		self['leftContentTitle'] = Label("Watchlist")
+		self['title'] = Label("Watchlist")
+		self['leftContentTitle'] = Label("Movie2k Watchlist")
 		self['stationIcon'] = Pixmap()
 		self['handlung'] = Label("")
 		self['name'] = Label("")
@@ -279,6 +279,7 @@ class m2kWatchlist(Screen):
 		#print sname, surl, slang, stotaleps
 		count_all_eps = 0
 		self.counting += 1
+		self['title'].setText("Update %s/%s" % (self.counting,self.count))
 
 		staffeln = re.findall('<FORM name="episodeform(.*?)">(.*?)</FORM>', data, re.S)
 		for (staffel, ep_data) in staffeln:
@@ -295,13 +296,14 @@ class m2kWatchlist(Screen):
 		self.streamList2.append((sname, surl, slang, str(stotaleps), str(new_eps)))
 		self.streamList2.sort()
 		self.streamMenuList.setList(map(m2kWatchSeriesListEntry, self.streamList2))
-		self.keyLocked = False
 
 		print self.counting, self.count
 		if self.counting == self.count:
 			print "update done."
+			self['title'].setText("Update done.")
 			self.write_tmp.close()
 			shutil.move(config.mediaportal.watchlistpath.value+"mp_m2k_watchlist.tmp", config.mediaportal.watchlistpath.value+"mp_m2k_watchlist")
+			self.keyLocked = False
 			
 		if last_new_ep:
 			(staffel, episode) = last_new_ep

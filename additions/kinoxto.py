@@ -9,6 +9,15 @@ def kxListEntry(entry):
 		(eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 20, 5, 16, 11, flag),
 		(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 830, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		]
+		
+def kxListEntry2(entry):
+	#png = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/%s.png" % entry[4]
+	png = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/%s.png" % entry[4]
+	flag = LoadPixmap(png)
+	return [entry,
+		(eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 20, 5, 16, 11, flag),
+		(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 830, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
+		]
 def kxStreamListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 230, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]),
@@ -959,7 +968,7 @@ class kxSerienABCpage(Screen):
 			for (kxTitle,kxUrl,kxImage,kxHandlung,kxLang) in kxMovies:
 				kxUrl = "http://kinox.to" + kxUrl.replace('\\','')
 				self.streamList.append((decodeHtml(kxTitle.replace('\\','')),kxUrl,kxImage.replace('\\',''),kxHandlung,kxLang))
-				self.streamMenuList.setList(map(kxListEntry, self.streamList))
+				self.streamMenuList.setList(map(kxListEntry2, self.streamList))
 			self.keyLocked = False
 			self.showInfos()
 		else:
@@ -1260,8 +1269,8 @@ class kxWatchlist(Screen):
 			"info": self.update
 		}, -1)
 		
-		self['title'] = Label("Kinox.to")
-		self['leftContentTitle'] = Label("Watchlist")
+		self['title'] = Label("Watchlist")
+		self['leftContentTitle'] = Label("Kinox.to Watchlist")
 		self['stationIcon'] = Pixmap()
 		self['handlung'] = Label("")
 		self['name'] = Label("")
@@ -1318,6 +1327,7 @@ class kxWatchlist(Screen):
 		#print sname, surl, slang, stotaleps
 		count_all_eps = 0
 		self.counting += 1
+		self['title'].setText("Update %s/%s" % (self.counting,self.count))
 		staffeln = re.findall('<option value="(.*\d)" rel="(.*\d)"', data, re.M)
 		if staffeln:
 			for each in staffeln:
@@ -1333,14 +1343,16 @@ class kxWatchlist(Screen):
 			self.streamList2.append((sname, surl, slang, str(stotaleps), str(new_eps)))
 			self.streamList2.sort()
 			self.streamMenuList.setList(map(kxWatchSeriesListEntry, self.streamList2))
-			self.keyLocked = False
+			
 		
 		print self.counting, self.count
 		if self.counting == self.count:
 			print "update done."
+			self['title'].setText("Update Done.")
 			self.write_tmp.close()
 			shutil.move(config.mediaportal.watchlistpath.value+"mp_kx_watchlist.tmp", config.mediaportal.watchlistpath.value+"mp_kx_watchlist")
-	
+			self.keyLocked = False
+			
 	def keyOK(self):
 		exist = self['streamlist'].getCurrent()
 		if self.keyLocked or exist == None:
