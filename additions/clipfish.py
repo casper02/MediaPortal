@@ -4,7 +4,7 @@ import Queue
 import threading
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
-CF_Version = "Clipfish.de v0.91 (experimental)"
+CF_Version = "Clipfish.de v0.92 (experimental)"
 
 CF_siteEncoding = 'utf-8'
 
@@ -82,14 +82,8 @@ class show_CF_Genre(Screen):
 		self.chooseMenuList.l.setItemHeight(25)
 		self['genreList'] = self.chooseMenuList
 		
-		
-		self.genreMenu = [
-			[
-			("Videos", ""),
-			("Musik", "")
-			],
-			[[
-			("Eure Empfehlungen", "/28/%seure-empfehlungen"),
+		"""
+			#("Eure Empfehlungen", "/28/%seure-empfehlungen"),
 			("Anime & Cartoons", "/2/%sanime-cartoons"),
 			("Auto", "/3/%sauto"),
 			("Comedy & Humor", "/1/%scomedy-humor"),
@@ -105,6 +99,31 @@ class show_CF_Genre(Screen):
 			("Stars & Lifestyle", "/11/%sstars-lifestyle"),
 			("Tiere & Natur", "/15/%stiere-natur"),
 			("Urlaub & Reisen", "/16/%surlaub-reisen")
+			
+		"""
+		
+		self.genreMenu = [
+			[
+			("Videos", ""),
+			("Musik", "")
+			],
+			[[
+			#("Eure Empfehlungen", "/28/%seure-empfehlungen"),
+			("Anime & Cartoons", "/2/%s"),
+			("Auto", "/3/%s"),
+			("Comedy & Humor", "/1/%s"),
+			("Freunde & Familie", "/4/%s"),
+			("Games & PC", "/6/%s"),
+			("Hobbies & Tipps", "/7/%s"),
+			("Kino, TV & Werbung", "/8/%s"),
+			("Leute & Blogs", "/9/%s"),
+			("News & Wissenschaft", "/297/%s"),
+			("Party & Events", "/13/%s"),
+			("Sexy Videos", "/17/%s"),
+			("Sport & Action", "/14/%s"),
+			("Stars & Lifestyle", "/11/%s"),
+			("Tiere & Natur", "/15/%s"),
+			("Urlaub & Reisen", "/16/%s")
 			],[
 			("Country / Folk", "/207/country-folk"),
 			("Dance / Elektro", "/109/dance-electro"),
@@ -367,7 +386,7 @@ class CF_FilmListeScreen(Screen):
 		if not self.genreVideos:
 			url = "%s/beste/%d/#" % (self.genreLink, self.page)
 		else:
-			link = self.genreLink % 'neu/'
+			link = self.genreLink % 'neu'
 			url = "%s/%d/" % (link, self.page)
 			
 		if self.page:
@@ -498,7 +517,13 @@ class CF_FilmListeScreen(Screen):
 	def getXml(self, data):
 		print "getXml:"
 		url = None
-		if not self.genreVideos:
+		m = re.search('rtmpe:', data)
+		if m:
+			rtmp_vid = True
+		else:
+			rtmp_vid = False
+			
+		if rtmp_vid:
 			print "musik url:"
 			m = re.search('<filename>.*?ondemand/(.*?):(.*?)\?', data)
 			if m:
