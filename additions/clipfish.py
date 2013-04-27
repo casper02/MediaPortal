@@ -4,7 +4,7 @@ import Queue
 import threading
 from Plugins.Extensions.MediaPortal.resources.imports import *
 
-CF_Version = "Clipfish.de v0.92 (experimental)"
+CF_Version = "Clipfish.de v0.93 (experimental)"
 
 CF_siteEncoding = 'utf-8'
 
@@ -73,7 +73,7 @@ class show_CF_Genre(Screen):
 		self.genreSelected = False
 		self.menuListe = []
 		self.baseUrl = "http://www.clipfish.de"
-		self.genreBase = ["/kategorien", "/musikvideos/genre"]
+		self.genreBase = ["/kategorien", "/musikvideos/genre", "/special/spielfilme/genre"]
 		self.genreName = ["","","",""]
 		self.genreUrl = ["","","",""]
 		self.genreTitle = ""
@@ -82,33 +82,14 @@ class show_CF_Genre(Screen):
 		self.chooseMenuList.l.setItemHeight(25)
 		self['genreList'] = self.chooseMenuList
 		
-		"""
-			#("Eure Empfehlungen", "/28/%seure-empfehlungen"),
-			("Anime & Cartoons", "/2/%sanime-cartoons"),
-			("Auto", "/3/%sauto"),
-			("Comedy & Humor", "/1/%scomedy-humor"),
-			("Freunde & Familie", "/4/%sfreunde-familie"),
-			("Games & PC", "/6/%sgames-pc"),
-			("Hobbies & Tipps", "/7/%shobbies-tipps"),
-			("Kino, TV & Werbung", "/8/%skino-tv-werbung"),
-			("Leute & Blogs", "/9/%sleute-blogs"),
-			("News & Wissenschaft", "/297/%snews-wissenschaft"),
-			("Party & Events", "/13/%sparty-events"),
-			("Sexy Videos", "/17/%ssexy-videos"),
-			("Sport & Action", "/14/%ssport-action"),
-			("Stars & Lifestyle", "/11/%sstars-lifestyle"),
-			("Tiere & Natur", "/15/%stiere-natur"),
-			("Urlaub & Reisen", "/16/%surlaub-reisen")
-			
-		"""
-		
 		self.genreMenu = [
 			[
 			("Videos", ""),
-			("Musik", "")
+			("Musik", ""),
+			("Spielfilme", "")
 			],
 			[[
-			#("Eure Empfehlungen", "/28/%seure-empfehlungen"),
+			#("Eure Empfehlungen", "/28/%s"),
 			("Anime & Cartoons", "/2/%s"),
 			("Auto", "/3/%s"),
 			("Comedy & Humor", "/1/%s"),
@@ -138,9 +119,23 @@ class show_CF_Genre(Screen):
 			("Metal / Hard Rock", "/59/metal-hard-rock"),
 			("Rock / Alternative", "/119/rock-alternative"),
 			("Schlager", "/38/schlager")
+			],[
+			("Action", "/1"),
+			("SciFi", "/43"),
+			("Drama", "/37"),
+			("Abenteuer", "/31"),
+			("Dokumentation", "/23"),
+			("Kinder", "/17"),
+			("Western", "/11"),
+			("Klassiker", "/9"),
+			("Horror", "/27"),
+			("Asian", "/71"),
+			("Erotik", "/25"),
+			("Komödie", "/29")
 			]
 			],
 			[
+			[None],
 			[None],
 			[None]
 			]
@@ -366,6 +361,7 @@ class CF_FilmListeScreen(Screen):
 		self.pages = 0;
 		self.genreSpecials = False
 		self.genreVideos = re.match('.*?Videos', self.genreName)
+		self.genreSpielfilme = re.match('.*?Spielfilm', self.genreName)
 
 		self.setGenreStrTitle()
 		
@@ -383,11 +379,13 @@ class CF_FilmListeScreen(Screen):
 
 	def loadPage(self):
 		print "loadPage:"
-		if not self.genreVideos:
-			url = "%s/beste/%d/#" % (self.genreLink, self.page)
-		else:
+		if self.genreVideos:
 			link = self.genreLink % 'neu'
 			url = "%s/%d/" % (link, self.page)
+		elif self.genreSpielfilme:
+			url = "%s/%d/" % (self.genreLink, self.page)
+		else:
+			url = "%s/beste/%d/#" % (self.genreLink, self.page)
 			
 		if self.page:
 			self['page'].setText("%d / %d" % (self.page,self.pages))
@@ -508,7 +506,10 @@ class CF_FilmListeScreen(Screen):
 			m = re.search('data: "(.*?)"', data, re.S)
 			
 		if m:
-			url = self.baseUrl + m.group(1)
+			url = m.group(1)
+			if url[0:4] != "http":
+				url = self.baseUrl + url
+				
 			getPage(url, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getXml).addErrback(self.dataError)
 		else:
 			print "No xml data found!"
