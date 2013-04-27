@@ -3,9 +3,8 @@
 import Queue
 import threading
 from Plugins.Extensions.MediaPortal.resources.imports import *
-from Plugins.Extensions.MediaPortal.resources.yt_url import *
 
-CF_Version = "Clipfish.de v0.90 (experimental)"
+CF_Version = "Clipfish.de v0.91 (experimental)"
 
 CF_siteEncoding = 'utf-8'
 
@@ -60,7 +59,7 @@ class show_CF_Genre(Screen):
 		}, -1)
 
 		self['title'] = Label(CF_Version)
-		self['ContentTitle'] = Label("Musik Genre")
+		self['ContentTitle'] = Label("Genre Auswahl")
 		self['name'] = Label("")
 		self['F1'] = Label("")
 		self['F2'] = Label("")
@@ -68,13 +67,13 @@ class show_CF_Genre(Screen):
 		self['F4'] = Label("")
 		
 		self.menuLevel = 0
-		self.menuMaxLevel = 0
+		self.menuMaxLevel = 1
 		self.menuIdx = [0,0,0]
 		self.keyLocked = True
 		self.genreSelected = False
 		self.menuListe = []
 		self.baseUrl = "http://www.clipfish.de"
-		self.genreBase = "/musikvideos/genre"
+		self.genreBase = ["/kategorien", "/musikvideos/genre"]
 		self.genreName = ["","","",""]
 		self.genreUrl = ["","","",""]
 		self.genreTitle = ""
@@ -83,8 +82,30 @@ class show_CF_Genre(Screen):
 		self.chooseMenuList.l.setItemHeight(25)
 		self['genreList'] = self.chooseMenuList
 		
+		
 		self.genreMenu = [
 			[
+			("Videos", ""),
+			("Musik", "")
+			],
+			[[
+			("Eure Empfehlungen", "/28/%seure-empfehlungen"),
+			("Anime & Cartoons", "/2/%sanime-cartoons"),
+			("Auto", "/3/%sauto"),
+			("Comedy & Humor", "/1/%scomedy-humor"),
+			("Freunde & Familie", "/4/%sfreunde-familie"),
+			("Games & PC", "/6/%sgames-pc"),
+			("Hobbies & Tipps", "/7/%shobbies-tipps"),
+			("Kino, TV & Werbung", "/8/%skino-tv-werbung"),
+			("Leute & Blogs", "/9/%sleute-blogs"),
+			("News & Wissenschaft", "/297/%snews-wissenschaft"),
+			("Party & Events", "/13/%sparty-events"),
+			("Sexy Videos", "/17/%ssexy-videos"),
+			("Sport & Action", "/14/%ssport-action"),
+			("Stars & Lifestyle", "/11/%sstars-lifestyle"),
+			("Tiere & Natur", "/15/%stiere-natur"),
+			("Urlaub & Reisen", "/16/%surlaub-reisen")
+			],[
 			("Country / Folk", "/207/country-folk"),
 			("Dance / Elektro", "/109/dance-electro"),
 			("HipHop / Rap", "/211/hip-hop-rap"),
@@ -98,9 +119,10 @@ class show_CF_Genre(Screen):
 			("Metal / Hard Rock", "/59/metal-hard-rock"),
 			("Rock / Alternative", "/119/rock-alternative"),
 			("Schlager", "/38/schlager")
+			]
 			],
-			[None],
 			[
+			[None],
 			[None]
 			]
 			]
@@ -165,7 +187,7 @@ class show_CF_Genre(Screen):
 		
 		if self.genreSelected:
 			print "Genre selected"
-			genreurl = self.baseUrl+self.genreBase+self.genreUrl[0]+self.genreUrl[1]
+			genreurl = self.baseUrl+self.genreBase[self.menuIdx[0]]+self.genreUrl[0]+self.genreUrl[1]
 			print genreurl
 			self.session.open(CF_FilmListeScreen, genreurl, self.genreTitle)
 
@@ -324,6 +346,7 @@ class CF_FilmListeScreen(Screen):
 		self.page = 0
 		self.pages = 0;
 		self.genreSpecials = False
+		self.genreVideos = re.match('.*?Videos', self.genreName)
 
 		self.setGenreStrTitle()
 		
@@ -341,10 +364,11 @@ class CF_FilmListeScreen(Screen):
 
 	def loadPage(self):
 		print "loadPage:"
-		#if not self.genreSpecials:
-		url = "%s/beste/%d/#" % (self.genreLink, self.page)
-		#else:
-		#	url = 
+		if not self.genreVideos:
+			url = "%s/beste/%d/#" % (self.genreLink, self.page)
+		else:
+			link = self.genreLink % 'neu/'
+			url = "%s/%d/" % (link, self.page)
 			
 		if self.page:
 			self['page'].setText("%d / %d" % (self.page,self.pages))
@@ -386,30 +410,37 @@ class CF_FilmListeScreen(Screen):
 					url = m1.group(1)
 					img = m1.group(3)
 					
-					self.musicListe.append((title, url, img))
+					self.musicListe.append((title, "%s%s" % (self.baseUrl, url), img))
 			else:
 				a = l
 				
 		if len(self.musicListe) == 0:
 			print "No videos found!"
 			self.pages = 0
-			self.musicListe.append(('Keine Musikvideos gefunden !','',''))
+			self.musicListe.append(('Keine Videos gefunden !','',''))
 		else:
 			menu_len = len(self.musicListe)
 			print "Music videos found: ",menu_len
 	
 			if not self.pages:
-				m = re.findall('/#">(.*?)</a>', data)
-				if m:
+				m1 = re.search('class="cf-page-stepper">(.*?)</div>', data, re.S)
+				if m1:
+					m2 = re.findall('">(\d*?)</a>', m1.group(1))
+					
+				if m1 and m2:
 					pages = 0
-					for i in m:
+					for i in m2:
 						x = int(i)
 						if x > pages:
 							pages = x
-							
-					self.pages = pages
+					
+					if pages > 999:
+						self.pages = 999
+					else:
+						self.pages = pages
 				else:
 					self.pages = 1
+					
 				self.page = 1
 				print "Page: %d / %d" % (self.page,self.pages)
 				self['page'].setText("%d / %d" % (self.page,self.pages))
@@ -451,22 +482,40 @@ class CF_FilmListeScreen(Screen):
 		self['handlung'].setText(decodeHtml(data))
 
 	def getVid(self, data):
-		print "playVid: "
-		m = re.search('NAME="FlashVars".*?data=(.*?)&amp', data)
+		print "getVid: "
+		if not self.genreVideos:
+			m = re.search('NAME="FlashVars".*?data=(.*?)&amp', data)
+		else:
+			m = re.search('data: "(.*?)"', data, re.S)
+			
 		if m:
 			url = self.baseUrl + m.group(1)
 			getPage(url, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getXml).addErrback(self.dataError)
 		else:
 			print "No xml data found!"
+			self.dataError('No video data found!')
 	
 	def getXml(self, data):
 		print "getXml:"
-		m = re.search('<filename>.*?ondemand/(.*?):(.*?)\?', data)
-		if m:
-			url = 'http://video.clipfish.de/' + m.group(2) + '.' + m.group(1)
+		url = None
+		if not self.genreVideos:
+			print "musik url:"
+			m = re.search('<filename>.*?ondemand/(.*?):(.*?)\?', data)
+			if m:
+				url = 'http://video.clipfish.de/' + m.group(2) + '.' + m.group(1)
+		else:
+			print "film url:"
+			#print "data: ",data
+			m = re.search('<filename>.*?clipfish.de/(.*?)(flv|f4v|mp4).*?</filename>', data, re.S)
+			if m:
+				print "m: ",m.group(1)
+				url = 'http://video.clipfish.de/' + m.group(1) + m.group(2)
+		
+		if url != None:
 			self.playVid(url)
 		else:
 			print "No video url found!"
+			self.dataError('No video data found!')
 	
 	def playVid(self, url):
 		print "playVid: ",url
@@ -490,6 +539,7 @@ class CF_FilmListeScreen(Screen):
 		if fileExists(picPath):
 			print "picpath: ",picPath
 			self['coverArt'].instance.setPixmap(None)
+			#self['coverArt'].instance.setPixmap(enigma.gPixmapPtr())
 			self.scale = AVSwitch().getFramebufferScale()
 			self.picload = ePicLoad()
 			size = self['coverArt'].instance.size()
@@ -504,8 +554,8 @@ class CF_FilmListeScreen(Screen):
 	def keyOK(self):
 		if (self.keyLocked|self.eventL.is_set()):
 			return
-
-		url = self.baseUrl + self['liste'].getCurrent()[0][1]
+		url = self['liste'].getCurrent()[0][1]
+		print "keyOK: ", len(url), ',', url
 		getPage(url, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getVid).addErrback(self.dataError)
 	
 	def keyUp(self):
