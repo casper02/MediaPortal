@@ -1549,6 +1549,34 @@ class m2kStreamListeScreen(Screen):
 		if stream_url == None:
 			message = self.session.open(MessageBox, _("Stream not found, try another Stream Hoster."), MessageBox.TYPE_INFO, timeout=3)
 		else:
+			if not fileExists(config.mediaportal.watchlistpath.value+"mp_m2k_watched"):
+				os.system("touch "+config.mediaportal.watchlistpath.value+"mp_m2k_watched")
+				
+			self.update_liste = []
+			leer = os.path.getsize(config.mediaportal.watchlistpath.value+"mp_m2k_watched")
+			if not leer == 0:
+				self.updates_read = open(config.mediaportal.watchlistpath.value+"mp_m2k_watched" , "r")
+				for lines in sorted(self.updates_read.readlines()):
+					line = re.findall('"(.*?)"', lines)
+					if line:
+						print line[0]
+						self.update_liste.append("%s" % (line[0]))
+				self.updates_read.close()
+				
+				updates_read2 = open(config.mediaportal.watchlistpath.value+"mp_m2k_watched" , "a")
+				check = ("%s" % self.streamName)
+				if not check in self.update_liste:
+					print "update add: %s" % (self.streamName)
+					updates_read2.write('"%s"\n' % (self.streamName))
+					updates_read2.close()
+				else:
+					print "dupe %s" % (self.streamName)
+			else:
+				updates_read3 = open(config.mediaportal.watchlistpath.value+"mp_m2k_watched" , "a")
+				print "update add: %s" % (self.streamName)
+				updates_read3.write('"%s"\n' % (self.streamName))
+				updates_read3.close()
+				
 			sref = eServiceReference(0x1001, 0, stream_url)
 			sref.setName(self.streamName)
 			self.session.open(MoviePlayer, sref)
@@ -1707,6 +1735,20 @@ class m2kEpisodenListeScreen(Screen):
 		print error
 		
 	def loadPageData(self, data):
+		self.watched_liste = []
+		self.mark_last_watched = []
+		if not fileExists(config.mediaportal.watchlistpath.value+"mp_m2k_watched"):
+			os.system("touch "+config.mediaportal.watchlistpath.value+"mp_m2k_watched")
+		if fileExists(config.mediaportal.watchlistpath.value+"mp_m2k_watched"):
+			leer = os.path.getsize(config.mediaportal.watchlistpath.value+"mp_m2k_watched")
+			if not leer == 0:
+				self.updates_read = open(config.mediaportal.watchlistpath.value+"mp_m2k_watched" , "r")
+				for lines in sorted(self.updates_read.readlines()):
+					line = re.findall('"(.*?)"', lines)
+					if line:
+						self.watched_liste.append("%s" % (line[0]))
+				self.updates_read.close()
+				
 		print "daten bekommen"
 		folgen = re.findall('<FORM name="episodeform(.*?)">(.*?)</FORM>', data, re.S)
 		if folgen:
@@ -1725,15 +1767,46 @@ class m2kEpisodenListeScreen(Screen):
 						else:
 							episode3 = "E"+str(episode)
 						staffel_episode = "%s - %s%s" % (self.streamName,staffel3,episode3)
-						self.filmliste.append((staffel_episode,url_to_streams))
+						if staffel_episode in self.watched_liste:
+							self.filmliste.append((staffel_episode,url_to_streams,True))
+							self.mark_last_watched.append(staffel_episode)
+						else:
+							self.filmliste.append((staffel_episode,url_to_streams,False))
 			self.chooseMenuList.setList(map(self.m2kStreamListEntry, self.filmliste))
+			
+			# jump to last watched episode
+			if len(self.mark_last_watched) != 0:
+				counting_watched = 0
+				for (name,url,watched) in self.filmliste:
+					counting_watched += 1
+					if self.mark_last_watched[-1] == name:
+						counting_watched = int(counting_watched) - 1
+						print "last watched episode: %s" % counting_watched
+						break
+				self["filmList"].moveToIndex(int(counting_watched))
+			else:
+				if len(self.filmliste) != 0:
+					jump_last = len(self.filmliste) -1
+				else:
+					jump_last = 0
+				print "last episode: %s" % jump_last
+				self["filmList"].moveToIndex(int(jump_last))
+
 			self.keyLocked = False
 			self.loadPic()
 			
 	def m2kStreamListEntry(self, entry):
-		return [entry,
-			(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]),
-			]
+		if entry[2]:
+			png = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/watched.png"
+			watched = LoadPixmap(png)
+			return [entry,
+				(eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 39, 3, 100, 22, watched),
+				(eListboxPythonMultiContent.TYPE_TEXT, 100, 0, 700, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
+				]
+		else:
+			return [entry,
+				(eListboxPythonMultiContent.TYPE_TEXT, 100, 0, 700, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
+				]
 
 	def loadPic(self):
 		getPage(self.streamGenreLink, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.showHandlung).addErrback(self.dataError)

@@ -1343,8 +1343,7 @@ class kxWatchlist(Screen):
 			self.streamList2.append((sname, surl, slang, str(stotaleps), str(new_eps)))
 			self.streamList2.sort()
 			self.streamMenuList.setList(map(kxWatchSeriesListEntry, self.streamList2))
-			
-		
+
 		print self.counting, self.count
 		if self.counting == self.count:
 			print "update done."
