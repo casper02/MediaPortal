@@ -323,6 +323,7 @@ class oasetvCDListeScreen(Screen):
 			stream_url = re.findall("'file','(.*?)'", sUnpacked)
 			if stream_url:
 				print stream_url[0]
+				self.keyLocked = False
 				sref = eServiceReference(0x1001, 0, stream_url[0])
 				sref.setName(self.stream_name)
 				self.session.open(MoviePlayer, sref)
@@ -337,13 +338,12 @@ class oasetvCDListeScreen(Screen):
 			stream_url = re.findall("'file','(.*?)'", sUnpacked)
 			if stream_url:
 				print stream_url[0]
+				self.keyLocked = False
 				sref = eServiceReference(0x1001, 0, stream_url[0])
 				sref.setName(self.stream_name)
 				self.session.open(MoviePlayer, sref)
 		else:
 			message = self.session.open(MessageBox, _("Stream not found."), MessageBox.TYPE_INFO, timeout=3)
-			
-		self.keyLocked = False
 
 	def dataError(self, error):
 		self.keyLocked = False
