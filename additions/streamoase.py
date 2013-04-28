@@ -92,7 +92,7 @@ class oasetvFilmListeScreen(Screen):
 		self['title'] = Label("Stream-Oase.tv")
 		self['name'] = Label("Film Auswahl")
 		self['handlung'] = Label("")
-		self['page'] = Label("0")
+		self['page'] = Label("")
 		self['coverArt'] = Pixmap()
 		
 		self.keyLocked = True
@@ -127,16 +127,28 @@ class oasetvFilmListeScreen(Screen):
 				self.chooseMenuList.setList(map(oaseFilmListEntry, self.filmliste))
 				self.keyLocked = False
 				self.loadPic()
+				
+		totalpages = re.findall('\?start=(.*?\d)"', data, re.S)
+		if totalpages:
+			if int(self.page) == 0:
+				print totalpages[-1]
+				pagenr = "1 / %s" % totalpages[-1]
+				self['page'].setText(pagenr)
+			else:
+				print totalpages[-1]
+				pagenr = "%s / %s" % ((int(self.page) / 56) + 1, totalpages[-1])
+				self['page'].setText(pagenr)
+		else:
+			if int(self.page) == 0:
+				self['page'].setText("1")
+			else:
+				pagenr = (int(self.page) / 56) + 1
+				self['page'].setText(str(pagenr))
 
 	def loadPic(self):
 		streamName = self['filmList'].getCurrent()[0][0]
 		streamFilmLink = self['filmList'].getCurrent()[0][1]
 		self['name'].setText(streamName)
-		if int(self.page) == 0:
-			self['page'].setText("0")
-		else:
-			pagenr = (int(self.page) / 56)
-			self['page'].setText(str(pagenr))
 		streamPic = self['filmList'].getCurrent()[0][2]
 		downloadPage(streamPic, "/tmp/oatvIcon.jpg").addCallback(self.ShowCover)
 		getPage(streamFilmLink, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadPageInfos).addErrback(self.dataError)
@@ -150,7 +162,7 @@ class oasetvFilmListeScreen(Screen):
 				self['handlung'].setText("keine infos")
 		else:
 			self['handlung'].setText("keine infos")
-	
+
 	def ShowCover(self, picData):
 		if fileExists("/tmp/oatvIcon.jpg"):
 			self['coverArt'].instance.setPixmap(None)
