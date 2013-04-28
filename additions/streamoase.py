@@ -128,16 +128,17 @@ class oasetvFilmListeScreen(Screen):
 				self.keyLocked = False
 				self.loadPic()
 				
-		totalpages = re.findall('\?start=(.*?\d)"', data, re.S)
-		if totalpages:
-			if int(self.page) == 0:
-				print totalpages[-1]
-				pagenr = "1 / %s" % totalpages[-1]
-				self['page'].setText(pagenr)
-			else:
-				print totalpages[-1]
-				pagenr = "%s / %s" % ((int(self.page) / 56) + 1, totalpages[-1])
-				self['page'].setText(pagenr)
+		if re.match('.*?title="Ende">Ende<', data, re.S):
+			totalpages = re.findall('\?start=(.*?\d)"', data, re.S)
+			if totalpages:
+				if int(self.page) == 0:
+					print totalpages[-1]
+					pagenr = "1 / %s" % totalpages[-1]
+					self['page'].setText(pagenr)
+				else:
+					print totalpages[-1]
+					pagenr = "%s / %s" % ((int(self.page) / 56) + 1, totalpages[-1])
+					self['page'].setText(pagenr)
 		else:
 			if int(self.page) == 0:
 				self['page'].setText("1")
