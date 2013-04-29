@@ -303,6 +303,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Zeige MUSIC-Channels:", config.mediaportal.showMusicChannels))
 		self.configlist.append(getConfigListEntry("Zeige USER-Channels:", config.mediaportal.showUserChannels))
 		self.configlist.append(getConfigListEntry("Zeige YouTube:", config.mediaportal.showYoutube))
+		self.configlist.append(getConfigListEntry("Zeige Clipfish:", config.mediaportal.showClipfish))
 
 		### mediatheken
 		self.configlist.append(getConfigListEntry("----- Mediatheken -----", config.mediaportal.fake_entry))
