@@ -1474,7 +1474,7 @@ class kxStreams(Screen):
 			self.session.open(kxParts, urls, self.stream_name)
 		else:
 			print "one parts only.."
-			extern_stream_url = re.findall('<a href=."(.*?)"', data, re.S)
+			extern_stream_url = re.findall('<a href=.".*?(http.*?)"', data)
 			if extern_stream_url:
 				stream = extern_stream_url[0].replace('\\','')
 				if stream:
