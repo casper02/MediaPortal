@@ -6,11 +6,23 @@ ck = {}
 def bsListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
-		]	
+		]
+def bsListEntryMark(entry):
+	if entry[2]:
+		png = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/images/watched.png"
+		watched = LoadPixmap(png)
+		return [entry,
+			(eListboxPythonMultiContent.TYPE_PIXMAP_ALPHATEST, 39, 3, 100, 22, watched),
+			(eListboxPythonMultiContent.TYPE_TEXT, 100, 0, 700, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
+			]
+	else:
+		return [entry,
+			(eListboxPythonMultiContent.TYPE_TEXT, 100, 0, 700, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
+			]
 def mainListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
-		]	
+		]
 		
 class bsMain(Screen, ConfigListScreen):
 	def __init__(self, session):
@@ -120,9 +132,10 @@ class bsSerien(Screen, ConfigListScreen):
 		if self.keyLocked or exist == None:
 			return
 
+		serienTitle = self['streamlist'].getCurrent()[0][0]
 		auswahl = self['streamlist'].getCurrent()[0][1]
 		print auswahl
-		self.session.open(bsStaffeln, auswahl)
+		self.session.open(bsStaffeln, auswahl, serienTitle)
 
 	def keyAdd(self):
 		exist = self['streamlist'].getCurrent()
@@ -202,9 +215,10 @@ class bsWatchlist(Screen, ConfigListScreen):
 		if self.keyLocked or exist == None:
 			return
 
+		serienTitle = self['streamlist'].getCurrent()[0][0]
 		auswahl = self['streamlist'].getCurrent()[0][1]
-		print auswahl
-		self.session.open(bsStaffeln, auswahl)
+		print serienTitle, auswahl
+		self.session.open(bsStaffeln, auswahl, serienTitle)
 			
 	def keyDel(self):
 		exist = self['streamlist'].getCurrent()
@@ -230,7 +244,7 @@ class bsWatchlist(Screen, ConfigListScreen):
 		self.close()
 
 class bsStaffeln(Screen, ConfigListScreen):
-	def __init__(self, session, serienUrl):
+	def __init__(self, session, serienUrl, serienTitle):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/bsStaffeln.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
@@ -241,6 +255,7 @@ class bsStaffeln(Screen, ConfigListScreen):
 			f.close()
 			
 		self.serienUrl = serienUrl
+		self.serienTitle = serienTitle
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
@@ -312,13 +327,13 @@ class bsStaffeln(Screen, ConfigListScreen):
 		staffel = staffel.replace('Staffel ','').replace('Film(e)','0')
 		auswahl = self['streamlist'].getCurrent()[0][1]
 		print auswahl, staffel
-		self.session.open(bsEpisoden, auswahl, staffel)
+		self.session.open(bsEpisoden, auswahl, staffel, self.serienTitle)
 		
 	def keyCancel(self):
 		self.close()
 
 class bsEpisoden(Screen, ConfigListScreen):
-	def __init__(self, session, serienUrl, bsStaffel):
+	def __init__(self, session, serienUrl, bsStaffel, serienTitle):
 		self.session = session
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/bsEpisoden.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
@@ -330,6 +345,7 @@ class bsEpisoden(Screen, ConfigListScreen):
 		
 		self.serienUrl = serienUrl
 		self.bsStaffel = bsStaffel
+		self.serienTitle = serienTitle
 		Screen.__init__(self, session)
 
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
@@ -356,6 +372,22 @@ class bsEpisoden(Screen, ConfigListScreen):
 		getPage(self.serienUrl, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 		
 	def parseData(self, data):
+	
+		# Mark Watches episodes
+		self.watched_liste = []
+		self.mark_last_watched = []
+		if not fileExists(config.mediaportal.watchlistpath.value+"mp_bs_watched"):
+			os.system("touch "+config.mediaportal.watchlistpath.value+"mp_bs_watched")
+		if fileExists(config.mediaportal.watchlistpath.value+"mp_bs_watched"):
+			leer = os.path.getsize(config.mediaportal.watchlistpath.value+"mp_bs_watched")
+			if not leer == 0:
+				self.updates_read = open(config.mediaportal.watchlistpath.value+"mp_bs_watched" , "r")
+				for lines in sorted(self.updates_read.readlines()):
+					line = re.findall('"(.*?)"', lines)
+					if line:
+						self.watched_liste.append("%s" % (line[0]))
+				self.updates_read.close()
+				
 		episoden = re.findall('<tr>.*?<td>(\d+)</td>.*?<td><a href="(serie/.*?)">', data, re.S)
 		details = re.findall('<strong>Beschreibung</strong>.*?<p>(.*?)</p>.*?<img\ssrc="(.*?)"\salt="Cover"\s{0,2}/>', data, re.S)
 		bsStaffel2 = self.bsStaffel
@@ -372,8 +404,13 @@ class bsEpisoden(Screen, ConfigListScreen):
 				else:
 					bsEpisode2 = "E"+str(bsEpisode)
 				bsEpisode = "%s%s - %s" % (bsStaffel3, bsEpisode2, decodeHtml(bsTitle[0].replace('_',' ').replace('-',' ')))
-				self.streamList.append((bsEpisode,bsUrl))
-			self.streamMenuList.setList(map(bsListEntry, self.streamList))
+				
+				checkname = self.serienTitle+" - "+bsEpisode
+				if checkname in self.watched_liste:
+					self.streamList.append((bsEpisode,bsUrl,True))
+				else:
+					self.streamList.append((bsEpisode,bsUrl,False))
+			self.streamMenuList.setList(map(bsListEntryMark, self.streamList))
 			self.keyLocked = False
 		if details:
 			(handlung,cover) = details[0]
@@ -407,7 +444,7 @@ class bsEpisoden(Screen, ConfigListScreen):
 		auswahl = self['streamlist'].getCurrent()[0][1]
 		title = self['streamlist'].getCurrent()[0][0]
 		print auswahl
-		self.session.open(bsStreams, auswahl, title)
+		self.session.open(bsStreams, auswahl, self.serienTitle+" - "+title)
 				
 	def keyCancel(self):
 		self.close()
@@ -495,15 +532,39 @@ class bsStreams(Screen, ConfigListScreen):
 
 	def playfile(self, link):
 		print link
+		if not fileExists(config.mediaportal.watchlistpath.value+"mp_bs_watched"):
+			os.system("touch "+config.mediaportal.watchlistpath.value+"mp_bs_watched")
+			
+		self.update_liste = []
+		leer = os.path.getsize(config.mediaportal.watchlistpath.value+"mp_bs_watched")
+		if not leer == 0:
+			self.updates_read = open(config.mediaportal.watchlistpath.value+"mp_bs_watched" , "r")
+			for lines in sorted(self.updates_read.readlines()):
+				line = re.findall('"(.*?)"', lines)
+				if line:
+					print line[0]
+					self.update_liste.append("%s" % (line[0]))
+			self.updates_read.close()
+			
+			updates_read2 = open(config.mediaportal.watchlistpath.value+"mp_bs_watched" , "a")
+			check = ("%s" % self.streamname)
+			if not check in self.update_liste:
+				print "update add: %s" % (self.streamname)
+				updates_read2.write('"%s"\n' % (self.streamname))
+				updates_read2.close()
+			else:
+				print "dupe %s" % (self.streamname)
+		else:
+			updates_read3 = open(config.mediaportal.watchlistpath.value+"mp_bs_watched" , "a")
+			print "update add: %s" % (self.streamname)
+			updates_read3.write('"%s"\n' % (self.streamname))
+			updates_read3.close()
+
 		sref = eServiceReference(0x1001, 0, link)
 		sref.setName(self.streamname)
 		self.session.open(MoviePlayer, sref)
 		
-	def findStream(self, data):
-		#print data
-		
-		#test = re.findall('<a href="(.*?)" target="_blank">', data, re.S)
-		
+	def findStream(self, data):	
 		if re.match(".*?<iframe.*?src=",data, re.S|re.I):
 			test = re.findall('<iframe.*?src=["|\'](http://.*?)["|\']', data, re.S|re.I)
 		else:
