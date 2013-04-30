@@ -104,7 +104,8 @@ class MEHDFilmListeScreen(Screen):
 			"right" : self.keyRight,
 			"left" : self.keyLeft,
 			"nextBouquet" : self.keyPageUp,
-			"prevBouquet" : self.keyPageDown
+			"prevBouquet" : self.keyPageDown,
+			"blue" : self.keyBlue
 		}, -1)
 
 		self['title'] = Label("My-Entertainment.biz")
@@ -246,6 +247,30 @@ class MEHDFilmListeScreen(Screen):
 			return
 		self.page += 1 
 		self.loadPage()
+
+	def keyBlue(self):
+		streamLink = self['filmList'].getCurrent()[0][1]
+		getPage(streamLink, cookies=kekse, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getYTrailer).addErrback(self.dataError)
+	
+	def getYTrailer(self, data):
+		print "getYTrailer..."
+		ytLinkIds = re.findall('<param name="movie" value="http://www.youtube.com/v/(.*?)\;', data, re.S)
+		if ytLinkIds:
+			ytLinkId = str(ytLinkIds[0].replace('&amp', ''))
+			y = youtubeUrl(self.session)
+			y.addErrback(self.youtubeErr)
+			ytLink = y.getVideoUrl(ytLinkId, "2")
+			if ytLink:
+				streamName = self['filmList'].getCurrent()[0][0]
+				sref = eServiceReference(0x1001, 0, ytLink)
+				sref.setName(streamName)
+				self.session.open(MoviePlayer, sref)
+			else:
+				sText = 'Kein Trailer verfuegbar'
+				self.session.open(MessageBox,_(sText), MessageBox.TYPE_INFO)
+		else:
+			sText = 'Kein Trailer verfuegbar'
+			self.session.open(MessageBox,_(sText), MessageBox.TYPE_INFO)
 		
 	def keyCancel(self):
 		self.close()
