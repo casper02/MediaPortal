@@ -1,4 +1,5 @@
 from Plugins.Extensions.MediaPortal.resources.imports import *
+from Plugins.Extensions.MediaPortal.resources.yt_url import *
 from Plugins.Extensions.MediaPortal.resources.decrypt import *
 kekse = {}
 def MEHDGenreListEntry(entry):
@@ -258,7 +259,7 @@ class MEHDFilmListeScreen(Screen):
 		if ytLinkIds:
 			ytLinkId = str(ytLinkIds[0].replace('&amp', ''))
 			y = youtubeUrl(self.session)
-			y.addErrback(self.youtubeErr)
+			y.addErrback(self.dataError)
 			ytLink = y.getVideoUrl(ytLinkId, "2")
 			if ytLink:
 				streamName = self['filmList'].getCurrent()[0][0]
