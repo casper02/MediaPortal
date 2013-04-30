@@ -1,9 +1,10 @@
 ﻿#	-*-	coding:	utf-8	-*-
 
+from os.path import exists
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.yt_url import *
 
-USER_Version = "USER-Channels v0.93"
+USER_Version = "USER-Channels v0.94"
 
 USER_siteEncoding = 'utf-8'
 
@@ -46,6 +47,7 @@ class show_USER_Genre(Screen):
 		self['F3'] = Label("")
 		self['F4'] = Label("")
 		
+		self.user_path = config.mediaportal.watchlistpath.value + "mp_userchan.xml"
 		self.keyLocked = True
 		self.genreliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -60,20 +62,31 @@ class show_USER_Genre(Screen):
 		self.genreliste.append((0, "Für jeden Kanal müssen nur zwei Einträge hinzugefügt werden:", ""))
 		self.genreliste.append((0, "'<name> Kanal Bezeichnung </name>' und '<user> Besitzername </user>'", ""))
 		self.genreliste.append((0, " ", ""))
-		self.genreliste.append((0, "Mit der Taste 'Grün' wird die Datei: './userfiles/userchan.xml' geladen.", ""))
+		self.genreliste.append((0, "Mit der Taste 'Grün' wird die Datei:", ""))
+		self.genreliste.append((0, "'"+self.user_path+"' geladen.", ""))
 		self.genreliste.append((0, " ", ""))
 		self.genreliste.append((0, "With this extension you can add your favorite Youtube channels themselves.", ""))
 		self.genreliste.append((0, "For each channel, only two entries are added:", ""))
 		self.genreliste.append((0, "'<name> channel name </name>' and '<user> owner name </ user>'", ""))
 		self.genreliste.append((0, " ", ""))
-		self.genreliste.append((0, "With the 'Green' button the user file: './userfiles/userchan.xml' is loaded.", ""))
+		self.genreliste.append((0, "With the 'Green' button the user file:", ""))
+		self.genreliste.append((0, "'"+self.user_path+"' is loaded.", ""))
+		
+		if not exists(self.user_path):
+			self.getUserFile(fInit=True)
+			
 		self.chooseMenuList.setList(map(show_USER_GenreListEntry, self.genreliste))
 		
-	def getUserFile(self):
+	def getUserFile(self, fInit=False):
 		fname = self.plugin_path + "/userfiles/userchan.xml"
+		
 		print "fname: ",fname
 		try:
-			fp = open(fname)
+			if fInit:
+				shutil.copyfile(fname, self.user_path)
+				return
+				
+			fp = open(self.user_path)
 			data = fp.read()
 			fp.close()
 		except IOError, e:
