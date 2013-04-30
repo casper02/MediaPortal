@@ -5,7 +5,7 @@ from Plugins.Extensions.MediaPortal.resources.yt_url import *
 import Queue
 import threading
 
-DS_Version = "Doku-Stream.org v0.97"
+DS_Version = "Doku-Stream.org v0.98"
 
 DS_siteEncoding = 'utf-8'
 
@@ -97,7 +97,7 @@ class show_DS_Genre(Screen):
 			("Politik", "/politik"),
 			("Religion", "/religion"),
 			("Serien", "/serien"),
-			("Shortclips", "/clips-ausschnitte"),
+			#("Shortclips", "/clips-ausschnitte"),
 			("Technik", "/technik"),
 			("Vorträge", "/vortrage"),
 			("Wirtschaft", "/wirtschaft-2"),
@@ -108,10 +108,10 @@ class show_DS_Genre(Screen):
 			None, None,
 			#subGenre_0 = 
 			[
-			("1. Weltkrieg", "/1-weltkrieg-zeitgeschichte"),
+			#("1. Weltkrieg", "/1-weltkrieg-zeitgeschichte"),
 			("2. Weltkrieg", "/2-weltkrieg-zeitgeschichte"),
-			("Antike - Ägypten", "/agypten"),
-			("Antike - Rom", "/antike-rom"),
+			#("Antike - Ägypten", "/agypten"),
+			#("Antike - Rom", "/antike-rom"),
 			("Diverses Geschichte", "/diverses-geschichte")
 			],
 			#subGenre_1 = 
@@ -125,45 +125,48 @@ class show_DS_Genre(Screen):
 			#subGenre_2 = 
 			None,
 			#subGenre_3 = 
-			[
-			("Ausland", "/ausland"),
-			("Inland", "/inland")
-			],
+			None,
+			#[
+			#("Ausland", "/ausland"),
+			#("Inland", "/inland")
+			#],
 			#subGenre_4 = 
 			None,
 			#subGenre_5 = 
 			[
 			("Alpha Centauri", "/alpha-centauri"),
-			("Das Römer Experiment", "/das-romer-experiment"),
-			("Die Geschichte der Indianer", "/die-geschichte-der-indianer"),
+			#("Das Römer Experiment", "/das-romer-experiment"),
+			#("Die Geschichte der Indianer", "/die-geschichte-der-indianer"),
 			("Geheimnisse des Universums / Unser Universum", "/serie-geheimnisse-des-universums"),
 			("Geist & Gehirn", "/geist-gehirn"),
 			("Leschs Kosmos", "/leschs-kosmos"),
 			("Mathematik zum Anfassen", "/mathematik-zum-anfassen"),
 			("Meilensteine der Naturwissenschaft & Technik", "/meilensteine-der-naturwissenschaft-und-technik"),
-			("Stil-Epochen", "/stil-epochen"),
+			#("Stil-Epochen", "/stil-epochen"),
 			("Terra X", "/terra-x-serien")
 			],
 			#subGenre_6 = 
-			[
-			("Diverse Shortclips", "/diverse-shortclips"),
-			("Science vs. Fiction", "/science-vs-fiction"),
-			("SciXpert-Leschs Universum", "/scixpert-leschs-universum")
-			],
+			None,
+			#[
+			#("Diverse Shortclips", "/diverse-shortclips"),
+			#("Science vs. Fiction", "/science-vs-fiction"),
+			#("SciXpert-Leschs Universum", "/scixpert-leschs-universum")
+			#],
 			#subGenre_7 = 
 			None,
 			#subGenre_8 = 
-			[
-			("Politikvorträge", "/politikvortrage"),
-			("Wirtschaftsvorträge", "/wirtschaft-vortrage"),
-			("Wissenschaftsvorträge", "/wissen-vortrage")
-			],
+			None,
+			#[
+			#("Politikvorträge", "/politikvortrage"),
+			#("Wirtschaftsvorträge", "/wirtschaft-vortrage"),
+			#("Wissenschaftsvorträge", "/wissen-vortrage")
+			#],
 			#subGenre_9 = 
 			None,
 			#subGenre_10 = 
 			[
 			("Astronomie", "/astronomie"),
-			("Dinosaurier", "/dinosaurier"),
+			#("Dinosaurier", "/dinosaurier"),
 			("Diverses Wissen", "/diverses-wissen"),
 			("Tier und Natur", "/tier-und-natur"),
 			("Übernatürliches", "/ubernaturliches")
@@ -466,19 +469,15 @@ class DS_FilmListeScreen(Screen):
 		if self.genreNEUESTE:
 			print "Specials Dokus suche..."
 			m=re.search('class="lcp_catlist"(.*?)</ul>',data,re.S)
-			#m=re.search('<ul class="lcp_catlist"(.*?)</ul>',data,re.S)
 		else:
 			print "Normal search.."
-			#m=re.search('<div id="content-left">(.*?)<!-- end content-left -->',data,re.S)
-			m=re.search('id="content-left">(.*?)"box-left navigation">',data,re.S)
+			m=re.search('id="content"(.*?)"navigation">',data,re.S)
 			
 		if m:
 			if self.genreNEUESTE:
-				#dokus = re.findall('<li><a href="(.*?)" title="(.*?)">', m.group(1))
 				dokus = re.findall('href="(.*?)".*?title="(.*?)">', m.group(1))
 			else:
-				#dokus = re.findall('"post-title">.*?<a href="(.*?)".*?title="(.*?)">.*?<img src="(.*?)"', m.group(1), re.S)
-				dokus = re.findall('"post-title">.*?<a.*?href="(.*?)".*?title="(.*?)">.*?<img.*?src="(.*?)"', m.group(1), re.S)
+				dokus = re.findall('"border-bottom:none.*?href="(.*?)".*?title="(.*?)">.*?<img.*?src="(.*?)"', m.group(1), re.S)
 		else:
 			dokus = None
 		
@@ -820,15 +819,15 @@ class DS_Streams(Screen, ConfigListScreen):
 		
 	def parseData(self, data):
 		print "parseData:"
-		#m = re.search('<div id="content-left">(.*?)<!-- end content-left -->', data, re.S)
-		m = re.search('id="content-left">(.*?)</div>', data, re.S)
+		#m = re.search('id="content"(.*?)</div>', data, re.S)
 		
-		m2 = None
+		#m2 = None
 		desc = None
 		self.streamListe = []
 		
-		if m:
-			m2 = re.search('"http://www.youtube.com/(embed|v)/(.*?)&amp', m.group(1), re.S)
+		#if m:
+		#	m2 = re.search('"http://www.youtube.com/(embed|v)/(.*?)&amp', m.group(1), re.S)
+		m2 = re.search('"http://www.youtube.com/(embed|v)/(.*?)&amp', data, re.S)
 			
 		parts = False
 		img = self.imgUrl
