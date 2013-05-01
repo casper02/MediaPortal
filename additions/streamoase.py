@@ -1,6 +1,8 @@
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.decrypt import *
+import HTMLParser
 
+ck = {}
 
 def oasetvGenreListEntry(entry):
 	return [entry,
@@ -189,11 +191,11 @@ class oasetvFilmListeScreen(Screen):
 	def findStream(self, data):
 		stream_list = []
 		stream_name = self['filmList'].getCurrent()[0][0]
-		get_embed = re.findall('http://180upload.com/embed-(.*?)-', data, re.S)
-		if get_embed:
-			url = "http://180upload.com/" + get_embed[0]
-			print url
-			stream_list.append(("180upload", url))
+		#get_embed = re.findall('http://180upload.com/embed-(.*?)-', data, re.S)
+		#if get_embed:
+		#	url = "http://180upload.com/" + get_embed[0]
+		#	print url
+		#	stream_list.append(("180upload", url))
 		get_wupfile = re.findall('(http://wupfile.com.*?)"', data, re.S)
 		if get_wupfile:
 			print get_wupfile[0]
@@ -301,22 +303,38 @@ class oasetvCDListeScreen(Screen):
 		streamLink = self['filmList'].getCurrent()[0][1]
 		self.keyLocked = True
 		if name == "180upload":
-			getPage(streamLink, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.readPostData, streamLink).addErrback(self.dataError)
+			getPage(streamLink, agent=std_headers, cookies=ck, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.readPostData, streamLink).addErrback(self.dataError)
 		elif name == "Wupfile":
 			getPage(streamLink, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.postData).addErrback(self.dataError)
 		elif name == "MightyUpload":
 			getPage(streamLink, agent=std_headers, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.postData2).addErrback(self.dataError)
 		
 	def readPostData(self, data, url):
+		html_parser = HTMLParser.HTMLParser()
 		form_values = {}
 		for i in re.finditer('<input.*?name="(.*?)".*?value="(.*?)">', data):
 			form_values[i.group(1)] = i.group(2)
+
+		codes = re.findall("<span style='position:absolute;padding-left:.*?px;padding-top:.*?px;'>(.*?)</span>", data, re.S)
+		if codes:
+			code = ""
+			for each in codes:
+				print html_parser.unescape(each)
+				code += html_parser.unescape(each)
+			
+		if code:
+			form_values["code"] = str(code)
+
+		print form_values
+		
+		print ck
 				
 		form_values = urllib.urlencode(form_values)
-		getPage(url, agent=std_headers, method='POST', postdata=form_values, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.postData).addErrback(self.dataError)
+		getPage(url, agent=std_headers, method='POST', cookies=ck, postdata=form_values, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.postData).addErrback(self.dataError)
 
 	def postData(self, data):
 		get_packedjava = re.findall("<script type=.text.javascript.>eval.function(.*?)</script>", data, re.S|re.DOTALL)
+		print get_packedjava
 		if get_packedjava:
 			sUnpacked = cJsUnpacker().unpackByString(get_packedjava[1])
 		if sUnpacked:
